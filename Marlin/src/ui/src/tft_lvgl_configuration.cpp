@@ -52,6 +52,12 @@ uint16_t DeviceCode = 0x9488;
 #define MAX_HZ_POSX HDP+1
 #define MAX_HZ_POSY VDP+1 
 
+void SysTick_Callback() 
+{
+     lv_tick_inc(1);
+}
+
+
 void tft_set_cursor(uint16_t x,uint16_t y)
 {
     #if 0
@@ -420,6 +426,8 @@ void tft_lvgl_init()
     indev_drv.type = LV_INDEV_TYPE_POINTER;	 /*Touch pad is a pointer-like device*/
     indev_drv.read_cb = my_touchpad_read; 	 /*Set your driver function*/
     lv_indev_drv_register(&indev_drv);		 /*Finally register the driver*/
+
+	systick_attach_callback(SysTick_Callback);
 
     tft_style_init();
 
