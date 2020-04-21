@@ -106,8 +106,11 @@
 //
 #define POWER_LOSS_PIN                      PA2   // PW_DET
 #define PS_ON_PIN                           PA3   // PW_OFF
-
-#define LED_PIN                             PB2
+#define SUICIDE_PIN PB2     // Enable MKSPWC support
+#define KILL_PIN PA2     // Enable MKSPWC support
+#define KILL_PIN_INVERTING true     // Enable MKSPWC support
+#define SERVO0_PIN                          PA8   // Enable BLTOUCH support
+//#define LED_PIN                             PB2
 
 //
 // SD Card
