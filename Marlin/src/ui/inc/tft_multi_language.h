@@ -402,10 +402,10 @@ typedef struct print_file_dialog_disp
 	const char *file_name_too_long_error;
 	const char *close_machine_error;
 	const char *filament_no_press;
-	char *print_finish;
-	char *print_time;
-	char *reprint;
-	char *wifi_enable_tips;
+	const char *print_finish;
+	const char *print_time;
+	const char *reprint;
+	const char *wifi_enable_tips;
 }print_file_dialog_menu_def;
 extern print_file_dialog_menu_def print_file_dialog_menu;
 
