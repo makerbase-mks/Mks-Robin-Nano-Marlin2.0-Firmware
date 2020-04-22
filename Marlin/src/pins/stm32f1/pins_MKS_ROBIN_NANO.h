@@ -39,6 +39,12 @@
 #define DISABLE_DEBUG
 
 //
+// EEPROM
+//
+//#define FLASH_EEPROM_EMULATION
+#define SDCARD_EEPROM_EMULATION
+
+//
 // Note: MKS Robin board is using SPI2 interface.
 //
 //#define SPI_MODULE 2
@@ -115,6 +121,10 @@
 //
 // SD Card
 //
+#ifndef SDCARD_CONNECTION
+  #define SDCARD_CONNECTION              ONBOARD
+#endif
+
 #define SDIO_SUPPORT
 #define SD_DETECT_PIN                       PD12
 
