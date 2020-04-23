@@ -63,10 +63,10 @@ uint32_t lv_get_pic_addr(uint8_t *Pname)
 	return addr;
 }
 
-const char *picPath = "mks_pic2";
+const char *picPath = "mks_pic";
 const char *bakPath = "bak_pic";
 
-const char *fontPath = "mks_font2";
+const char *fontPath = "mks_font";
 const char *bakFont = "bak_font";
 #if 1
 void spiFlashErase_PIC()
@@ -136,7 +136,7 @@ void spiFlashErase_FONT()
 			
 	for(Font_sectorcnt=0;Font_sectorcnt<FONT_SIZE_xM*1024/64;Font_sectorcnt++)
 	{
-		W25QXX.SPI_FLASH_BlockErase(UNIGBK_FLASH_ADDR+Font_sectorcnt*64*1024);
+		W25QXX.SPI_FLASH_BlockErase(FONTINFOADDR+Font_sectorcnt*64*1024);
 	}
 	/*	
 	FLASH_Unlock();
@@ -587,7 +587,7 @@ void UpdateFont()
 				else */
 				//{
 				//if((strstr(fn, ".gco")) || (strstr(fn, ".GCO")) || (fno.fattrib & AM_DIR))
-				if(strstr(fn, "_puhui16.bin"))	
+				if(strstr(fn, ".bin"))	
 				{
 					char dosFilename[FILENAME_LENGTH];
 					createFilename(dosFilename, d);
