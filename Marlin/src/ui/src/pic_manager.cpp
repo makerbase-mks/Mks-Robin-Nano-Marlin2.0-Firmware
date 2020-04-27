@@ -17,8 +17,9 @@
 extern uint16_t DeviceCode;
 extern unsigned char bmp_public_buf[17 * 1024];
 
+#if ENABLED (SDSUPPORT)
 extern char *createFilename(char * const buffer, const dir_t &p);
-
+#endif
 
 /*void SPI_FLASH_BufferRead(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead)
 {
@@ -296,7 +297,7 @@ uint32_t Pic_Info_Write(uint8_t *P_name,uint32_t P_size)
 uint8_t public_buf[512];
 
 //uint8_t public_buf_test[512];
-
+#if ENABLED (SDSUPPORT)
 void UpdatePic()
 {
 	//int r;
@@ -501,6 +502,7 @@ void UpdatePic()
     }
 }
 
+
 void spi_flash_read_test()
 {
 	W25QXX.SPI_FLASH_BufferRead(public_buf,UNIGBK_FLASH_ADDR,BMP_WRITE_BUF_LEN);
@@ -697,6 +699,7 @@ void UpdateFont()
 		}
     }
 }
+#endif
 #endif
 
 #if 1

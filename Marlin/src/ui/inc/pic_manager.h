@@ -86,8 +86,7 @@ extern void Pic_Read(uint8_t *Pname,uint8_t *P_Rbuff);
 extern void lv_pic_test(uint8_t *P_Rbuff,uint32_t addr,uint32_t size);
 #endif
 extern uint32_t lv_get_pic_addr(uint8_t *Pname);
-extern void UpdatePic();
-extern void UpdateFont();
+
 extern void get_spi_flash_data(const char *rec_buf,int offset, int size);
 //extern void SPI_FLASH_BufferRead(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead);
 

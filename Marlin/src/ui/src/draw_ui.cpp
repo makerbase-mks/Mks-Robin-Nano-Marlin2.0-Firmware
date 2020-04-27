@@ -380,6 +380,7 @@ char *creat_title_text()
 
 void preview_gcode_prehandle(char *path)
 {
+	#if ENABLED (SDSUPPORT)
 	uint8_t re;
 	uint32_t read;
 	uint32_t pre_read_cnt = 0;
@@ -408,11 +409,12 @@ void preview_gcode_prehandle(char *path)
 		update_spi_flash();	
 	}
 	card.closefile();
+	#endif
 }
 
 void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 {
-
+	#if ENABLED (SDSUPPORT)
 	uint8_t ress;
 	uint32_t read,write;
 	volatile uint32_t i,j;
@@ -536,6 +538,7 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 			return;
 		}
 		card.closefile();
+	#endif
 }
 
 void Draw_default_preview(int xpos_pixel,int ypos_pixel,uint8_t sel)
@@ -1286,6 +1289,7 @@ void draw_return_ui()
 	
 }
 
+#if ENABLED (SDSUPPORT)
 void sd_detection()
 {
 	#if ENABLED(SDSUPPORT)
@@ -1302,4 +1306,5 @@ void sd_detection()
     }
   #endif // SDSUPPORT
 }
+#endif
 

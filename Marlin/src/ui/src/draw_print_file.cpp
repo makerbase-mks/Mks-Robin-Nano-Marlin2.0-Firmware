@@ -26,7 +26,7 @@ extern uint8_t public_buf[512];
 extern char public_buf_m[100];
 
 uint8_t sel_id=0;
-
+#if ENABLED (SDSUPPORT)
 static uint8_t search_file()
 {
 	char valid_name_cnt=0;
@@ -102,10 +102,11 @@ static uint8_t search_file()
 	  return valid_name_cnt;
 	  
 }
-
+#endif
 
 uint8_t have_pre_pic(char *path)
 {
+	#if ENABLED (SDSUPPORT)
 	char *ps1,*ps2;
 	char *cur_name;
 
@@ -126,7 +127,9 @@ uint8_t have_pre_pic(char *path)
 			card.closefile();
 			return 0;			
 	}
+	#endif
 }
+
 
 LV_IMG_DECLARE(bmp_pic_117x92);
 LV_IMG_DECLARE(bmp_pic_100x100);
@@ -137,6 +140,7 @@ LV_IMG_DECLARE(bmp_pic_100x40);
 static void event_handler(lv_obj_t * obj, lv_event_t event)
 {
 	uint8_t i;
+	uint8_t file_count;
 	//switch(obj->mks_obj_id)
 	//{
 	if(obj->mks_obj_id == ID_P_UP)
@@ -154,9 +158,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 				
 				if(dir_offset[curDirLever].cur_page_first_offset >= FILE_NUM)
 					list_file.Sd_file_offset = dir_offset[curDirLever].cur_page_first_offset - FILE_NUM;
-				
-				uint8_t file_count = search_file();
-				
+				#if ENABLED (SDSUPPORT)
+				file_count = search_file();
+				#endif
 				if(file_count != 0)
 				{
 					dir_offset[curDirLever].curPage--;
@@ -178,9 +182,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 				list_file.Sd_file_cnt = 0;
 
 				list_file.Sd_file_offset = dir_offset[curDirLever].cur_page_last_offset + 1;
-				
-				uint8_t file_count = search_file();
-				
+				#if ENABLED (SDSUPPORT)
+				file_count = search_file();
+				#endif
 				if(file_count != 0)
 				{
 					dir_offset[curDirLever].curPage++;
@@ -208,14 +212,17 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			if(ch != 0)
 			{
 				*ch = 0;
+				#if ENABLED (SDSUPPORT)
 				card.cdup();
-				
+				#endif
 				dir_offset[curDirLever].curPage = 0;
 				dir_offset[curDirLever].cur_page_first_offset = 0;
 				dir_offset[curDirLever].cur_page_last_offset = 0;
 				curDirLever--;
 				list_file.Sd_file_offset = dir_offset[curDirLever].cur_page_first_offset;
-				uint8_t file_count = search_file();
+				#if ENABLED (SDSUPPORT)
+				file_count = search_file();
+				#endif
 				lv_obj_del(scr);
 				disp_gcode_icon(file_count);
 			}
@@ -246,7 +253,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 							strcpy(list_file.curDirPath,  list_file.file_name[i]);
 							curDirLever++;
 							list_file.Sd_file_offset = dir_offset[curDirLever].cur_page_first_offset;
-							uint8_t file_count = search_file();
+							#if ENABLED (SDSUPPORT)
+							file_count = search_file();
+							#endif
 							lv_obj_del(scr);
 							disp_gcode_icon(file_count);
 						}
@@ -268,7 +277,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 void lv_draw_print_file(void)
 {
 	//uint8_t i;
-	
+	uint8_t file_count;
 	if(disp_state_stack._disp_state[disp_state_stack._disp_index] != PRINT_FILE_UI)
 	{
 		disp_state_stack._disp_index++;
@@ -287,11 +296,12 @@ void lv_draw_print_file(void)
 	memset(list_file.curDirPath, 0, sizeof(list_file.curDirPath));
 
 	list_file.Sd_file_offset = dir_offset[curDirLever].cur_page_first_offset;
-
+	#if ENABLED (SDSUPPORT)
 	card.mount();
 	
-	uint8_t file_count = search_file();
 	
+	file_count = search_file();
+	#endif
 	disp_gcode_icon(file_count);
 	
 	
@@ -487,6 +497,7 @@ void disp_gcode_icon(uint8_t file_num)
 
 void lv_open_gcode_file(char *path)
 {
+	#if ENABLED (SDSUPPORT)
 	uint32_t read;
 	uint32_t *ps4;
 	int pre_sread_cnt;
@@ -503,6 +514,7 @@ void lv_open_gcode_file(char *path)
 		pre_sread_cnt = (uint32_t)ps4-(uint32_t)((uint32_t *)(&public_buf[0]));
 		card.setIndex(pre_sread_cnt+8);	
 	}
+	#endif
 }
 
 int ascii2dec_test(char *ascii)
@@ -527,6 +539,7 @@ int ascii2dec_test(char *ascii)
 
 void lv_gcode_file_read(uint8_t *data_buf)
 {
+	#if ENABLED (SDSUPPORT)
 	uint16_t i=0,j=0,k=0;
 	uint32_t read;
 	uint16_t row_1=0;
@@ -551,11 +564,14 @@ void lv_gcode_file_read(uint8_t *data_buf)
 		}
 	}
 	memcpy(data_buf,public_buf,200);
+	#endif
 }
 
 void lv_close_gcode_file()
 {
+	#if ENABLED (SDSUPPORT)
 	card.closefile();
+	#endif
 }
 
 void cutFileName(char *path, int len, int bytePerLine,  char *outStr)

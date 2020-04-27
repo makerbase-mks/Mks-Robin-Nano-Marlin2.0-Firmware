@@ -29,7 +29,10 @@ static lv_disp_buf_t disp_buf;
 //static lv_color_t buf[LV_HOR_RES_MAX * 18]; 
 //static lv_color_t buf[10*5]; 
 //extern lv_obj_t * scr;
-
+#if ENABLED (SDSUPPORT)
+extern void UpdatePic();
+extern void UpdateFont();
+#endif
 uint16_t DeviceCode = 0x9488;
 
 #define SetCs  
@@ -404,8 +407,10 @@ void tft_lvgl_init()
 	//uint16_t test_id=0;
     W25QXX.init(SPI_QUARTER_SPEED);
     //test_id=W25QXX.W25QXX_ReadID();
+    #if ENABLED (SDSUPPORT)
     UpdatePic();
     UpdateFont();
+    #endif
     gCfgItems_init();
 	ui_cfg_init();
     disp_language_init();
@@ -558,7 +563,7 @@ void ADS7843_Rd_Addata(uint16_t *X_Addata,uint16_t *Y_Addata)
 	uint16_t		i,j,k;
     int result;
 
-        
+       #if ENABLED(TOUCH_BUTTONS)
 	for(i=0;i<times;i++)					
 	{
 		OUT_WRITE(TOUCH_CS_PIN, LOW);
@@ -571,7 +576,7 @@ void ADS7843_Rd_Addata(uint16_t *X_Addata,uint16_t *Y_Addata)
 		x_addata[i] = SPI2_ReadWrite2Bytes(); 
 		WRITE(TOUCH_CS_PIN, HIGH);
 	}
-
+	#endif
 	result = x_addata[0];
 	for(i=0;i<times;i++)					
 	{
@@ -686,7 +691,7 @@ void LV_TASK_HANDLER()
 	#endif
 	disp_pre_gcode(2,36);
 	GUI_RefreshPage();
-	sd_detection();
+	//sd_detection();
 }
 
 #endif

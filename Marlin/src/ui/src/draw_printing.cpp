@@ -297,9 +297,11 @@ void disp_ext_temp()
 
 void disp_bed_temp()
 {
+	#if HAS_HEATED_BED
 	memset(public_buf_l,0,sizeof(public_buf_l));
 	sprintf(public_buf_l,printing_menu.bed_temp,(int)thermalManager.temp_bed.celsius,(int)thermalManager.temp_bed.target);
 	lv_label_set_text(labelBed, public_buf_l);
+	#endif
 }
 
 void disp_fan_speed()
@@ -350,12 +352,16 @@ void setProBarRate()
 	
 	if(gCfgItems.from_flash_pic != 1)
 	{
+		#if ENABLED (SDSUPPORT)
 		rate_tmp_r =(long long)card.getIndex() * 100;
+		#endif
 		rate = rate_tmp_r / uiCfg.curFilesize;
 	}
 	else
 	{
+		#if ENABLED (SDSUPPORT)
 		rate_tmp_r =(long long)card.getIndex();
+		#endif
 		rate = (rate_tmp_r-(PREVIEW_SIZE+To_pre_view))* 100 / (uiCfg.curFilesize-(PREVIEW_SIZE+To_pre_view));
 	}
 	//gCurFileState.totalSend = rate;

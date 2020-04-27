@@ -55,6 +55,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			}
 			#endif
 		}
+		#if HAS_HEATED_BED
 		else
 		{
 			
@@ -67,7 +68,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			}
 			
 		}
-		
+		#endif
 		disp_desire_temp();
 	    }
 		break;
@@ -88,7 +89,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 					thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)0;
 					thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
 				}
-			}			
+			}	
+			#if HAS_HEATED_BED
 			else
 			{
 				if((int)thermalManager.temp_bed.target > uiCfg.stepHeat)
@@ -102,6 +104,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 					thermalManager.start_watching_bed();
 				}
 			}
+			#endif
 			disp_desire_temp();
 	    }
 		
@@ -194,11 +197,13 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 				thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)0;
 				thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
 			}
+			#if HAS_HEATED_BED
 			else
 			{
 				thermalManager.temp_bed.target = (float)0;
 				thermalManager.start_watching_bed();						
 			}
+			#endif
 			disp_desire_temp();
 	    }
 		break;
@@ -392,12 +397,14 @@ void disp_desire_temp()
 		sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
 		
 	}
+	#if HAS_HEATED_BED
 	else
 	{
 		strcat(public_buf_l,preheat_menu.hotbed);
 
 		sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_bed.celsius,  (int)thermalManager.temp_bed.target);
 	}
+	#endif
 	strcat(public_buf_l,": ");
 	strcat(public_buf_l,buf);
 	lv_label_set_text(tempText1, public_buf_l);

@@ -35,6 +35,7 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 		
 		if(gcode_preview_over != 1)
 		{
+			#if ENABLED (SDSUPPORT)
 			char *cur_name;
 			cur_name=strrchr(list_file.file_name[sel_id],'/');
 
@@ -63,6 +64,7 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 				    card.startFileprint();
 				    once_flag = 0;
 			}
+			#endif
 		}
     	}
 	else if(DialogType == DIALOG_TYPE_STOP)
@@ -70,7 +72,8 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 		stop_print_time();
 		lv_clear_dialog();
 		lv_draw_ready_print();
-		
+
+		#if ENABLED (SDSUPPORT)
 		card.endFilePrint();
 		wait_for_heatup = false;
 		gCfgItems.print_state = IDLE;
@@ -83,6 +86,7 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 		queue.enqueue_one_now(PSTR("G91"));
 		queue.enqueue_one_now(PSTR("G1 Z10"));
 		queue.enqueue_one_now(PSTR("G90"));
+		#endif
 	}
 	else if(DialogType == DIALOG_TYPE_FINISH_PRINT)
 	{
