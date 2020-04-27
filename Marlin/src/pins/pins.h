@@ -1036,6 +1036,9 @@
 #ifndef KILL_PIN
   #define KILL_PIN -1
 #endif
+#ifndef KILL_PIN_INVERTING
+  #define KILL_PIN_INVERTING false
+#endif
 #ifndef SUICIDE_PIN
   #define SUICIDE_PIN -1
 #endif
