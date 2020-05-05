@@ -75,6 +75,7 @@
 #define FILAMENT_TEXT_RU					"замена"
 #define LANGUAGE_TEXT_RU					"язык"
 #define MOTOR_OFF_TEXT_RU					"отклмотор"
+#define MOTOR_OFF_XY_TEXT_RU    "Off-XY"
 #define SHUTDOWN_TEXT_RU					"выключение"
 
 #define U_DISK_TEXT_RU						"U диск"

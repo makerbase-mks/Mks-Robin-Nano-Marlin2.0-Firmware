@@ -6,6 +6,7 @@
 #include "../inc/pic_manager.h"
 #include "../../module/motion.h"
 #include "../../module/planner.h"
+#include "../../feature/powerloss.h"
 
 CFG_ITMES gCfgItems;
 UI_CFG uiCfg;
@@ -36,7 +37,7 @@ void gCfgItems_init()
 	gCfgItems.language = LANG_ENGLISH;
 	gCfgItems.leveling_mode = 0;
 	gCfgItems.from_flash_pic = 0;
-	gCfgItems.print_state = IDLE;
+	gCfgItems.curFilesize = 0;
 	
 	W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems.spi_flash_flag,VAR_INF_ADDR,sizeof(gCfgItems.spi_flash_flag));
 	if(gCfgItems.spi_flash_flag == GCFG_FLAG_VALUE)
@@ -72,6 +73,7 @@ void ui_cfg_init()
 
 void update_spi_flash()
 {
+	W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
 	W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems,VAR_INF_ADDR,sizeof(gCfgItems));
 }
 
@@ -516,8 +518,9 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 			if (!fname) return;
 			if (file.open(curDir, fname, O_READ))
 			{
-				uiCfg.curFilesize = file.fileSize();
+				gCfgItems.curFilesize = file.fileSize();
 				file.close();
+				update_spi_flash();
 			}
 			
 			card.openFileRead(cur_name);
@@ -533,6 +536,9 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
                                 planner.e_factor[1]= planner.flow_percentage[1]*0.01;  
                             }                            
 				card.startFileprint();
+				#if ENABLED(POWER_LOSS_RECOVERY)
+				recovery.prepare();
+				#endif
 				once_flag = 0;
 			}
 			return;

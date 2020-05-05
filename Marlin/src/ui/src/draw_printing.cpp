@@ -9,6 +9,7 @@
 #include "../../module/motion.h"
 #include "../../sd/cardreader.h"
 #include "../../gcode/queue.h"
+#include "../../feature/powerloss.h"
 
 static lv_obj_t * scr;
 static lv_obj_t * labelExt1,* labelExt2,* labelBed,* labelFan,* labelZpos,* labelTime;
@@ -42,22 +43,36 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 	    else if(event == LV_EVENT_RELEASED) {
 		if(gcode_preview_over != 1)
 		{
-			 if(gCfgItems.print_state == WORKING)
+			 if(uiCfg.print_state == WORKING)
 			 {
-				 gCfgItems.print_state = PAUSED;
+				 uiCfg.print_state = PAUSED;
 			        queue.inject_P(PSTR("M25"));
 				 lv_obj_set_event_cb_mks(buttonPause, event_handler,ID_PAUSE,"bmp_Pause.bin",0);
 				 lv_label_set_text(labelPause, printing_menu.resume);
 				 lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
 			 }
-			 else if(gCfgItems.print_state == PAUSED)
+			 else if(uiCfg.print_state == PAUSED)
 			 {
-			 	gCfgItems.print_state = WORKING;
+			 	uiCfg.print_state = WORKING;
 			       queue.inject_P(PSTR("M24"));
 				lv_obj_set_event_cb_mks(obj, event_handler,ID_PAUSE,"bmp_Resume.bin",0);
 				lv_label_set_text(labelPause, printing_menu.pause);
 				 lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
 			 }
+			 #if ENABLED(POWER_LOSS_RECOVERY)
+			 else if(uiCfg.print_state == REPRINTED)
+			 {
+			 	uiCfg.print_state = WORKING;
+				lv_obj_set_event_cb_mks(obj, event_handler,ID_PAUSE,"bmp_Resume.bin",0);
+				lv_label_set_text(labelPause, printing_menu.pause);
+				lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
+			 	recovery.resume();
+				print_time.minutes = recovery.info.print_job_elapsed / 60;
+				print_time.seconds = recovery.info.print_job_elapsed % 60;
+				print_time.hours    = print_time.minutes / 60;
+				start_print_time();
+			 }
+			 #endif
 		}
 	    }
 	    break;
@@ -171,7 +186,7 @@ void lv_draw_printing(void)
     lv_imgbtn_set_src(buttonZpos, LV_BTN_STATE_PR, &bmp_pic_45x45);	
 	lv_imgbtn_set_style(buttonZpos, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonZpos, LV_BTN_STATE_REL, &tft_style_lable_rel);
-	if(gCfgItems.print_state == WORKING)
+	if(uiCfg.print_state == WORKING)
 	lv_obj_set_event_cb_mks(buttonPause, event_handler,ID_PAUSE,"bmp_Resume.bin",0);
 	else
 	lv_obj_set_event_cb_mks(buttonPause, event_handler,ID_PAUSE,"bmp_Pause.bin",0);
@@ -249,7 +264,14 @@ void lv_draw_printing(void)
 	
 	if(gCfgItems.multiple_language !=0)
 	{
-	    	lv_label_set_text(labelPause, printing_menu.pause);
+		if(uiCfg.print_state == WORKING)
+		{
+	    		lv_label_set_text(labelPause, printing_menu.pause);
+		}
+		else
+		{
+			lv_label_set_text(labelPause, printing_menu.resume);
+		}
 		lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
 
 		lv_label_set_text(labelStop, printing_menu.stop);
@@ -355,14 +377,14 @@ void setProBarRate()
 		#if ENABLED (SDSUPPORT)
 		rate_tmp_r =(long long)card.getIndex() * 100;
 		#endif
-		rate = rate_tmp_r / uiCfg.curFilesize;
+		rate = rate_tmp_r / gCfgItems.curFilesize;
 	}
 	else
 	{
 		#if ENABLED (SDSUPPORT)
 		rate_tmp_r =(long long)card.getIndex();
 		#endif
-		rate = (rate_tmp_r-(PREVIEW_SIZE+To_pre_view))* 100 / (uiCfg.curFilesize-(PREVIEW_SIZE+To_pre_view));
+		rate = (rate_tmp_r-(PREVIEW_SIZE+To_pre_view))* 100 / (gCfgItems.curFilesize-(PREVIEW_SIZE+To_pre_view));
 	}
 	//gCurFileState.totalSend = rate;
 	

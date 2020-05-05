@@ -9,6 +9,7 @@
 #include "../../gcode/queue.h"
 #include "../../module/temperature.h"
 #include "../../module/planner.h"
+#include "../../feature/powerloss.h"
 
 static lv_obj_t * scr;
 extern uint8_t sel_id;
@@ -29,7 +30,7 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 		reset_print_time();
 		start_print_time();
 		
-		gCfgItems.print_state = WORKING;
+		uiCfg.print_state = WORKING;
 		lv_clear_dialog();
 		lv_draw_printing();
 		
@@ -46,8 +47,9 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 			if (!fname) return;
 			if (file.open(curDir, fname, O_READ))
 			{
-				uiCfg.curFilesize = file.fileSize();
+				gCfgItems.curFilesize = file.fileSize();
 				file.close();
+				update_spi_flash();
 			}
 			card.openFileRead(cur_name);
 			if(card.isFileOpen())
@@ -62,6 +64,9 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 	                            planner.e_factor[1]= planner.flow_percentage[1]*0.01;  
 	                        }                            
 				    card.startFileprint();
+				    #if ENABLED(POWER_LOSS_RECOVERY)
+      				recovery.prepare();
+    				#endif
 				    once_flag = 0;
 			}
 			#endif
@@ -76,16 +81,20 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 		#if ENABLED (SDSUPPORT)
 		card.endFilePrint();
 		wait_for_heatup = false;
-		gCfgItems.print_state = IDLE;
+		uiCfg.print_state = IDLE;
 		
 		queue.clear();
         	//quickstop_stepper();
 		//print_job_timer.stop();
 		thermalManager.disable_all_heaters();
 
+		#if ENABLED(POWER_LOSS_RECOVERY)
+		recovery.purge();
+		#endif
 		queue.enqueue_one_now(PSTR("G91"));
 		queue.enqueue_one_now(PSTR("G1 Z10"));
 		queue.enqueue_one_now(PSTR("G90"));
+		queue.enqueue_one_now(PSTR("G28 X0 Y0"));
 		#endif
 	}
 	else if(DialogType == DIALOG_TYPE_FINISH_PRINT)

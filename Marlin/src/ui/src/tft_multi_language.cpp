@@ -217,6 +217,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_CN;
 			set_menu.breakpoint=BREAK_POINT_TEXT_CN;
 			set_menu.motoroff=MOTOR_OFF_TEXT_CN;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_CN;
 			set_menu.language=LANGUAGE_TEXT_CN;
             //set_menu.machine_para = MACHINE_PARA_CN;
             
@@ -429,6 +430,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_T_CN;
 			set_menu.breakpoint=BREAK_POINT_TEXT_T_CN;
 			set_menu.motoroff=MOTOR_OFF_TEXT_T_CN;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_T_CN;
 			set_menu.language=LANGUAGE_TEXT_T_CN;
             //set_menu.machine_para = MACHINE_PARA_T_CN;
 			//
@@ -629,6 +631,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_EN;
 			set_menu.breakpoint=BREAK_POINT_TEXT_EN;
 			set_menu.motoroff=MOTOR_OFF_TEXT_EN;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_EN;
 			set_menu.language=LANGUAGE_TEXT_EN;
             //set_menu.machine_para = MACHINE_PARA_EN;
 			//
@@ -826,6 +829,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_RU;
 			set_menu.breakpoint=BREAK_POINT_TEXT_RU;
 			set_menu.motoroff=MOTOR_OFF_TEXT_RU;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_RU;
 			set_menu.language=LANGUAGE_TEXT_RU;
 			//
 			more_menu.title = TITLE_MORE_RU;	
@@ -1026,6 +1030,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_SP;
 			set_menu.breakpoint=BREAK_POINT_TEXT_SP;
 			set_menu.motoroff=MOTOR_OFF_TEXT_SP;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_SP;
 			set_menu.language=LANGUAGE_TEXT_SP;
 			//
 			more_menu.title = TITLE_MORE_SP;
@@ -1223,6 +1228,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_FR;
 			set_menu.breakpoint=BREAK_POINT_TEXT_FR;
 			set_menu.motoroff=MOTOR_OFF_TEXT_FR;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_FR;
 			set_menu.language=LANGUAGE_TEXT_FR;
 			//
 			more_menu.title = TITLE_MORE_FR;
@@ -1423,6 +1429,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_IT;
 			set_menu.breakpoint=BREAK_POINT_TEXT_IT;
 			set_menu.motoroff=MOTOR_OFF_TEXT_IT;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_IT;
 			set_menu.language=LANGUAGE_TEXT_IT;
 			//
 			more_menu.title = TITLE_MORE_IT;
@@ -1620,6 +1627,7 @@ void disp_language_init()
 			set_menu.filament=FILAMENT_TEXT_EN;
 			set_menu.breakpoint=BREAK_POINT_TEXT_EN;
 			set_menu.motoroff=MOTOR_OFF_TEXT_EN;
+			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_EN;
 			set_menu.language=LANGUAGE_TEXT_EN;
             //set_menu.machine_para = MACHINE_PARA_EN;
 			//

@@ -127,7 +127,7 @@ void lv_draw_opration(void)
 	buttonFan = lv_imgbtn_create(scr, NULL);
 	buttonSpeed = lv_imgbtn_create(scr, NULL);
 	
-	if(gCfgItems.print_state != WORKING)
+	if(uiCfg.print_state != WORKING)
 		//buttonFilament = lv_imgbtn_create(scr, NULL);
 	//else
 		buttonMove = lv_imgbtn_create(scr, NULL);
@@ -159,7 +159,7 @@ void lv_draw_opration(void)
 	lv_imgbtn_set_style(buttonSpeed, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonSpeed, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
-	if(gCfgItems.print_state != WORKING)
+	if(uiCfg.print_state != WORKING)
 	/*{
 		lv_obj_set_event_cb_mks(buttonFilament, event_handler,ID_O_FILAMENT,"bmp_Filamentchange.bin",0);	
 	       lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_REL, &bmp_pic);
@@ -192,7 +192,7 @@ void lv_draw_opration(void)
 	lv_obj_set_pos(buttonFan,BTN_X_PIXEL*2+INTERVAL_V*3,titleHeight);
 	lv_obj_set_pos(buttonSpeed,BTN_X_PIXEL*3+INTERVAL_V*4,titleHeight);
 	
-	if(gCfgItems.print_state != WORKING)
+	if(uiCfg.print_state != WORKING)
 	/*{
 		lv_obj_set_pos(buttonFilament,INTERVAL_V,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 	}
@@ -208,7 +208,7 @@ void lv_draw_opration(void)
 	lv_btn_set_layout(buttonFan, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonSpeed, LV_LAYOUT_OFF);
 	
-	if(gCfgItems.print_state != WORKING)
+	if(uiCfg.print_state != WORKING)
 	/*{
 		lv_btn_set_layout(buttonFilament, LV_LAYOUT_OFF);
 	}
@@ -224,7 +224,7 @@ void lv_draw_opration(void)
 	label_Fan = lv_label_create(buttonFan, NULL);
 	label_Speed = lv_label_create(buttonSpeed, NULL);
 	
-	if(gCfgItems.print_state != WORKING)
+	if(uiCfg.print_state != WORKING)
 	/*{
 		label_Filament = lv_label_create(buttonFilament, NULL);
 	}
@@ -250,7 +250,7 @@ void lv_draw_opration(void)
 		lv_label_set_text(label_Speed, operation_menu.speed);
 		lv_obj_align(label_Speed, buttonSpeed, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
 
-		if(gCfgItems.print_state != WORKING)
+		if(uiCfg.print_state != WORKING)
 		/*{
 			lv_label_set_text(label_Filament, operation_menu.filament);
 			lv_obj_align(label_Filament, buttonFilament, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);

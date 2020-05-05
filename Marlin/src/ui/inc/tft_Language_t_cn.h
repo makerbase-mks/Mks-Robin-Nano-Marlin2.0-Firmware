@@ -75,6 +75,7 @@
 #define FILAMENT_TEXT_T_CN							"換料"
 #define LANGUAGE_TEXT_T_CN							"語言"
 #define MOTOR_OFF_TEXT_T_CN							"關閉電機"
+#define MOTOR_OFF_XY_TEXT_T_CN    "關閉XY"
 #define SHUTDOWN_TEXT_T_CN							"關機"
 
 #define U_DISK_TEXT_T_CN							"U盤"

@@ -16,6 +16,8 @@ static lv_obj_t * scr;
 #define ID_H_Y				3
 #define ID_H_Z				4
 #define ID_H_RETURN			5
+#define ID_H_OFF_ALL		6
+#define ID_H_OFF_XY			7
 
 static void event_handler(lv_obj_t * obj, lv_event_t event)
 {
@@ -57,6 +59,24 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 	        queue.inject_P(PSTR("G28 Z0"));
 	    }
 		break;
+	case ID_H_OFF_ALL:
+		if(event == LV_EVENT_CLICKED) {
+			
+			
+	    }
+	    else if(event == LV_EVENT_RELEASED) {
+	        queue.inject_P(PSTR("M84"));
+	    }
+		break;
+	case ID_H_OFF_XY:
+		if(event == LV_EVENT_CLICKED) {
+			
+			
+	    }
+	    else if(event == LV_EVENT_RELEASED) {
+	        queue.inject_P(PSTR("M84 X Y"));
+	    }
+		break;
 	case ID_H_RETURN:
 	    if(event == LV_EVENT_CLICKED) {
 			
@@ -75,6 +95,7 @@ void lv_draw_home(void)
 {
 	lv_obj_t *buttonHomeAll,*buttonHomeX,*buttonHomeY,*buttonHomeZ;
 	lv_obj_t *buttonBack;
+	lv_obj_t *buttonOffAll,*buttonOffXY;
 
 	if(disp_state_stack._disp_state[disp_state_stack._disp_index] != ZERO_UI)
 	{
@@ -108,7 +129,8 @@ void lv_draw_home(void)
 	buttonHomeY = lv_imgbtn_create(scr, NULL);
 	buttonHomeZ = lv_imgbtn_create(scr, NULL);
 	buttonBack = lv_imgbtn_create(scr, NULL);
-
+	buttonOffAll = lv_imgbtn_create(scr, NULL);
+	buttonOffXY = lv_imgbtn_create(scr, NULL);
 	
 	//lv_obj_set_event_cb_mks(buttonWifi, event_handler,ID_S_WIFI,"bmp_Wifi.bin",0);
 	//lv_imgbtn_set_src(buttonWifi, LV_BTN_STATE_REL, &bmp_pic);
@@ -147,6 +169,18 @@ void lv_draw_home(void)
 	lv_imgbtn_set_style(buttonHomeZ, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonHomeZ, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
+	lv_obj_set_event_cb_mks(buttonOffAll, event_handler,ID_H_OFF_ALL,"bmp_Motor_off.bin",0);	
+    lv_imgbtn_set_src(buttonOffAll, LV_BTN_STATE_REL, &bmp_pic);
+    lv_imgbtn_set_src(buttonOffAll, LV_BTN_STATE_PR, &bmp_pic);	
+	lv_imgbtn_set_style(buttonOffAll, LV_BTN_STATE_PR, &tft_style_lable_pre);
+	lv_imgbtn_set_style(buttonOffAll, LV_BTN_STATE_REL, &tft_style_lable_rel);
+
+	lv_obj_set_event_cb_mks(buttonOffXY, event_handler,ID_H_OFF_XY,"bmp_Motor_off.bin",0);	
+    lv_imgbtn_set_src(buttonOffXY, LV_BTN_STATE_REL, &bmp_pic);
+    lv_imgbtn_set_src(buttonOffXY, LV_BTN_STATE_PR, &bmp_pic);	
+	lv_imgbtn_set_style(buttonOffXY, LV_BTN_STATE_PR, &tft_style_lable_pre);
+	lv_imgbtn_set_style(buttonOffXY, LV_BTN_STATE_REL, &tft_style_lable_rel);
+
 	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_H_RETURN,"bmp_Return.bin",0);	
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic);	
@@ -168,6 +202,8 @@ void lv_draw_home(void)
 	//lv_obj_set_pos(buttonContinue,BTN_X_PIXEL*3+INTERVAL_V*4,titleHeight);
 	lv_obj_set_pos(buttonHomeZ,BTN_X_PIXEL*3+INTERVAL_V*4,titleHeight);
 	lv_obj_set_pos(buttonHomeAll,INTERVAL_V,titleHeight);
+	lv_obj_set_pos(buttonOffAll,INTERVAL_V,  BTN_Y_PIXEL+INTERVAL_H+titleHeight);
+	lv_obj_set_pos(buttonOffXY,BTN_X_PIXEL+INTERVAL_V*2,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 	lv_obj_set_pos(buttonBack,BTN_X_PIXEL*3+INTERVAL_V*4,  BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 
     /*Create a label on the Image button*/
@@ -177,6 +213,8 @@ void lv_draw_home(void)
 	//lv_btn_set_layout(buttonContinue, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonHomeY, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonHomeZ, LV_LAYOUT_OFF);
+	lv_btn_set_layout(buttonOffAll, LV_LAYOUT_OFF);
+	lv_btn_set_layout(buttonOffXY, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
 	
     //lv_obj_t * labelWifi= lv_label_create(buttonWifi, NULL);
@@ -185,6 +223,8 @@ void lv_draw_home(void)
 	//lv_obj_t * label_Continue = lv_label_create(buttonContinue, NULL);
 	lv_obj_t * labelHomeY = lv_label_create(buttonHomeY, NULL);
 	lv_obj_t * labelHomeZ = lv_label_create(buttonHomeZ, NULL);
+	lv_obj_t * labelOffAll = lv_label_create(buttonOffAll, NULL);
+	lv_obj_t * labelOffXY = lv_label_create(buttonOffXY, NULL);
 	lv_obj_t * label_Back = lv_label_create(buttonBack, NULL);
 	
 	
@@ -204,9 +244,15 @@ void lv_draw_home(void)
 
 		lv_label_set_text(labelHomeY, home_menu.home_y);	
 		lv_obj_align(labelHomeY, buttonHomeY, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
-		
-		lv_label_set_text(labelHomeZ, home_menu.home_z);
+
+		lv_label_set_text(labelHomeZ, home_menu.home_z);	
 		lv_obj_align(labelHomeZ, buttonHomeZ, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
+
+		lv_label_set_text(labelOffAll, set_menu.motoroff);
+		lv_obj_align(labelOffAll, buttonOffAll, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
+
+		lv_label_set_text(labelOffXY, set_menu.motoroffXY);
+		lv_obj_align(labelOffXY, buttonOffXY, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
 		
 		lv_label_set_text(label_Back, common_menu.text_back);
 		lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);

@@ -75,7 +75,8 @@ typedef struct
 	uint8_t language;
 	uint8_t leveling_mode;
 	uint8_t from_flash_pic;
-	uint8_t print_state;
+	uint32_t curFilesize;
+	
 }CFG_ITMES;
 
 typedef struct
@@ -86,9 +87,9 @@ typedef struct
 	uint8_t extruStep;
 	uint8_t extruSpeed;
 	uint8_t stepPrintSpeed;
+	uint8_t print_state;
 	uint16_t moveSpeed;
 	float   move_dist;
-	uint32_t curFilesize;
 }UI_CFG;
 
 typedef enum

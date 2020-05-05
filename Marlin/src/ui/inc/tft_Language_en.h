@@ -276,6 +276,7 @@
 #define FILAMENT_TEXT_EN							"Filament"
 #define LANGUAGE_TEXT_EN							"Language"
 #define MOTOR_OFF_TEXT_EN							"Motor-off"
+#define MOTOR_OFF_XY_TEXT_EN          "Off-XY"
 #define SHUTDOWN_TEXT_EN							"Shutdown"
 
 #define U_DISK_TEXT_EN								"USB"

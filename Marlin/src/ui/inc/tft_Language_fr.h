@@ -75,6 +75,7 @@
 #define FILAMENT_TEXT_FR				"Remplacer"
 #define LANGUAGE_TEXT_FR				"Langue"
 #define MOTOR_OFF_TEXT_FR				"M-hors"
+#define MOTOR_OFF_XY_TEXT_FR    "M-hors-XY"
 #define SHUTDOWN_TEXT_FR				"Eteindre"
 
 #define U_DISK_TEXT_FR					"Clé usb"

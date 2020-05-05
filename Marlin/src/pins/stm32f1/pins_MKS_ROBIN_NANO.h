@@ -110,8 +110,8 @@
 //
 // Misc. Functions
 //
-#define POWER_LOSS_PIN                      PA2   // PW_DET
-#define PS_ON_PIN                           PA3   // PW_OFF
+//#define POWER_LOSS_PIN                      PA2   // PW_DET
+//#define PS_ON_PIN                           PA3   // PW_OFF
 //#define SUICIDE_PIN PB2     // Enable MKSPWC support ROBIN NANO v1.2 ONLY
 //#define KILL_PIN PA2     // Enable MKSPWC support ROBIN NANO v1.2 ONLY
 //#define KILL_PIN_INVERTING true     // Enable MKSPWC support ROBIN NANO v1.2 ONLY

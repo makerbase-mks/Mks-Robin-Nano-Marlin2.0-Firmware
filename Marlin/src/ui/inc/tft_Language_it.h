@@ -75,6 +75,7 @@
 #define FILAMENT_TEXT_IT					"Filamento"
 #define LANGUAGE_TEXT_IT					"Lingua"
 #define MOTOR_OFF_TEXT_IT					"Motor off"
+#define MOTOR_OFF_XY_TEXT_IT    "Off-XY"
 #define SHUTDOWN_TEXT_IT					"Spento"
 
 #define U_DISK_TEXT_IT						"USB"

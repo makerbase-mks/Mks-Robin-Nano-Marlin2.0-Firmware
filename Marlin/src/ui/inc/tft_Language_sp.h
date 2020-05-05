@@ -75,6 +75,7 @@
 #define FILAMENT_TEXT_SP				"Filamento"
 #define LANGUAGE_TEXT_SP				"Language"
 #define MOTOR_OFF_TEXT_SP				"Apagar motor"
+#define MOTOR_OFF_XY_TEXT_SP    "Off-XY"
 #define SHUTDOWN_TEXT_SP				"Apagar"
 
 #define U_DISK_TEXT_SP					"PENDRIVE"

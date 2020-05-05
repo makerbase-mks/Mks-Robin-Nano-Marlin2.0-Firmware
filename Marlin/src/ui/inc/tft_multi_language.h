@@ -167,6 +167,7 @@ typedef struct set_menu_disp
 	const char *filament;
 	const char *breakpoint;
 	const char *motoroff;
+	const char *motoroffXY;
 	const char *shutdown;
 	const char *language;
 	const char *machine_para;

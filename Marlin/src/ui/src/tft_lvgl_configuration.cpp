@@ -13,6 +13,7 @@
 
 #include "../inc/mks_hardware_test.h"
 #include "../inc/draw_ui.h"
+#include "../../feature/powerloss.h"
 
 
 //#include "../../../Configuration.h"
@@ -34,6 +35,7 @@ extern void UpdatePic();
 extern void UpdateFont();
 #endif
 uint16_t DeviceCode = 0x9488;
+extern uint8_t sel_id;
 
 #define SetCs  
 #define ClrCs 
@@ -54,6 +56,10 @@ uint16_t DeviceCode = 0x9488;
 
 #define MAX_HZ_POSX HDP+1
 #define MAX_HZ_POSY VDP+1 
+
+extern uint8_t gcode_preview_over;
+extern uint8_t flash_preview_begin;
+extern uint8_t default_preview_flg;
 
 void SysTick_Callback() 
 {
@@ -436,6 +442,20 @@ void tft_lvgl_init()
 
     tft_style_init();
 
+    #if ENABLED(POWER_LOSS_RECOVERY)
+    if((recovery.info.valid_head != 0) && 
+	(recovery.info.valid_head == recovery.info.valid_foot))
+    {
+    	if(gCfgItems.from_flash_pic == 1)
+		flash_preview_begin = 1;
+	else
+		default_preview_flg = 1;
+	    uiCfg.print_state = REPRINTED;
+	    strncpy(list_file.long_name[sel_id],recovery.info.sd_filename,sizeof(list_file.long_name[sel_id]));
+	    lv_draw_printing();
+    }
+    else
+    #endif
     lv_draw_ready_print();
 	
 	#if ENABLED(MKS_TEST)
