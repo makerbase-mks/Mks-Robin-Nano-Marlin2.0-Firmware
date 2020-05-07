@@ -192,9 +192,9 @@
 //#define MAX6675_SS_PIN                    PE5   // TC1 - CS1
 //#define MAX6675_SS_PIN                    PF11  // TC2 - CS2
 
-#define POWER_LOSS_PIN                      PA2   // PW_DET
-#define PS_ON_PIN                           PG11  // PW_OFF
-#define FIL_RUNOUT_PIN                      PA4   // MT_DET1
+//#define POWER_LOSS_PIN                      PA2   // PW_DET
+//#define PS_ON_PIN                           PG11  // PW_OFF
+//#define FIL_RUNOUT_PIN                      PA4   // MT_DET1
 //#define FIL_RUNOUT_PIN                    PE6   // MT_DET2
 //#define FIL_RUNOUT_PIN                    PG14  // MT_DET3
 

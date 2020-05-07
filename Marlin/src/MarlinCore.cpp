@@ -58,11 +58,11 @@
 #include "gcode/queue.h"
 
 #if ENABLED(TFT_LITTLE_VGL_UI)
-#include "lvgl/lvgl.h"
-#include "ui/inc/tft_lvgl_configuration.h"
-#include "ui/inc/draw_ready_print.h"
+#include "lvgl.h"
+#include "lcd/extui/lib/mks_ui/inc/tft_lvgl_configuration.h"
+#include "lcd/extui/lib/mks_ui/inc/draw_ready_print.h"
 #if ENABLED(MKS_TEST)
-#include "ui/inc/mks_hardware_test.h"
+#include "lcd/extui/lib/mks_ui/inc/mks_hardware_test.h"
 #endif
 #endif
 
