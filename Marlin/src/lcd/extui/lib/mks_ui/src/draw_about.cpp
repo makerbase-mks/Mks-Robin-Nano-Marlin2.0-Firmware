@@ -11,7 +11,7 @@
 #include "../../../../../module/temperature.h"
 
 static lv_obj_t * scr;
-static lv_obj_t * firmWare,*board;
+static lv_obj_t * fw_type,*board,*fw_version;
 
 #define ID_A_RETURN		1
 
@@ -84,14 +84,28 @@ void lv_draw_about(void)
 		lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
 	}
 
-	firmWare = lv_label_create(scr, NULL);
-	lv_obj_set_style(firmWare, &tft_style_lable_rel);
-	lv_label_set_text(firmWare, "Firmware: Robin_Nano35");
-	lv_obj_align(firmWare, NULL, LV_ALIGN_CENTER,0, -20);
+	fw_version = lv_label_create(scr, NULL);
+	lv_obj_set_style(fw_version, &tft_style_lable_rel);
+	lv_label_set_text(fw_version, "Version: V_2.0.5.3");
+	lv_obj_align(fw_version, NULL, LV_ALIGN_CENTER,0, -60);
+
+	fw_type = lv_label_create(scr, NULL);
+	lv_obj_set_style(fw_type, &tft_style_lable_rel);
+	#if (MOTHERBOARD == BOARD_MKS_ROBIN_PRO)
+	lv_label_set_text(fw_type, "Firmware: Robin_Pro35");
+	#elif (MOTHERBOARD == BOARD_MKS_ROBIN_NANO)
+	lv_label_set_text(fw_type, "Firmware: Robin_Nano35");
+	#endif
+	lv_obj_align(fw_type, NULL, LV_ALIGN_CENTER,0, -20);
 
 	board = lv_label_create(scr, NULL);
 	lv_obj_set_style(board, &tft_style_lable_rel);
+	#if (MOTHERBOARD == BOARD_MKS_ROBIN_PRO)
+	lv_label_set_text(board, "Board: MKS Robin pro");
+	#elif (MOTHERBOARD == BOARD_MKS_ROBIN_NANO)
 	lv_label_set_text(board, "Board: MKS Robin nano");
+	#endif
+	
 	lv_obj_align(board, NULL, LV_ALIGN_CENTER,0, 20);
 }
 

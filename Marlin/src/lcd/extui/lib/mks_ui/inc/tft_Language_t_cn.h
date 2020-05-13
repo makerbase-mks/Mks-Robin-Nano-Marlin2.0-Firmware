@@ -230,4 +230,19 @@
 #define TEXT_VALUE_T_CN                  "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_T_CN								": %d℃"
 #define WIFI_RECONNECT_TEXT_T_CN         "重新連接"
+
+#define MESSEGE_PAUSING_T_CN			"暫停中..."
+#define MESSEGE_CHANGING_T_CN			"等待換料開始..."
+#define MESSEGE_UNLOAD_T_CN			"退料中,請稍等..."
+#define MESSEGE_WAITING_T_CN			"點擊按鈕恢復打印"
+#define MESSEGE_INSERT_T_CN			"裝載耗材後,點擊按鈕開始打印"
+#define MESSEGE_LOAD_T_CN			"進料中,請稍等..."
+#define MESSEGE_PURGE_T_CN			"等待擠出..."
+#define MESSEGE_RESUME_T_CN			"等待恢復打印..."
+#define MESSEGE_HEAT_T_CN			"按下按鈕,加熱噴頭"
+#define MESSEGE_HEATING_T_CN			"噴頭加熱中,請等待..."
+#define MESSEGE_OPTION_T_CN			"擠出更多還是繼續打印"
+#define MESSEGE_PURGE_MORE_T_CN   "擠出"
+#define MESSEGE_CONTINUE_PRINT_T_CN   "打印"
+
 #endif

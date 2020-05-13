@@ -10,6 +10,9 @@
 #if ENABLED(POWER_LOSS_RECOVERY)
 #include "../../../../../feature/powerloss.h"
 #endif
+#if ENABLED(PARK_HEAD_ON_PAUSE)
+#include "../../../../../feature/pause.h"
+#endif
 
 CFG_ITMES gCfgItems;
 UI_CFG uiCfg;
@@ -41,6 +44,7 @@ void gCfgItems_init()
 	gCfgItems.leveling_mode = 0;
 	gCfgItems.from_flash_pic = 0;
 	gCfgItems.curFilesize = 0;
+	gCfgItems.finish_power_off = 0;
 	
 	W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems.spi_flash_flag,VAR_INF_ADDR,sizeof(gCfgItems.spi_flash_flag));
 	if(gCfgItems.spi_flash_flag == GCFG_FLAG_VALUE)
@@ -67,6 +71,7 @@ void ui_cfg_init()
 	uiCfg.curTempType = 0;
 	uiCfg.curSprayerChoose = 0;
 	uiCfg.stepHeat = 10;
+	uiCfg.leveling_first_time = 0;
 	uiCfg.extruStep = 5;
 	uiCfg.extruSpeed = 10;
 	uiCfg.move_dist = 1;
@@ -700,7 +705,7 @@ void GUI_RefreshPage()
 					disp_print_time();
 					disp_fan_Zpos();
 				}
-				if(printing_rate_update_flag)
+				if(printing_rate_update_flag || marlin_state == MF_SD_COMPLETE)
 				{
 					printing_rate_update_flag = 0;
 					if(gcode_preview_over == 0)
@@ -961,7 +966,7 @@ void clear_cur_ui()
 			//Clear_Printmore();
 			break;
 		case LEVELING_UI:
-			//Clear_Leveling();//**
+			lv_clear_manualLevel();
 			break;
 		case BIND_UI:
 			//Clear_Bind();
@@ -1179,7 +1184,7 @@ void draw_return_ui()
 				//draw_FilamentChange();
 				break;
 			case LEVELING_UI:
-				//draw_leveling();
+				lv_draw_manualLevel();
 				break;
 				
 			case BIND_UI:

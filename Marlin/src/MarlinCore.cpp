@@ -60,7 +60,7 @@
 #if ENABLED(TFT_LITTLE_VGL_UI)
 #include "lvgl.h"
 #include "lcd/extui/lib/mks_ui/inc/tft_lvgl_configuration.h"
-#include "lcd/extui/lib/mks_ui/inc/draw_ready_print.h"
+#include "lcd/extui/lib/mks_ui/inc/draw_ui.h"
 #if ENABLED(MKS_TEST)
 #include "lcd/extui/lib/mks_ui/inc/mks_hardware_test.h"
 #endif
@@ -760,7 +760,11 @@ void kill(PGM_P const lcd_error/*=nullptr*/, PGM_P const lcd_component/*=nullptr
   SERIAL_ERROR_MSG(STR_ERR_KILLED);
 
   #if HAS_DISPLAY
-    ui.kill_screen(lcd_error ?: GET_TEXT(MSG_KILLED), lcd_component ?: NUL_STR);
+  	#if ENABLED(TFT_LITTLE_VGL_UI)
+	lv_draw_error_message(lcd_error);
+	#else
+       ui.kill_screen(lcd_error ?: GET_TEXT(MSG_KILLED), lcd_component ?: NUL_STR);
+	#endif
   #else
     UNUSED(lcd_error);
     UNUSED(lcd_component);

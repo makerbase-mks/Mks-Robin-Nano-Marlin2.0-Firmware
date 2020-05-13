@@ -36,6 +36,7 @@ tool_menu_def tool_menu;
 MachinePara_menu_def MachinePara_menu;
 MachineSettings_menu_def MachineSettings_menu;
 TemperatureSettings_menu_def TemperatureSettings_menu;
+pause_msg_def pause_msg_menu;
 
 void disp_language_init()
 {
@@ -221,6 +222,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_CN;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_CN;
 			set_menu.language=LANGUAGE_TEXT_CN;
+			set_menu.shutdown=SHUTDOWN_TEXT_CN;
             //set_menu.machine_para = MACHINE_PARA_CN;
             
 			//
@@ -345,6 +347,21 @@ void disp_language_init()
 			zoffset_menu.title = TITLE_ZOFFSET_CN;
 			zoffset_menu.inc = ZOFFSET_INC_CN;
 			zoffset_menu.dec = ZOFFSET_DEC_CN;
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_CN;
+			pause_msg_menu.changing = MESSEGE_CHANGING_CN;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_CN;
+			pause_msg_menu.waiting = MESSEGE_WAITING_CN;
+			pause_msg_menu.insert = MESSEGE_INSERT_CN;
+			pause_msg_menu.load = MESSEGE_LOAD_CN;
+			pause_msg_menu.purge = MESSEGE_PURGE_CN;
+			pause_msg_menu.resume = MESSEGE_RESUME_CN;
+			pause_msg_menu.heat = MESSEGE_HEAT_CN;
+			pause_msg_menu.heating = MESSEGE_HEATING_CN;
+			pause_msg_menu.option = MESSEGE_OPTION_CN;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_CN;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_CN;
+
 			break;
 #if 1            
 		#if 1
@@ -434,6 +451,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_T_CN;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_T_CN;
 			set_menu.language=LANGUAGE_TEXT_T_CN;
+			set_menu.shutdown=SHUTDOWN_TEXT_T_CN;
             //set_menu.machine_para = MACHINE_PARA_T_CN;
 			//
 			filesys_menu.title = TITLE_FILESYS_T_CN;
@@ -553,7 +571,21 @@ void disp_language_init()
 			//ZOFFSET
 			zoffset_menu.title = TITLE_ZOFFSET_T_CN;
 			zoffset_menu.inc = ZOFFSET_INC_T_CN;
-			zoffset_menu.dec = ZOFFSET_DEC_T_CN;			
+			zoffset_menu.dec = ZOFFSET_DEC_T_CN;	
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_T_CN;
+			pause_msg_menu.changing = MESSEGE_CHANGING_T_CN;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_T_CN;
+			pause_msg_menu.waiting = MESSEGE_WAITING_T_CN;
+			pause_msg_menu.insert = MESSEGE_INSERT_T_CN;
+			pause_msg_menu.load = MESSEGE_LOAD_T_CN;
+			pause_msg_menu.purge = MESSEGE_PURGE_T_CN;
+			pause_msg_menu.resume = MESSEGE_RESUME_T_CN;
+			pause_msg_menu.heat = MESSEGE_HEAT_T_CN;
+			pause_msg_menu.heating = MESSEGE_HEATING_T_CN;
+			pause_msg_menu.option = MESSEGE_OPTION_T_CN;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_T_CN;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_T_CN;
 			break;
 		case LANG_ENGLISH:
 			common_menu.dialog_confirm_title = TITLE_DIALOG_CONFIRM_EN;
@@ -635,6 +667,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_EN;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_EN;
 			set_menu.language=LANGUAGE_TEXT_EN;
+			set_menu.shutdown=SHUTDOWN_TEXT_EN;
             //set_menu.machine_para = MACHINE_PARA_EN;
 			//
 			more_menu.title = TITLE_MORE_EN;
@@ -751,7 +784,21 @@ void disp_language_init()
 			//ZOFFSET
 			zoffset_menu.title = TITLE_ZOFFSET_EN;
 			zoffset_menu.inc = ZOFFSET_INC_EN;
-			zoffset_menu.dec = ZOFFSET_DEC_EN;				
+			zoffset_menu.dec = ZOFFSET_DEC_EN;
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_EN;
+			pause_msg_menu.changing = MESSEGE_CHANGING_EN;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_EN;
+			pause_msg_menu.waiting = MESSEGE_WAITING_EN;
+			pause_msg_menu.insert = MESSEGE_INSERT_EN;
+			pause_msg_menu.load = MESSEGE_LOAD_EN;
+			pause_msg_menu.purge = MESSEGE_PURGE_EN;
+			pause_msg_menu.resume = MESSEGE_RESUME_EN;
+			pause_msg_menu.heat = MESSEGE_HEAT_EN;
+			pause_msg_menu.heating = MESSEGE_HEATING_EN;
+			pause_msg_menu.option = MESSEGE_OPTION_EN;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_EN;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_EN;
 			break;
 		case LANG_RUSSIAN:
 			common_menu.dialog_confirm_title = TITLE_DIALOG_CONFIRM_RU;
@@ -833,6 +880,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_RU;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_RU;
 			set_menu.language=LANGUAGE_TEXT_RU;
+			set_menu.shutdown=SHUTDOWN_TEXT_RU;
 			//
 			more_menu.title = TITLE_MORE_RU;	
 			more_menu.zoffset = ZOFFSET_RU;
@@ -948,7 +996,21 @@ void disp_language_init()
 			//ZOFFSET
 			zoffset_menu.title = TITLE_ZOFFSET_RU;
 			zoffset_menu.inc = ZOFFSET_INC_RU;
-			zoffset_menu.dec = ZOFFSET_DEC_RU;			
+			zoffset_menu.dec = ZOFFSET_DEC_RU;	
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_RU;
+			pause_msg_menu.changing = MESSEGE_CHANGING_RU;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_RU;
+			pause_msg_menu.waiting = MESSEGE_WAITING_RU;
+			pause_msg_menu.insert = MESSEGE_INSERT_RU;
+			pause_msg_menu.load = MESSEGE_LOAD_RU;
+			pause_msg_menu.purge = MESSEGE_PURGE_RU;
+			pause_msg_menu.resume = MESSEGE_RESUME_RU;
+			pause_msg_menu.heat = MESSEGE_HEAT_RU;
+			pause_msg_menu.heating = MESSEGE_HEATING_RU;
+			pause_msg_menu.option = MESSEGE_OPTION_RU;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_RU;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_RU;
 			break;
 		case LANG_SPANISH:
 			common_menu.dialog_confirm_title = TITLE_DIALOG_CONFIRM_SP;
@@ -1034,6 +1096,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_SP;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_SP;
 			set_menu.language=LANGUAGE_TEXT_SP;
+			set_menu.shutdown=SHUTDOWN_TEXT_SP;
 			//
 			more_menu.title = TITLE_MORE_SP;
 			more_menu.zoffset = ZOFFSET_SP;
@@ -1150,7 +1213,21 @@ void disp_language_init()
 			//ZOFFSET
 			zoffset_menu.title = TITLE_ZOFFSET_SP;
 			zoffset_menu.inc = ZOFFSET_INC_SP;
-			zoffset_menu.dec = ZOFFSET_DEC_SP;			
+			zoffset_menu.dec = ZOFFSET_DEC_SP;
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_SP;
+			pause_msg_menu.changing = MESSEGE_CHANGING_SP;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_SP;
+			pause_msg_menu.waiting = MESSEGE_WAITING_SP;
+			pause_msg_menu.insert = MESSEGE_INSERT_SP;
+			pause_msg_menu.load = MESSEGE_LOAD_SP;
+			pause_msg_menu.purge = MESSEGE_PURGE_SP;
+			pause_msg_menu.resume = MESSEGE_RESUME_SP;
+			pause_msg_menu.heat = MESSEGE_HEAT_SP;
+			pause_msg_menu.heating = MESSEGE_HEATING_SP;
+			pause_msg_menu.option = MESSEGE_OPTION_SP;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_SP;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_SP;
 			break;
 		#endif
 
@@ -1232,6 +1309,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_FR;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_FR;
 			set_menu.language=LANGUAGE_TEXT_FR;
+			set_menu.shutdown=SHUTDOWN_TEXT_FR;
 			//
 			more_menu.title = TITLE_MORE_FR;
 			more_menu.zoffset = ZOFFSET_FR;
@@ -1349,7 +1427,21 @@ void disp_language_init()
 			//ZOFFSET
 			zoffset_menu.title = TITLE_ZOFFSET_FR;
 			zoffset_menu.inc = ZOFFSET_INC_FR;
-			zoffset_menu.dec = ZOFFSET_DEC_FR;			
+			zoffset_menu.dec = ZOFFSET_DEC_FR;
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_FR;
+			pause_msg_menu.changing = MESSEGE_CHANGING_FR;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_FR;
+			pause_msg_menu.waiting = MESSEGE_WAITING_FR;
+			pause_msg_menu.insert = MESSEGE_INSERT_FR;
+			pause_msg_menu.load = MESSEGE_LOAD_FR;
+			pause_msg_menu.purge = MESSEGE_PURGE_FR;
+			pause_msg_menu.resume = MESSEGE_RESUME_FR;
+			pause_msg_menu.heat = MESSEGE_HEAT_FR;
+			pause_msg_menu.heating = MESSEGE_HEATING_FR;
+			pause_msg_menu.option = MESSEGE_OPTION_FR;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_FR;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_FR;
 			break;
 			
 		case LANG_ITALY:
@@ -1433,6 +1525,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_IT;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_IT;
 			set_menu.language=LANGUAGE_TEXT_IT;
+			set_menu.shutdown=SHUTDOWN_TEXT_IT;
 			//
 			more_menu.title = TITLE_MORE_IT;
 			more_menu.zoffset = ZOFFSET_IT;
@@ -1547,7 +1640,21 @@ void disp_language_init()
 			//ZOFFSET
 			zoffset_menu.title = TITLE_ZOFFSET_IT;
 			zoffset_menu.inc = ZOFFSET_INC_IT;
-			zoffset_menu.dec = ZOFFSET_DEC_IT;			
+			zoffset_menu.dec = ZOFFSET_DEC_IT;	
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_IT;
+			pause_msg_menu.changing = MESSEGE_CHANGING_IT;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_IT;
+			pause_msg_menu.waiting = MESSEGE_WAITING_IT;
+			pause_msg_menu.insert = MESSEGE_INSERT_IT;
+			pause_msg_menu.load = MESSEGE_LOAD_IT;
+			pause_msg_menu.purge = MESSEGE_PURGE_IT;
+			pause_msg_menu.resume = MESSEGE_RESUME_IT;
+			pause_msg_menu.heat = MESSEGE_HEAT_IT;
+			pause_msg_menu.heating = MESSEGE_HEATING_IT;
+			pause_msg_menu.option = MESSEGE_OPTION_IT;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_IT;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_IT;
 			break;
 
 #endif        
@@ -1631,6 +1738,7 @@ void disp_language_init()
 			set_menu.motoroff=MOTOR_OFF_TEXT_EN;
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_EN;
 			set_menu.language=LANGUAGE_TEXT_EN;
+			set_menu.shutdown=SHUTDOWN_TEXT_EN;
             //set_menu.machine_para = MACHINE_PARA_EN;
 			//
 			more_menu.title = TITLE_MORE_EN;
@@ -1748,6 +1856,20 @@ void disp_language_init()
 			zoffset_menu.title = TITLE_ZOFFSET_EN;
 			zoffset_menu.inc = ZOFFSET_INC_EN;
 			zoffset_menu.dec = ZOFFSET_DEC_EN;
+
+			pause_msg_menu.pausing = MESSEGE_PAUSING_EN;
+			pause_msg_menu.changing = MESSEGE_CHANGING_EN;
+			pause_msg_menu.unload = MESSEGE_UNLOAD_EN;
+			pause_msg_menu.waiting = MESSEGE_WAITING_EN;
+			pause_msg_menu.insert = MESSEGE_INSERT_EN;
+			pause_msg_menu.load = MESSEGE_LOAD_EN;
+			pause_msg_menu.purge = MESSEGE_PURGE_EN;
+			pause_msg_menu.resume = MESSEGE_RESUME_EN;
+			pause_msg_menu.heat = MESSEGE_HEAT_EN;
+			pause_msg_menu.heating = MESSEGE_HEATING_EN;
+			pause_msg_menu.option = MESSEGE_OPTION_EN;
+			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_EN;
+			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_EN;
 		break;
 	}
 }

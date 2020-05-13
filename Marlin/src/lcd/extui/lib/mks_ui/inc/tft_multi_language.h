@@ -471,6 +471,24 @@ typedef struct TemperatureSettings_menu_disp
 }TemperatureSettings_menu_def;
 extern TemperatureSettings_menu_def TemperatureSettings_menu;
 
+typedef struct pause_msg_disp
+{
+	const char *pausing;
+	const char *changing;
+	const char *unload;
+	const char *waiting;
+	const char *insert;
+	const char *load;
+	const char *purge;
+	const char *resume;
+	const char *heat;
+	const char *heating;
+	const char *option;
+	const char *purgeMore;
+	const char *continuePrint;
+}pause_msg_def;
+extern pause_msg_def pause_msg_menu;
+
 /*****************************************/
 //********************************************//
 //#if defined(TFT70)

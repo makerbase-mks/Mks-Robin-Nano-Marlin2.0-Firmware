@@ -14,6 +14,9 @@
 #if ENABLED(POWER_LOSS_RECOVERY)
 #include "../../../../../feature/powerloss.h"
 #endif
+#if ENABLED(PARK_HEAD_ON_PAUSE)
+#include "../../../../../feature/pause.h"
+#endif
 
 static lv_obj_t * scr;
 extern uint8_t sel_id;
@@ -83,22 +86,23 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 		lv_draw_ready_print();
 
 		#if ENABLED (SDSUPPORT)
-		card.endFilePrint();
-		wait_for_heatup = false;
+		//card.endFilePrint();
+		//wait_for_heatup = false;
 		uiCfg.print_state = IDLE;
-		
-		queue.clear();
+		card.flag.abort_sd_printing = true;
+		//queue.clear();
         	//quickstop_stepper();
 		//print_job_timer.stop();
-		thermalManager.disable_all_heaters();
+		//thermalManager.disable_all_heaters();
 
-		#if ENABLED(POWER_LOSS_RECOVERY)
-		recovery.purge();
-		#endif
-		queue.enqueue_one_now(PSTR("G91"));
-		queue.enqueue_one_now(PSTR("G1 Z10"));
-		queue.enqueue_one_now(PSTR("G90"));
-		queue.enqueue_one_now(PSTR("G28 X0 Y0"));
+		//#if ENABLED(POWER_LOSS_RECOVERY)
+		//recovery.purge();
+		//#endif
+		//queue.enqueue_one_now(PSTR("G91"));
+		//queue.enqueue_one_now(PSTR("G1 Z10"));
+		//queue.enqueue_one_now(PSTR("G90"));
+		//queue.enqueue_one_now(PSTR("G28 X0 Y0"));
+		//queue.inject_P(PSTR("G91\nG1 Z10\nG90\nG28 X0 Y0\nM84\nM107"));
 		#endif
 	}
 	else if(DialogType == DIALOG_TYPE_FINISH_PRINT)
@@ -106,6 +110,23 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event)
 		clear_cur_ui();
 		lv_draw_ready_print();
 	}
+	#if ENABLED(ADVANCED_PAUSE_FEATURE)
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_WAITING
+		||DialogType == DIALOG_PAUSE_MESSAGE_INSERT
+		||DialogType == DIALOG_PAUSE_MESSAGE_HEAT)
+	{
+		wait_for_user = false;
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_OPTION)
+	{
+		pause_menu_response = PAUSE_RESPONSE_EXTRUDE_MORE;
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_RESUME)
+	{
+		clear_cur_ui();
+		draw_return_ui();
+	}
+	#endif
     }
 }
 
@@ -116,8 +137,17 @@ static void btn_cancel_event_cb(lv_obj_t * btn, lv_event_t event)
     }
     else if(event == LV_EVENT_RELEASED)
     {
-    	clear_cur_ui();
-	draw_return_ui();
+    	if(DialogType == DIALOG_PAUSE_MESSAGE_OPTION)
+	{
+		#if ENABLED(ADVANCED_PAUSE_FEATURE)
+		pause_menu_response = PAUSE_RESPONSE_RESUME_PRINT;
+		#endif
+	}
+	else
+	{
+    		clear_cur_ui();
+		draw_return_ui();
+	}
     }
 }
 
@@ -176,7 +206,7 @@ void lv_draw_dialog(uint8_t type)
 	lv_obj_set_style(labelDialog, &tft_style_lable_rel);
     	
 
-	if(DialogType == DIALOG_TYPE_FINISH_PRINT)
+	if(DialogType == DIALOG_TYPE_FINISH_PRINT || DialogType == DIALOG_PAUSE_MESSAGE_RESUME)
 	{
 		lv_obj_t * btnOk = lv_btn_create(scr, NULL);     /*Add a button the current screen*/
 		lv_obj_set_pos(btnOk, BTN_OK_X+90, BTN_OK_Y);                            /*Set its position*/
@@ -188,6 +218,29 @@ void lv_draw_dialog(uint8_t type)
 		lv_label_set_text(labelOk, print_file_dialog_menu.confirm);  /*Set the labels text*/
 
 	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_WAITING
+		||DialogType == DIALOG_PAUSE_MESSAGE_INSERT
+		||DialogType == DIALOG_PAUSE_MESSAGE_HEAT)
+	{
+		lv_obj_t * btnOk = lv_btn_create(scr, NULL);     /*Add a button the current screen*/
+		lv_obj_set_pos(btnOk, BTN_OK_X+90, BTN_OK_Y);                            /*Set its position*/
+		lv_obj_set_size(btnOk, 100, 50);                          /*Set its size*/
+		lv_obj_set_event_cb(btnOk, btn_ok_event_cb); 
+		lv_btn_set_style(btnOk, LV_BTN_STYLE_REL, &style_btn_rel);    /*Set the button's released style*/
+		lv_btn_set_style(btnOk, LV_BTN_STYLE_PR, &style_btn_pr);      /*Set the button's pressed style*/
+		lv_obj_t * labelOk = lv_label_create(btnOk, NULL);          /*Add a label to the button*/
+		lv_label_set_text(labelOk, print_file_dialog_menu.confirm);  /*Set the labels text*/		
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_PAUSING
+		||DialogType == DIALOG_PAUSE_MESSAGE_CHANGING
+		||DialogType == DIALOG_PAUSE_MESSAGE_UNLOAD
+		||DialogType == DIALOG_PAUSE_MESSAGE_LOAD
+		||DialogType == DIALOG_PAUSE_MESSAGE_PURGE
+		||DialogType == DIALOG_PAUSE_MESSAGE_RESUME
+		||DialogType == DIALOG_PAUSE_MESSAGE_HEATING)
+	{
+		
+	}
 	else
 	{	
 		lv_obj_t * btnOk = lv_btn_create(scr, NULL);     /*Add a button the current screen*/
@@ -197,8 +250,7 @@ void lv_draw_dialog(uint8_t type)
 		lv_btn_set_style(btnOk, LV_BTN_STYLE_REL, &style_btn_rel);    /*Set the button's released style*/
 		lv_btn_set_style(btnOk, LV_BTN_STYLE_PR, &style_btn_pr);      /*Set the button's pressed style*/
 		lv_obj_t * labelOk = lv_label_create(btnOk, NULL);          /*Add a label to the button*/
-		lv_label_set_text(labelOk, print_file_dialog_menu.confirm);  /*Set the labels text*/
-
+		
 		lv_obj_t * btnCancel = lv_btn_create(scr, NULL);     /*Add a button the current screen*/
 		lv_obj_set_pos(btnCancel, BTN_CANCEL_X, BTN_CANCEL_Y);                            /*Set its position*/
 		lv_obj_set_size(btnCancel, 100, 50);                          /*Set its size*/
@@ -206,7 +258,17 @@ void lv_draw_dialog(uint8_t type)
 		lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);    /*Set the button's released style*/
 		lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);      /*Set the button's pressed style*/
 		lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);          /*Add a label to the button*/
-		lv_label_set_text(labelCancel, print_file_dialog_menu.cancle); 
+
+		if(DialogType == DIALOG_PAUSE_MESSAGE_OPTION)
+		{
+			lv_label_set_text(labelOk, pause_msg_menu.purgeMore);  /*Set the labels text*/
+			lv_label_set_text(labelCancel, pause_msg_menu.continuePrint);
+		}
+		else
+		{
+			lv_label_set_text(labelOk, print_file_dialog_menu.confirm);  /*Set the labels text*/
+			lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
+		}
 	}
 	if(DialogType == DIALOG_TYPE_PRINT_FILE)
 	{
@@ -227,6 +289,61 @@ void lv_draw_dialog(uint8_t type)
 	else if(DialogType == DIALOG_TYPE_FINISH_PRINT)
 	{
 		lv_label_set_text(labelDialog, print_file_dialog_menu.print_finish);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_PAUSING)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.pausing);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_CHANGING)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.changing);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_UNLOAD)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.unload);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_WAITING)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.waiting);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_INSERT)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.insert);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_LOAD)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.load);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_PURGE)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.purge);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_RESUME)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.resume);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_HEAT)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.heat);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_HEATING)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.heating);
+		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
+	}
+	else if(DialogType == DIALOG_PAUSE_MESSAGE_OPTION)
+	{
+		lv_label_set_text(labelDialog, pause_msg_menu.option);
 		lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
 	}
 

@@ -32,11 +32,14 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			memset(public_buf_l,0,sizeof(public_buf_l));
-			queue.enqueue_one_now(PSTR("G91"));
-			sprintf(public_buf_l, "G1 X%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
-			queue.enqueue_one_now(PSTR(public_buf_l));
-			queue.enqueue_one_now(PSTR("G90"));
+			if(queue.length <= (BUFSIZE-3))
+			{
+				memset(public_buf_l,0,sizeof(public_buf_l));
+				queue.enqueue_one_P(PSTR("G91"));
+				sprintf(public_buf_l, "G1 X%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
+				queue.enqueue_one_P(PSTR(public_buf_l));
+				queue.enqueue_one_P(PSTR("G90"));
+			}
 	    }
 		break;
 	case ID_M_X_N:
@@ -45,11 +48,14 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-	     	memset(public_buf_l,0,sizeof(public_buf_l));
-			queue.enqueue_one_now(PSTR("G91"));
-			sprintf(public_buf_l, "G1 X-%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
-			queue.enqueue_one_now(PSTR(public_buf_l));
-			queue.enqueue_one_now(PSTR("G90"));	
+			if(queue.length <= (BUFSIZE-3))
+			{
+		     	memset(public_buf_l,0,sizeof(public_buf_l));
+				queue.enqueue_one_now(PSTR("G91"));
+				sprintf(public_buf_l, "G1 X-%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
+				queue.enqueue_one_now(PSTR(public_buf_l));
+				queue.enqueue_one_now(PSTR("G90"));	
+			}
 	    }
 		break;
 	case ID_M_Y_P:
@@ -58,11 +64,14 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			memset(public_buf_l,0,sizeof(public_buf_l));
-			queue.enqueue_one_now(PSTR("G91"));
-			sprintf(public_buf_l, "G1 Y%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
-			queue.enqueue_one_now(PSTR(public_buf_l));
-			queue.enqueue_one_now(PSTR("G90"));
+			if(queue.length <= (BUFSIZE-3))
+			{
+				memset(public_buf_l,0,sizeof(public_buf_l));
+				queue.enqueue_one_now(PSTR("G91"));
+				sprintf(public_buf_l, "G1 Y%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
+				queue.enqueue_one_now(PSTR(public_buf_l));
+				queue.enqueue_one_now(PSTR("G90"));
+			}
 	    }
 		break;
 	case ID_M_Y_N:
@@ -71,11 +80,14 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			memset(public_buf_l,0,sizeof(public_buf_l));
-			queue.enqueue_one_now(PSTR("G91"));
-			sprintf(public_buf_l, "G1 Y-%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
-			queue.enqueue_one_now(PSTR(public_buf_l));
-			queue.enqueue_one_now(PSTR("G90"));
+			if(queue.length <= (BUFSIZE-3))
+			{
+				memset(public_buf_l,0,sizeof(public_buf_l));
+				queue.enqueue_one_now(PSTR("G91"));
+				sprintf(public_buf_l, "G1 Y-%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
+				queue.enqueue_one_now(PSTR(public_buf_l));
+				queue.enqueue_one_now(PSTR("G90"));
+			}
 	    }
 		break;
 	case ID_M_Z_P:
@@ -83,11 +95,14 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			memset(public_buf_l,0,sizeof(public_buf_l));
-			queue.enqueue_one_now(PSTR("G91"));
-			sprintf(public_buf_l, "G1 Z%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
-			queue.enqueue_one_now(PSTR(public_buf_l));
-			queue.enqueue_one_now(PSTR("G90"));
+			if(queue.length <= (BUFSIZE-3))
+			{
+				memset(public_buf_l,0,sizeof(public_buf_l));
+				queue.enqueue_one_now(PSTR("G91"));
+				sprintf(public_buf_l, "G1 Z%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
+				queue.enqueue_one_now(PSTR(public_buf_l));
+				queue.enqueue_one_now(PSTR("G90"));
+			}
 	    }
 		break;
 	case ID_M_Z_N:
@@ -95,11 +110,14 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			memset(public_buf_l,0,sizeof(public_buf_l));
-			queue.enqueue_one_now(PSTR("G91"));
-			sprintf(public_buf_l, "G1 Z-%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
-			queue.enqueue_one_now(PSTR(public_buf_l));
-			queue.enqueue_one_now(PSTR("G90"));
+			if(queue.length <= (BUFSIZE-3))
+			{
+				memset(public_buf_l,0,sizeof(public_buf_l));
+				queue.enqueue_one_now(PSTR("G91"));
+				sprintf(public_buf_l, "G1 Z-%3.1f F%d",uiCfg.move_dist, uiCfg.moveSpeed);
+				queue.enqueue_one_now(PSTR(public_buf_l));
+				queue.enqueue_one_now(PSTR("G90"));
+			}
 	    }
 		break;
 	case ID_M_STEP:

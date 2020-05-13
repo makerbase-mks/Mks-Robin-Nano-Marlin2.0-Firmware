@@ -459,8 +459,14 @@ void tft_lvgl_init()
 	else
 		default_preview_flg = 1;
 	    uiCfg.print_state = REPRINTED;
-	    strncpy(list_file.long_name[sel_id],recovery.info.sd_filename,sizeof(list_file.long_name[sel_id]));
-	    lv_draw_printing();
+
+		memset(public_buf_m,0,sizeof(public_buf_m));
+		strncpy(public_buf_m,recovery.info.sd_filename,sizeof(public_buf_m));
+		card.printLongPath(public_buf_m);
+		
+		strncpy(list_file.long_name[sel_id],card.longFilename,sizeof(list_file.long_name[sel_id]));
+		
+		lv_draw_printing();
     }
     else
     #endif

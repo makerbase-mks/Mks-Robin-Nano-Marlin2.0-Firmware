@@ -24,7 +24,8 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #include "../inc/draw_fan.h"
 #include "../inc/draw_about.h"
 #include "../inc/draw_change_speed.h"
-
+#include "../inc/draw_manuaLevel.h"
+#include "../inc/draw_error_message.h"
 
 #define  TFT35
 
@@ -75,6 +76,7 @@ typedef struct
 	uint8_t language;
 	uint8_t leveling_mode;
 	uint8_t from_flash_pic;
+	uint8_t finish_power_off;
 	uint32_t curFilesize;
 	
 }CFG_ITMES;
@@ -84,6 +86,7 @@ typedef struct
 	uint8_t curTempType:1,
 			curSprayerChoose:3,
 			stepHeat:4;
+	uint8_t leveling_first_time:1;
 	uint8_t extruStep;
 	uint8_t extruSpeed;
 	uint8_t stepPrintSpeed;
@@ -156,7 +159,8 @@ typedef enum
 	DOUBLE_Z_UI,
 	ENABLE_INVERT_UI,
 	NUMBER_KEY_UI,
-	BABY_STEP_UI
+	BABY_STEP_UI,
+	ERROR_MESSAGE_UI
 } DISP_STATE;
 
 typedef struct

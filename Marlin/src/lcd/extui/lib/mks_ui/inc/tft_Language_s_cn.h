@@ -231,4 +231,18 @@
 #define PRINTING_OPERATION_GBK				"操作"
 #define PRINTING_PAUSE_GBK						"暂停"
 
+#define MESSEGE_PAUSING_CN			"暂停中..."
+#define MESSEGE_CHANGING_CN			"等待换料开始..."
+#define MESSEGE_UNLOAD_CN			"退料中,请稍等..."
+#define MESSEGE_WAITING_CN			"点击按钮恢复打印"
+#define MESSEGE_INSERT_CN			"装载耗材后,点击按钮开始打印"
+#define MESSEGE_LOAD_CN			"进料中,请稍等..."
+#define MESSEGE_PURGE_CN			"等待挤出..."
+#define MESSEGE_RESUME_CN			"等待恢复打印..."
+#define MESSEGE_HEAT_CN			"按下按钮,加热喷头"
+#define MESSEGE_HEATING_CN			"喷头加热中,请等待..."
+#define MESSEGE_OPTION_CN			"挤出更多还是继续打印?"
+#define MESSEGE_PURGE_MORE_CN   "挤出"
+#define MESSEGE_CONTINUE_PRINT_CN   "打印"
+
 #endif

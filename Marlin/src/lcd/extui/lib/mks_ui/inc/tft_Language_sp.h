@@ -243,5 +243,18 @@
 #define PRINTING_AJUSTES_SP		"Ajustes"
 #define PRINTING_PAUSAR_SP			"Pausar"
 
+#define MESSEGE_PAUSING_SP			"Aparcando..."
+#define MESSEGE_CHANGING_SP			"Esperando para iniciar el cambio de filamento"
+#define MESSEGE_UNLOAD_SP			"Espere para liberar el filamento"
+#define MESSEGE_WAITING_SP			"Pulsar el botón para reanudar impresión"
+#define MESSEGE_INSERT_SP			"Inserte el filamento y pulse el botón para continuar..."
+#define MESSEGE_LOAD_SP			"Espere para purgar el filamento"
+#define MESSEGE_PURGE_SP			"Espere para purgar el filamento"
+#define MESSEGE_RESUME_SP			"Esperando impresora para reanudar..."
+#define MESSEGE_HEAT_SP			"Pulse el botón para calentar la boquilla"
+#define MESSEGE_HEATING_SP			"Calentando boquilla Espere por favor..."
+#define MESSEGE_OPTION_SP			"¿Purgar más o continuar con la impresión?"
+#define MESSEGE_PURGE_MORE_SP   "Purga"
+#define MESSEGE_CONTINUE_PRINT_SP   "Impresión"
 
 #endif

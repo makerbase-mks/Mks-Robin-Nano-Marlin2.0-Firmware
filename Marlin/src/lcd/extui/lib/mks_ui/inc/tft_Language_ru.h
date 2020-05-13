@@ -236,4 +236,18 @@
 #define DIALOG_REPRINT_RU                 "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_RU "The wifi module is being configured,\nplease wait a moment....."
 
+#define MESSEGE_PAUSING_RU			"Стоянка..."
+#define MESSEGE_CHANGING_RU			"Подождите, пока начнется смена филамента"
+#define MESSEGE_UNLOAD_RU			"Дождитесь выгрузки нити"
+#define MESSEGE_WAITING_RU			"Нажмите кнопку,чтобы возобновить печать"
+#define MESSEGE_INSERT_RU			"Вставьте нить и нажмите кнопку,чтобы продолжить"
+#define MESSEGE_LOAD_RU			"Дождитесь загрузки нити"
+#define MESSEGE_PURGE_RU			"Дождитесь чистки нити"
+#define MESSEGE_RESUME_RU			"Подождите,пока печать возобновится ..."
+#define MESSEGE_HEAT_RU			"Нажмите кнопку, чтобы нагреть форсунку"
+#define MESSEGE_HEATING_RU			"Подогрев форсунки Пожалуйста, подождите ..."
+#define MESSEGE_OPTION_RU			"Очистить больше или продолжить печать?"
+#define MESSEGE_PURGE_MORE_RU   "чистка"
+#define MESSEGE_CONTINUE_PRINT_RU   "Распечатать"
+
 #endif

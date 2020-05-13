@@ -59,7 +59,11 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
+			#if HAS_SUICIDE
+			suicide();
+			#else
 			queue.enqueue_one_now(PSTR("M84"));
+			#endif
 	    }
 		break;
 	case ID_S_LANGUAGE:
@@ -148,8 +152,11 @@ void lv_draw_set(void)
     //lv_imgbtn_set_src(buttonContinue, LV_BTN_STATE_PR, &bmp_pic);	
 	//lv_imgbtn_set_style(buttonContinue, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	//lv_imgbtn_set_style(buttonContinue, LV_BTN_STATE_REL, &tft_style_lable_rel);
-
-	lv_obj_set_event_cb_mks(buMotorOff, event_handler,ID_S_MOTOR_OFF,"bmp_Motor_off.bin",0);	
+	#if HAS_SUICIDE
+	lv_obj_set_event_cb_mks(buMotorOff, event_handler,ID_S_MOTOR_OFF,"bmp_Mamual.bin",0);
+	#else
+	lv_obj_set_event_cb_mks(buMotorOff, event_handler,ID_S_MOTOR_OFF,"bmp_Motor_off.bin",0);
+	#endif
     lv_imgbtn_set_src(buMotorOff, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buMotorOff, LV_BTN_STATE_PR, &bmp_pic);	
 	lv_imgbtn_set_style(buMotorOff, LV_BTN_STATE_PR, &tft_style_lable_pre);
@@ -216,8 +223,11 @@ void lv_draw_set(void)
 
 	       //lv_label_set_text(label_Continue, set_menu.breakpoint);
 		//lv_obj_align(label_Continue, buttonContinue, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
-
-		lv_label_set_text(label_MotorOff, set_menu.motoroff);	
+		#if HAS_SUICIDE
+		lv_label_set_text(label_MotorOff, set_menu.shutdown);
+		#else
+		lv_label_set_text(label_MotorOff, set_menu.motoroff);
+		#endif
 		lv_obj_align(label_MotorOff, buMotorOff, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
 		
 		lv_label_set_text(label_Language, set_menu.language);

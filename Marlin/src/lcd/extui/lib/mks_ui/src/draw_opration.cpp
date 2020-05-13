@@ -17,6 +17,10 @@ static lv_obj_t * scr;
 #define ID_O_SPEED			5
 #define ID_O_RETURN			6
 #define ID_O_FAN			7
+#define ID_O_POWER_OFF		8
+
+static lv_obj_t *label_PowerOff;
+static lv_obj_t *buttonPowerOff;
 
 static void event_handler(lv_obj_t * obj, lv_event_t event)
 {
@@ -89,6 +93,31 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 	        draw_return_ui();
 	    }
 		break;
+	case ID_O_POWER_OFF:
+	    if(event == LV_EVENT_CLICKED) {
+			
+	    }
+	    else if(event == LV_EVENT_RELEASED) {
+		 if(gCfgItems.finish_power_off == 1)
+		 {
+		 	gCfgItems.finish_power_off = 0;
+			lv_obj_set_event_cb_mks(obj, event_handler,ID_O_POWER_OFF,"bmp_Mamual.bin",0);
+			lv_label_set_text(label_PowerOff, printing_more_menu.manual);
+			lv_obj_align(label_PowerOff, buttonPowerOff, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
+			lv_obj_refresh_ext_draw_pad(label_PowerOff);
+			update_spi_flash();
+		 }
+		 else
+		 {
+		 	gCfgItems.finish_power_off = 1;
+			lv_obj_set_event_cb_mks(obj, event_handler,ID_O_POWER_OFF,"bmp_Auto.bin",0);
+			lv_label_set_text(label_PowerOff, printing_more_menu.auto_close);
+			lv_obj_align(label_PowerOff, buttonPowerOff, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
+			lv_obj_refresh_ext_draw_pad(label_PowerOff);
+			update_spi_flash();
+		 }
+	    }
+		break;
 
 	}
 }
@@ -130,10 +159,12 @@ void lv_draw_opration(void)
 	buttonFan = lv_imgbtn_create(scr, NULL);
 	buttonSpeed = lv_imgbtn_create(scr, NULL);
 	
+	
 	if(uiCfg.print_state != WORKING)
 		//buttonFilament = lv_imgbtn_create(scr, NULL);
 	//else
 		buttonMove = lv_imgbtn_create(scr, NULL);
+	buttonPowerOff = lv_imgbtn_create(scr, NULL);
 	buttonBack = lv_imgbtn_create(scr, NULL);
 	
 
@@ -178,6 +209,18 @@ void lv_draw_opration(void)
 		lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_PR, &tft_style_lable_pre);
 		lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_REL, &tft_style_lable_rel);
 	}
+		if(gCfgItems.finish_power_off == 1)
+		{
+			lv_obj_set_event_cb_mks(buttonPowerOff, event_handler,ID_O_POWER_OFF,"bmp_Auto.bin",0);
+		}
+		else
+		{
+			lv_obj_set_event_cb_mks(buttonPowerOff, event_handler,ID_O_POWER_OFF,"bmp_Mamual.bin",0);
+		}
+		lv_imgbtn_set_src(buttonPowerOff, LV_BTN_STATE_REL, &bmp_pic);
+	       lv_imgbtn_set_src(buttonPowerOff, LV_BTN_STATE_PR, &bmp_pic);	
+		lv_imgbtn_set_style(buttonPowerOff, LV_BTN_STATE_PR, &tft_style_lable_pre);
+		lv_imgbtn_set_style(buttonPowerOff, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
 	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_O_RETURN,"bmp_Return.bin",0);	
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
@@ -202,6 +245,11 @@ void lv_draw_opration(void)
 	else*/
 	{
 		lv_obj_set_pos(buttonMove,INTERVAL_V,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
+		lv_obj_set_pos(buttonPowerOff,BTN_X_PIXEL+INTERVAL_V*2,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
+	}
+	else
+	{
+		lv_obj_set_pos(buttonPowerOff,INTERVAL_V,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 	}
 	lv_obj_set_pos(buttonBack,BTN_X_PIXEL*3+INTERVAL_V*4,  BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 
@@ -219,6 +267,7 @@ void lv_draw_opration(void)
 	{
 		lv_btn_set_layout(buttonMove, LV_LAYOUT_OFF);
 	}
+	lv_btn_set_layout(buttonPowerOff, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
 	
        labelPreHeat = lv_label_create(buttonPreHeat, NULL);
@@ -235,6 +284,7 @@ void lv_draw_opration(void)
 	{
 		label_Move = lv_label_create(buttonMove, NULL);
 	}
+	label_PowerOff = lv_label_create(buttonPowerOff, NULL);
 	
 	label_Back = lv_label_create(buttonBack, NULL);
 	
@@ -263,6 +313,16 @@ void lv_draw_opration(void)
 			lv_label_set_text(label_Move, operation_menu.move);
 			lv_obj_align(label_Move, buttonMove, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
 		}
+
+		if(gCfgItems.finish_power_off == 1)
+		{
+			lv_label_set_text(label_PowerOff, printing_more_menu.auto_close);
+		}
+		else
+		{
+			lv_label_set_text(label_PowerOff, printing_more_menu.manual);
+		}
+		lv_obj_align(label_PowerOff, buttonPowerOff, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
 		
 		lv_label_set_text(label_Back, common_menu.text_back);
 		lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);

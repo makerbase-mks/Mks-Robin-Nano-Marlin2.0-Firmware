@@ -238,4 +238,19 @@
 #define DIALOG_PRINT_TIME_FR              "Temps d'impression: "
 #define DIALOG_REPRINT_FR                 "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_FR "The wifi module is being configured,\nplease wait a moment....."
+
+
+#define MESSEGE_PAUSING_FR			"Parking..."
+#define MESSEGE_CHANGING_FR			"Attente filament pour démarrer"
+#define MESSEGE_UNLOAD_FR			"Attente retrait du filament"
+#define MESSEGE_WAITING_FR			"Presser bouton,pour reprendre"
+#define MESSEGE_INSERT_FR			"Insérer filament et app. bouton pour continuer..."
+#define MESSEGE_LOAD_FR			"Attente chargement filament"
+#define MESSEGE_PURGE_FR			"Attente Purge filament"
+#define MESSEGE_RESUME_FR			"Attente reprise impression"
+#define MESSEGE_HEAT_FR			"Presser le bouton pour chauffer..."
+#define MESSEGE_HEATING_FR			"Buse en chauffe Patienter SVP..."
+#define MESSEGE_OPTION_FR			"Purger davantage ou continuer l'impression?"
+#define MESSEGE_PURGE_MORE_FR   "Purge"
+#define MESSEGE_CONTINUE_PRINT_FR   "Impression"
 #endif

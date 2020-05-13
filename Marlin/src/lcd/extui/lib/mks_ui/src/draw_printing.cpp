@@ -52,8 +52,13 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 		{
 			 if(uiCfg.print_state == WORKING)
 			 {
+				 #if ENABLED(PARK_HEAD_ON_PAUSE)
+				 queue.inject_P(PSTR("M25 P\nM24"));
+				 #elif ENABLED(SDSUPPORT)
+				 queue.inject_P(PSTR("M25"));
 				 uiCfg.print_state = PAUSED;
-			        queue.inject_P(PSTR("M25"));
+				 #endif
+				 
 				 lv_obj_set_event_cb_mks(buttonPause, event_handler,ID_PAUSE,"bmp_Pause.bin",0);
 				 lv_label_set_text(labelPause, printing_menu.resume);
 				 lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
@@ -61,10 +66,15 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			 else if(uiCfg.print_state == PAUSED)
 			 {
 			 	uiCfg.print_state = WORKING;
-			       queue.inject_P(PSTR("M24"));
+				
+			       #if ENABLED(PARK_HEAD_ON_PAUSE)
+				wait_for_heatup = wait_for_user = false;
+				#endif
+				if (IS_SD_PAUSED())queue.inject_P(PSTR("M24"));// queue.inject_P(M24_STR);
+				 
 				lv_obj_set_event_cb_mks(obj, event_handler,ID_PAUSE,"bmp_Resume.bin",0);
 				lv_label_set_text(labelPause, printing_menu.pause);
-				 lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
+				lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
 			 }
 			 #if ENABLED(POWER_LOSS_RECOVERY)
 			 else if(uiCfg.print_state == REPRINTED)
@@ -413,7 +423,7 @@ void setProBarRate()
 	{
 		lv_bar_set_value(bar1, rate, LV_ANIM_ON);
 
-		if(/*(mksReprint.mks_printer_state == MKS_IDLE)  &&*/  (rate == 100) )
+		if(marlin_state == MF_SD_COMPLETE)
 		{
 			if(once_flag == 0)
 			{					
@@ -425,6 +435,11 @@ void setProBarRate()
 				lv_draw_dialog(DIALOG_TYPE_FINISH_PRINT);
                 			
 				once_flag = 1;
+				
+				#if HAS_SUICIDE
+				if(gCfgItems.finish_power_off == 1)
+				suicide();
+				#endif
 			}					
 		}
 		

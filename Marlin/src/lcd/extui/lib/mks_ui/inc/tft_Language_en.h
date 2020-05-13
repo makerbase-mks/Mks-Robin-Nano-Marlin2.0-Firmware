@@ -681,4 +681,18 @@
 #define PRINTING_OPERATION_OTHER_LANGUGE		"Operation"
 #define PRINTING_PAUSE_OTHER_LANGUGE			"Pause"
 
+#define MESSEGE_PAUSING_EN			"Parking..."
+#define MESSEGE_CHANGING_EN			"Wait for filament change to start"
+#define MESSEGE_UNLOAD_EN			"Wait for filament unload"
+#define MESSEGE_WAITING_EN			"Press Button to resume print"
+#define MESSEGE_INSERT_EN			"Insert filament and press button to continue"
+#define MESSEGE_LOAD_EN			"Wait for filament load"
+#define MESSEGE_PURGE_EN			"Wait for filament purge"
+#define MESSEGE_RESUME_EN			"Wait for print to resume..."
+#define MESSEGE_HEAT_EN			"Press button to heat nozzle"
+#define MESSEGE_HEATING_EN			"Nozzle heating Please wait..."
+#define MESSEGE_OPTION_EN			"Purge more or continue print?"
+#define MESSEGE_PURGE_MORE_EN   "Purge"
+#define MESSEGE_CONTINUE_PRINT_EN   "Print"
+
 #endif

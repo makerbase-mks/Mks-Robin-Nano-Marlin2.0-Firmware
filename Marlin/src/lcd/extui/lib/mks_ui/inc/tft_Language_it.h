@@ -234,4 +234,18 @@
 #define DIALOG_PRINT_TIME_IT              "Tempo di stampa: "
 #define DIALOG_REPRINT_IT                 "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_IT "The wifi module is being configured,\nplease wait a moment....."
+
+#define MESSEGE_PAUSING_IT			"Parcheggiando..."
+#define MESSEGE_CHANGING_IT			"Attendere avvio del cambio di filamento"
+#define MESSEGE_UNLOAD_IT			"Attendere l'espulsione del filamento"
+#define MESSEGE_WAITING_IT			"Premi per riprendere la stampa"
+#define MESSEGE_INSERT_IT			"Inserisci il filamento e premi per continuare"
+#define MESSEGE_LOAD_IT			"Attendere il caricamento del filamento"
+#define MESSEGE_PURGE_IT			"Attendere lo spurgo del filamento"
+#define MESSEGE_RESUME_IT			"Attendere la ripresa della stampa..."
+#define MESSEGE_HEAT_IT			"Premi per riscaldare ugello"
+#define MESSEGE_HEATING_IT			"Riscaldam. ugello Attendere prego..."
+#define MESSEGE_OPTION_IT			"Eliminare di più o continuare a stampare?"
+#define MESSEGE_PURGE_MORE_IT   "Epurazione"
+#define MESSEGE_CONTINUE_PRINT_IT   "Stampa"
 #endif
