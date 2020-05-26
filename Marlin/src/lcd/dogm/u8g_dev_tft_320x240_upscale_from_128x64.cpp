@@ -636,8 +636,6 @@ uint8_t u8g_dev_tft_320x240_upscale_from_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, u
       // bottom line and buttons
       #if ENABLED(TOUCH_BUTTONS)
 
-        #if DISABLED(TFT_LITTLE_VGL_UI)
-
         setWindow(u8g, dev, 10, 170, 309, 171);
         #ifdef LCD_USE_DMA_FSMC
           LCD_IO_WriteMultiple(TFT_DISABLED_COLOR, 600);
@@ -658,7 +656,7 @@ uint8_t u8g_dev_tft_320x240_upscale_from_128x64_fn(u8g_t *u8g, u8g_dev_t *dev, u
 
         setWindow(u8g, dev, 242, 185, 305, 224);
         drawImage(buttonC, u8g, dev, 32, 20, TFT_BTOKMENU_COLOR);
-        #endif
+
       #endif // TOUCH_BUTTONS
 
       return 0;

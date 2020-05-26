@@ -299,19 +299,6 @@ FORCE_INLINE screenFunc_t ap_message_screen(const PauseMessage message) {
   return nullptr;
 }
 
-#if ENABLED(TFT_LITTLE_VGL_UI)
-extern void lv_draw_pause_message(const PauseMessage msg);
-
-void lcd_pause_show_message(
-  const PauseMessage message,
-  const PauseMode mode/*=PAUSE_MODE_SAME*/,
-  const uint8_t extruder/*=active_extruder*/
-) {
-  if (mode != PAUSE_MODE_SAME) pause_mode = mode;
-  hotend_status_extruder = extruder;
-  lv_draw_pause_message(message);
-}
-#else
 void lcd_pause_show_message(
   const PauseMessage message,
   const PauseMode mode/*=PAUSE_MODE_SAME*/,
@@ -327,7 +314,5 @@ void lcd_pause_show_message(
   else
     ui.return_to_status();
 }
-
-#endif
 
 #endif // HAS_LCD_MENU && ADVANCED_PAUSE_FEATURE

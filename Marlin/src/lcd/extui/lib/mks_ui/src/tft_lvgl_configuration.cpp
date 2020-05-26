@@ -17,13 +17,17 @@
 #if ENABLED(POWER_LOSS_RECOVERY)
 #include "../../../../../feature/powerloss.h"
 #endif
+#include <SPI.h>
+#if ENABLED(SPI_GRAPHICAL_TFT)
+#include "../inc/SPI_TFT.h"
+#endif
 
 
 //#include "../../../Configuration.h"
 //#include "../../../src/core/macros.h"
 
 
-
+extern void LCD_IO_Init(uint8_t cs, uint8_t rs);
 extern void LCD_IO_WriteData(uint16_t RegValue);
 extern void LCD_IO_WriteReg(uint16_t Reg);
 
@@ -274,11 +278,11 @@ void LCD_Clear(uint16_t  Color)
     ili9320_SetWindows(0,0,480,320);
 		LCD_WriteRAM_Prepare();
 		//index = (160*480);
-    /*for(index=0;index<320*480;index++)
+    for(index=0;index<320*480;index++)
     {
         LCD_IO_WriteData(Color);
-    }*/
-    LCD_IO_WriteMultiple(Color, (480*320));
+    }
+    //LCD_IO_WriteMultiple(Color, (480*320));
     //while(index --)
 		//LCD_IO_WriteData(Color);
 	}
@@ -312,106 +316,126 @@ void LCD_Clear(uint16_t  Color)
 	}
 }
 
+extern uint16_t ILI9488_ReadRAM();
+
+#if DISABLED(SPI_GRAPHICAL_TFT)
 void init_tft()
 {
 	uint16_t i;
 	//************* Start Initial Sequence **********//
-	LCD_IO_WriteReg(0x00E0); 
-	LCD_IO_WriteData(0x0000); 
-	LCD_IO_WriteData(0x0007); 
-	LCD_IO_WriteData(0x000f); 
-	LCD_IO_WriteData(0x000D); 
-	LCD_IO_WriteData(0x001B); 
-	LCD_IO_WriteData(0x000A); 
-	LCD_IO_WriteData(0x003c); 
-	LCD_IO_WriteData(0x0078); 
-	LCD_IO_WriteData(0x004A); 
-	LCD_IO_WriteData(0x0007); 
-	LCD_IO_WriteData(0x000E); 
-	LCD_IO_WriteData(0x0009); 
-	LCD_IO_WriteData(0x001B); 
-	LCD_IO_WriteData(0x001e); 
-	LCD_IO_WriteData(0x000f);  
+	
+    LCD_IO_Init(FSMC_CS_PIN, FSMC_RS_PIN);
+	
+	_delay_ms(5);
+	
+	LCD_IO_WriteReg(0X00D3);				   
+	DeviceCode=ILI9488_ReadRAM();	//dummy read 	
+	DeviceCode=ILI9488_ReadRAM();	
+	DeviceCode=ILI9488_ReadRAM();   								   
+	DeviceCode<<=8;
+	DeviceCode|=ILI9488_ReadRAM();  	
+	
+	if(DeviceCode == 0x9488)
+	{
+		LCD_IO_WriteReg(0x00E0); 
+		LCD_IO_WriteData(0x0000); 
+		LCD_IO_WriteData(0x0007); 
+		LCD_IO_WriteData(0x000f); 
+		LCD_IO_WriteData(0x000D); 
+		LCD_IO_WriteData(0x001B); 
+		LCD_IO_WriteData(0x000A); 
+		LCD_IO_WriteData(0x003c); 
+		LCD_IO_WriteData(0x0078); 
+		LCD_IO_WriteData(0x004A); 
+		LCD_IO_WriteData(0x0007); 
+		LCD_IO_WriteData(0x000E); 
+		LCD_IO_WriteData(0x0009); 
+		LCD_IO_WriteData(0x001B); 
+		LCD_IO_WriteData(0x001e); 
+		LCD_IO_WriteData(0x000f);  
 
-	LCD_IO_WriteReg(0x00E1); 
-	LCD_IO_WriteData(0x0000); 
-	LCD_IO_WriteData(0x0022); 
-	LCD_IO_WriteData(0x0024); 
-	LCD_IO_WriteData(0x0006); 
-	LCD_IO_WriteData(0x0012); 
-	LCD_IO_WriteData(0x0007); 
-	LCD_IO_WriteData(0x0036); 
-	LCD_IO_WriteData(0x0047); 
-	LCD_IO_WriteData(0x0047); 
-	LCD_IO_WriteData(0x0006); 
-	LCD_IO_WriteData(0x000a); 
-	LCD_IO_WriteData(0x0007); 
-	LCD_IO_WriteData(0x0030); 
-	LCD_IO_WriteData(0x0037); 
-	LCD_IO_WriteData(0x000f); 
+		LCD_IO_WriteReg(0x00E1); 
+		LCD_IO_WriteData(0x0000); 
+		LCD_IO_WriteData(0x0022); 
+		LCD_IO_WriteData(0x0024); 
+		LCD_IO_WriteData(0x0006); 
+		LCD_IO_WriteData(0x0012); 
+		LCD_IO_WriteData(0x0007); 
+		LCD_IO_WriteData(0x0036); 
+		LCD_IO_WriteData(0x0047); 
+		LCD_IO_WriteData(0x0047); 
+		LCD_IO_WriteData(0x0006); 
+		LCD_IO_WriteData(0x000a); 
+		LCD_IO_WriteData(0x0007); 
+		LCD_IO_WriteData(0x0030); 
+		LCD_IO_WriteData(0x0037); 
+		LCD_IO_WriteData(0x000f); 
 
-	LCD_IO_WriteReg(0x00C0); 
-	LCD_IO_WriteData(0x0010); 
-	LCD_IO_WriteData(0x0010); 
+		LCD_IO_WriteReg(0x00C0); 
+		LCD_IO_WriteData(0x0010); 
+		LCD_IO_WriteData(0x0010); 
 
-	LCD_IO_WriteReg(0x00C1); 
-	LCD_IO_WriteData(0x0041); 
+		LCD_IO_WriteReg(0x00C1); 
+		LCD_IO_WriteData(0x0041); 
 
-	LCD_IO_WriteReg(0x00C5); 
-	LCD_IO_WriteData(0x0000); 
-	LCD_IO_WriteData(0x0022); 
-	LCD_IO_WriteData(0x0080); 
+		LCD_IO_WriteReg(0x00C5); 
+		LCD_IO_WriteData(0x0000); 
+		LCD_IO_WriteData(0x0022); 
+		LCD_IO_WriteData(0x0080); 
 
-	LCD_IO_WriteReg(0x0036); 
-	//ILI9488_WriteData(0x0068);
-	//if(gCfgItems.overturn_180 != 0xEE)
-	//{
-		LCD_IO_WriteData(0x0068); 
-	//}
-	//else
-	//{
-		//ILI9488_WriteData(0x00A8);
-	//}
+		LCD_IO_WriteReg(0x0036); 
+		//ILI9488_WriteData(0x0068);
+		//if(gCfgItems.overturn_180 != 0xEE)
+		//{
+			LCD_IO_WriteData(0x0068); 
+		//}
+		//else
+		//{
+			//ILI9488_WriteData(0x00A8);
+		//}
 
-	LCD_IO_WriteReg(0x003A); //Interface Mode Control
-	LCD_IO_WriteData(0x0055);
+		LCD_IO_WriteReg(0x003A); //Interface Mode Control
+		LCD_IO_WriteData(0x0055);
 
-	LCD_IO_WriteReg(0X00B0);  //Interface Mode Control  
-	LCD_IO_WriteData(0x0000); 
-	LCD_IO_WriteReg(0x00B1);   //Frame rate 70HZ  
-	LCD_IO_WriteData(0x00B0); 
-	LCD_IO_WriteData(0x0011); 
-	LCD_IO_WriteReg(0x00B4); 
-	LCD_IO_WriteData(0x0002);   
-	LCD_IO_WriteReg(0x00B6); //RGB/MCU Interface Control
-	LCD_IO_WriteData(0x0002); 
-	LCD_IO_WriteData(0x0042); 
+		LCD_IO_WriteReg(0X00B0);  //Interface Mode Control  
+		LCD_IO_WriteData(0x0000); 
+		LCD_IO_WriteReg(0x00B1);   //Frame rate 70HZ  
+		LCD_IO_WriteData(0x00B0); 
+		LCD_IO_WriteData(0x0011); 
+		LCD_IO_WriteReg(0x00B4); 
+		LCD_IO_WriteData(0x0002);   
+		LCD_IO_WriteReg(0x00B6); //RGB/MCU Interface Control
+		LCD_IO_WriteData(0x0002); 
+		LCD_IO_WriteData(0x0042); 
 
-	LCD_IO_WriteReg(0x00B7); 
-	LCD_IO_WriteData(0x00C6); 
+		LCD_IO_WriteReg(0x00B7); 
+		LCD_IO_WriteData(0x00C6); 
 
-	//WriteComm(0XBE);
-	//WriteData(0x00);
-	//WriteData(0x04);
+		//WriteComm(0XBE);
+		//WriteData(0x00);
+		//WriteData(0x04);
 
-	LCD_IO_WriteReg(0x00E9); 
-	LCD_IO_WriteData(0x0000);
+		LCD_IO_WriteReg(0x00E9); 
+		LCD_IO_WriteData(0x0000);
 
-	LCD_IO_WriteReg(0X00F7);    
-	LCD_IO_WriteData(0x00A9); 
-	LCD_IO_WriteData(0x0051); 
-	LCD_IO_WriteData(0x002C); 
-	LCD_IO_WriteData(0x0082);
+		LCD_IO_WriteReg(0X00F7);    
+		LCD_IO_WriteData(0x00A9); 
+		LCD_IO_WriteData(0x0051); 
+		LCD_IO_WriteData(0x002C); 
+		LCD_IO_WriteData(0x0082);
 
-	LCD_IO_WriteReg(0x0011); 
-	for(i=0;i<65535;i++);
-	LCD_IO_WriteReg(0x0029); 	
+		LCD_IO_WriteReg(0x0011); 
+		for(i=0;i<65535;i++);
+		LCD_IO_WriteReg(0x0029); 	
 
-	ili9320_SetWindows(0,0,480,320);
-	LCD_Clear(0x0000);
+		ili9320_SetWindows(0,0,480,320);
+		LCD_Clear(0x0000);
+		
+	      OUT_WRITE(LCD_BACKLIGHT_PIN, HIGH);
+	}
 
-    //ili9320_Clear(0x0000);
 }
+#endif
 
 extern uint8_t bmp_public_buf[17 * 1024];
 void tft_lvgl_init()
@@ -428,6 +452,13 @@ void tft_lvgl_init()
     disp_language_init();
     //spi_flash_read_test();
 
+	#if ENABLED(SPI_GRAPHICAL_TFT)
+       SPI_TFT.spi_init(SPI_FULL_SPEED);
+	SPI_TFT.LCD_init();
+	#else
+	init_tft();
+	#endif
+	
     lv_init();	
 
     lv_disp_buf_init(&disp_buf, bmp_public_buf, NULL, LV_HOR_RES_MAX * 18);		/*Initialize the display buffer*/
@@ -449,16 +480,19 @@ void tft_lvgl_init()
 	init_gb2312_font();
 
     tft_style_init();
+	
+	filament_pin_setup();
 
     #if ENABLED(POWER_LOSS_RECOVERY)
     if((recovery.info.valid_head != 0) && 
 	(recovery.info.valid_head == recovery.info.valid_foot))
     {
     	if(gCfgItems.from_flash_pic == 1)
-		flash_preview_begin = 1;
-	else
-		default_preview_flg = 1;
-	    uiCfg.print_state = REPRINTED;
+			flash_preview_begin = 1;
+		else
+			default_preview_flg = 1;
+		
+	    uiCfg.print_state = REPRINTING;
 
 		memset(public_buf_m,0,sizeof(public_buf_m));
 		strncpy(public_buf_m,recovery.info.sd_filename,sizeof(public_buf_m));
@@ -496,6 +530,46 @@ void LCD_WriteRAM(uint16_t RGB_Code)
 
 
 
+#if ENABLED(SPI_GRAPHICAL_TFT)
+void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p)
+{
+	uint16_t i,width,height;
+	uint16_t clr_temp;
+	uint8_t tbuf[480*2];
+	
+	SPI_TFT.spi_init(SPI_FULL_SPEED);
+	
+    width = area->x2 - area->x1 + 1;
+    height = area->y2 - area->y1 +1;
+
+	for(int j=0;j<height;j++)
+	{
+		SPI_TFT.SetCursor(0,0);
+    	SPI_TFT.SetWindows((uint16_t)area->x1,(uint16_t)area->y1+j,width,1);
+    	SPI_TFT.LCD_WriteRAM_Prepare();	
+		
+		for(i=0;i<width*2;)
+		{
+	    	clr_temp = (uint16_t)(((uint16_t)color_p->ch.red<<11)
+							|((uint16_t)color_p->ch.green<<5)
+							|((uint16_t)color_p->ch.blue));	
+			
+			tbuf[i]=clr_temp>>8;
+			tbuf[i+1]=clr_temp;
+			i+=2;
+			color_p++;
+		}
+		SPI_TFT_CS_L;
+		SPI_TFT_DC_H;
+		SPI.dmaSend(tbuf,width*2,true);
+		SPI_TFT_CS_H;	
+	}
+
+	lv_disp_flush_ready(disp);         /* Indicate you are ready with the flushing*/
+
+	W25QXX.init(SPI_QUARTER_SPEED);
+}
+#else
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p)
 {
     #if 1
@@ -532,6 +606,8 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
     lv_disp_flush_ready(disp);         /* Indicate you are ready with the flushing*/
     #endif
 }
+#endif
+
 
 #define TICK_CYCLE 1
 
@@ -548,6 +624,46 @@ unsigned int  getTickDiff(unsigned int curTick, unsigned int  lastTick)
 		return (0xffffffff - lastTick + curTick) * TICK_CYCLE;
 	}
 }
+
+#if ENABLED(SPI_GRAPHICAL_TFT)
+
+#ifndef USE_XPT2046
+#define USE_XPT2046         1
+#define XPT2046_XY_SWAP  	1
+#define XPT2046_X_INV   	1
+#define XPT2046_Y_INV   	0
+#endif
+
+#if USE_XPT2046
+#define XPT2046_HOR_RES     480
+#define XPT2046_VER_RES     320
+#define XPT2046_X_MIN       201  
+#define XPT2046_Y_MIN       164
+#define XPT2046_X_MAX       3919 
+#define XPT2046_Y_MAX       3776
+#define XPT2046_AVG         4
+#define XPT2046_INV         1
+#endif
+
+#else
+#ifndef USE_XPT2046
+#define USE_XPT2046         1
+#define XPT2046_XY_SWAP  	1
+#define XPT2046_X_INV   	0
+#define XPT2046_Y_INV   	1
+#endif
+
+#if USE_XPT2046
+#define XPT2046_HOR_RES     480
+#define XPT2046_VER_RES     320
+#define XPT2046_X_MIN       201 
+#define XPT2046_Y_MIN       164
+#define XPT2046_X_MAX       3919
+#define XPT2046_Y_MAX       3776
+#define XPT2046_AVG         4
+#define XPT2046_INV         0
+#endif
+#endif
 
 static void xpt2046_corr(uint16_t * x, uint16_t * y)
 {
@@ -583,34 +699,63 @@ int SPI2_ReadWrite2Bytes(void)
 {
 	volatile uint16_t ans=0;
         uint16_t temp = 0;
+	#if ENABLED(SPI_GRAPHICAL_TFT)
+	temp=SPI_TFT.spi_read_write_byte(0xff);
+	ans=temp<<8;
+	temp=SPI_TFT.spi_read_write_byte(0xff);
+	ans|=temp;
+	ans>>=3;	
+	#else
 	temp=W25QXX.spi_flash_read_write_byte(0xff);
 	ans=temp<<8;
 	temp=W25QXX.spi_flash_read_write_byte(0xff);
 	ans|=temp;
 	ans>>=3;
+	#endif
 	return ans&0x0fff;
 }
+
 uint16_t		x_addata[times],y_addata[times];
-void ADS7843_Rd_Addata(uint16_t *X_Addata,uint16_t *Y_Addata)
+void XPT2046_Rd_Addata(uint16_t *X_Addata,uint16_t *Y_Addata)
 {
 
 	uint16_t		i,j,k;
     //int result;
 
-       #if ENABLED(TOUCH_BUTTONS)
+       //#if ENABLED(TOUCH_BUTTONS)
+	   
+	#if ENABLED(SPI_GRAPHICAL_TFT)
+	SPI_TFT.spi_init(SPI_QUARTER_SPEED);
+	#endif
+	
 	for(i=0;i<times;i++)					
 	{
+		#if ENABLED(SPI_GRAPHICAL_TFT)
 		OUT_WRITE(TOUCH_CS_PIN, LOW);
-		W25QXX.spi_flash_read_write_byte(CHX);
+		SPI_TFT.spi_read_write_byte(CHX);
 		y_addata[i] = SPI2_ReadWrite2Bytes();
 		WRITE(TOUCH_CS_PIN, HIGH);
 		
 		OUT_WRITE(TOUCH_CS_PIN, LOW);
-		W25QXX.spi_flash_read_write_byte(CHY);
+		SPI_TFT.spi_read_write_byte(CHY);
 		x_addata[i] = SPI2_ReadWrite2Bytes(); 
-		WRITE(TOUCH_CS_PIN, HIGH);
+		WRITE(TOUCH_CS_PIN, HIGH);		
+		#else
+			//#if ENABLED(TOUCH_BUTTONS)
+			OUT_WRITE(TOUCH_CS_PIN, LOW);
+			W25QXX.spi_flash_read_write_byte(CHX);
+			y_addata[i] = SPI2_ReadWrite2Bytes();
+			WRITE(TOUCH_CS_PIN, HIGH);
+			
+			OUT_WRITE(TOUCH_CS_PIN, LOW);
+			W25QXX.spi_flash_read_write_byte(CHY);
+			x_addata[i] = SPI2_ReadWrite2Bytes(); 
+			WRITE(TOUCH_CS_PIN, HIGH);
+			//#endif
+		#endif
+
 	}
-	#endif
+	//#endif
 	//result = x_addata[0];
 	for(i=0;i<times;i++)					
 	{
@@ -695,7 +840,7 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data)
     /*Save the pressed coordinates and the state*/
 	if(diffTime > 10)
 	{
-		ADS7843_Rd_Addata((uint16_t *)&last_x, (uint16_t *)&last_y);
+		XPT2046_Rd_Addata((uint16_t *)&last_x, (uint16_t *)&last_y);
 	    if(TOUCH_PressValid(last_x, last_y)) {
 	        
 	        data->state = LV_INDEV_STATE_PR;
@@ -716,15 +861,4 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data)
     #endif
 }
 
-void LV_TASK_HANDLER()
-{
-	//lv_tick_inc(1);
-	lv_task_handler();
-	#if ENABLED(MKS_TEST)
-	mks_test();
-	#endif
-	disp_pre_gcode(2,36);
-	GUI_RefreshPage();
-	//sd_detection();
-}
 #endif

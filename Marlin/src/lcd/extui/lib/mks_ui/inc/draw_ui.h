@@ -26,6 +26,8 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #include "../inc/draw_change_speed.h"
 #include "../inc/draw_manuaLevel.h"
 #include "../inc/draw_error_message.h"
+#include "../inc/printer_opration.h"
+
 
 #define  TFT35
 
@@ -77,6 +79,7 @@ typedef struct
 	uint8_t leveling_mode;
 	uint8_t from_flash_pic;
 	uint8_t finish_power_off;
+	uint8_t pause_reprint;
 	uint32_t curFilesize;
 	
 }CFG_ITMES;
@@ -89,8 +92,9 @@ typedef struct
 	uint8_t leveling_first_time:1;
 	uint8_t extruStep;
 	uint8_t extruSpeed;
-	uint8_t stepPrintSpeed;
 	uint8_t print_state;
+	uint8_t stepPrintSpeed;
+	uint8_t waitEndMoves;
 	uint16_t moveSpeed;
 	float   move_dist;
 }UI_CFG;
@@ -206,6 +210,8 @@ extern void draw_return_ui();
 extern void sd_detection();
 extern void gCfg_to_spiFlah();
 extern void print_time_count();
+
+extern void LV_TASK_HANDLER();
 
 
 #if defined(__cplusplus)

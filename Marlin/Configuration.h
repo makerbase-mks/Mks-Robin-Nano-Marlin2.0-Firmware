@@ -38,7 +38,6 @@
  */
 #define CONFIGURATION_H_VERSION 020005
 
-#define TFT_LITTLE_VGL_UI
 //#define MKS_TEST
 
 //===========================================================================
@@ -1149,7 +1148,7 @@
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  * By default the firmware assumes HIGH=FILAMENT PRESENT.
  */
-#define FILAMENT_RUNOUT_SENSOR
+//#define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
   #define NUM_RUNOUT_SENSORS   1     // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
   #define FIL_RUNOUT_INVERTING false // Set to true to invert the logic of the sensor.
@@ -1503,7 +1502,7 @@
  *    P1  Raise the nozzle always to Z-park height.
  *    P2  Raise the nozzle by Z-park amount, limited to Z_MAX_POS.
  */
-#define NOZZLE_PARK_FEATURE
+//#define NOZZLE_PARK_FEATURE
 
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z_raise }
@@ -2101,7 +2100,7 @@
 //
 // FSMC display (MKS Robin, Alfawise U20, JGAurora A5S, REXYZ A1, etc.)
 //
-#define FSMC_GRAPHICAL_TFT
+//#define FSMC_GRAPHICAL_TFT
 
 //=============================================================================
 //============================  Other Controllers  ============================
@@ -2110,7 +2109,7 @@
 //
 // ADS7843/XPT2046 ADC Touchscreen such as ILI9341 2.8
 //
-#define TOUCH_BUTTONS
+//#define TOUCH_BUTTONS
 #if ENABLED(TOUCH_BUTTONS)
   #define BUTTON_DELAY_EDIT  75 // (ms) Button repeat delay for edit screens
   #define BUTTON_DELAY_MENU 100 // (ms) Button repeat delay for menus
@@ -2120,6 +2119,11 @@
   #define XPT2046_X_OFFSET       -43
   #define XPT2046_Y_OFFSET        257
 #endif
+
+//If TFT_LITTLE_VGL_UI is enabled, there is no need to turn on FSMC_GRAPHICAL_TFT.
+#define TFT_LITTLE_VGL_UI
+//Robin_nano_v2.0 motherboard touch screen is spi interface, you need to enable this item.
+//#define SPI_GRAPHICAL_TFT	
 
 //
 // RepRapWorld REPRAPWORLD_KEYPAD v1.1

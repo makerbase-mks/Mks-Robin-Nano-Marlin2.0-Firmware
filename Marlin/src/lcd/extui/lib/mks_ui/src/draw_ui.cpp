@@ -14,6 +14,11 @@
 #include "../../../../../feature/pause.h"
 #endif
 
+#include <SPI.h>
+#if ENABLED(SPI_GRAPHICAL_TFT)
+#include "../inc/SPI_TFT.h"
+#endif
+
 CFG_ITMES gCfgItems;
 UI_CFG uiCfg;
 DISP_STATE_STACK disp_state_stack;
@@ -45,6 +50,7 @@ void gCfgItems_init()
 	gCfgItems.from_flash_pic = 0;
 	gCfgItems.curFilesize = 0;
 	gCfgItems.finish_power_off = 0;
+	gCfgItems.pause_reprint = 0;
 	
 	W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems.spi_flash_flag,VAR_INF_ADDR,sizeof(gCfgItems.spi_flash_flag));
 	if(gCfgItems.spi_flash_flag == GCFG_FLAG_VALUE)
@@ -81,6 +87,7 @@ void ui_cfg_init()
 
 void update_spi_flash()
 {
+	W25QXX.init(SPI_QUARTER_SPEED);	
 	W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
 	W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems,VAR_INF_ADDR,sizeof(gCfgItems));
 }
@@ -431,14 +438,24 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 	volatile uint16_t *p_index;
 	//int res;
 	char *cur_name;
+	uint16_t Color;
 	
 	cur_name=strrchr(path,'/');	
 	card.openFileRead(cur_name);
 
 	card.setIndex((PREVIEW_LITTLE_PIC_SIZE+To_pre_view)+size*row+8);
-	
-      		ili9320_SetWindows(xpos_pixel, ypos_pixel+row, 200,1);
+		#if ENABLED(SPI_GRAPHICAL_TFT)
+		
+		SPI_TFT.spi_init(SPI_FULL_SPEED);
+		//SPI_TFT.SetCursor(0,0);
+		SPI_TFT.SetWindows(xpos_pixel, ypos_pixel+row, 200,1);
+		SPI_TFT.LCD_WriteRAM_Prepare();
+		
+		#else
+		ili9320_SetWindows(xpos_pixel, ypos_pixel+row, 200,1);
 		LCD_WriteRAM_Prepare(); 
+		#endif
+      		
 		j=0;
 		i=0;
 		
@@ -448,7 +465,7 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 			for(i=0;i<400;)
 			{
 				bmp_public_buf[j]= ascii2dec_test((char*)&public_buf[i])<<4|ascii2dec_test((char*)&public_buf[i+1]);
-				//bmp_public_buf[j]= ascii2dec_test1((char*)&buff_pic[8+i])<<4|ascii2dec_test1((char*)&buff_pic[8+i+1]);
+				
 				i+=2;
 				j++;
 			}
@@ -469,13 +486,30 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 			//#endif
 
 		}
+		#if ENABLED(SPI_GRAPHICAL_TFT)
+		for(i=0;i<400;)
+		{
+			p_index = (uint16_t *)(&bmp_public_buf[i]);
+
+		       Color = (*p_index >> 8);
+			*p_index = Color | ((*p_index & 0xff) << 8);
+			i+=2;
+		}
+		SPI_TFT_CS_L;
+		SPI_TFT_DC_H;
+		SPI.dmaSend(bmp_public_buf,400,true);
+		SPI_TFT_CS_H;
+		
+		#else
 		for(i=0;i<400;)
 		{
 			p_index = (uint16_t *)(&bmp_public_buf[i]); 
 			//if(*p_index == 0x0000)*p_index=gCfgItems.preview_bk_color;
-	    		LCD_IO_WriteData(*p_index);
+			LCD_IO_WriteData(*p_index);
 			i=i+2;
 		}
+		#endif
+		W25QXX.init(SPI_QUARTER_SPEED);
 		if(row<20)
 		{
 			W25QXX.SPI_FLASH_SectorErase(BAK_VIEW_ADDR_TFT35+row*4096);
@@ -561,25 +595,52 @@ void Draw_default_preview(int xpos_pixel,int ypos_pixel,uint8_t sel)
 	int x_off = 0, y_off = 0;
 	int _y;
 	uint16_t *p_index;
-	int i;
-	uint16_t temp_p;
+	int i,j;
+	uint16_t temp_p,Color;
 	
 	for(index = 0; index < 10; index ++)//200*200
 	{
 		if(sel == 1)
 		{
 			flash_view_Read(bmp_public_buf, 8000);//20k
+			//memset(bmp_public_buf,0x1f,8000);
 		}
 		else
 		{
+			//memset(bmp_public_buf,0x1f,8000);
 			default_view_Read(bmp_public_buf, 8000);//20k
 		}
 
 		i = 0;
+		#if ENABLED(SPI_GRAPHICAL_TFT)
 		
+		//SPI_TFT.spi_init(SPI_FULL_SPEED);
+		//SPI_TFT.SetWindows(xpos_pixel, y_off * 20+ypos_pixel, 200,20);     //200*200
+		//SPI_TFT.LCD_WriteRAM_Prepare();
+		j=0;
+		for(_y = y_off * 20; _y < (y_off + 1) * 20; _y++)
+		{
+				SPI_TFT.spi_init(SPI_FULL_SPEED);
+				SPI_TFT.SetWindows(xpos_pixel, y_off * 20+ypos_pixel+j, 200,1);     //200*200
+				SPI_TFT.LCD_WriteRAM_Prepare();
+
+				j++;
+				//memcpy(public_buf,&bmp_public_buf[i],400);
+				SPI_TFT_CS_L;
+				SPI_TFT_DC_H;
+				SPI.dmaSend(&bmp_public_buf[i],400,true);
+				SPI_TFT_CS_H;
+
+				i = i+400;
+				if(i >= 8000)
+					break;
+		}
+		
+		#else
 		ili9320_SetWindows(xpos_pixel, y_off * 20+ypos_pixel, 200,20);     //200*200
 
 		LCD_WriteRAM_Prepare(); 
+		
 		for(_y = y_off * 20; _y < (y_off + 1) * 20; _y++)
 		{
 			for (x_off = 0; x_off < 200; x_off++) 
@@ -593,16 +654,20 @@ void Draw_default_preview(int xpos_pixel,int ypos_pixel,uint8_t sel)
 				{
 					p_index = (uint16_t *)(&bmp_public_buf[i]); 	
 				}
+				
 				LCD_IO_WriteData(*p_index);
+				
+				
 				i += 2;
 				
 			}
 			if(i >= 8000)
 				break;
 		}
+		#endif
 		y_off++;		
 	}
-
+	W25QXX.init(SPI_QUARTER_SPEED);
 }
 
 
@@ -1335,5 +1400,16 @@ void print_time_count()
 	}
 }
 
+void LV_TASK_HANDLER()
+{
+	//lv_tick_inc(1);
+	lv_task_handler();
+	#if ENABLED(MKS_TEST)
+	mks_test();
+	#endif
+	disp_pre_gcode(2,36);
+	GUI_RefreshPage(); 
+	//sd_detection();
+}
 
 #endif

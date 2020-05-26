@@ -31,6 +31,8 @@ uint32_t lv_get_pic_addr(uint8_t *Pname)
 	PIC_MSG PIC;
 	uint32_t tmp_cnt = 0;
 	uint32_t addr=0;
+
+	W25QXX.init(SPI_QUARTER_SPEED);	
 	
 	W25QXX.SPI_FLASH_BufferRead(&Pic_cnt,PIC_COUNTER_ADDR,1);
 	if(Pic_cnt == 0xff)
@@ -745,6 +747,7 @@ void Pic_Read(uint8_t *Pname,uint8_t *P_Rbuff)
 
 void lv_pic_test(uint8_t *P_Rbuff,uint32_t addr,uint32_t size)
 {
+	W25QXX.init(SPI_QUARTER_SPEED);
 	W25QXX.SPI_FLASH_BufferRead((uint8_t *)P_Rbuff,addr,size);
 	/*if(DMA_ERRO_FLAG)
 	{
@@ -756,6 +759,7 @@ void lv_pic_test(uint8_t *P_Rbuff,uint32_t addr,uint32_t size)
 
 void get_spi_flash_data(const char *rec_buf,int addr, int size)
 {
+	W25QXX.init(SPI_QUARTER_SPEED);	
 	W25QXX.SPI_FLASH_BufferRead((uint8_t *)rec_buf,UNIGBK_FLASH_ADDR+addr,size);
 }
 #endif
@@ -775,6 +779,8 @@ void Pic_Logo_Read(uint8_t *LogoName,uint8_t *Logo_Rbuff,uint32_t LogoReadsize)
 uint32_t default_view_addroffset = 0;
 void default_view_Read(uint8_t *default_view_Rbuff,uint32_t default_view_Readsize)
 {
+	W25QXX.init(SPI_QUARTER_SPEED);	
+	
 	W25QXX.SPI_FLASH_BufferRead(default_view_Rbuff,DEFAULT_VIEW_ADDR_TFT35+default_view_addroffset+4,default_view_Readsize);
 	default_view_addroffset += default_view_Readsize;
 	if(default_view_addroffset >= DEFAULT_VIEW_MAX_SIZE)
@@ -787,6 +793,8 @@ void default_view_Read(uint8_t *default_view_Rbuff,uint32_t default_view_Readsiz
 uint32_t flash_view_addroffset = 0;
 void flash_view_Read(uint8_t *flash_view_Rbuff,uint32_t flash_view_Readsize)
 {
+	W25QXX.init(SPI_QUARTER_SPEED);	
+	
 	W25QXX.SPI_FLASH_BufferRead(flash_view_Rbuff,BAK_VIEW_ADDR_TFT35+flash_view_addroffset,flash_view_Readsize);
 	flash_view_addroffset += flash_view_Readsize;
 	if(flash_view_addroffset >= FLASH_VIEW_MAX_SIZE)

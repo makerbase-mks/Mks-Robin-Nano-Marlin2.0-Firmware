@@ -683,9 +683,7 @@ void idle(
     max7219.idle_tasks();
   #endif
 
-  #if DISABLED(TFT_LITTLE_VGL_UI)
   ui.update();
-  #endif
 
   #if ENABLED(HOST_KEEPALIVE_FEATURE)
     gcode.host_keepalive();
@@ -760,11 +758,7 @@ void kill(PGM_P const lcd_error/*=nullptr*/, PGM_P const lcd_component/*=nullptr
   SERIAL_ERROR_MSG(STR_ERR_KILLED);
 
   #if HAS_DISPLAY
-  	#if ENABLED(TFT_LITTLE_VGL_UI)
-	lv_draw_error_message(lcd_error);
-	#else
        ui.kill_screen(lcd_error ?: GET_TEXT(MSG_KILLED), lcd_component ?: NUL_STR);
-	#endif
   #else
     UNUSED(lcd_error);
     UNUSED(lcd_component);
@@ -986,8 +980,7 @@ void setup() {
 
   SETUP_RUN(ui.init());
   SETUP_RUN(ui.reset_status());       // Load welcome message early. (Retained if no errors exist.)
-
-  #if HAS_SPI_LCD && ENABLED(SHOW_BOOTSCREEN)
+  #if HAS_SPI_LCD && ENABLED(SHOW_BOOTSCREEN) 
 	  ui.show_bootscreen();
   #endif
 
@@ -1214,6 +1207,9 @@ void loop() {
     queue.advance();
 
     endstops.event_handler();
+	#if ENABLED(TFT_LITTLE_VGL_UI)
+   printer_state_polling(); 
+	#endif
 
   } while (ENABLED(__AVR__)); // Loop forever on slower (AVR) boards
 }

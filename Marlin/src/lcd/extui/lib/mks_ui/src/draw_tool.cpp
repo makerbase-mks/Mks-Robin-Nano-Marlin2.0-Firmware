@@ -6,6 +6,7 @@
 //#include "../../lvgl/src/lv_core/lv_disp.h"
 //#include "../../lvgl/src/lv_core/lv_refr.h"
 #include "../inc/draw_ui.h"
+#include "../../../../../gcode/queue.h"
 
 //static lv_obj_t *buttonMoveZ,*buttonTest,*buttonZ0,*buttonStop,*buttonReturn;
 static lv_obj_t * scr;

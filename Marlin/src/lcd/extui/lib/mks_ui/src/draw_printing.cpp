@@ -52,11 +52,14 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 		{
 			 if(uiCfg.print_state == WORKING)
 			 {
-				 #if ENABLED(PARK_HEAD_ON_PAUSE)
-				 queue.inject_P(PSTR("M25 P\nM24"));
-				 #elif ENABLED(SDSUPPORT)
-				 queue.inject_P(PSTR("M25"));
-				 uiCfg.print_state = PAUSED;
+				 //#if ENABLED(PARK_HEAD_ON_PAUSE)
+				 //queue.inject_P(PSTR("M25 P\nM24"));
+				 #if ENABLED(SDSUPPORT)
+				 //queue.inject_P(PSTR("M25\nG91\nG1 Z10\nG90"));
+				 card.pauseSDPrint();
+				 stop_print_time();
+				 uiCfg.print_state = PAUSING;
+				 
 				 #endif
 				 
 				 lv_obj_set_event_cb_mks(buttonPause, event_handler,ID_PAUSE,"bmp_Pause.bin",0);
@@ -65,29 +68,25 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			 }
 			 else if(uiCfg.print_state == PAUSED)
 			 {
-			 	uiCfg.print_state = WORKING;
+			 	uiCfg.print_state = RESUMING;
 				
-			       #if ENABLED(PARK_HEAD_ON_PAUSE)
-				wait_for_heatup = wait_for_user = false;
-				#endif
-				if (IS_SD_PAUSED())queue.inject_P(PSTR("M24"));// queue.inject_P(M24_STR);
+				//if (IS_SD_PAUSED())queue.inject_P(PSTR("M24"));// queue.inject_P(M24_STR);
 				 
 				lv_obj_set_event_cb_mks(obj, event_handler,ID_PAUSE,"bmp_Resume.bin",0);
 				lv_label_set_text(labelPause, printing_menu.pause);
 				lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
 			 }
 			 #if ENABLED(POWER_LOSS_RECOVERY)
-			 else if(uiCfg.print_state == REPRINTED)
+			 else if(uiCfg.print_state == REPRINTING)
 			 {
-			 	uiCfg.print_state = WORKING;
+			 	uiCfg.print_state = REPRINTED;
 				lv_obj_set_event_cb_mks(obj, event_handler,ID_PAUSE,"bmp_Resume.bin",0);
 				lv_label_set_text(labelPause, printing_menu.pause);
 				lv_obj_align(labelPause, buttonPause, LV_ALIGN_CENTER,30, 0);
-			 	recovery.resume();
+			 	//recovery.resume();
 				print_time.minutes = recovery.info.print_job_elapsed / 60;
 				print_time.seconds = recovery.info.print_job_elapsed % 60;
 				print_time.hours    = print_time.minutes / 60;
-				start_print_time();
 			 }
 			 #endif
 		}

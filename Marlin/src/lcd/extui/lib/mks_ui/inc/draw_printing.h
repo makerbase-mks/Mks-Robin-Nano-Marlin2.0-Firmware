@@ -10,9 +10,12 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 
 #define IDLE			0
 #define WORKING		1
-#define PAUSED		2		
-#define REPRINTED	3
-#define STOP			4
+#define PAUSING		2	
+#define PAUSED		3
+#define REPRINTING	4
+#define REPRINTED	5
+#define RESUMING	6
+#define STOP			7
 
 
 extern void lv_draw_printing(void);
