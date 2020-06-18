@@ -63,6 +63,123 @@
 #endif
 
 //
+//TMC UART RX / TX Pins Hardware/Software Serial
+//
+#if HAS_TMC220x
+  /**
+  * TMC2209 stepper drivers
+  * 
+  * Hardware serial communication ports.
+  * If undefined software serial is used according to the pins below
+  * 
+  * Four TMC2209 drivers can use the same HW/SW serial port with hardware configured addresses.
+  * Set the address using jumpers on pins MS1 and MS2.
+  * Address | MS1  | MS2
+  *       0 | LOW  | LOW
+  *       1 | HIGH | LOW
+  *       2 | LOW  | HIGH
+  *       3 | HIGH | HIGH
+  */
+
+  // Set Hardware Serial UART only für TCM 2209
+  //#define HARDWARE_SERIAL
+    //https://www.reddit.com/r/3Dprinting/comments/gthxb6/mks_robin_nano_v12_diagram_for_5x_tmc2209_v30/
+    //https://www.youtube.com/watch?v=dtXiUXb5DvQ
+    //PDN Cable, 1k Resistor required on TX,  Connect to PDN on Stepper
+    //wire Diag to min endstop, 
+    
+
+  // Set Software Serial UART for TMC 2208 / TMC 2209
+  #define SOFTWARE_SERIAL
+  //only for TMC2209
+  // use https://github.com/FYSETC/SoftwareSerialM  
+  // https://www.gitmemory.com/issue/MarlinFirmware/Marlin/15873/552647130
+  // Bind cables, no resistor, connect to PDN 
+  //wire Diag to min endstop,
+
+
+
+  #if ENABLED(HARDWARE_SERIAL)
+    //#define X_HARDWARE_SERIAL  Serial1
+    //#define Y_HARDWARE_SERIAL  Serial1
+    //#define Z_HARDWARE_SERIAL  Serial1
+    //#define E0_HARDWARE_SERIAL Serial1
+
+    //Set *_SERIAL_TX_PIN and *_SERIAL_RX_PIN to match for all drivers on the same PIN to the same Slave Address.
+    // | = add jumper
+    // : = remove jumper
+    // M1 is always closest to 12/24v
+    // <- board power M1 M2 M3 -> endstops
+    // See: https://github.com/le3tspeak/Marlin-2.0.X-MKS-Robin-Nano/blob/MKS-Robin-Nano/docs/TMC2209HWSERIAL.jpg
+    #define  X_SLAVE_ADDRESS 3    // |  |  :
+    #define  Y_SLAVE_ADDRESS 2    // :  |  :
+    #define  Z_SLAVE_ADDRESS 1    // |  :  :
+    #define E0_SLAVE_ADDRESS 0    // :  :  :
+
+    #ifdef E1_DRIVER_TYPE
+      #define E1_SLAVE_ADDRESS 0  // :  :  : 
+    #endif
+    #ifdef Z2_DRIVER_TYPE
+      #define Z2_SLAVE_ADDRESS 0  // :  :  : 
+    #endif
+
+    #define X_SERIAL_TX_PIN                   PA9
+    #define X_SERIAL_RX_PIN                   PA9
+    
+    #define Y_SERIAL_TX_PIN                   PA9
+    #define Y_SERIAL_RX_PIN                   PA9
+    
+    #define Z_SERIAL_TX_PIN                   PA9
+    #define Z_SERIAL_RX_PIN                   PA9
+
+    #define E0_SERIAL_TX_PIN                  PA5
+    #define E0_SERIAL_RX_PIN                  PA5
+
+    #ifdef E1_DRIVER_TYPE
+      #define E1_SERIAL_TX_PIN                PA9
+      #define E1_SERIAL_RX_PIN                PA9
+    #endif
+
+    #ifdef Z2_DRIVER_TYPE
+      #define E1_SERIAL_TX_PIN                PA9
+      #define E1_SERIAL_RX_PIN                PA9
+    #endif
+
+  #elif ENABLED (SOFTWARE_SERIAL)
+    //#define X_HARDWARE_SERIAL  Serial1
+    //#define Y_HARDWARE_SERIAL  Serial1
+    //#define Z_HARDWARE_SERIAL  Serial1
+    //#define E0_HARDWARE_SERIAL Serial1
+
+    //Set *_SERIAL_TX_PIN and *_SERIAL_RX_PIN to match for all drivers on the same PIN to the same Slave Address.
+    #define  X_SLAVE_ADDRESS 0
+    #define  Y_SLAVE_ADDRESS 0
+    #define  Z_SLAVE_ADDRESS 0
+    #define E0_SLAVE_ADDRESS 0
+    #ifdef E1_DRIVER_TYPE
+      #define E1_SLAVE_ADDRESS 0  
+    #endif
+    #ifdef Z2_DRIVER_TYPE
+      #define Z2_SLAVE_ADDRESS 0
+    #endif
+
+    #define X_SERIAL_TX_PIN                   PA3
+    #define X_SERIAL_RX_PIN                   PA3
+    
+    #define Y_SERIAL_TX_PIN                   PA6
+    #define Y_SERIAL_RX_PIN                   PA6
+    
+    #define Z_SERIAL_TX_PIN                   PA1
+    #define Z_SERIAL_RX_PIN                   PA1
+
+    #define E0_SERIAL_TX_PIN                  PE5
+    #define E0_SERIAL_RX_PIN                  PE5
+
+    // Reduce baud rate to improve software serial reliability
+    #define TMC_BAUD_RATE 19200
+  #endif
+#endif
+//
 // Steppers
 //
 #define X_ENABLE_PIN                        PE4
@@ -81,9 +198,20 @@
 #define E0_STEP_PIN                         PD6
 #define E0_DIR_PIN                          PD3
 
-#define E1_ENABLE_PIN                       PA3
-#define E1_STEP_PIN                         PA6
-#define E1_DIR_PIN                          PA1
+#if ENABLED(SOFTWARE_SERIAL)
+  	//#define E1_ENABLE_PIN                   PA3  // USED BY UART X Don't change
+    //#define E1_STEP_PIN                     PA6  // USED BY UART Y Don't change
+    //#define E1_DIR_PIN                      PA1  // USED BY UART Z Don't change
+   #else
+    #define E1_ENABLE_PIN                     PA3
+    #define E1_STEP_PIN                       PA6 
+    #define E1_DIR_PIN                        PA1  
+  #endif
+
+//
+// Servos
+//
+//#define SERVO0_PIN                          PA8   // Enable BLTOUCH support ROBIN NANO v1.2 ONLY
 
 //
 // Temperature Sensors

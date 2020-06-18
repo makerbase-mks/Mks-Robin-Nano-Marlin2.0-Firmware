@@ -1,0 +1,3 @@
+Borrowed fixes from Bugfix 2.x to get rid of compile errors
+Added logic to allow hardware and Software UART
+
