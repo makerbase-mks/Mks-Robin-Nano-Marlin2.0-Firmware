@@ -64,7 +64,7 @@ void lv_draw_about(void)
 	#if 1
 	
 
-	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_A_RETURN,"bmp_Return.bin",0);	
+	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_A_RETURN,"bmp_return.bin",0);	
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic);	
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_lable_pre);
@@ -95,6 +95,8 @@ void lv_draw_about(void)
 	lv_label_set_text(fw_type, "Firmware: Robin_Pro35");
 	#elif (MOTHERBOARD == BOARD_MKS_ROBIN_NANO)
 	lv_label_set_text(fw_type, "Firmware: Robin_Nano35");
+	#elif (MOTHERBOARD == BOARD_MKS_ROBIN_NANO_V2)
+	lv_label_set_text(fw_type, "Firmware: Robin_Nano35");
 	#endif
 	lv_obj_align(fw_type, NULL, LV_ALIGN_CENTER,0, -20);
 
@@ -104,6 +106,8 @@ void lv_draw_about(void)
 	lv_label_set_text(board, "Board: MKS Robin pro");
 	#elif (MOTHERBOARD == BOARD_MKS_ROBIN_NANO)
 	lv_label_set_text(board, "Board: MKS Robin nano");
+	#elif (MOTHERBOARD == BOARD_MKS_ROBIN_NANO_V2)
+	lv_label_set_text(board, "Board: MKS Robin nano V2");
 	#endif
 	
 	lv_obj_align(board, NULL, LV_ALIGN_CENTER,0, 20);

@@ -28,7 +28,7 @@ static x_header_t __g_xbf_hd = {
     .max = 0,
     .bpp = 0,
 };
-static uint8_t __g_font_buf[75];
+static uint8_t __g_font_buf[63];
 
 static uint8_t *__user_font_getdata(int offset, int size){
     //memset(__g_font_buf,0,sizeof(__g_font_buf));
@@ -90,12 +90,13 @@ static bool __user_font_get_glyph_dsc(const lv_font_t * font, lv_font_glyph_dsc_
     .line_height = 25,
     .base_line = 0,
 };*/
+//weiRuanYaHei Regular,12
 lv_font_t gb2312_puhui32;
 void init_gb2312_font()
 {
     gb2312_puhui32.get_glyph_bitmap = __user_font_get_bitmap;
     gb2312_puhui32.get_glyph_dsc = __user_font_get_glyph_dsc;
-    gb2312_puhui32.line_height = 25;
+    gb2312_puhui32.line_height = 21;
     gb2312_puhui32.base_line = 0;
 }
 

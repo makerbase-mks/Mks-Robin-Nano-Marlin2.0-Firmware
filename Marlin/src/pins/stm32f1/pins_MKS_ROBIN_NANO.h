@@ -36,6 +36,7 @@
 //
 // Release PB4 (Y_ENABLE_PIN) from JTAG NRST role
 //
+
 #define DISABLE_DEBUG
 
 //
@@ -43,6 +44,9 @@
 //
 //#define FLASH_EEPROM_EMULATION
 #define SDCARD_EEPROM_EMULATION
+
+//#define E2END 0xFFF                              // 4Kb (24lc32)
+//#define I2C_EEPROM                                // EEPROM on I2C-0
 
 //
 // Note: MKS Robin board is using SPI2 interface.
@@ -57,10 +61,6 @@
 #define Y_STOP_PIN                          PA12
 #define Z_MIN_PIN                           PA11
 #define Z_MAX_PIN                           PC4
-
-#ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN                    PA4   // MT_DET
-#endif
 
 //
 // Steppers
@@ -119,12 +119,16 @@
 //#define KILL_PIN 						                PA2     // Enable MKSPWC support ROBIN NANO v1.2 ONLY
 //#define KILL_PIN_INVERTING 				          true     // Enable MKSPWC support ROBIN NANO v1.2 ONLY
 
-//#define SERVO0_PIN                          PA8   // Enable BLTOUCH support ROBIN NANO v1.2 ONLY
+#define SERVO0_PIN                          PA8   // Enable BLTOUCH support ROBIN NANO v1.2 ONLY
 
 //#define LED_PIN                             PB2
 
 #define MT_DET_1_PIN				PA4
+#define MT_DET_2_PIN     				PE6 
 #define MT_DET_PIN_INVERTING		false
+
+#define WIFI_IO0_PIN       			PC13
+
 
 //
 // SD Card
@@ -149,53 +153,7 @@
 
 #if ENABLED(SPI_GRAPHICAL_TFT)
 
-  #if HAS_SPI_LCD
-
-    #define BEEPER_PIN       PC5
-    #define BTN_ENC          PE13
-    #define LCD_PINS_ENABLE  PD13
-    #define LCD_PINS_RS      PC6
-    #define BTN_EN1          PE8
-    #define BTN_EN2          PE11
-    #define LCD_BACKLIGHT_PIN -1
-
-    // MKS MINI12864 and MKS LCD12864B; If using MKS LCD12864A (Need to remove RPK2 resistor)
-    #if ENABLED(MKS_MINI_12864)
-      #define LCD_BACKLIGHT_PIN -1
-      #define LCD_RESET_PIN  -1
-      #define DOGLCD_A0      PD11
-      #define DOGLCD_CS      PE15
-      #define DOGLCD_SCK     PA5
-      #define DOGLCD_MOSI    PA7
-
-      // Required for MKS_MINI_12864 with this board
-      #define MKS_LCD12864B
-      #undef SHOW_BOOTSCREEN
-
-    #else // !MKS_MINI_12864
-
-      #define LCD_PINS_D4    PE14
-      #if ENABLED(ULTIPANEL)
-        #define LCD_PINS_D5  PE15
-        #define LCD_PINS_D6  PD11
-        #define LCD_PINS_D7  PD10
-      #endif
-
-      #ifndef ST7920_DELAY_1
-        #define ST7920_DELAY_1 DELAY_NS(125)
-      #endif
-      #ifndef ST7920_DELAY_2
-        #define ST7920_DELAY_2 DELAY_NS(125)
-      #endif
-      #ifndef ST7920_DELAY_3
-        #define ST7920_DELAY_3 DELAY_NS(125)
-      #endif
-
-    #endif // !MKS_MINI_12864
-
-  #else  
-
-	#define SPI_TFT_CS_PIN			PD11
+  #define SPI_TFT_CS_PIN			PD11
 	#define SPI_TFT_SCK_PIN			PA5
 	#define SPI_TFT_MISO_PIN		PA6
 	#define SPI_TFT_MOSI_PIN		PA7
@@ -213,8 +171,6 @@
   #define BTN_EN2          PE11
   #define BEEPER_PIN       PC5
   #define BTN_ENC          PE13
-
-  #endif//HAS_SPI_LCD
 
 #else
   #if ENABLED(TFT_LITTLE_VGL_UI)
@@ -257,6 +213,53 @@
     #define TOUCH_MOSI_PIN                  PB15  // SPI2_MOSI
   #endif
 #endif
+
+#if HAS_SPI_LCD
+
+#define BEEPER_PIN       PC5
+#define BTN_ENC          PE13
+#define LCD_PINS_ENABLE  PD13
+#define LCD_PINS_RS      PC6
+#define BTN_EN1          PE8
+#define BTN_EN2          PE11
+#define LCD_BACKLIGHT_PIN -1
+
+// MKS MINI12864 and MKS LCD12864B; If using MKS LCD12864A (Need to remove RPK2 resistor)
+#if ENABLED(MKS_MINI_12864)
+  #define LCD_BACKLIGHT_PIN -1
+  #define LCD_RESET_PIN  -1
+  #define DOGLCD_A0      PD11
+  #define DOGLCD_CS      PE15
+  #define DOGLCD_SCK     PA5
+  #define DOGLCD_MOSI    PA7
+
+  // Required for MKS_MINI_12864 with this board
+  #define MKS_LCD12864B
+  #undef SHOW_BOOTSCREEN
+
+#else // !MKS_MINI_12864
+
+  #define LCD_PINS_D4    PE14
+  #if ENABLED(ULTIPANEL)
+    #define LCD_PINS_D5  PE15
+    #define LCD_PINS_D6  PD11
+    #define LCD_PINS_D7  PD10
+  #endif
+
+  #ifndef ST7920_DELAY_1
+    #define ST7920_DELAY_1 DELAY_NS(125)
+  #endif
+  #ifndef ST7920_DELAY_2
+    #define ST7920_DELAY_2 DELAY_NS(125)
+  #endif
+  #ifndef ST7920_DELAY_3
+    #define ST7920_DELAY_3 DELAY_NS(125)
+  #endif
+
+#endif // !MKS_MINI_12864
+
+#endif//HAS_SPI_LCD
+
 
 #define SPI_FLASH
 #if ENABLED(SPI_FLASH)

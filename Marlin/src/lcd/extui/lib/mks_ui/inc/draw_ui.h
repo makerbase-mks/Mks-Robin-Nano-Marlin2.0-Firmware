@@ -27,7 +27,19 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #include "../inc/draw_manuaLevel.h"
 #include "../inc/draw_error_message.h"
 #include "../inc/printer_opration.h"
-
+#include "../inc/draw_machine_para.h"
+#include "../inc/draw_machine_settings.h"
+#include "../inc/draw_motor_settings.h"
+#include "../inc/draw_advance_settings.h"
+#include "../inc/draw_acceleration_settings.h"
+#include "../inc/draw_number_key.h"
+#include "../inc/draw_jerk_settings.h"
+#include "../inc/draw_pause_position.h"
+#include "../inc/draw_step_settings.h"
+#include "../inc/draw_tmc_current_settings.h"
+#include "../inc/draw_eeprom_settings.h"
+#include "../inc/draw_max_feedrate_settings.h"
+#include "../inc/draw_tmc_step_mode_settings.h"
 
 #define  TFT35
 
@@ -44,7 +56,7 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 
 #define SIMPLE_FIRST_PAGE_GRAP		30
 
-#define BUTTON_TEXT_Y_OFFSET		-20
+#define BUTTON_TEXT_Y_OFFSET		-10
 
 #define TITLE_XPOS	 3		//TFT_screen.title_xpos//
 #define TITLE_YPOS	 5		//TFT_screen.title_ypos//
@@ -61,6 +73,30 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define PREVIEW_SIZE			202720//(PREVIEW_LITTLE_PIC_SIZE+800*200+201*9+1)
 
 #define GCFG_FLAG_VALUE 0xee
+
+//machine parameter ui
+#define PARA_UI_POS_X	10
+#define PARA_UI_POS_Y	50
+
+#define PARA_UI_SIZE_X	450
+#define PARA_UI_SIZE_Y	40
+
+#define PARA_UI_ARROW_V	12
+
+#define PARA_UI_BACL_POS_X		400
+#define PARA_UI_BACL_POS_Y		270
+
+#define PARA_UI_TURN_PAGE_POS_X		320
+#define PARA_UI_TURN_PAGE_POS_Y		270
+
+#define PARA_UI_VALUE_SIZE_X	370
+#define PARA_UI_VALUE_POS_X	400
+#define PARA_UI_VALUE_V	5
+
+#define PARA_UI_STATE_POS_X	380
+#define PARA_UI_STATE_V		2
+
+
 #else
 
 #define TFT_WIDTH   320
@@ -80,6 +116,9 @@ typedef struct
 	uint8_t from_flash_pic;
 	uint8_t finish_power_off;
 	uint8_t pause_reprint;
+	float pausePosX;
+	float pausePosY;
+	float pausePosZ;
 	uint32_t curFilesize;
 	
 }CFG_ITMES;
@@ -89,7 +128,8 @@ typedef struct
 	uint8_t curTempType:1,
 			curSprayerChoose:3,
 			stepHeat:4;
-	uint8_t leveling_first_time:1;
+	uint8_t leveling_first_time:1,
+			para_ui_page:1;
 	uint8_t extruStep;
 	uint8_t extruSpeed;
 	uint8_t print_state;
@@ -164,7 +204,11 @@ typedef enum
 	ENABLE_INVERT_UI,
 	NUMBER_KEY_UI,
 	BABY_STEP_UI,
-	ERROR_MESSAGE_UI
+	ERROR_MESSAGE_UI,
+	PAUSE_POS_UI,
+	TMC_CURRENT_UI,
+	TMC_MODE_UI,
+	EEPROM_SETTINGS_UI
 } DISP_STATE;
 
 typedef struct
@@ -187,6 +231,47 @@ typedef struct
 } PRINT_TIME;
 extern PRINT_TIME  print_time;
 
+typedef enum
+{
+	PrintAcceleration,
+	RetractAcceleration,
+	TravelAcceleration,
+	XAcceleration,
+	YAcceleration,
+	ZAcceleration,
+	E0Acceleration,
+	E1Acceleration,
+
+	XMaxFeedRate,
+	YMaxFeedRate,
+	ZMaxFeedRate,
+	E0MaxFeedRate,
+	E1MaxFeedRate,
+
+	XJerk,
+	YJerk,
+	ZJerk,
+	EJerk,
+
+	Xstep,
+	Ystep,
+	Zstep,
+	E0step,
+	E1step,
+
+	Xcurrent,
+	Ycurrent,
+	Zcurrent,
+	E0current,
+	E1current,
+
+	pause_pos_x,
+	pause_pos_y,
+	pause_pos_z
+
+}value_state;
+extern value_state value;
+
 extern CFG_ITMES gCfgItems;
 extern UI_CFG uiCfg;
 extern DISP_STATE disp_state;
@@ -196,6 +281,15 @@ extern DISP_STATE_STACK disp_state_stack;
 extern lv_style_t tft_style_scr;
 extern lv_style_t tft_style_lable_pre;
 extern lv_style_t tft_style_lable_rel;
+extern lv_style_t style_line;
+extern lv_style_t style_para_value_pre;
+extern lv_style_t style_para_value_rel;
+extern lv_style_t style_num_key_pre;
+extern lv_style_t style_num_key_rel;
+extern lv_style_t style_num_text;
+
+
+extern lv_point_t line_points[4][2];
 
 extern void gCfgItems_init();
 extern void ui_cfg_init();
@@ -213,6 +307,7 @@ extern void print_time_count();
 
 extern void LV_TASK_HANDLER();
 
+extern void lv_ex_line(lv_obj_t * line,lv_point_t *points);
 
 #if defined(__cplusplus)
 }    /* Make sure we have C-declarations in C++ programs */

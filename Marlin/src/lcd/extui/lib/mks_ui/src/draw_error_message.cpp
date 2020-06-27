@@ -10,6 +10,9 @@
 #include "../inc/tft_lvgl_configuration.h"
 #include "../inc/mks_hardware_test.h"
 #include "../inc/draw_ui.h"
+#if ENABLED(SPI_GRAPHICAL_TFT)
+#include "../inc/SPI_TFT.h"
+#endif
 
 static lv_obj_t * scr;
 
@@ -52,7 +55,12 @@ void lv_draw_error_message(PGM_P const msg)
 
 	lv_task_handler();
 	#endif
+	#if ENABLED(SPI_GRAPHICAL_TFT)
+	SPI_TFT.LCD_clear(0x0000);
+	#else
 	LCD_Clear(0x0000);
+	#endif
+	
 	if(msg)
 	disp_string((TFT_WIDTH-strlen(msg)*16)/2,100,msg,0xffff,0x0000);
 	disp_string((TFT_WIDTH-strlen("PRINTER HALTED")*16)/2,140,"PRINTER HALTED",0xffff,0x0000);

@@ -37,6 +37,650 @@ MachinePara_menu_def MachinePara_menu;
 MachineSettings_menu_def MachineSettings_menu;
 TemperatureSettings_menu_def TemperatureSettings_menu;
 pause_msg_def pause_msg_menu;
+eeprom_def eeprom_menu;
+
+machine_common_def machine_menu;
+
+void machine_setting_disp()
+{
+    if(gCfgItems.language == LANG_SIMPLE_CHINESE)
+    {
+    	     MachinePara_menu.title = MACHINE_PARA_TITLE_CN;
+            MachinePara_menu.MachineSetting = MACHINE_TYPE_CNOFIG_CN;
+            MachinePara_menu.TemperatureSetting=TEMPERATURE_CONFIG_CN;
+            MachinePara_menu.MotorSetting=MOTOR_CONFIG_CN;
+            MachinePara_menu.AdvanceSetting=ADVANCE_CONFIG_CN;
+
+            machine_menu.default_value = DEFAULT_CN;
+            machine_menu.next=NEXT_CN;
+            machine_menu.previous=PREVIOUS_CN;
+
+            machine_menu.MachineConfigTitle = MACHINE_CONFIG_TITLE_CN;
+            machine_menu.MachineType=MACHINE_TYPE_CN;
+            machine_menu.Stroke=MACHINE_STROKE_CN;
+            machine_menu.HomeDir=MACHINE_HOMEDIR_CN;
+            machine_menu.EndStopType=MACHINE_ENDSTOP_TYPE_CN;
+            machine_menu.FilamentConf=MACHINE_FILAMENT_CONFIG_CN;
+            machine_menu.LevelingConf=MACHINE_LEVELING_CONFIG_CN;
+
+            machine_menu.MachineTypeConfTitle = MACHINE_TYPE_CONFIG_TITLE_CN;
+            machine_menu.xyz=MACHINE_TYPE_XYZ_CN;
+            machine_menu.delta=MACHINE_TYPE_DELTA_CN;
+            machine_menu.corexy=MACHINE_TYPE_COREXY_CN;
+
+            machine_menu.StrokeConfTitle=MACHINE_STROKE_CONF_TITLE_CN;
+            machine_menu.xStroke=X_MAX_LENGTH_CN;
+            machine_menu.yStroke=Y_MAX_LENGTH_CN;
+            machine_menu.zStroke=Z_MAX_LENGTH_CN;
+			
+	    machine_menu.xmin=X_MIN_LENGTH_CN;
+	    machine_menu.ymin=Y_MIN_LENGTH_CN;
+	    machine_menu.zmin=Z_MIN_LENGTH_CN;
+
+            machine_menu.HomeDirConfTitle=HOME_DIR_CONF_TITLE_CN;
+            machine_menu.xHomeDir=HOME_DIR_X_CN;
+            machine_menu.yHomeDir=HOME_DIR_Y_CN;
+            machine_menu.zHomeDir=HOME_DIR_Z_CN;
+            machine_menu.min=HOME_MIN_CN;
+            machine_menu.max=HOME_MAX_CN;
+
+            machine_menu.EndstopConfTitle=ENDSTOP_CONF_TITLE_CN;
+            machine_menu.xEndstop_min=MIN_ENDSTOP_X_CN;
+            machine_menu.yEndstop_min=MIN_ENDSTOP_Y_CN;
+            machine_menu.zEndstop_min=MIN_ENDSTOP_Z_CN;
+            machine_menu.xEndstop_max=MAX_ENDSTOP_X_CN;
+            machine_menu.yEndstop_max=MAX_ENDSTOP_Y_CN;
+            machine_menu.zEndstop_max=MAX_ENDSTOP_Z_CN;            
+            machine_menu.FilamentEndstop=ENDSTOP_FIL_CN;
+            machine_menu.LevelingEndstop=ENDSTOP_LEVEL_CN;
+            machine_menu.opened=ENDSTOP_OPENED_CN;
+            machine_menu.closed=ENDSTOP_CLOSED_CN;
+
+            machine_menu.FilamentConfTitle=FILAMENT_CONF_TITLE_CN;
+            machine_menu.InTemperature=FILAMENT_IN_TEMPERATURE_CN;
+            machine_menu.InLength=FILAMENT_IN_LENGTH_CN;
+            machine_menu.InSpeed=FILAMENT_IN_SPEED_CN;
+            machine_menu.OutTemperature=FILAMENT_OUT_TEMPERATURE_CN;
+            machine_menu.OutLength=FILAMENT_OUT_LENGTH_CN;
+            machine_menu.OutSpeed=FILAMENT_OUT_SPEED_CN;
+                        
+            machine_menu.LevelingParaConfTitle=LEVELING_CONF_TITLE_CN;
+            machine_menu.LevelingParaConf=LEVELING_PARA_CONF_CN;
+            machine_menu.DeltaLevelConf=LEVELING_DELTA_CN;
+            machine_menu.XYZLevelconf=LEVELING_XYZ_CN;
+
+            machine_menu.LevelingSubConfTitle=LEVELING_PARA_CONF_TITLE_CN;
+            machine_menu.AutoLevelEnable=AUTO_LEVELING_ENABLE_CN;
+            machine_menu.BLtouchEnable=BLTOUCH_LEVELING_ENABLE_CN;
+            machine_menu.ProbePort=PROBE_PORT_CN;
+            machine_menu.ProbeXoffset=PROBE_X_OFFSET_CN;
+            machine_menu.ProbeYoffset=PROBE_Y_OFFSET_CN;
+            machine_menu.ProbeZoffset=PROBE_Z_OFFSET_CN;
+            machine_menu.ProbeXYspeed=PROBE_XY_SPEED_CN;
+            machine_menu.ProbeZspeed=PROBE_Z_SPEED_CN;
+            machine_menu.enable = ENABLE_CN;
+            machine_menu.disable = DISABLE_CN;
+            machine_menu.z_min = Z_MIN_CN;
+            machine_menu.z_max = Z_MAX_CN;
+
+            machine_menu.LevelingSubDeltaConfTitle=DELTA_LEVEL_CONF_TITLE_CN;
+            machine_menu.MachineRadius=DELTA_MACHINE_RADIUS_CN;
+            machine_menu.DiagonalRod=DELTA_DIAGONAL_ROD_CN;
+            machine_menu.PrintableRadius=DELTA_PRINT_RADIUS_CN;
+            machine_menu.DeltaHeight=DELTA_HEIGHT_CN;
+            machine_menu.SmoothRodOffset=SMOOTH_ROD_OFFSET_CN;
+            machine_menu.EffectorOffset=EFFECTOR_OFFSET_CN;
+            machine_menu.CalibrationRadius=CALIBRATION_RADIUS_CN;
+
+            machine_menu.LevelingSubXYZConfTitle=XYZ_LEVEL_CONF_TITLE_CN;
+            //machine_menu.ProbeMaxLeft=PROBE_REACH_MAX_LEFT_CN;
+            //machine_menu.ProbeMaxRigh=PROBE_REACH_MAX_RIGHT_CN;
+            //machine_menu.ProbeMaxfront=PROBE_REACH_MAX_FRONT_CN;
+            //machine_menu.ProbeMaxback=PROBE_REACH_MAX_BACK_CN;
+
+            machine_menu.TemperatureConfTitle=TEMPERATURE_CONF_TITLE_CN;
+            machine_menu.NozzleConf=NOZZLE_CONF_CN;
+            machine_menu.HotBedConf=HOTBED_CONF_CN;
+			machine_menu.PreheatTemperConf=PREHEAT_TEMPER_CN;
+
+            machine_menu.NozzleConfTitle=NOZZLE_CONF_TITLE_CN;
+            machine_menu.NozzleCnt=NOZZLECNT_CN;
+            machine_menu.NozzleType=NOZZLE_TYPE_CN;
+            machine_menu.NozzleAdjustType=NOZZLE_ADJUST_TYPE_CN;
+            machine_menu.NozzleMinTemperature=NOZZLE_MIN_TEMPERATURE_CN;
+            machine_menu.NozzleMaxTemperature=NOZZLE_MAX_TEMPERATURE_CN;
+			machine_menu.Extrude_Min_Temper=EXTRUD_MIN_TEMPER_CN;
+
+	     //machine_menu.HotbedEnable=HOTBED_ENABLE_CN;
+            machine_menu.HotbedConfTitle=HOTBED_CONF_TITLE_CN;
+            machine_menu.HotbedAjustType=HOTBED_ADJUST_CN;
+            machine_menu.HotbedMinTemperature=HOTBED_MIN_TEMPERATURE_CN;
+            machine_menu.HotbedMaxTemperature=HOTBED_MAX_TEMPERATURE_CN;
+
+            machine_menu.MotorConfTitle=MOTOR_CONF_TITLE_CN;
+            machine_menu.MaxFeedRateConf=MAXFEEDRATE_CONF_CN;
+            machine_menu.AccelerationConf=ACCELERATION_CONF_CN;
+            machine_menu.JerkConf=JERKCONF_CN;
+            machine_menu.StepsConf=STEPSCONF_CN;
+	     machine_menu.TMCcurrentConf=TMC_CURRENT_CN;
+	     machine_menu.TMCStepModeConf=TMC_STEP_MODE_CN;
+            machine_menu.MotorDirConf=MOTORDIRCONF_CN;
+            machine_menu.HomeFeedRateConf=HOMEFEEDRATECONF_CN;
+	     machine_menu.PausePosition=PAUSE_POSITION_CN;
+
+            machine_menu.MaxFeedRateConfTitle=MAXFEEDRATE_CONF_TITLE_CN;
+            machine_menu.XMaxFeedRate=X_MAXFEEDRATE_CN;
+            machine_menu.YMaxFeedRate=Y_MAXFEEDRATE_CN;
+            machine_menu.ZMaxFeedRate=Z_MAXFEEDRATE_CN;
+            machine_menu.E0MaxFeedRate=E0_MAXFEEDRATE_CN;
+            machine_menu.E1MaxFeedRate=E1_MAXFEEDRATE_CN;
+
+            machine_menu.AccelerationConfTitle=ACCELERATION_CONF_TITLE_CN;
+            machine_menu.PrintAcceleration=PRINT_ACCELERATION_CN;
+            machine_menu.RetractAcceleration=RETRACT_ACCELERATION_CN;
+            machine_menu.TravelAcceleration=TRAVEL_ACCELERATION_CN;
+            machine_menu.X_Acceleration=X_ACCELERATION_CN;
+            machine_menu.Y_Acceleration=Y_ACCELERATION_CN;
+            machine_menu.Z_Acceleration=Z_ACCELERATION_CN;
+            machine_menu.E0_Acceleration=E0_ACCELERATION_CN;
+            machine_menu.E1_Acceleration=E1_ACCELERATION_CN;
+
+            machine_menu.JerkConfTitle=JERK_CONF_TITLE_CN;
+            machine_menu.X_Jerk=X_JERK_CN;
+            machine_menu.Y_Jerk=Y_JERK_CN;
+            machine_menu.Z_Jerk=Z_JERK_CN;
+            machine_menu.E_Jerk=E_JERK_CN;
+
+            machine_menu.StepsConfTitle=STEPS_CONF_TITLE_CN;
+            machine_menu.X_Steps=X_STEPS_CN;
+            machine_menu.Y_Steps=Y_STEPS_CN;
+            machine_menu.Z_Steps=Z_STEPS_CN;
+            machine_menu.E0_Steps=E0_STEPS_CN;
+            machine_menu.E1_Steps=E1_STEPS_CN;
+
+	     machine_menu.TmcCurrentConfTitle=TMC_CURRENT_CONF_TITLE_CN;
+            machine_menu.X_Current=X_TMC_CURRENT_CN;
+            machine_menu.Y_Current=Y_TMC_CURRENT_CN;
+            machine_menu.Z_Current=Z_TMC_CURRENT_CN;
+            machine_menu.E0_Current=E0_TMC_CURRENT_CN;
+            machine_menu.E1_Current=E1_TMC_CURRENT_CN;
+
+	     machine_menu.TmcStepModeConfTitle=TMC_MODE_CONF_TITLE_CN;
+            machine_menu.X_StepMode=X_TMC_MODE_CN;
+            machine_menu.Y_StepMode=Y_TMC_MODE_CN;
+            machine_menu.Z_StepMode=Z_TMC_MODE_CN;
+            machine_menu.E0_StepMode=E0_TMC_MODE_CN;
+            machine_menu.E1_StepMode=E1_TMC_MODE_CN;
+
+            machine_menu.MotorDirConfTitle=MOTORDIR_CONF_TITLE_CN;
+            machine_menu.X_MotorDir=X_MOTORDIR_CN;
+            machine_menu.Y_MotorDir=Y_MOTORDIR_CN;
+            machine_menu.Z_MotorDir=Z_MOTORDIR_CN;
+            machine_menu.E0_MotorDir=E0_MOTORDIR_CN;
+            machine_menu.E1_MotorDir=E1_MOTORDIR_CN;
+            machine_menu.Invert_0=INVERT_P_CN;
+            machine_menu.Invert_1=INVERT_N_CN;
+
+            machine_menu.HomeFeedRateConfTitle=HOMEFEEDRATE_CONF_TITLE_CN;
+            machine_menu.XY_HomeFeedRate=X_HOMESPEED_CN;
+            //machine_menu.Y_HomeFeedRate=Y_HOMESPEED_CN;
+            machine_menu.Z_HomeFeedRate=Z_HOMESPEED_CN;
+          
+            machine_menu.AdvancedConfTitle=ADVANCED_CONF_TITLE_CN;
+            machine_menu.PwrOffDection=PWROFF_DECTION_CN;
+            machine_menu.PwrOffAfterPrint=PWROFF_AFTER_PRINT_CN;
+            machine_menu.HaveUps=HAVE_UPS_CN;
+            machine_menu.Z2andZ2Endstop=Z2_AND_Z2ENDSTOP_CONF_CN;
+            machine_menu.EnablePinsInvert=ENABLE_PINS_CONF_CN;
+
+            machine_menu.Z2ConfTitle=Z2_AND_Z2ENDSTOP_CONF_TITLE_CN;
+            machine_menu.Z2Enable=Z2_ENABLE_CN;
+            machine_menu.Z2EndstopEnable=Z2_ENDSTOP_CN;
+            machine_menu.Z2Port=Z2_PORT_CN;
+
+            machine_menu.EnablePinsInvertTitle=ENABLE_PINS_CONF_TITLE_CN;
+            machine_menu.XInvert=X_ENABLE_PINS_INVERT_CN;
+            machine_menu.YInvert=Y_ENABLE_PINS_INVERT_CN;
+            machine_menu.ZInvert=Z_ENABLE_PINS_INVERT_CN;
+            machine_menu.EInvert=E_ENABLE_PINS_INVERT_CN;
+
+            machine_menu.key_back = KEY_BACK_CN;
+            machine_menu.key_reset = KEY_REST_CN;
+            machine_menu.key_confirm = KEY_CONFIRM_CN;
+
+	     machine_menu.PausePosText = PAUSE_POSITION_CN;
+		machine_menu.xPos = PAUSE_POSITION_X_CN;
+		machine_menu.yPos = PAUSE_POSITION_Y_CN;
+		machine_menu.zPos = PAUSE_POSITION_Z_CN;
+    }
+    else if(gCfgItems.language == LANG_COMPLEX_CHINESE)
+    {
+    	MachinePara_menu.title = MACHINE_PARA_TITLE_T_CN;
+        MachinePara_menu.MachineSetting = MACHINE_TYPE_CNOFIG_T_CN;
+        MachinePara_menu.TemperatureSetting=TEMPERATURE_CONFIG_T_CN;
+        MachinePara_menu.MotorSetting=MOTOR_CONFIG_T_CN;
+        MachinePara_menu.AdvanceSetting=ADVANCE_CONFIG_T_CN;
+
+        machine_menu.default_value = DEFAULT_T_CN;
+        machine_menu.next=NEXT_T_CN;
+        machine_menu.previous=PREVIOUS_T_CN;
+
+        machine_menu.MachineConfigTitle = MACHINE_CONFIG_TITLE_T_CN;
+        machine_menu.MachineType=MACHINE_TYPE_T_CN;
+        machine_menu.Stroke=MACHINE_STROKE_T_CN;
+        machine_menu.HomeDir=MACHINE_HOMEDIR_T_CN;
+        machine_menu.EndStopType=MACHINE_ENDSTOP_TYPE_T_CN;
+        machine_menu.FilamentConf=MACHINE_FILAMENT_CONFIG_T_CN;
+        machine_menu.LevelingConf=MACHINE_LEVELING_CONFIG_T_CN;
+
+        machine_menu.MachineTypeConfTitle = MACHINE_TYPE_CONFIG_TITLE_T_CN;
+        machine_menu.xyz=MACHINE_TYPE_XYZ_T_CN;
+        machine_menu.delta=MACHINE_TYPE_DELTA_T_CN;
+        machine_menu.corexy=MACHINE_TYPE_COREXY_T_CN;
+
+        machine_menu.StrokeConfTitle=MACHINE_STROKE_CONF_TITLE_T_CN;
+        machine_menu.xStroke=X_MAX_LENGTH_T_CN;
+        machine_menu.yStroke=Y_MAX_LENGTH_T_CN;
+        machine_menu.zStroke=Z_MAX_LENGTH_T_CN;
+
+	    machine_menu.xmin=X_MIN_LENGTH_T_CN;
+	    machine_menu.ymin=Y_MIN_LENGTH_T_CN;
+	    machine_menu.zmin=Z_MIN_LENGTH_T_CN;		
+
+        machine_menu.HomeDirConfTitle=HOME_DIR_CONF_TITLE_T_CN;
+        machine_menu.xHomeDir=HOME_DIR_X_T_CN;
+        machine_menu.yHomeDir=HOME_DIR_Y_T_CN;
+        machine_menu.zHomeDir=HOME_DIR_Z_T_CN;
+        machine_menu.min=HOME_MIN_T_CN;
+        machine_menu.max=HOME_MAX_T_CN;
+
+        machine_menu.EndstopConfTitle=ENDSTOP_CONF_TITLE_T_CN;
+        machine_menu.xEndstop_min=MIN_ENDSTOP_X_T_CN;
+        machine_menu.yEndstop_min=MIN_ENDSTOP_Y_T_CN;
+        machine_menu.zEndstop_min=MIN_ENDSTOP_Z_T_CN;
+        machine_menu.xEndstop_max=MAX_ENDSTOP_X_T_CN;
+        machine_menu.yEndstop_max=MAX_ENDSTOP_Y_T_CN;
+        machine_menu.zEndstop_max=MAX_ENDSTOP_Z_T_CN;            
+        machine_menu.FilamentEndstop=ENDSTOP_FIL_T_CN;
+        machine_menu.LevelingEndstop=ENDSTOP_LEVEL_T_CN;
+        machine_menu.opened=ENDSTOP_OPENED_T_CN;
+        machine_menu.closed=ENDSTOP_CLOSED_T_CN;
+
+        machine_menu.FilamentConfTitle=FILAMENT_CONF_TITLE_T_CN;
+        machine_menu.InTemperature=FILAMENT_IN_TEMPERATURE_T_CN;
+        machine_menu.InLength=FILAMENT_IN_LENGTH_T_CN;
+        machine_menu.InSpeed=FILAMENT_IN_SPEED_T_CN;
+        machine_menu.OutTemperature=FILAMENT_OUT_TEMPERATURE_T_CN;
+        machine_menu.OutLength=FILAMENT_OUT_LENGTH_T_CN;
+        machine_menu.OutSpeed=FILAMENT_OUT_SPEED_T_CN;
+                    
+        machine_menu.LevelingParaConfTitle=LEVELING_CONF_TITLE_T_CN;
+        machine_menu.LevelingParaConf=LEVELING_PARA_CONF_T_CN;
+        machine_menu.DeltaLevelConf=LEVELING_DELTA_T_CN;
+        machine_menu.XYZLevelconf=LEVELING_XYZ_T_CN;
+
+        machine_menu.LevelingSubConfTitle=LEVELING_PARA_CONF_TITLE_T_CN;
+        machine_menu.AutoLevelEnable=AUTO_LEVELING_ENABLE_T_CN;
+        machine_menu.BLtouchEnable=BLTOUCH_LEVELING_ENABLE_T_CN;
+        machine_menu.ProbePort=PROBE_PORT_T_CN;
+        machine_menu.ProbeXoffset=PROBE_X_OFFSET_T_CN;
+        machine_menu.ProbeYoffset=PROBE_Y_OFFSET_T_CN;
+        machine_menu.ProbeZoffset=PROBE_Z_OFFSET_T_CN;
+        machine_menu.ProbeXYspeed=PROBE_XY_SPEED_T_CN;
+        machine_menu.ProbeZspeed=PROBE_Z_SPEED_T_CN;
+        machine_menu.enable = ENABLE_T_CN;
+        machine_menu.disable = DISABLE_T_CN;
+        machine_menu.z_min = Z_MIN_T_CN;
+        machine_menu.z_max = Z_MAX_T_CN;
+
+        machine_menu.LevelingSubDeltaConfTitle=DELTA_LEVEL_CONF_TITLE_T_CN;
+        machine_menu.MachineRadius=DELTA_MACHINE_RADIUS_T_CN;
+        machine_menu.DiagonalRod=DELTA_DIAGONAL_ROD_T_CN;
+        machine_menu.PrintableRadius=DELTA_PRINT_RADIUS_T_CN;
+        machine_menu.DeltaHeight=DELTA_HEIGHT_T_CN;
+        machine_menu.SmoothRodOffset=SMOOTH_ROD_OFFSET_T_CN;
+        machine_menu.EffectorOffset=EFFECTOR_OFFSET_T_CN;
+        machine_menu.CalibrationRadius=CALIBRATION_RADIUS_T_CN;
+
+        machine_menu.LevelingSubXYZConfTitle=XYZ_LEVEL_CONF_TITLE_T_CN;
+        //machine_menu.ProbeMaxLeft=PROBE_REACH_MAX_LEFT_T_CN;
+        //machine_menu.ProbeMaxRigh=PROBE_REACH_MAX_RIGHT_T_CN;
+        //machine_menu.ProbeMaxfront=PROBE_REACH_MAX_FRONT_T_CN;
+        //machine_menu.ProbeMaxback=PROBE_REACH_MAX_BACK_T_CN;
+
+        machine_menu.TemperatureConfTitle=TEMPERATURE_CONF_TITLE_T_CN;
+        machine_menu.NozzleConf=NOZZLE_CONF_T_CN;
+        machine_menu.HotBedConf=HOTBED_CONF_T_CN;
+        machine_menu.PreheatTemperConf=PREHEAT_TEMPER_T_CN;
+
+        machine_menu.NozzleConfTitle=NOZZLE_CONF_TITLE_T_CN;
+        machine_menu.NozzleCnt=NOZZLECNT_T_CN;
+        machine_menu.NozzleType=NOZZLE_TYPE_T_CN;
+        machine_menu.NozzleAdjustType=NOZZLE_ADJUST_TYPE_T_CN;
+        machine_menu.NozzleMinTemperature=NOZZLE_MIN_TEMPERATURE_T_CN;
+        machine_menu.NozzleMaxTemperature=NOZZLE_MAX_TEMPERATURE_T_CN;
+        machine_menu.Extrude_Min_Temper=EXTRUD_MIN_TEMPER_T_CN;
+
+	 //machine_menu.HotbedEnable=HOTBED_ENABLE_T_CN;
+        machine_menu.HotbedConfTitle=HOTBED_CONF_TITLE_T_CN;
+        machine_menu.HotbedAjustType=HOTBED_ADJUST_T_CN;
+        machine_menu.HotbedMinTemperature=HOTBED_MIN_TEMPERATURE_T_CN;
+        machine_menu.HotbedMaxTemperature=HOTBED_MAX_TEMPERATURE_T_CN;
+
+        machine_menu.MotorConfTitle=MOTOR_CONF_TITLE_T_CN;
+        machine_menu.MaxFeedRateConf=MAXFEEDRATE_CONF_T_CN;
+        machine_menu.AccelerationConf=ACCELERATION_CONF_T_CN;
+        machine_menu.JerkConf=JERKCONF_T_CN;
+        machine_menu.StepsConf=STEPSCONF_T_CN;
+	 machine_menu.TMCcurrentConf=TMC_CURRENT_T_CN;
+	 machine_menu.TMCStepModeConf=TMC_STEP_MODE_T_CN;
+        machine_menu.MotorDirConf=MOTORDIRCONF_T_CN;
+        machine_menu.HomeFeedRateConf=HOMEFEEDRATECONF_T_CN;
+	 machine_menu.PausePosition=PAUSE_POSITION_T_CN;
+
+        machine_menu.MaxFeedRateConfTitle=MAXFEEDRATE_CONF_TITLE_T_CN;
+        machine_menu.XMaxFeedRate=X_MAXFEEDRATE_T_CN;
+        machine_menu.YMaxFeedRate=Y_MAXFEEDRATE_T_CN;
+        machine_menu.ZMaxFeedRate=Z_MAXFEEDRATE_T_CN;
+        machine_menu.E0MaxFeedRate=E0_MAXFEEDRATE_T_CN;
+        machine_menu.E1MaxFeedRate=E1_MAXFEEDRATE_T_CN;
+
+        machine_menu.AccelerationConfTitle=ACCELERATION_CONF_TITLE_T_CN;
+        machine_menu.PrintAcceleration=PRINT_ACCELERATION_T_CN;
+        machine_menu.RetractAcceleration=RETRACT_ACCELERATION_T_CN;
+        machine_menu.TravelAcceleration=TRAVEL_ACCELERATION_T_CN;
+        machine_menu.X_Acceleration=X_ACCELERATION_T_CN;
+        machine_menu.Y_Acceleration=Y_ACCELERATION_T_CN;
+        machine_menu.Z_Acceleration=Z_ACCELERATION_T_CN;
+        machine_menu.E0_Acceleration=E0_ACCELERATION_T_CN;
+        machine_menu.E1_Acceleration=E1_ACCELERATION_T_CN;
+
+        machine_menu.JerkConfTitle=JERK_CONF_TITLE_T_CN;
+        machine_menu.X_Jerk=X_JERK_T_CN;
+        machine_menu.Y_Jerk=Y_JERK_T_CN;
+        machine_menu.Z_Jerk=Z_JERK_T_CN;
+        machine_menu.E_Jerk=E_JERK_T_CN;
+
+        machine_menu.StepsConfTitle=STEPS_CONF_TITLE_T_CN;
+        machine_menu.X_Steps=X_STEPS_T_CN;
+        machine_menu.Y_Steps=Y_STEPS_T_CN;
+        machine_menu.Z_Steps=Z_STEPS_T_CN;
+        machine_menu.E0_Steps=E0_STEPS_T_CN;
+        machine_menu.E1_Steps=E1_STEPS_T_CN;
+
+		machine_menu.TmcCurrentConfTitle=TMC_CURRENT_CONF_TITLE_T_CN;
+        machine_menu.X_Current=X_TMC_CURRENT_T_CN;
+        machine_menu.Y_Current=Y_TMC_CURRENT_T_CN;
+        machine_menu.Z_Current=Z_TMC_CURRENT_T_CN;
+        machine_menu.E0_Current=E0_TMC_CURRENT_T_CN;
+        machine_menu.E1_Current=E1_TMC_CURRENT_T_CN;
+
+	 machine_menu.TmcStepModeConfTitle=TMC_MODE_CONF_TITLE_T_CN;
+        machine_menu.X_StepMode=X_TMC_MODE_T_CN;
+        machine_menu.Y_StepMode=Y_TMC_MODE_T_CN;
+        machine_menu.Z_StepMode=Z_TMC_MODE_T_CN;
+        machine_menu.E0_StepMode=E0_TMC_MODE_T_CN;
+        machine_menu.E1_StepMode=E1_TMC_MODE_T_CN;
+
+        machine_menu.MotorDirConfTitle=MOTORDIR_CONF_TITLE_T_CN;
+        machine_menu.X_MotorDir=X_MOTORDIR_T_CN;
+        machine_menu.Y_MotorDir=Y_MOTORDIR_T_CN;
+        machine_menu.Z_MotorDir=Z_MOTORDIR_T_CN;
+        machine_menu.E0_MotorDir=E0_MOTORDIR_T_CN;
+        machine_menu.E1_MotorDir=E1_MOTORDIR_T_CN;
+        machine_menu.Invert_0=INVERT_P_T_CN;
+        machine_menu.Invert_1=INVERT_N_T_CN;
+
+        machine_menu.HomeFeedRateConfTitle=HOMEFEEDRATE_CONF_TITLE_T_CN;
+        machine_menu.XY_HomeFeedRate=X_HOMESPEED_T_CN;
+        //machine_menu.Y_HomeFeedRate=Y_HOMESPEED_T_CN;
+        machine_menu.Z_HomeFeedRate=Z_HOMESPEED_T_CN;
+
+        machine_menu.AdvancedConfTitle=ADVANCED_CONF_TITLE_T_CN;
+        machine_menu.PwrOffDection=PWROFF_DECTION_T_CN;
+        machine_menu.PwrOffAfterPrint=PWROFF_AFTER_PRINT_T_CN;
+        machine_menu.HaveUps=HAVE_UPS_T_CN;
+        machine_menu.Z2andZ2Endstop=Z2_AND_Z2ENDSTOP_CONF_T_CN;
+        machine_menu.EnablePinsInvert=ENABLE_PINS_CONF_T_CN;
+
+        machine_menu.Z2ConfTitle=Z2_AND_Z2ENDSTOP_CONF_TITLE_T_CN;
+        machine_menu.Z2Enable=Z2_ENABLE_T_CN;
+        machine_menu.Z2EndstopEnable=Z2_ENDSTOP_T_CN;
+        machine_menu.Z2Port=Z2_PORT_T_CN;
+
+        machine_menu.EnablePinsInvertTitle=ENABLE_PINS_CONF_TITLE_T_CN;
+        machine_menu.XInvert=X_ENABLE_PINS_INVERT_T_CN;
+        machine_menu.YInvert=Y_ENABLE_PINS_INVERT_T_CN;
+        machine_menu.ZInvert=Z_ENABLE_PINS_INVERT_T_CN;
+        machine_menu.EInvert=E_ENABLE_PINS_INVERT_T_CN;
+
+        machine_menu.key_back = KEY_BACK_T_CN;
+        machine_menu.key_reset = KEY_REST_T_CN;
+        machine_menu.key_confirm = KEY_CONFIRM_T_CN;
+	//machine_menu.high_level = MOTOR_EN_HIGH_LEVEL_T_CN;
+	//machine_menu.low_level = MOTOR_EN_LOW_LEVEL_T_CN;
+
+	machine_menu.PausePosText = PAUSE_POSITION_T_CN;
+	machine_menu.xPos = PAUSE_POSITION_X_T_CN;
+	machine_menu.yPos = PAUSE_POSITION_Y_T_CN;
+	machine_menu.zPos = PAUSE_POSITION_Z_T_CN;
+     
+    }
+    else
+    {
+    MachinePara_menu.title = MACHINE_PARA_TITLE_EN;
+    MachinePara_menu.MachineSetting = MACHINE_TYPE_CNOFIG_EN;
+    MachinePara_menu.TemperatureSetting=TEMPERATURE_CONFIG_EN;
+    MachinePara_menu.MotorSetting=MOTOR_CONFIG_EN;
+    MachinePara_menu.AdvanceSetting=ADVANCE_CONFIG_EN;
+
+    machine_menu.default_value = DEFAULT_EN;
+    machine_menu.next=NEXT_EN;
+    machine_menu.previous=PREVIOUS_EN;
+
+    machine_menu.MachineConfigTitle = MACHINE_CONFIG_TITLE_EN;
+    machine_menu.MachineType=MACHINE_TYPE_EN;
+    machine_menu.Stroke=MACHINE_STROKE_EN;
+    machine_menu.HomeDir=MACHINE_HOMEDIR_EN;
+    machine_menu.EndStopType=MACHINE_ENDSTOP_TYPE_EN;
+    machine_menu.FilamentConf=MACHINE_FILAMENT_CONFIG_EN;
+    machine_menu.LevelingConf=MACHINE_LEVELING_CONFIG_EN;
+
+    machine_menu.MachineTypeConfTitle = MACHINE_TYPE_CONFIG_TITLE_EN;
+    machine_menu.xyz=MACHINE_TYPE_XYZ_EN;
+    machine_menu.delta=MACHINE_TYPE_DELTA_EN;
+    machine_menu.corexy=MACHINE_TYPE_COREXY_EN;
+
+    machine_menu.StrokeConfTitle=MACHINE_STROKE_CONF_TITLE_EN;
+    machine_menu.xStroke=X_MAX_LENGTH_EN;
+    machine_menu.yStroke=Y_MAX_LENGTH_EN;
+    machine_menu.zStroke=Z_MAX_LENGTH_EN;
+	
+    machine_menu.xmin=X_MIN_LENGTH_EN;
+    machine_menu.ymin=Y_MIN_LENGTH_EN;
+    machine_menu.zmin=Z_MIN_LENGTH_EN;
+
+    machine_menu.HomeDirConfTitle=HOME_DIR_CONF_TITLE_EN;
+    machine_menu.xHomeDir=HOME_DIR_X_EN;
+    machine_menu.yHomeDir=HOME_DIR_Y_EN;
+    machine_menu.zHomeDir=HOME_DIR_Z_EN;
+    machine_menu.min=HOME_MIN_EN;
+    machine_menu.max=HOME_MAX_EN;
+
+    machine_menu.EndstopConfTitle=ENDSTOP_CONF_TITLE_EN;
+    machine_menu.xEndstop_min=MIN_ENDSTOP_X_EN;
+    machine_menu.yEndstop_min=MIN_ENDSTOP_Y_EN;
+    machine_menu.zEndstop_min=MIN_ENDSTOP_Z_EN;
+    machine_menu.xEndstop_max=MAX_ENDSTOP_X_EN;
+    machine_menu.yEndstop_max=MAX_ENDSTOP_Y_EN;
+    machine_menu.zEndstop_max=MAX_ENDSTOP_Z_EN;            
+    machine_menu.FilamentEndstop=ENDSTOP_FIL_EN;
+    machine_menu.LevelingEndstop=ENDSTOP_LEVEL_EN;
+    machine_menu.opened=ENDSTOP_OPENED_EN;
+    machine_menu.closed=ENDSTOP_CLOSED_EN;
+
+    machine_menu.FilamentConfTitle=FILAMENT_CONF_TITLE_EN;
+    machine_menu.InTemperature=FILAMENT_IN_TEMPERATURE_EN;
+    machine_menu.InLength=FILAMENT_IN_LENGTH_EN;
+    machine_menu.InSpeed=FILAMENT_IN_SPEED_EN;
+    machine_menu.OutTemperature=FILAMENT_OUT_TEMPERATURE_EN;
+    machine_menu.OutLength=FILAMENT_OUT_LENGTH_EN;
+    machine_menu.OutSpeed=FILAMENT_OUT_SPEED_EN;
+
+    machine_menu.LevelingParaConfTitle=LEVELING_CONF_TITLE_EN;
+    machine_menu.LevelingParaConf=LEVELING_PARA_CONF_EN;
+    machine_menu.DeltaLevelConf=LEVELING_DELTA_EN;
+    machine_menu.XYZLevelconf=LEVELING_XYZ_EN;
+
+    machine_menu.LevelingSubConfTitle=LEVELING_PARA_CONF_TITLE_EN;
+    machine_menu.AutoLevelEnable=AUTO_LEVELING_ENABLE_EN;
+    machine_menu.BLtouchEnable=BLTOUCH_LEVELING_ENABLE_EN;
+    machine_menu.ProbePort=PROBE_PORT_EN;
+    machine_menu.ProbeXoffset=PROBE_X_OFFSET_EN;
+    machine_menu.ProbeYoffset=PROBE_Y_OFFSET_EN;
+    machine_menu.ProbeZoffset=PROBE_Z_OFFSET_EN;
+    machine_menu.ProbeXYspeed=PROBE_XY_SPEED_EN;
+    machine_menu.ProbeZspeed=PROBE_Z_SPEED_EN;
+    machine_menu.enable = ENABLE_EN;
+    machine_menu.disable = DISABLE_EN;
+    machine_menu.z_min = Z_MIN_EN;
+    machine_menu.z_max = Z_MAX_EN;
+
+    machine_menu.LevelingSubDeltaConfTitle=DELTA_LEVEL_CONF_TITLE_EN;
+    machine_menu.MachineRadius=DELTA_MACHINE_RADIUS_EN;
+    machine_menu.DiagonalRod=DELTA_DIAGONAL_ROD_EN;
+    machine_menu.PrintableRadius=DELTA_PRINT_RADIUS_EN;
+    machine_menu.DeltaHeight=DELTA_HEIGHT_EN;
+    machine_menu.SmoothRodOffset=SMOOTH_ROD_OFFSET_EN;
+    machine_menu.EffectorOffset=EFFECTOR_OFFSET_EN;
+    machine_menu.CalibrationRadius=CALIBRATION_RADIUS_EN;
+
+    machine_menu.LevelingSubXYZConfTitle=XYZ_LEVEL_CONF_TITLE_EN;
+    //machine_menu.Level_positon=PROBE_REACH_MAX_LEFT_EN;
+    //machine_menu.ProbeMaxRigh=PROBE_REACH_MAX_RIGHT_EN;
+    //machine_menu.ProbeMaxfront=PROBE_REACH_MAX_FRONT_EN;
+   // machine_menu.ProbeMaxback=PROBE_REACH_MAX_BACK_EN;
+
+    machine_menu.TemperatureConfTitle=TEMPERATURE_CONF_TITLE_EN;
+    machine_menu.NozzleConf=NOZZLE_CONF_EN;
+    machine_menu.HotBedConf=HOTBED_CONF_EN;
+    machine_menu.PreheatTemperConf=PREHEAT_TEMPER_EN;
+
+    machine_menu.NozzleConfTitle=NOZZLE_CONF_TITLE_EN;
+    machine_menu.NozzleCnt=NOZZLECNT_EN;
+    machine_menu.NozzleType=NOZZLE_TYPE_EN;
+    machine_menu.NozzleAdjustType=NOZZLE_ADJUST_TYPE_EN;
+    machine_menu.NozzleMinTemperature=NOZZLE_MIN_TEMPERATURE_EN;
+    machine_menu.NozzleMaxTemperature=NOZZLE_MAX_TEMPERATURE_EN;
+    machine_menu.Extrude_Min_Temper=EXTRUD_MIN_TEMPER_EN;
+
+    machine_menu.HotbedEnable=HOTBED_ENABLE_EN;
+    machine_menu.HotbedConfTitle=HOTBED_CONF_TITLE_EN;
+    machine_menu.HotbedAjustType=HOTBED_ADJUST_EN;
+    machine_menu.HotbedMinTemperature=HOTBED_MIN_TEMPERATURE_EN;
+    machine_menu.HotbedMaxTemperature=HOTBED_MAX_TEMPERATURE_EN;
+
+    machine_menu.MotorConfTitle=MOTOR_CONF_TITLE_EN;
+    machine_menu.MaxFeedRateConf=MAXFEEDRATE_CONF_EN;
+    machine_menu.AccelerationConf=ACCELERATION_CONF_EN;
+    machine_menu.JerkConf=JERKCONF_EN;
+    machine_menu.StepsConf=STEPSCONF_EN;
+    machine_menu.TMCcurrentConf=TMC_CURRENT_EN;
+    machine_menu.TMCStepModeConf=TMC_STEP_MODE_EN;
+    machine_menu.MotorDirConf=MOTORDIRCONF_EN;
+    machine_menu.HomeFeedRateConf=HOMEFEEDRATECONF_EN;
+    machine_menu.PausePosition=PAUSE_POSITION_EN;
+
+    machine_menu.MaxFeedRateConfTitle=MAXFEEDRATE_CONF_TITLE_EN;
+    machine_menu.XMaxFeedRate=X_MAXFEEDRATE_EN;
+    machine_menu.YMaxFeedRate=Y_MAXFEEDRATE_EN;
+    machine_menu.ZMaxFeedRate=Z_MAXFEEDRATE_EN;
+    machine_menu.E0MaxFeedRate=E0_MAXFEEDRATE_EN;
+    machine_menu.E1MaxFeedRate=E1_MAXFEEDRATE_EN;
+
+    machine_menu.AccelerationConfTitle=ACCELERATION_CONF_TITLE_EN;
+    machine_menu.PrintAcceleration=PRINT_ACCELERATION_EN;
+    machine_menu.RetractAcceleration=RETRACT_ACCELERATION_EN;
+    machine_menu.TravelAcceleration=TRAVEL_ACCELERATION_EN;
+    machine_menu.X_Acceleration=X_ACCELERATION_EN;
+    machine_menu.Y_Acceleration=Y_ACCELERATION_EN;
+    machine_menu.Z_Acceleration=Z_ACCELERATION_EN;
+    machine_menu.E0_Acceleration=E0_ACCELERATION_EN;
+    machine_menu.E1_Acceleration=E1_ACCELERATION_EN;
+
+    machine_menu.JerkConfTitle=JERK_CONF_TITLE_EN;
+    machine_menu.X_Jerk=X_JERK_EN;
+    machine_menu.Y_Jerk=Y_JERK_EN;
+    machine_menu.Z_Jerk=Z_JERK_EN;
+    machine_menu.E_Jerk=E_JERK_EN;
+
+    machine_menu.StepsConfTitle=STEPS_CONF_TITLE_EN;
+    machine_menu.X_Steps=X_STEPS_EN;
+    machine_menu.Y_Steps=Y_STEPS_EN;
+    machine_menu.Z_Steps=Z_STEPS_EN;
+    machine_menu.E0_Steps=E0_STEPS_EN;
+    machine_menu.E1_Steps=E1_STEPS_EN;
+
+	machine_menu.TmcCurrentConfTitle=TMC_CURRENT_CONF_TITLE_EN;
+    machine_menu.X_Current=X_TMC_CURRENT_EN;
+    machine_menu.Y_Current=Y_TMC_CURRENT_EN;
+    machine_menu.Z_Current=Z_TMC_CURRENT_EN;
+    machine_menu.E0_Current=E0_TMC_CURRENT_EN;
+    machine_menu.E1_Current=E1_TMC_CURRENT_EN;
+
+    machine_menu.TmcStepModeConfTitle=TMC_MODE_CONF_TITLE_EN;
+    machine_menu.X_StepMode=X_TMC_MODE_EN;
+    machine_menu.Y_StepMode=Y_TMC_MODE_EN;
+    machine_menu.Z_StepMode=Z_TMC_MODE_EN;
+    machine_menu.E0_StepMode=E0_TMC_MODE_EN;
+    machine_menu.E1_StepMode=E1_TMC_MODE_EN;
+
+    machine_menu.MotorDirConfTitle=MOTORDIR_CONF_TITLE_EN;
+    machine_menu.X_MotorDir=X_MOTORDIR_EN;
+    machine_menu.Y_MotorDir=Y_MOTORDIR_EN;
+    machine_menu.Z_MotorDir=Z_MOTORDIR_EN;
+    machine_menu.E0_MotorDir=E0_MOTORDIR_EN;
+    machine_menu.E1_MotorDir=E1_MOTORDIR_EN;
+    machine_menu.Invert_0=INVERT_P_EN;
+    machine_menu.Invert_1=INVERT_N_EN;
+
+    machine_menu.HomeFeedRateConfTitle=HOMEFEEDRATE_CONF_TITLE_EN;
+    machine_menu.XY_HomeFeedRate=X_HOMESPEED_EN;
+    //machine_menu.Y_HomeFeedRate=Y_HOMESPEED_EN;
+    machine_menu.Z_HomeFeedRate=Z_HOMESPEED_EN;
+
+    machine_menu.AdvancedConfTitle=ADVANCED_CONF_TITLE_EN;
+    machine_menu.PwrOffDection=PWROFF_DECTION_EN;
+    machine_menu.PwrOffAfterPrint=PWROFF_AFTER_PRINT_EN;
+    machine_menu.HaveUps=HAVE_UPS_EN;
+    machine_menu.Z2andZ2Endstop=Z2_AND_Z2ENDSTOP_CONF_EN;
+    machine_menu.EnablePinsInvert=ENABLE_PINS_CONF_EN;
+
+    machine_menu.Z2ConfTitle=Z2_AND_Z2ENDSTOP_CONF_TITLE_EN;
+    machine_menu.Z2Enable=Z2_ENABLE_EN;
+    machine_menu.Z2EndstopEnable=Z2_ENDSTOP_EN;
+    machine_menu.Z2Port=Z2_PORT_EN;
+
+    machine_menu.EnablePinsInvertTitle=ENABLE_PINS_CONF_TITLE_EN;
+    machine_menu.XInvert=X_ENABLE_PINS_INVERT_EN;
+    machine_menu.YInvert=Y_ENABLE_PINS_INVERT_EN;
+    machine_menu.ZInvert=Z_ENABLE_PINS_INVERT_EN;
+    machine_menu.EInvert=E_ENABLE_PINS_INVERT_EN;
+
+    machine_menu.key_back = KEY_BACK_EN;
+    machine_menu.key_reset = KEY_REST_EN;
+    machine_menu.key_confirm = KEY_CONFIRM_EN;
+    //
+	machine_menu.high_level = MOTOR_EN_HIGH_LEVEL_EN;
+	machine_menu.low_level = MOTOR_EN_LOW_LEVEL_EN;
+
+	machine_menu.PausePosText = PAUSE_POSITION_EN;
+	machine_menu.xPos = PAUSE_POSITION_X_EN;
+	machine_menu.yPos = PAUSE_POSITION_Y_EN;
+	machine_menu.zPos = PAUSE_POSITION_Z_EN;
+    }
+
+}
 
 void disp_language_init()
 {
@@ -115,6 +759,19 @@ void disp_language_init()
 	zoffset_menu.step01 = ZOFFSET_STEP01;
 	zoffset_menu.step1 = ZOFFSET_STEP1;
 
+	machine_menu.key_0 = KEYBOARD_KEY0_EN;
+    machine_menu.key_1 = KEYBOARD_KEY1_EN;
+    machine_menu.key_2 = KEYBOARD_KEY2_EN;
+    machine_menu.key_3 = KEYBOARD_KEY3_EN;
+    machine_menu.key_4 = KEYBOARD_KEY4_EN;
+    machine_menu.key_5 = KEYBOARD_KEY5_EN;
+    machine_menu.key_6 = KEYBOARD_KEY6_EN;
+    machine_menu.key_7 = KEYBOARD_KEY7_EN;
+    machine_menu.key_8 = KEYBOARD_KEY8_EN;
+    machine_menu.key_9 = KEYBOARD_KEY9_EN;
+    machine_menu.key_point= KEYBOARD_KEY_POINT_EN;
+	machine_menu.negative=KEYBOARD_KEY_NEGATIVE_EN;
+
 	//wifi-list
 	#if 0
 	list_menu.title=TEXT_WIFI_MENU_TITLE_EN;
@@ -132,6 +789,8 @@ void disp_language_init()
 	   tips_menu.failedJoin = TEXT_WIFI_FAILED_JOIN_EN;
 	   tips_menu.wifiConected = TEXT_WIFI_WIFI_CONECTED_EN;
 	#endif
+	machine_setting_disp();
+	
 	operation_menu.babystep = TEXT_BABY_STEP_EN;
     
 	switch(gCfgItems.language)
@@ -223,7 +882,8 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_CN;
 			set_menu.language=LANGUAGE_TEXT_CN;
 			set_menu.shutdown=SHUTDOWN_TEXT_CN;
-            //set_menu.machine_para = MACHINE_PARA_CN;
+            		set_menu.machine_para = MACHINE_PARA_CN;
+			set_menu.eepromSet = EEPROM_SETTINGS_CN;
             
 			//
 			filesys_menu.title = TITLE_FILESYS_CN;
@@ -362,6 +1022,14 @@ void disp_language_init()
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_CN;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_CN;
 
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_CN;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_CN;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_CN;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_CN;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_CN;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_CN;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_CN;
+				
 			break;
 #if 1            
 		#if 1
@@ -452,7 +1120,8 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_T_CN;
 			set_menu.language=LANGUAGE_TEXT_T_CN;
 			set_menu.shutdown=SHUTDOWN_TEXT_T_CN;
-            //set_menu.machine_para = MACHINE_PARA_T_CN;
+            		set_menu.machine_para = MACHINE_PARA_T_CN;
+			set_menu.eepromSet = EEPROM_SETTINGS_T_CN;
 			//
 			filesys_menu.title = TITLE_FILESYS_T_CN;
 			filesys_menu.sd_sys = SD_CARD_TEXT_T_CN;
@@ -586,6 +1255,15 @@ void disp_language_init()
 			pause_msg_menu.option = MESSEGE_OPTION_T_CN;
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_T_CN;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_T_CN;
+
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_T_CN;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_T_CN;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_T_CN;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_T_CN;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_T_CN;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_T_CN;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_T_CN;
+			
 			break;
 		case LANG_ENGLISH:
 			common_menu.dialog_confirm_title = TITLE_DIALOG_CONFIRM_EN;
@@ -668,7 +1346,9 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_EN;
 			set_menu.language=LANGUAGE_TEXT_EN;
 			set_menu.shutdown=SHUTDOWN_TEXT_EN;
-            //set_menu.machine_para = MACHINE_PARA_EN;
+            		set_menu.machine_para = MACHINE_PARA_EN;
+			set_menu.eepromSet = EEPROM_SETTINGS_EN;
+			
 			//
 			more_menu.title = TITLE_MORE_EN;
 			more_menu.zoffset = ZOFFSET_EN;
@@ -799,6 +1479,15 @@ void disp_language_init()
 			pause_msg_menu.option = MESSEGE_OPTION_EN;
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_EN;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_EN;
+
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_EN;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_EN;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_EN;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_EN;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_EN;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_EN;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_EN;
+			
 			break;
 		case LANG_RUSSIAN:
 			common_menu.dialog_confirm_title = TITLE_DIALOG_CONFIRM_RU;
@@ -881,6 +1570,8 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_RU;
 			set_menu.language=LANGUAGE_TEXT_RU;
 			set_menu.shutdown=SHUTDOWN_TEXT_RU;
+			set_menu.machine_para = MACHINE_PARA_RU;
+			set_menu.eepromSet = EEPROM_SETTINGS_RU;
 			//
 			more_menu.title = TITLE_MORE_RU;	
 			more_menu.zoffset = ZOFFSET_RU;
@@ -1011,6 +1702,14 @@ void disp_language_init()
 			pause_msg_menu.option = MESSEGE_OPTION_RU;
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_RU;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_RU;
+
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_RU;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_RU;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_RU;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_RU;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_RU;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_RU;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_RU;
 			break;
 		case LANG_SPANISH:
 			common_menu.dialog_confirm_title = TITLE_DIALOG_CONFIRM_SP;
@@ -1097,6 +1796,8 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_SP;
 			set_menu.language=LANGUAGE_TEXT_SP;
 			set_menu.shutdown=SHUTDOWN_TEXT_SP;
+			set_menu.machine_para = MACHINE_PARA_SP;
+			set_menu.eepromSet = EEPROM_SETTINGS_SP;
 			//
 			more_menu.title = TITLE_MORE_SP;
 			more_menu.zoffset = ZOFFSET_SP;
@@ -1228,6 +1929,14 @@ void disp_language_init()
 			pause_msg_menu.option = MESSEGE_OPTION_SP;
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_SP;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_SP;
+
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_SP;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_SP;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_SP;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_SP;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_SP;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_SP;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_SP;
 			break;
 		#endif
 
@@ -1310,6 +2019,8 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_FR;
 			set_menu.language=LANGUAGE_TEXT_FR;
 			set_menu.shutdown=SHUTDOWN_TEXT_FR;
+			set_menu.machine_para = MACHINE_PARA_FR;
+			set_menu.eepromSet = EEPROM_SETTINGS_FR;
 			//
 			more_menu.title = TITLE_MORE_FR;
 			more_menu.zoffset = ZOFFSET_FR;
@@ -1442,6 +2153,14 @@ void disp_language_init()
 			pause_msg_menu.option = MESSEGE_OPTION_FR;
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_FR;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_FR;
+
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_FR;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_FR;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_FR;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_FR;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_FR;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_FR;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_FR;
 			break;
 			
 		case LANG_ITALY:
@@ -1526,6 +2245,8 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_IT;
 			set_menu.language=LANGUAGE_TEXT_IT;
 			set_menu.shutdown=SHUTDOWN_TEXT_IT;
+			set_menu.machine_para = MACHINE_PARA_IT;
+			set_menu.eepromSet = EEPROM_SETTINGS_IT;
 			//
 			more_menu.title = TITLE_MORE_IT;
 			more_menu.zoffset = ZOFFSET_IT;
@@ -1655,6 +2376,14 @@ void disp_language_init()
 			pause_msg_menu.option = MESSEGE_OPTION_IT;
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_IT;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_IT;
+
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_IT;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_IT;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_IT;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_IT;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_IT;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_IT;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_IT;
 			break;
 
 #endif        
@@ -1739,7 +2468,8 @@ void disp_language_init()
 			set_menu.motoroffXY=MOTOR_OFF_XY_TEXT_EN;
 			set_menu.language=LANGUAGE_TEXT_EN;
 			set_menu.shutdown=SHUTDOWN_TEXT_EN;
-            //set_menu.machine_para = MACHINE_PARA_EN;
+            		set_menu.machine_para = MACHINE_PARA_EN;
+			set_menu.eepromSet = EEPROM_SETTINGS_EN;
 			//
 			more_menu.title = TITLE_MORE_EN;
 			more_menu.zoffset = ZOFFSET_EN;
@@ -1870,6 +2600,15 @@ void disp_language_init()
 			pause_msg_menu.option = MESSEGE_OPTION_EN;
 			pause_msg_menu.purgeMore = MESSEGE_PURGE_MORE_EN;
 			pause_msg_menu.continuePrint = MESSEGE_CONTINUE_PRINT_EN;
+
+			eeprom_menu.title = EEPROM_SETTINGS_TITLE_EN;
+			eeprom_menu.store = EEPROM_SETTINGS_STORE_EN;
+			eeprom_menu.read = EEPROM_SETTINGS_READ_EN;
+			eeprom_menu.revert = EEPROM_SETTINGS_REVERT_EN;
+			eeprom_menu.storeTips = EEPROM_STORE_TIPS_EN;
+			eeprom_menu.readTips =  EEPROM_READ_TIPS_EN;
+			eeprom_menu.revertTips =  EEPROM_REVERT_TIPS_EN;
+			
 		break;
 	}
 }

@@ -11,6 +11,8 @@
 #include "../../../../../module/temperature.h"
 #include "../../../../../gcode/queue.h"
 
+#include "../../../../../gcode/gcode.h"
+
 static lv_obj_t * scr;
 static lv_obj_t * fanText;
 
@@ -39,7 +41,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 				fanSpeed++;
 				memset(public_buf_l,0,sizeof(public_buf_l));
 				sprintf(public_buf_l, "M106 S%d",fanSpeed);
-				queue.enqueue_one_now(PSTR(public_buf_l));
+				//queue.enqueue_one_now(PSTR(public_buf_l));
+				//queue.inject_P(PSTR(public_buf_l));
+				gcode.process_subcommands_now_P(PSTR(public_buf_l));
 			}
 	    }
 		break;
@@ -53,7 +57,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 				fanSpeed--;
 				memset(public_buf_l,0,sizeof(public_buf_l));
 				sprintf(public_buf_l, "M106 S%d",fanSpeed);
-				queue.enqueue_one_now(PSTR(public_buf_l));
+				//queue.enqueue_one_now(PSTR(public_buf_l));
+				//queue.inject_P(PSTR(public_buf_l));
+				gcode.process_subcommands_now_P(PSTR(public_buf_l));
 			}
 	    }
 		
@@ -64,7 +70,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			queue.enqueue_one_now(PSTR("M106 S255"));
+			//queue.enqueue_one_now(PSTR("M106 S255"));
+			//queue.inject_P(PSTR("M106 S255"));
+			gcode.process_subcommands_now_P(PSTR("M106 S255"));
 	    }
 		break;
 	case ID_F_MID:
@@ -73,7 +81,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			queue.enqueue_one_now(PSTR("M106 S127"));
+			//queue.enqueue_one_now(PSTR("M106 S127"));
+			//queue.inject_P(PSTR("M106 S127"));
+			gcode.process_subcommands_now_P(PSTR("M106 S127"));
 	    }
 		break;
 	case ID_F_OFF:
@@ -81,7 +91,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			queue.enqueue_one_now(PSTR("M107"));
+			//queue.enqueue_one_now(PSTR("M107"));
+			//queue.inject_P(PSTR("M107"));
+			gcode.process_subcommands_now_P(PSTR("M107"));
 	    }
 		break;
 	case ID_F_RETURN:
@@ -102,6 +114,10 @@ void lv_draw_fan(void)
 {
 	lv_obj_t *buttonAdd,*buttonDec,*buttonHigh,*buttonMid;
 	lv_obj_t *buttonOff,*buttonBack;
+
+	#if FAN_COUNT > 0
+	fanSpeed = thermalManager.fan_speed[0];
+	#endif
 
 	if(disp_state_stack._disp_state[disp_state_stack._disp_index] != FAN_UI)
 	{
@@ -148,25 +164,25 @@ void lv_draw_fan(void)
 	lv_imgbtn_set_style(buttonDec, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonDec, LV_BTN_STATE_REL, &tft_style_lable_rel);
 	
-	lv_obj_set_event_cb_mks(buttonHigh, event_handler,ID_F_HIGH,"bmp_Speed255.bin",0);	
+	lv_obj_set_event_cb_mks(buttonHigh, event_handler,ID_F_HIGH,"bmp_speed255.bin",0);	
     lv_imgbtn_set_src(buttonHigh, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buttonHigh, LV_BTN_STATE_PR, &bmp_pic);	
 	lv_imgbtn_set_style(buttonHigh, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonHigh, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
-	lv_obj_set_event_cb_mks(buttonMid, event_handler,ID_F_MID,"bmp_Speed127.bin",0);
+	lv_obj_set_event_cb_mks(buttonMid, event_handler,ID_F_MID,"bmp_speed127.bin",0);
     lv_imgbtn_set_src(buttonMid, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buttonMid, LV_BTN_STATE_PR, &bmp_pic);	
 	lv_imgbtn_set_style(buttonMid, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonMid, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
-	lv_obj_set_event_cb_mks(buttonOff, event_handler,ID_F_OFF,"bmp_Speed0.bin",0);	
+	lv_obj_set_event_cb_mks(buttonOff, event_handler,ID_F_OFF,"bmp_speed0.bin",0);	
     lv_imgbtn_set_src(buttonOff, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buttonOff, LV_BTN_STATE_PR, &bmp_pic);	
 	lv_imgbtn_set_style(buttonOff, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonOff, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
-	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_F_RETURN,"bmp_Return.bin",0);	
+	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_F_RETURN,"bmp_return.bin",0);	
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic);	
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_lable_pre);

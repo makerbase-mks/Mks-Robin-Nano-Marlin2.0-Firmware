@@ -77,6 +77,8 @@
 #define MOTOR_OFF_TEXT_FR				"M-hors"
 #define MOTOR_OFF_XY_TEXT_FR    "M-hors-XY"
 #define SHUTDOWN_TEXT_FR				"Eteindre"
+#define MACHINE_PARA_FR				"Config"
+#define EEPROM_SETTINGS_FR    "Eeprom Set"
 
 #define U_DISK_TEXT_FR					"Clé usb"
 #define SD_CARD_TEXT_FR					"Carte SD"
@@ -253,4 +255,14 @@
 #define MESSEGE_OPTION_FR			"Purger davantage ou continuer l'impression?"
 #define MESSEGE_PURGE_MORE_FR   "Purge"
 #define MESSEGE_CONTINUE_PRINT_FR   "Impression"
+
+#define EEPROM_SETTINGS_TITLE_FR  "Paramètres EEPROM"
+#define EEPROM_SETTINGS_STORE_FR  "Stocker les paramètres dans l'EEPROM"
+#define EEPROM_SETTINGS_READ_FR   "Lire les paramètres de l'EEPROM"
+#define EEPROM_SETTINGS_REVERT_FR "Rétablir les paramètres par défaut d'usine"
+
+#define EEPROM_STORE_TIPS_FR  "Stocker les paramètres dans l'EEPROM?"
+#define EEPROM_READ_TIPS_FR   "Lire les paramètres de l'EEPROM?"
+#define EEPROM_REVERT_TIPS_FR "Rétablir les paramètres par défaut d'usine?"
+
 #endif

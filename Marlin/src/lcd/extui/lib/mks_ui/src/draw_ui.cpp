@@ -19,12 +19,15 @@
 #include "../inc/SPI_TFT.h"
 #endif
 
+#include "../inc/mks_hardware_test.h"
+
 CFG_ITMES gCfgItems;
 UI_CFG uiCfg;
 DISP_STATE_STACK disp_state_stack;
 DISP_STATE disp_state = MAIN_UI;
 DISP_STATE last_disp_state;
 PRINT_TIME  print_time;
+value_state value;
 
 uint32_t To_pre_view;
 uint8_t gcode_preview_over;
@@ -42,6 +45,13 @@ extern uint8_t bmp_public_buf[17 * 1024];
 
 extern void LCD_IO_WriteData(uint16_t RegValue);
 
+lv_point_t line_points[4][2] = { 
+		{{PARA_UI_POS_X, PARA_UI_POS_Y+PARA_UI_SIZE_Y}, {TFT_WIDTH, PARA_UI_POS_Y+PARA_UI_SIZE_Y}},
+		{{PARA_UI_POS_X, PARA_UI_POS_Y*2+PARA_UI_SIZE_Y}, {TFT_WIDTH, PARA_UI_POS_Y*2+PARA_UI_SIZE_Y}},
+		{{PARA_UI_POS_X, PARA_UI_POS_Y*3+PARA_UI_SIZE_Y}, {TFT_WIDTH, PARA_UI_POS_Y*3+PARA_UI_SIZE_Y}},
+		{{PARA_UI_POS_X, PARA_UI_POS_Y*4+PARA_UI_SIZE_Y}, {TFT_WIDTH, PARA_UI_POS_Y*4+PARA_UI_SIZE_Y}}
+};
+
 void gCfgItems_init()
 {
 	gCfgItems.multiple_language = MULTI_LANGUAGE_ENABLE;
@@ -51,6 +61,9 @@ void gCfgItems_init()
 	gCfgItems.curFilesize = 0;
 	gCfgItems.finish_power_off = 0;
 	gCfgItems.pause_reprint = 0;
+	gCfgItems.pausePosX = -1;
+	gCfgItems.pausePosY = -1;
+	gCfgItems.pausePosZ = 5;
 	
 	W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems.spi_flash_flag,VAR_INF_ADDR,sizeof(gCfgItems.spi_flash_flag));
 	if(gCfgItems.spi_flash_flag == GCFG_FLAG_VALUE)
@@ -78,6 +91,7 @@ void ui_cfg_init()
 	uiCfg.curSprayerChoose = 0;
 	uiCfg.stepHeat = 10;
 	uiCfg.leveling_first_time = 0;
+	uiCfg.para_ui_page = 0;
 	uiCfg.extruStep = 5;
 	uiCfg.extruSpeed = 10;
 	uiCfg.move_dist = 1;
@@ -95,12 +109,22 @@ void update_spi_flash()
 lv_style_t tft_style_scr;
 lv_style_t tft_style_lable_pre;
 lv_style_t tft_style_lable_rel;
+lv_style_t style_line;
+lv_style_t style_para_value_pre;
+lv_style_t style_para_value_rel;
+
+lv_style_t style_num_key_pre;
+lv_style_t style_num_key_rel;
+
+lv_style_t style_num_text;
 
 void tft_style_init()
 {
 	lv_style_copy(&tft_style_scr, &lv_style_scr);
 	tft_style_scr.body.main_color     = LV_COLOR_BACKGROUND;
 	tft_style_scr.body.grad_color     = LV_COLOR_BACKGROUND;
+	//tft_style_scr.body.main_color.full     = 0xC318;
+	//tft_style_scr.body.grad_color.full     = 0xC318;
 	tft_style_scr.text.color     		= LV_COLOR_TEXT;
 	tft_style_scr.text.sel_color     	= LV_COLOR_TEXT;
 	tft_style_scr.line.width   		= 0;
@@ -111,10 +135,14 @@ void tft_style_init()
 	lv_style_copy(&tft_style_lable_rel, &lv_style_scr);
 	tft_style_lable_pre.body.main_color	= LV_COLOR_BACKGROUND;
 	tft_style_lable_pre.body.grad_color	= LV_COLOR_BACKGROUND;
+	//tft_style_lable_pre.body.main_color.full	= 0xC318;
+	//tft_style_lable_pre.body.grad_color.full	= 0xC318;
 	tft_style_lable_pre.text.color     	= LV_COLOR_TEXT;
 	tft_style_lable_pre.text.sel_color     	= LV_COLOR_TEXT;
 	tft_style_lable_rel.body.main_color	= LV_COLOR_BACKGROUND;
 	tft_style_lable_rel.body.grad_color	= LV_COLOR_BACKGROUND;	
+	//tft_style_lable_rel.body.main_color.full	= 0xC318;
+	//tft_style_lable_rel.body.grad_color.full	= 0xC318;	
 	tft_style_lable_rel.text.color     		= LV_COLOR_TEXT;
 	tft_style_lable_rel.text.sel_color     	= LV_COLOR_TEXT;
 	tft_style_lable_pre.text.font     		= &gb2312_puhui32;
@@ -125,6 +153,61 @@ void tft_style_init()
 	tft_style_lable_rel.text.letter_space 		= 0;
        tft_style_lable_pre.text.line_space   		= -5;
 	tft_style_lable_rel.text.line_space   		= -5;
+
+	lv_style_copy(&style_para_value_pre, &lv_style_scr);
+	lv_style_copy(&style_para_value_rel, &lv_style_scr);
+	style_para_value_pre.body.main_color	= LV_COLOR_BACKGROUND;
+	style_para_value_pre.body.grad_color	= LV_COLOR_BACKGROUND;
+	style_para_value_pre.text.color     	= LV_COLOR_BLACK;
+	style_para_value_pre.text.sel_color     	= LV_COLOR_BLACK;
+	style_para_value_rel.body.main_color	= LV_COLOR_BACKGROUND;
+	style_para_value_rel.body.grad_color	= LV_COLOR_BACKGROUND;	
+	style_para_value_rel.text.color     		= LV_COLOR_BLACK;
+	style_para_value_rel.text.sel_color     	= LV_COLOR_BLACK;
+	style_para_value_pre.text.font     		= &gb2312_puhui32;
+	style_para_value_rel.text.font     		= &gb2312_puhui32;
+	style_para_value_pre.line.width   			= 0;
+	style_para_value_rel.line.width   			= 0;
+	style_para_value_pre.text.letter_space 		= 0;
+	style_para_value_rel.text.letter_space 		= 0;
+    style_para_value_pre.text.line_space   		= -5;
+	style_para_value_rel.text.line_space   		= -5;
+
+	lv_style_copy(&style_num_key_pre, &lv_style_scr);
+	lv_style_copy(&style_num_key_rel, &lv_style_scr);
+	style_num_key_pre.body.main_color	= LV_COLOR_KEY_BACKGROUND;
+	style_num_key_pre.body.grad_color	= LV_COLOR_KEY_BACKGROUND;
+	style_num_key_pre.text.color     	= LV_COLOR_TEXT;
+	style_num_key_pre.text.sel_color     	= LV_COLOR_TEXT;
+	style_num_key_rel.body.main_color	= LV_COLOR_KEY_BACKGROUND;
+	style_num_key_rel.body.grad_color	= LV_COLOR_KEY_BACKGROUND;	
+	style_num_key_rel.text.color     		= LV_COLOR_TEXT;
+	style_num_key_rel.text.sel_color     	= LV_COLOR_TEXT;
+	style_num_key_pre.text.font     		= &gb2312_puhui32;
+	style_num_key_rel.text.font     		= &gb2312_puhui32;
+	style_num_key_pre.line.width   			= 0;
+	style_num_key_rel.line.width   			= 0;
+	style_num_key_pre.text.letter_space 		= 0;
+	style_num_key_rel.text.letter_space 		= 0;
+    style_num_key_pre.text.line_space   		= -5;
+	style_num_key_rel.text.line_space   		= -5;
+
+
+	lv_style_copy(&style_num_text, &lv_style_scr);
+
+	style_num_text.body.main_color	= LV_COLOR_WHITE;
+	style_num_text.body.grad_color	= LV_COLOR_WHITE;	
+	style_num_text.text.color     	= LV_COLOR_BLACK;
+	style_num_text.text.sel_color     	= LV_COLOR_BLACK;
+	style_num_text.text.font     		= &gb2312_puhui32;
+	style_num_text.line.width   		= 0;
+	style_num_text.text.letter_space 	= 0;
+	style_num_text.text.line_space   	= -5;
+
+    	lv_style_copy(&style_line, &lv_style_plain);
+    	style_line.line.color = LV_COLOR_MAKE(0x49, 0x54, 0xff);
+    	style_line.line.width = 1;
+    	style_line.line.rounded = 1;
 }
 
 #define MAX_TITLE_LEN	28
@@ -320,6 +403,9 @@ char *getDispText(int index)
 	case BABY_STEP_UI:
             strcpy(public_buf_l, operation_menu.babystep);
             break;
+	case EEPROM_SETTINGS_UI:
+		strcpy(public_buf_l, eeprom_menu.title);
+		break;
 		default:
 			break;
 	}
@@ -494,6 +580,7 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 		       Color = (*p_index >> 8);
 			*p_index = Color | ((*p_index & 0xff) << 8);
 			i+=2;
+			if(*p_index == 0x0000)*p_index=0xC318;
 		}
 		SPI_TFT_CS_L;
 		SPI_TFT_DC_H;
@@ -504,7 +591,7 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 		for(i=0;i<400;)
 		{
 			p_index = (uint16_t *)(&bmp_public_buf[i]); 
-			//if(*p_index == 0x0000)*p_index=gCfgItems.preview_bk_color;
+			if(*p_index == 0x0000)*p_index=0x18C3;
 			LCD_IO_WriteData(*p_index);
 			i=i+2;
 		}
@@ -592,23 +679,31 @@ void gcode_preview(char *path,int xpos_pixel,int ypos_pixel)
 void Draw_default_preview(int xpos_pixel,int ypos_pixel,uint8_t sel)
 {
 	int index; 
-	int x_off = 0, y_off = 0;
+	int  y_off = 0;
 	int _y;
 	uint16_t *p_index;
 	int i,j;
-	uint16_t temp_p,Color;
+	uint16_t Color;
 	
 	for(index = 0; index < 10; index ++)//200*200
 	{
 		if(sel == 1)
 		{
 			flash_view_Read(bmp_public_buf, 8000);//20k
-			//memset(bmp_public_buf,0x1f,8000);
 		}
 		else
 		{
-			//memset(bmp_public_buf,0x1f,8000);
 			default_view_Read(bmp_public_buf, 8000);//20k
+			#if ENABLED(SPI_GRAPHICAL_TFT)
+			for(i=0;i<8000;)
+			{
+				p_index = (uint16_t *)(&bmp_public_buf[i]);
+
+			       Color = (*p_index >> 8);
+				*p_index = Color | ((*p_index & 0xff) << 8);
+				i+=2;
+			}
+			#endif
 		}
 
 		i = 0;
@@ -637,6 +732,10 @@ void Draw_default_preview(int xpos_pixel,int ypos_pixel,uint8_t sel)
 		}
 		
 		#else
+
+		int  x_off=0;
+		uint16_t temp_p;
+
 		ili9320_SetWindows(xpos_pixel, y_off * 20+ypos_pixel, 200,20);     //200*200
 
 		LCD_WriteRAM_Prepare(); 
@@ -726,7 +825,7 @@ void GUI_RefreshPage()
 		{
 		      case MAIN_UI:          
 				
-					lv_draw_ready_print();
+					//lv_draw_ready_print();
 				
 				break;
 			case EXTRUSION_UI:  
@@ -1058,16 +1157,16 @@ void clear_cur_ui()
 		//Clear_Tips();
 		break;
 	case MACHINE_PARA_UI:
-		//Clear_MachinePara();
+		lv_clear_machine_para();
 		break;
     case MACHINE_SETTINGS_UI:
-        //Clear_MachineSettings();
+        lv_clear_machine_settings();
         break;
     case TEMPERATURE_SETTINGS_UI:
         //Clear_TemperatureSettings();
         break;
      case MOTOR_SETTINGS_UI:
-        //Clear_MotorSettings();
+        lv_clear_motor_settings();
         break;  
      case MACHINETYPE_UI:
         //Clear_MachineType();
@@ -1097,16 +1196,18 @@ void clear_cur_ui()
         //Clear_XYZLevelPara();
         break; 
      case MAXFEEDRATE_UI:
-        //Clear_MaxFeedRate();
+        lv_clear_max_feedrate_settings();
         break;  
      case STEPS_UI:
-        //Clear_Steps();
+        lv_clear_step_settings();
         break;
      case ACCELERATION_UI:
-        //Clear_Acceleration();
+        lv_clear_acceleration_settings();
         break;
      case JERK_UI:
-        //Clear_Jerk();
+	 #if HAS_CLASSIC_JERK
+        lv_clear_jerk_settings();
+	 #endif
         break;
      case MOTORDIR_UI:
         //Clear_MotorDir();
@@ -1121,7 +1222,7 @@ void clear_cur_ui()
         //Clear_HotbedConfig();
 		break; 
     case ADVANCED_UI:
-        //Clear_Advanced();
+        lv_clear_advance_settings();
         break;   
     case DOUBLE_Z_UI:
         //Clear_DoubleZ();
@@ -1130,11 +1231,27 @@ void clear_cur_ui()
         //Clear_EnableInvert();
         break;  
     case NUMBER_KEY_UI:
-        //Clear_NumberKey();
+        lv_clear_number_key();
         break;
 	case BABY_STEP_UI:
             //Clear_babyStep();
             break;
+	case PAUSE_POS_UI:
+            lv_clear_pause_position();
+            break;
+	#if HAS_TRINAMIC_CONFIG
+	case TMC_CURRENT_UI:
+            lv_clear_tmc_current_settings();
+            break;
+	#endif
+	case EEPROM_SETTINGS_UI:
+            lv_clear_eeprom_settings();
+            break;
+	#if HAS_STEALTHCHOP
+	case TMC_MODE_UI:
+		lv_clear_tmc_step_mode_settings();
+		break;
+	#endif
 		default:
 			break;
 	}
@@ -1279,16 +1396,16 @@ void draw_return_ui()
 			//draw_Tips();
 			break;
 		case MACHINE_PARA_UI:
-			//draw_MachinePara();
+			lv_draw_machine_para();
 			break;	
         case MACHINE_SETTINGS_UI:
-            //draw_MachineSettings();
+            lv_draw_machine_settings();
             break;  
         case TEMPERATURE_SETTINGS_UI:
             //draw_TemperatureSettings();
             break; 
          case MOTOR_SETTINGS_UI:
-            //draw_MotorSettings();
+            lv_draw_motor_settings();
             break;
          case MACHINETYPE_UI:
             //draw_MachineType();
@@ -1318,16 +1435,18 @@ void draw_return_ui()
             //draw_XYZLevelPara();
             break;
          case MAXFEEDRATE_UI:
-            //draw_MaxFeedRate();
+            lv_draw_max_feedrate_settings();
             break;
          case STEPS_UI:
-            //draw_Steps();
+            lv_draw_step_settings();
             break;
          case ACCELERATION_UI:
-            //draw_Acceleration();
+            lv_draw_acceleration_settings();
             break;
          case JERK_UI:
-            //draw_Jerk();
+	     #if HAS_CLASSIC_JERK
+            lv_draw_jerk_settings();
+	     #endif
             break;  
          case MOTORDIR_UI:
             //draw_MotorDir();
@@ -1342,7 +1461,7 @@ void draw_return_ui()
             //draw_HotbedConfig();
             break;
         case ADVANCED_UI:
-            //draw_Advanced();
+            lv_draw_advance_settings();
             break;
         case DOUBLE_Z_UI:
             //draw_DoubleZ();
@@ -1351,7 +1470,7 @@ void draw_return_ui()
             //draw_EnableInvert();
             break;
         case NUMBER_KEY_UI:
-            //draw_NumberKey();
+            lv_draw_number_key();
             break;  
 	case DIALOG_UI:
             //draw_dialog(DialogType);
@@ -1359,9 +1478,24 @@ void draw_return_ui()
 	case BABY_STEP_UI:
             //draw_babyStep();
             break;
-	
-			default:
-				break;
+	case PAUSE_POS_UI:
+            lv_draw_pause_position();
+            break;
+	#if HAS_TRINAMIC_CONFIG
+	case TMC_CURRENT_UI:
+            lv_draw_tmc_current_settings();
+            break;
+	#endif
+	case EEPROM_SETTINGS_UI:
+            lv_draw_eeprom_settings();
+            break;
+	#if HAS_STEALTHCHOP
+	case TMC_MODE_UI:
+		lv_draw_tmc_step_mode_settings();
+		break;
+	#endif
+		default:
+		break;
 		}
 	}
 
@@ -1387,6 +1521,14 @@ void sd_detection()
 }
 #endif
 
+void lv_ex_line(lv_obj_t * line,lv_point_t *points)
+{
+    /*Copy the previous line and apply the new style*/
+    lv_line_set_points(line, points, 2);     /*Set the points*/
+    lv_line_set_style(line, LV_LINE_STYLE_MAIN, &style_line);
+    lv_obj_align(line, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
+}
+
 extern volatile uint32_t systick_uptime_millis;
 
 void print_time_count()
@@ -1404,9 +1546,10 @@ void LV_TASK_HANDLER()
 {
 	//lv_tick_inc(1);
 	lv_task_handler();
-	#if ENABLED(MKS_TEST)
-	mks_test();
-	#endif
+	if(mks_test_flag == 0x1e)
+	{
+		mks_hardware_test();
+	}
 	disp_pre_gcode(2,36);
 	GUI_RefreshPage(); 
 	//sd_detection();

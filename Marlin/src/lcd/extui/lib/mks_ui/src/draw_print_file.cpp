@@ -362,7 +362,7 @@ void disp_gcode_icon(uint8_t file_num)
 	lv_imgbtn_set_style(buttonPageDown, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
 	
-	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_P_RETURN,"bmp_Back.bin",0);	
+	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_P_RETURN,"bmp_back.bin",0);	
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic_117x92);
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic_117x92);	
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_lable_pre);
@@ -412,7 +412,7 @@ void disp_gcode_icon(uint8_t file_num)
 		
 		if(list_file.IsFolder[i] == 1)
 		{
-			lv_obj_set_event_cb_mks(buttonGcode[i], event_handler,(i+1),"bmp_Dir.bin",0);
+			lv_obj_set_event_cb_mks(buttonGcode[i], event_handler,(i+1),"bmp_dir.bin",0);
 			lv_imgbtn_set_src(buttonGcode[i], LV_BTN_STATE_REL, &bmp_pic);
 			lv_imgbtn_set_src(buttonGcode[i], LV_BTN_STATE_PR, &bmp_pic);
 			if(i < 3)
@@ -475,7 +475,7 @@ void disp_gcode_icon(uint8_t file_num)
 			}
 			else
 			{
-				lv_obj_set_event_cb_mks(buttonGcode[i], event_handler,(i+1),"bmp_File.bin",0);
+				lv_obj_set_event_cb_mks(buttonGcode[i], event_handler,(i+1),"bmp_file.bin",0);
 				lv_imgbtn_set_src(buttonGcode[i], LV_BTN_STATE_REL, &bmp_pic);
 				lv_imgbtn_set_src(buttonGcode[i], LV_BTN_STATE_PR, &bmp_pic);
 				if(i < 3)
@@ -546,6 +546,8 @@ void lv_gcode_file_read(uint8_t *data_buf)
 	//uint32_t read;
 	uint16_t row_1=0;
 	char temp_test[200];
+	volatile uint16_t *p_index;
+	//uint16_t Color;
 
 	while(1)
 	{
@@ -565,6 +567,27 @@ void lv_gcode_file_read(uint8_t *data_buf)
 			break;
 		}
 	}
+	#if ENABLED(SPI_GRAPHICAL_TFT)
+	for(i=0;i<200;)
+	{
+		p_index = (uint16_t *)(&public_buf[i]);
+
+	       //Color = (*p_index >> 8);
+		//*p_index = Color | ((*p_index & 0xff) << 8);
+		i+=2;
+		if(*p_index == 0x0000)*p_index=0x18C3;
+	}
+	#else
+	for(i=0;i<200;)
+	{
+		p_index = (uint16_t *)(&public_buf[i]);
+
+	       //Color = (*p_index >> 8);
+		//*p_index = Color | ((*p_index & 0xff) << 8);
+		i+=2;
+		if(*p_index == 0x0000)*p_index=0x18C3;
+	}
+	#endif
 	memcpy(data_buf,public_buf,200);
 	#endif
 }

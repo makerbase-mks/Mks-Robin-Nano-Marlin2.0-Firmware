@@ -24,7 +24,7 @@ void printer_state_polling()
 	if(uiCfg.print_state == PAUSING)
 	{
 		#if ENABLED(SDSUPPORT)
-		if( !planner.has_blocks_queued() &&  card.getIndex()>MIN_FILE_PRINTED) 	//避免 文件中 M109，M190指令 
+		if( !planner.has_blocks_queued() &&  card.getIndex()>MIN_FILE_PRINTED)  
 			uiCfg.waitEndMoves++;
 		
 		if(uiCfg.waitEndMoves > 20)
@@ -32,10 +32,20 @@ void printer_state_polling()
 			uiCfg.waitEndMoves = 0;
 			planner.synchronize();
 			gcode.process_subcommands_now_P(PSTR("M25"));
-			gcode.process_subcommands_now_P(PSTR("G91"));
-			gcode.process_subcommands_now_P(PSTR("G1 Z5"));
-			gcode.process_subcommands_now_P(PSTR("G90"));
-			
+			if(gCfgItems.pausePosZ != (float)-1)
+			{
+				gcode.process_subcommands_now_P(PSTR("G91"));
+				memset(public_buf_l,0,sizeof(public_buf_l));
+				sprintf(public_buf_l,"G1 Z%.1f",gCfgItems.pausePosZ);
+				gcode.process_subcommands_now_P(PSTR(public_buf_l));
+				gcode.process_subcommands_now_P(PSTR("G90"));
+			}
+			if(gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1)
+			{
+				memset(public_buf_l,0,sizeof(public_buf_l));
+				sprintf(public_buf_l,"G1 X%.1f Y%.1f",gCfgItems.pausePosX,gCfgItems.pausePosY);
+				gcode.process_subcommands_now_P(PSTR(public_buf_l));
+			}
 			uiCfg.print_state = PAUSED;
 			
 			//#if ENABLED(POWER_LOSS_RECOVERY)
@@ -59,10 +69,10 @@ void printer_state_polling()
 	{
 		if (IS_SD_PAUSED())
 		{
+			gcode.process_subcommands_now_P(PSTR("M24"));
 			gcode.process_subcommands_now_P(PSTR("G91"));
 			gcode.process_subcommands_now_P(PSTR("G1 Z-5"));
 			gcode.process_subcommands_now_P(PSTR("G90"));
-			gcode.process_subcommands_now_P(PSTR("M24"));
 			uiCfg.print_state = WORKING;
 			start_print_time();
 			

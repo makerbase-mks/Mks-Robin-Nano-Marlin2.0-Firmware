@@ -3,18 +3,17 @@
 #include "../inc/tft_lvgl_configuration.h"
 #include "lvgl.h"
 #include "../../../../../feature/touch/xpt2046.h"
-#include "../inc/draw_ready_print.h"
+#include "../inc/draw_ui.h"
 #include "../inc/W25Qxx.h"
 #include "../inc/pic_manager.h"
 //#include "../../MarlinCore.h"
 #include "../inc/mks_hardware_test.h"
 #include "../../../../../module/temperature.h"
 
-
-
-#if ENABLED(MKS_TEST)
-
-extern uint8_t curent_disp_ui;
+#if ENABLED(SPI_GRAPHICAL_TFT)
+#include "../inc/SPI_TFT.h"
+#endif
+#include "../../../../../sd/cardreader.h"
 
 uint8_t pw_det_sta,pw_off_sta,mt_det_sta,mt_det2_sta,mt_det3_sta;
 uint8_t endstopx1_sta,endstopx2_sta,endstopy1_sta,endstopy2_sta,endstopz1_sta,endstopz2_sta;
@@ -22,10 +21,10 @@ void test_gpio_readlevel_L()
 {
 	volatile uint32_t itest;
 
-  digitalWrite(WIFI_IO2_PIN, HIGH);
+  digitalWrite(WIFI_IO0_PIN, HIGH);
 	itest = 10000;
 	while(itest--);
-	if(digitalRead(POWER_LOSS_PIN)==0)
+	if(digitalRead(PA2)==0)
 	{
 		pw_det_sta = 1;
 	}
@@ -33,7 +32,7 @@ void test_gpio_readlevel_L()
 	{
 		pw_det_sta = 0;
 	}
-  if(digitalRead(PS_ON_PIN)==0)
+  if(digitalRead(PA3)==0)
 	{
 		pw_off_sta = 1;
 	}
@@ -41,7 +40,7 @@ void test_gpio_readlevel_L()
 	{
 		pw_off_sta = 0;
 	}
-	if(digitalRead(FIL_RUNOUT_PIN)==0)
+	if(digitalRead(MT_DET_1_PIN)==0)
 	{
 		mt_det_sta = 1;
 	}
@@ -49,7 +48,7 @@ void test_gpio_readlevel_L()
 	{
 		mt_det_sta = 0;
 	}
-	if(digitalRead(FIL_RUNOUT_2_PIN)==0)
+	if(digitalRead(MT_DET_2_PIN)==0)
 	{
 		mt_det2_sta = 1;
 	}
@@ -57,14 +56,14 @@ void test_gpio_readlevel_L()
 	{
 		mt_det2_sta = 0;
 	}	
-  if(digitalRead(FIL_RUNOUT_3_PIN)==0)
+  /*if(digitalRead(FIL_RUNOUT_3_PIN)==0)
 	{
 		mt_det3_sta = 1;
 	}
 	else
 	{
 		mt_det3_sta = 0;
-	}	
+	}*/	
 	if(digitalRead(X_MIN_PIN)==0)
 	{
 		endstopx1_sta = 1;
@@ -118,10 +117,10 @@ void test_gpio_readlevel_H()
 {
 	volatile uint32_t itest;
 
-  digitalWrite(WIFI_IO2_PIN, LOW);
+  digitalWrite(WIFI_IO0_PIN, LOW);
 	itest = 10000;
 	while(itest--);
-	if(digitalRead(POWER_LOSS_PIN)==1)
+	if(digitalRead(PA2)==1)
 	{
 		pw_det_sta = 1;
 	}
@@ -129,7 +128,7 @@ void test_gpio_readlevel_H()
 	{
 		pw_det_sta = 0;
 	}
-  if(digitalRead(PS_ON_PIN)==1)
+  if(digitalRead(PA3)==1)
 	{
 		pw_off_sta = 1;
 	}
@@ -137,7 +136,7 @@ void test_gpio_readlevel_H()
 	{
 		pw_off_sta = 0;
 	}
-	if(digitalRead(FIL_RUNOUT_PIN)==1)
+	if(digitalRead(MT_DET_1_PIN)==1)
 	{
 		mt_det_sta = 1;
 	}
@@ -145,7 +144,7 @@ void test_gpio_readlevel_H()
 	{
 		mt_det_sta = 0;
 	}
-	if(digitalRead(FIL_RUNOUT_2_PIN)==1)
+	if(digitalRead(MT_DET_2_PIN)==1)
 	{
 		mt_det2_sta = 1;
 	}
@@ -153,14 +152,14 @@ void test_gpio_readlevel_H()
 	{
 		mt_det2_sta = 0;
 	}	
-  if(digitalRead(FIL_RUNOUT_3_PIN)==1)
+ /* if(digitalRead(FIL_RUNOUT_3_PIN)==1)
 	{
 		mt_det3_sta = 1;
 	}
 	else
 	{
 		mt_det3_sta = 0;
-	}	
+	}	*/
 	if(digitalRead(X_MIN_PIN)==1)
 	{
 		endstopx1_sta = 1;
@@ -210,7 +209,7 @@ void test_gpio_readlevel_H()
 		endstopz2_sta = 0;
 	}
 }
-void init_Tst_GPIO()
+void init_test_gpio()
 {
   pinMode(X_MIN_PIN, INPUT_PULLUP);
   pinMode(X_MAX_PIN, INPUT_PULLUP);
@@ -219,26 +218,29 @@ void init_Tst_GPIO()
   pinMode(Z_MIN_PIN, INPUT_PULLUP);
   pinMode(Z_MAX_PIN, INPUT_PULLUP);
   
-  pinMode(WIFI_IO2_PIN, OUTPUT);
+  pinMode(WIFI_IO0_PIN, OUTPUT);
 
-  pinMode(FIL_RUNOUT_PIN, INPUT_PULLUP);
-  pinMode(FIL_RUNOUT_2_PIN, INPUT_PULLUP);
-  pinMode(FIL_RUNOUT_3_PIN, INPUT_PULLUP);
+  pinMode(MT_DET_1_PIN, INPUT_PULLUP);
+  pinMode(MT_DET_2_PIN, INPUT_PULLUP);
+  //pinMode(FIL_RUNOUT_3_PIN, INPUT_PULLUP);
 
-  pinMode(POWER_LOSS_PIN, INPUT_PULLUP);
-  pinMode(PS_ON_PIN, INPUT_PULLUP);
+  pinMode(PA2, INPUT_PULLUP);
+  pinMode(PA3, INPUT_PULLUP);
 
   pinMode(SERVO0_PIN, INPUT_PULLUP);
 
-  pinMode(E0_ENABLE_PIN, OUTPUT);
   pinMode(X_ENABLE_PIN, OUTPUT);
+  pinMode(Y_ENABLE_PIN, OUTPUT);
+  pinMode(Z_ENABLE_PIN, OUTPUT);
+  pinMode(E0_ENABLE_PIN, OUTPUT);
+  pinMode(E1_ENABLE_PIN, OUTPUT);
 
   digitalWrite(X_ENABLE_PIN, LOW);
   digitalWrite(Y_ENABLE_PIN, LOW);
   digitalWrite(Z_ENABLE_PIN, LOW);
   digitalWrite(E0_ENABLE_PIN, LOW);
   digitalWrite(E1_ENABLE_PIN, LOW);
-  digitalWrite(E2_ENABLE_PIN, LOW);
+  //digitalWrite(E2_ENABLE_PIN, LOW);
 }
 
 void mks_test_beeper(){
@@ -248,21 +250,19 @@ void mks_test_beeper(){
 	delay(100);
 }
 
-void Test_GPIO()
+void mks_gpio_test()
 {
-  init_Tst_GPIO();
+  init_test_gpio();
 
   test_gpio_readlevel_L();
 	test_gpio_readlevel_H();
 	test_gpio_readlevel_L();  
   if((pw_det_sta == 1)&&(mt_det_sta == 1)&&(mt_det2_sta == 1)&&(mt_det3_sta == 1))
 	{
-    		if(curent_disp_ui == 1)
 		    disp_det_ok();
 	}
 	else
 	{
-		if(curent_disp_ui == 1)
     		disp_det_error();
 	}
 	if((endstopx1_sta== 1)
@@ -272,31 +272,25 @@ void Test_GPIO()
 		&&(endstopz1_sta== 1)
 		&&(endstopz2_sta== 1))
 	{
-		if(curent_disp_ui == 1)
-    {
-      disp_Limit_ok();
-    }
+	      disp_Limit_ok();
 	}
 	else
 	{
-		if(curent_disp_ui == 1)
-    {
-      disp_Limit_error();
-      //mks_test_beeper();
-    }	
+      		disp_Limit_error();
 	}
 }
 
-void mks_test(){
+void mks_hardware_test()
+{
 	if(millis() % 2000 <1000){
 		digitalWrite(X_DIR_PIN, LOW);
 		digitalWrite(Y_DIR_PIN, LOW);
 		digitalWrite(Z_DIR_PIN, LOW);
 		digitalWrite(E0_DIR_PIN, LOW);
 		digitalWrite(E1_DIR_PIN, LOW);
-    digitalWrite(E2_DIR_PIN, LOW);
+    //digitalWrite(E2_DIR_PIN, LOW);
     thermalManager.fan_speed[0] = 255;
-    digitalWrite(HEATER_2_PIN, HIGH);//HE2
+    //digitalWrite(HEATER_2_PIN, HIGH);//HE2
 		digitalWrite(HEATER_1_PIN, HIGH);//HE1
     digitalWrite(HEATER_0_PIN, HIGH);//HE0
     digitalWrite(HEATER_BED_PIN, HIGH);//HOT-BED
@@ -307,9 +301,9 @@ void mks_test(){
 		digitalWrite(Z_DIR_PIN, HIGH);
 		digitalWrite(E0_DIR_PIN, HIGH);
 		digitalWrite(E1_DIR_PIN, HIGH);
-    digitalWrite(E2_DIR_PIN, HIGH);
+    //digitalWrite(E2_DIR_PIN, HIGH);
     thermalManager.fan_speed[0] = 0;
-    digitalWrite(HEATER_2_PIN, LOW);//HE2
+    //digitalWrite(HEATER_2_PIN, LOW);//HE2
 		digitalWrite(HEATER_1_PIN, LOW);//HE1
     digitalWrite(HEATER_0_PIN, LOW);//HE0
     digitalWrite(HEATER_BED_PIN, LOW);//HOT-BED
@@ -325,17 +319,17 @@ void mks_test(){
 		}
 		else
 		{
-			mks_test_beeper();
+			//mks_test_beeper();
 		}
 		
-		if(curent_disp_ui == 1)
+		if(disp_state == PRINT_READY_UI)
 		{
-			disp_test();
+			mks_disp_test();
 		}
     
-	}
+}
 
-#endif
+
 const uint16_t ASCII_Table_16x24[] =
 {
 /** 
@@ -924,11 +918,19 @@ void disp_char_1624(uint16_t x,uint16_t y,uint8_t c,uint16_t charColor,uint16_t 
       {
         if ( ((tmp_char >> j) & 0x01) == 0x01)
           {
+             #if ENABLED(SPI_GRAPHICAL_TFT)
+             SPI_TFT.SetPoit(x+j,y+i,charColor);
+		#else
           	tft_set_point(x+j,y+i,charColor);
+		#endif
           }
           else
           {
+          	#if ENABLED(SPI_GRAPHICAL_TFT)
+          	SPI_TFT.SetPoit(x+j,y+i,bkColor);
+		#else
           	tft_set_point(x+j,y+i,bkColor);
+		#endif
           }
       }
     }
@@ -948,15 +950,35 @@ void disp_string(uint16_t x,uint16_t y,const char * string,uint16_t charColor,ui
 //static lv_obj_t * scr_test;
 void disp_pic_update()
 {
+	#if DISABLED(SPI_GRAPHICAL_TFT)
 	LCD_Clear(0x0000);
+	#endif
+	
 	disp_string(120,150,"PIC Updating...",0xffff,0x0000);
 }
 
 void disp_font_update()
 {
+	#if DISABLED(SPI_GRAPHICAL_TFT)
 	LCD_Clear(0x0000);
+	#endif
+
 	disp_string(120,150,"FONT Updating...",0xffff,0x0000);
 }
+
+uint8_t mks_test_flag = 0;
+const char *MKSTestPath = "MKS_TEST";
+
+#if ENABLED (SDSUPPORT)
+void mks_test_get()
+{
+	SdFile dir, root = card.getroot();
+	if (dir.open(&root, MKSTestPath, O_RDONLY))
+	{	
+		mks_test_flag = 0x1e;
+	}
+}
+#endif
 
 
 #endif

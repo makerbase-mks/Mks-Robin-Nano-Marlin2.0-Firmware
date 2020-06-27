@@ -250,12 +250,12 @@
     #define TOUCH_SCK_PIN    PB13
     #define TOUCH_MOSI_PIN   PB15
     #define TOUCH_MISO_PIN   PB14
-    #if ENABLED(MKS_TEST)
+
     #define BEEPER_PIN       PC5
     #define WIFI_IO2_PIN       PC7
     #define FIL_RUNOUT_2_PIN     PE6   // MT_DET2
     #define FIL_RUNOUT_3_PIN     PG14  // MT_DET3
-    #endif
+
   #else
     #define BEEPER_PIN                      PC5
     #define BTN_ENC                         PG2

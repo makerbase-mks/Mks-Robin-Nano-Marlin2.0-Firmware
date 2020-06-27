@@ -29,8 +29,8 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define PIC_NAME_ADDR			0x003000	//pic information addr
 #define PIC_SIZE_ADDR			0x007000	//pic size information addr
 #define PIC_COUNTER_ADDR		0x008000	//pic total number
-#define PER_PIC_SAVE_ADDR		0x009000	//Storage address of each picture
-#define PIC_LOGO_ADDR			0x00A000	//logo addr
+//#define PER_PIC_SAVE_ADDR		0x009000	//Storage address of each picture
+#define PIC_LOGO_ADDR			0x009000	//logo addr
 //#define PIC_DATA_ADDR			0x02f000	//
 //TFT35
 #define DEFAULT_VIEW_ADDR_TFT35				0XC5800
@@ -78,7 +78,7 @@ typedef struct pic_msg PIC_MSG;
 //extern void PicMsg_Init(void);
 extern void Pic_Read(uint8_t *Pname,uint8_t *P_Rbuff);
 //extern void bindBmpFileData(const uint8_t **pBuf, uint8_t *pName);
-//extern void Pic_Logo_Read(uint8_t *LogoName,uint8_t *Logo_Rbuff,uint32_t LogoReadsize);
+extern void Pic_Logo_Read(uint8_t *LogoName,uint8_t *Logo_Rbuff,uint32_t LogoReadsize);
 //extern void default_view_Read(uint8_t *default_view_Rbuff,uint32_t default_view_Readsize);
 //extern void flash_view_Read(uint8_t *flash_view_Rbuff,uint32_t flash_view_Readsize);
 

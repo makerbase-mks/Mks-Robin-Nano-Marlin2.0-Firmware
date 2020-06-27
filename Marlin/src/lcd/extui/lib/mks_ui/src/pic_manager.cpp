@@ -59,7 +59,7 @@ uint32_t lv_get_pic_addr(uint8_t *Pname)
 			{
 				addr=PIC_DATA_ADDR_TFT32+i*PER_PIC_MAX_SPACE_TFT32;
 			}
-			return (addr+4);//The purpose of adding 4 is to remove 4-byte picture header information.
+			return addr;
 		}
 	}	
 
@@ -90,17 +90,10 @@ void spiFlashErase_PIC()
 		//LCD_ShowString(100,90,200,24,24,"SPI Flash");
 		//LCD_ShowString(100,120,200,24,24,"PIC Erasing...");					
 	}
-	#if ENABLED(MKS_TEST)
-	for(pic_sectorcnt=0;pic_sectorcnt<2;pic_sectorcnt++)
-	{
-		W25QXX.SPI_FLASH_BlockErase(PICINFOADDR+pic_sectorcnt*64*1024);
-	}
-	#else
 	for(pic_sectorcnt=0;pic_sectorcnt<PIC_SIZE_xM*1024/64;pic_sectorcnt++)
 	{
 		W25QXX.SPI_FLASH_BlockErase(PICINFOADDR+pic_sectorcnt*64*1024);
 	}
-	#endif
 	/*	
 	FLASH_Unlock();
 	spiFlashEraseFlag = SPI_FLASH_ERASE_FLAG_DATA;			
@@ -768,7 +761,9 @@ void get_spi_flash_data(const char *rec_buf,int addr, int size)
 uint32_t logo_addroffset = 0;
 void Pic_Logo_Read(uint8_t *LogoName,uint8_t *Logo_Rbuff,uint32_t LogoReadsize)
 {
-	W25QXX.SPI_FLASH_BufferRead(Logo_Rbuff,PIC_LOGO_ADDR+logo_addroffset,LogoReadsize);
+	W25QXX.init(SPI_QUARTER_SPEED);
+	
+	W25QXX.SPI_FLASH_BufferRead(Logo_Rbuff,PIC_LOGO_ADDR+logo_addroffset+4,LogoReadsize);
 	logo_addroffset += LogoReadsize;
 	if(logo_addroffset >= LOGO_MAX_SIZE_TFT35 )
 	{

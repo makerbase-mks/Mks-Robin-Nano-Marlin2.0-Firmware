@@ -25,14 +25,6 @@
 
 //#include "../../../Configuration.h"
 //#include "../../../src/core/macros.h"
-
-
-extern void LCD_IO_Init(uint8_t cs, uint8_t rs);
-extern void LCD_IO_WriteData(uint16_t RegValue);
-extern void LCD_IO_WriteReg(uint16_t Reg);
-
-extern void LCD_IO_WriteMultiple(uint16_t color, uint32_t count);
-
 extern void init_gb2312_font();
 
 static lv_disp_buf_t disp_buf;
@@ -76,21 +68,28 @@ void SysTick_Callback()
 	 print_time_count();
 }
 
+#if DISABLED(SPI_GRAPHICAL_TFT)
+
+extern void LCD_IO_Init(uint8_t cs, uint8_t rs);
+extern void LCD_IO_WriteData(uint16_t RegValue);
+extern void LCD_IO_WriteReg(uint16_t Reg);
+
+extern void LCD_IO_WriteMultiple(uint16_t color, uint32_t count);
 
 void tft_set_cursor(uint16_t x,uint16_t y)
 {
     #if 0
 	if(DeviceCode==0x8989)
 	{
-	 	LCD_WriteReg(0x004e,y);        //行
-    	LCD_WriteReg(0x004f,x);  //列
+	 	LCD_WriteReg(0x004e,y);       
+    	LCD_WriteReg(0x004f,x);  
 	}
 	else if((DeviceCode==0x9919))
 	{
-		LCD_WriteReg(0x004e,x); // 行
-  		LCD_WriteReg(0x004f,y); // 列	
+		LCD_WriteReg(0x004e,x); 
+  		LCD_WriteReg(0x004f,y); 
 	}
-    else if((DeviceCode==0x5761))      //SSD1963
+    else if((DeviceCode==0x5761))      
 	{
 		LCD_WrtReg(0x002A);	
         LCD_WrtRAM(x>>8);	    
@@ -122,8 +121,8 @@ void tft_set_cursor(uint16_t x,uint16_t y)
     }				
 	else
 	{
-  		LCD_WriteReg(0x0020,y); // 行
-  		LCD_WriteReg(0x0021,0x13f-x); // 列
+  		LCD_WriteReg(0x0020,y); 
+  		LCD_WriteReg(0x0021,0x13f-x); 
 	}  	
     #else
     LCD_IO_WriteReg(0X002A); 
@@ -163,15 +162,9 @@ void LCD_WriteRAM_Prepare(void)
 
 void tft_set_point(uint16_t x,uint16_t y,uint16_t point)
 {
-	//if(DeviceCode == 0x9488)
-	//{
-		if ( (x>480)||(y>320) ) return;
-	//}
-  	//**if ( (x>320)||(y>240) ) return;
-    tft_set_cursor(x,y);    /*设置光标位置*/
-
-    LCD_WriteRAM_Prepare();     /* 开始写入GRAM*/
-    //LCD_WriteRAM(point);
+    if ( (x>480)||(y>320) ) return;
+    tft_set_cursor(x,y);    
+    LCD_WriteRAM_Prepare();    
     LCD_IO_WriteData(point);
 }
 
@@ -318,7 +311,7 @@ void LCD_Clear(uint16_t  Color)
 
 extern uint16_t ILI9488_ReadRAM();
 
-#if DISABLED(SPI_GRAPHICAL_TFT)
+
 void init_tft()
 {
 	uint16_t i;
@@ -444,8 +437,10 @@ void tft_lvgl_init()
     W25QXX.init(SPI_QUARTER_SPEED);
     //test_id=W25QXX.W25QXX_ReadID();
     #if ENABLED (SDSUPPORT)
+    card.mount();
     UpdatePic();
     UpdateFont();
+    mks_test_get();
     #endif
     gCfgItems_init();
 	ui_cfg_init();
@@ -506,9 +501,10 @@ void tft_lvgl_init()
     #endif
     lv_draw_ready_print();
 	
-	#if ENABLED(MKS_TEST)
-	Test_GPIO();
-	#endif
+	if(mks_test_flag == 0x1e)
+	{
+		mks_gpio_test();
+	}
 }
 
 
@@ -534,14 +530,15 @@ void LCD_WriteRAM(uint16_t RGB_Code)
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p)
 {
 	uint16_t i,width,height;
-	uint16_t clr_temp;
-	uint8_t tbuf[480*2];
+	uint16_t Color;
+	lv_color_t *colorIndex;
+	//uint8_t tbuf[480*2];
 	
 	SPI_TFT.spi_init(SPI_FULL_SPEED);
 	
     width = area->x2 - area->x1 + 1;
     height = area->y2 - area->y1 +1;
-
+	#if 0
 	for(int j=0;j<height;j++)
 	{
 		SPI_TFT.SetCursor(0,0);
@@ -550,12 +547,12 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 		
 		for(i=0;i<width*2;)
 		{
-	    	clr_temp = (uint16_t)(((uint16_t)color_p->ch.red<<11)
+	    	/*clr_temp = (uint16_t)(((uint16_t)color_p->ch.red<<11)
 							|((uint16_t)color_p->ch.green<<5)
-							|((uint16_t)color_p->ch.blue));	
+							|((uint16_t)color_p->ch.blue));	*/
 			
-			tbuf[i]=clr_temp>>8;
-			tbuf[i+1]=clr_temp;
+			tbuf[i]=color_p->full >> 8;
+			tbuf[i+1]=color_p->full;
 			i+=2;
 			color_p++;
 		}
@@ -564,7 +561,39 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 		SPI.dmaSend(tbuf,width*2,true);
 		SPI_TFT_CS_H;	
 	}
-
+	#else
+	SPI_TFT.SetCursor(0,0);
+    	SPI_TFT.SetWindows((uint16_t)area->x1,(uint16_t)area->y1,width,height);
+    	SPI_TFT.LCD_WriteRAM_Prepare();
+	
+	//for(int j=0;j<height;j++)
+	//{
+			
+		
+		//for(i=0;i<width*2;)
+		//{
+			//tbuf[i]=color_p->full >> 8;
+			//tbuf[i+1]=color_p->full;
+			//i+=2;
+			//color_p++;
+		//}
+		colorIndex = color_p;
+		//if(cur_pic.got_addr == 0)
+		//{
+			for(i=0;i<width*height;)
+			{
+			       Color = (color_p->full >> 8);
+				color_p->full = Color | ((color_p->full & 0xff) << 8);
+				color_p++;
+				i++;
+			}
+		//}
+		SPI_TFT_CS_L;
+		SPI_TFT_DC_H;
+		SPI.dmaSend(colorIndex,width*height*2,true);
+		SPI_TFT_CS_H;	
+	//}
+	#endif
 	lv_disp_flush_ready(disp);         /* Indicate you are ready with the flushing*/
 
 	W25QXX.init(SPI_QUARTER_SPEED);
@@ -595,10 +624,10 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
     LCD_WriteRAM_Prepare();
     for(i=0;i<(width*height);i++)
     {
-    	  clr_temp = (uint16_t)(((uint16_t)color_p->ch.red<<11)
+    	  /*clr_temp = (uint16_t)(((uint16_t)color_p->ch.red<<11)
 						|((uint16_t)color_p->ch.green<<5)
-						|((uint16_t)color_p->ch.blue));
-        LCD_IO_WriteData(clr_temp);
+						|((uint16_t)color_p->ch.blue));*/
+        LCD_IO_WriteData(color_p->full);
 	 color_p++;
     }
     #endif
@@ -691,7 +720,7 @@ static void xpt2046_corr(uint16_t * x, uint16_t * y)
 #endif
 }
 
-#define  times  4
+#define  times  8
 #define	CHX 	0x90//0x90 
 #define	CHY 	0xD0//0xd0
 
@@ -725,7 +754,9 @@ void XPT2046_Rd_Addata(uint16_t *X_Addata,uint16_t *Y_Addata)
        //#if ENABLED(TOUCH_BUTTONS)
 	   
 	#if ENABLED(SPI_GRAPHICAL_TFT)
-	SPI_TFT.spi_init(SPI_QUARTER_SPEED);
+	SPI_TFT.spi_init(SPI_SPEED_6);
+	#else
+	W25QXX.init(SPI_SPEED_6);
 	#endif
 	
 	for(i=0;i<times;i++)					
@@ -755,6 +786,9 @@ void XPT2046_Rd_Addata(uint16_t *X_Addata,uint16_t *Y_Addata)
 		#endif
 
 	}
+	#if DISABLED(SPI_GRAPHICAL_TFT)
+	W25QXX.init(SPI_QUARTER_SPEED);
+	#endif
 	//#endif
 	//result = x_addata[0];
 	for(i=0;i<times;i++)					
@@ -806,7 +840,7 @@ void XPT2046_Rd_Addata(uint16_t *X_Addata,uint16_t *Y_Addata)
 	
 }
 
-#define ADC_VALID_OFFSET	10
+#define ADC_VALID_OFFSET	30
 
 uint8_t	TOUCH_PressValid(uint16_t _usX, uint16_t _usY)
 {
@@ -838,7 +872,7 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data)
     //if(data->state == LV_INDEV_STATE_PR)  ADS7843_Rd_Addata((u16 *)&last_x, (u16 *)&last_y);
 		//touchpad_get_xy(&last_x, &last_y);
     /*Save the pressed coordinates and the state*/
-	if(diffTime > 10)
+	if(diffTime > 4)
 	{
 		XPT2046_Rd_Addata((uint16_t *)&last_x, (uint16_t *)&last_y);
 	    if(TOUCH_PressValid(last_x, last_y)) {
