@@ -66,11 +66,11 @@ uint32_t lv_get_pic_addr(uint8_t *Pname)
 	return addr;
 }
 
-const char *picPath = "mks_pic";
-const char *bakPath = "bak_pic";
+const char *picPath = "_pic";
+const char *bakPath = "_b_pic";
 
-const char *fontPath = "mks_font";
-const char *bakFont = "bak_font";
+const char *fontPath = "_font";
+const char *bakFont = "_b_font";
 #if 1
 void spiFlashErase_PIC()
 {
@@ -129,8 +129,8 @@ void spiFlashErase_FONT()
 		//LCD_ShowString(100,90,200,24,24,"SPI Flash");
 		//LCD_ShowString(90,120,200,24,24,"FONT Erasing...");					
 	}
-			
-	for(Font_sectorcnt=0;Font_sectorcnt<FONT_SIZE_xM*1024/64;Font_sectorcnt++)
+	for(Font_sectorcnt=0;Font_sectorcnt<32-1;Font_sectorcnt++)		
+	//for(Font_sectorcnt=0;Font_sectorcnt<FONT_SIZE_xM*1024/64;Font_sectorcnt++)
 	{
 		W25QXX.SPI_FLASH_BlockErase(FONTINFOADDR+Font_sectorcnt*64*1024);
 	}

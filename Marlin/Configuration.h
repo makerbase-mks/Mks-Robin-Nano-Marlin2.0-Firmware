@@ -134,7 +134,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_MKS_ROBIN_NANO
+  #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
@@ -2121,7 +2121,7 @@
 //If TFT_LITTLE_VGL_UI is enabled, there is no need to turn on FSMC_GRAPHICAL_TFT.
 #define TFT_LITTLE_VGL_UI
 //Robin_nano_v2.0 motherboard touch screen is spi interface, you need to enable this item.
-//#define SPI_GRAPHICAL_TFT	
+#define SPI_GRAPHICAL_TFT	
 
 //
 // RepRapWorld REPRAPWORLD_KEYPAD v1.1
