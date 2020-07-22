@@ -48,6 +48,7 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define GBK_FLASH_ADDR				(UNIGBK_FLASH_ADDR+180224)//176*1024
 
 //flash flag
+#define REFLSHE_FLGA_ADD	(0X800000-32)
 #define FLASH_INF_VALID_FLAG			0xaa558761
 //SD card information first addr
 #define	VAR_INF_ADDR		0x000000

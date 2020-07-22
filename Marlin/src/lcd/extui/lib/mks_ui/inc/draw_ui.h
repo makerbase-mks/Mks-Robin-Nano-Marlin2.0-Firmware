@@ -135,6 +135,7 @@ typedef struct
 	uint8_t print_state;
 	uint8_t stepPrintSpeed;
 	uint8_t waitEndMoves;
+	uint8_t	F[4];
 	uint16_t moveSpeed;
 	float   move_dist;
 }UI_CFG;
