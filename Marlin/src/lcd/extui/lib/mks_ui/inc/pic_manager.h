@@ -52,6 +52,10 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 //SD card information first addr
 #define	VAR_INF_ADDR		0x000000
 
+#define	VAR_INF_ADDR_1k				0x001000
+#define	VAR_INF_ADDR_1k_FLAG		0x001000
+#define DISP_ROTATION_180_ADDR 		4174
+
 //
 union union32
 {

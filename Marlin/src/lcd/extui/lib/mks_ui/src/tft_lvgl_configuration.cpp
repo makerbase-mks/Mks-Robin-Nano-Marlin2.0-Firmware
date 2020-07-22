@@ -710,8 +710,13 @@ static void xpt2046_corr(uint16_t * x, uint16_t * y)
 		(*y) -= XPT2046_Y_MIN;    
 	else
 		(*y) = 0;    
+	#if LV_USE_ROTATION_180
+	(*x) = XPT2046_HOR_RES - (uint32_t)((uint32_t)(*x) * XPT2046_HOR_RES)/(XPT2046_X_MAX - XPT2046_X_MIN);    
+	(*y) = XPT2046_VER_RES - (uint32_t)((uint32_t)(*y) * XPT2046_VER_RES)/(XPT2046_Y_MAX - XPT2046_Y_MIN);
+	#else
 	(*x) = (uint32_t)((uint32_t)(*x) * XPT2046_HOR_RES)/(XPT2046_X_MAX - XPT2046_X_MIN);    
 	(*y) = (uint32_t)((uint32_t)(*y) * XPT2046_VER_RES)/(XPT2046_Y_MAX - XPT2046_Y_MIN);
+	#endif
 #if XPT2046_X_INV     
 	(*x) =  XPT2046_HOR_RES - (*x);
 #endif
