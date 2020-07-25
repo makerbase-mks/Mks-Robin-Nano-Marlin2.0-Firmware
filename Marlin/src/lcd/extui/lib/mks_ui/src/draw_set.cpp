@@ -20,21 +20,14 @@ static lv_obj_t * scr;
 #define ID_S_LANGUAGE		6
 #define ID_S_MACHINE_PARA	7
 #define ID_S_EEPROM_SET	8
-#define ID_S_RETURN			9
+#define ID_S_WIFI			9
+#define ID_S_RETURN			10
 
 static void event_handler(lv_obj_t * obj, lv_event_t event)
 {
+	char buf[6]={0};
 	switch(obj->mks_obj_id)
 	{
-	case ID_S_WIFI:
-	    if(event == LV_EVENT_CLICKED) {
-			
-			
-	    }
-	    else if(event == LV_EVENT_RELEASED) {
-	        
-	    }
-		break;
 	case ID_S_FAN:
 		if(event == LV_EVENT_CLICKED) {
 			
@@ -101,10 +94,56 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
 			lv_obj_del(scr);
-	        	lv_draw_ready_print();
+	        lv_draw_ready_print();
 	    }
 		break;
-
+	#if USE_WIFI_FUNCTION
+	case ID_S_WIFI:
+	    if(event == LV_EVENT_CLICKED) {
+			
+	    }
+	    else if(event == LV_EVENT_RELEASED) {
+		if(gCfgItems.wifi_mode_sel == STA_MODEL)
+		{
+			if(wifi_link_state == WIFI_CONNECTED)
+			{
+				last_disp_state = SET_UI;
+				lv_clear_set();
+				lv_draw_wifi();
+			}
+			else
+			{
+				if(uiCfg.command_send == 1)
+				{
+					buf[0] = 0xA5;
+					buf[1] = 0x07;
+					buf[2] = 0x00;
+					buf[3] = 0x00;
+					buf[4] = 0xFC;
+					raw_send_to_wifi(buf, 5);
+				
+					last_disp_state = SET_UI;
+					lv_clear_set();
+					lv_draw_wifi_list();
+				}
+				else
+				{
+					last_disp_state = SET_UI;
+					lv_clear_set();
+					lv_draw_dialog(WIFI_ENABLE_TIPS);
+				}
+			}
+		}
+		else
+		{
+			last_disp_state = SET_UI;
+			lv_clear_set();
+			lv_draw_wifi();
+		}
+						
+	}
+	break;
+	#endif
 	}
 }
 
@@ -115,6 +154,9 @@ void lv_draw_set(void)
 	lv_obj_t *buMotorOff,*buttonLanguage,*buttonBack;
 	lv_obj_t *buttonMachinePara;
 	lv_obj_t *buttonEepromSet;
+	#if USE_WIFI_FUNCTION
+	lv_obj_t *buttonWifi;
+	#endif
 
 	if(disp_state_stack._disp_state[disp_state_stack._disp_index] != SET_UI)
 	{
@@ -149,6 +191,9 @@ void lv_draw_set(void)
 	buttonLanguage = lv_imgbtn_create(scr, NULL);
 	buttonMachinePara = lv_imgbtn_create(scr, NULL);
 	buttonEepromSet = lv_imgbtn_create(scr, NULL);
+	#if USE_WIFI_FUNCTION
+	buttonWifi = lv_imgbtn_create(scr, NULL);
+	#endif
 	buttonBack = lv_imgbtn_create(scr, NULL);
 
 	
@@ -204,6 +249,14 @@ void lv_draw_set(void)
 	lv_imgbtn_set_style(buttonEepromSet, LV_BTN_STATE_PR, &tft_style_lable_pre);
 	lv_imgbtn_set_style(buttonEepromSet, LV_BTN_STATE_REL, &tft_style_lable_rel);
 
+	#if USE_WIFI_FUNCTION
+	lv_obj_set_event_cb_mks(buttonWifi, event_handler,ID_S_WIFI,"bmp_wifi.bin",0);	
+    lv_imgbtn_set_src(buttonWifi, LV_BTN_STATE_REL, &bmp_pic);
+    lv_imgbtn_set_src(buttonWifi, LV_BTN_STATE_PR, &bmp_pic);	
+	lv_imgbtn_set_style(buttonWifi, LV_BTN_STATE_PR, &tft_style_lable_pre);
+	lv_imgbtn_set_style(buttonWifi, LV_BTN_STATE_REL, &tft_style_lable_rel);
+	#endif
+	
 	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_S_RETURN,"bmp_return.bin",0);	
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic);	
@@ -228,6 +281,9 @@ void lv_draw_set(void)
 	lv_obj_set_pos(buttonLanguage,INTERVAL_V,titleHeight);
 	lv_obj_set_pos(buttonMachinePara,INTERVAL_V,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 	lv_obj_set_pos(buttonEepromSet,BTN_X_PIXEL+INTERVAL_V*2,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
+	#if USE_WIFI_FUNCTION
+	lv_obj_set_pos(buttonWifi,BTN_X_PIXEL*2+INTERVAL_V*3,BTN_Y_PIXEL+INTERVAL_H+titleHeight);
+	#endif
 	lv_obj_set_pos(buttonBack,BTN_X_PIXEL*3+INTERVAL_V*4,  BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 
     /*Create a label on the Image button*/
@@ -239,6 +295,9 @@ void lv_draw_set(void)
 	lv_btn_set_layout(buttonLanguage, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonMachinePara, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonEepromSet, LV_LAYOUT_OFF);
+	#if USE_WIFI_FUNCTION
+	lv_btn_set_layout(buttonWifi, LV_LAYOUT_OFF);
+	#endif
 	lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
 	
     //lv_obj_t * labelWifi= lv_label_create(buttonWifi, NULL);
@@ -249,6 +308,9 @@ void lv_draw_set(void)
 	lv_obj_t * label_Language = lv_label_create(buttonLanguage, NULL);
 	lv_obj_t * label_MachinePara = lv_label_create(buttonMachinePara, NULL);
 	lv_obj_t * label_EepromSet = lv_label_create(buttonEepromSet, NULL);
+	#if USE_WIFI_FUNCTION
+	lv_obj_t * label_Wifi = lv_label_create(buttonWifi, NULL);
+	#endif
 	lv_obj_t * label_Back = lv_label_create(buttonBack, NULL);
 	
 	if(gCfgItems.multiple_language !=0)
@@ -279,6 +341,11 @@ void lv_draw_set(void)
 
 		lv_label_set_text(label_EepromSet, set_menu.eepromSet);
 		lv_obj_align(label_EepromSet, buttonEepromSet, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
+
+		#if USE_WIFI_FUNCTION
+		lv_label_set_text(label_Wifi, set_menu.wifi);
+		lv_obj_align(label_Wifi, buttonWifi, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
+		#endif
 		
 		lv_label_set_text(label_Back, common_menu.text_back);
 		lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);

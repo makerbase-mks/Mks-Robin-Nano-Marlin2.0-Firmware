@@ -23,6 +23,8 @@
 #endif
 
 
+
+
 //#include "../../../Configuration.h"
 //#include "../../../src/core/macros.h"
 extern void init_gb2312_font();
@@ -65,7 +67,11 @@ extern uint8_t default_preview_flg;
 void SysTick_Callback() 
 {
      lv_tick_inc(1);
-	 print_time_count();
+     print_time_count();	
+	 if(tips_disp.timer == TIPS_TIMER_START)
+	 {
+		tips_disp.timer_count++;
+	 }
 }
 
 #if DISABLED(SPI_GRAPHICAL_TFT)
@@ -433,7 +439,7 @@ void init_tft()
 extern uint8_t bmp_public_buf[17 * 1024];
 void tft_lvgl_init()
 {
-	//uint16_t test_id=0;
+    //uint16_t test_id=0;
     W25QXX.init(SPI_QUARTER_SPEED);
     //test_id=W25QXX.W25QXX_ReadID();
     #if ENABLED (SDSUPPORT)
@@ -447,13 +453,21 @@ void tft_lvgl_init()
     disp_language_init();
     //spi_flash_read_test();
 
+	#if USE_WIFI_FUNCTION
+	esp_wifi_init();
+	WIFISERIAL.begin(WIFI_BAUDRATE);
+	uint32_t serial_connect_timeout = millis() + 1000UL;
+    	while (/*!WIFISERIAL && */PENDING(millis(), serial_connect_timeout)) { /*nada*/ }
+	//for(uint8_t i=0;i<100;i++)WIFISERIAL.write(0x33);
+	#endif
+
 	#if ENABLED(SPI_GRAPHICAL_TFT)
        SPI_TFT.spi_init(SPI_FULL_SPEED);
 	SPI_TFT.LCD_init();
 	#else
 	init_tft();
 	#endif
-	
+
     lv_init();	
 
     lv_disp_buf_init(&disp_buf, bmp_public_buf, NULL, LV_HOR_RES_MAX * 18);		/*Initialize the display buffer*/
@@ -636,9 +650,6 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
     #endif
 }
 #endif
-
-
-#define TICK_CYCLE 1
 
 static int32_t touch_time1 = 0;
 

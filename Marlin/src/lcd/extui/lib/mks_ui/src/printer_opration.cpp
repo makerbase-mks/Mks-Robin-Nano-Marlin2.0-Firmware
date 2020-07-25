@@ -115,6 +115,7 @@ void printer_state_polling()
 	{
 		filament_check();
 	}
+	wifi_looping();
 }
 
 

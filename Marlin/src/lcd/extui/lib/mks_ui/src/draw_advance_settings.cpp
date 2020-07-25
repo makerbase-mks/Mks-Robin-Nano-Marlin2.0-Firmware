@@ -9,8 +9,9 @@ static lv_obj_t * scr;
 #define ID_ADVANCE_RETURN		1
 
 #define ID_PAUSE_POS			2
-#define ID_PAUSE_POS_ARROW		3
-
+#define ID_PAUSE_POS_ARROW	3
+#define ID_WIFI_PARA			4
+#define ID_WIFI_PARA_ARROW	5
 
 
 static void event_handler(lv_obj_t * obj, lv_event_t event)
@@ -44,6 +45,27 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 	        	lv_draw_pause_position();
 	    }
 		break;
+	   #if USE_WIFI_FUNCTION
+		case ID_WIFI_PARA:
+	    if(event == LV_EVENT_CLICKED) {
+			
+	    }
+	    else if(event == LV_EVENT_RELEASED) {
+			lv_clear_advance_settings();
+	        	lv_draw_wifi_settings();
+	    }
+		break;
+		case ID_WIFI_PARA_ARROW:
+	    if(event == LV_EVENT_CLICKED) {
+			
+	    }
+	    else if(event == LV_EVENT_RELEASED) {
+			lv_clear_advance_settings();
+	        	lv_draw_wifi_settings();
+	    }
+		break;
+	   #endif
+		
 	}
 }
 
@@ -51,7 +73,11 @@ void lv_draw_advance_settings(void)
 {
 	lv_obj_t *buttonBack,*label_Back;
 	lv_obj_t *buttonPausePos,*labelPausePos,*buttonPausePosNarrow;
-	lv_obj_t * line1;
+	lv_obj_t *line1;
+	#if USE_WIFI_FUNCTION
+	lv_obj_t *buttonWifiSet,*labelWifiSet,*buttonWifiSetNarrow;
+	lv_obj_t *line2;
+	#endif
 	if(disp_state_stack._disp_state[disp_state_stack._disp_index] != ADVANCED_UI)
 	{
 		disp_state_stack._disp_index++;
@@ -97,6 +123,32 @@ void lv_draw_advance_settings(void)
 	line1 = lv_line_create(lv_scr_act(), NULL);
 	lv_ex_line(line1,line_points[0]);
 
+	#if USE_WIFI_FUNCTION
+	
+	buttonWifiSet = lv_btn_create(scr, NULL);     /*Add a button the current screen*/
+	lv_obj_set_pos(buttonWifiSet, PARA_UI_POS_X,PARA_UI_POS_Y*2);                            /*Set its position*/
+	lv_obj_set_size(buttonWifiSet, PARA_UI_SIZE_X,PARA_UI_SIZE_Y);                          /*Set its size*/
+
+	lv_obj_set_event_cb_mks(buttonWifiSet, event_handler,ID_WIFI_PARA,NULL,0);
+	lv_btn_set_style(buttonWifiSet, LV_BTN_STYLE_REL, &tft_style_lable_rel);    /*Set the button's released style*/
+	lv_btn_set_style(buttonWifiSet, LV_BTN_STYLE_PR, &tft_style_lable_pre);      /*Set the button's pressed style*/
+	lv_btn_set_layout(buttonWifiSet, LV_LAYOUT_OFF);
+	labelWifiSet = lv_label_create(buttonWifiSet, NULL);          /*Add a label to the button*/
+
+	buttonWifiSetNarrow = lv_imgbtn_create(scr, NULL);
+	lv_obj_set_pos(buttonWifiSetNarrow,PARA_UI_POS_X+PARA_UI_SIZE_X,PARA_UI_POS_Y*2+PARA_UI_ARROW_V);
+	lv_obj_set_event_cb_mks(buttonWifiSetNarrow, event_handler,ID_WIFI_PARA_ARROW,"bmp_arrow.bin",0);	
+    	lv_imgbtn_set_src(buttonWifiSetNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
+    	lv_imgbtn_set_src(buttonWifiSetNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);	
+	lv_imgbtn_set_style(buttonWifiSetNarrow, LV_BTN_STATE_PR, &tft_style_lable_pre);
+	lv_imgbtn_set_style(buttonWifiSetNarrow, LV_BTN_STATE_REL, &tft_style_lable_rel);
+	lv_btn_set_layout(buttonWifiSetNarrow, LV_LAYOUT_OFF);
+
+	line2 = lv_line_create(lv_scr_act(), NULL);
+	lv_ex_line(line2,line_points[1]);
+	
+	#endif
+
 	buttonBack = lv_imgbtn_create(scr, NULL);
 	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_ADVANCE_RETURN,"bmp_back70x40.bin",0);	
     	lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_para_back);
@@ -115,6 +167,11 @@ void lv_draw_advance_settings(void)
 
 		lv_label_set_text(labelPausePos, machine_menu.PausePosition);
 		lv_obj_align(labelPausePos, buttonPausePos, LV_ALIGN_IN_LEFT_MID,0, 0);
+
+		#if USE_WIFI_FUNCTION
+		lv_label_set_text(labelWifiSet, machine_menu.WifiSettings);
+		lv_obj_align(labelWifiSet, buttonWifiSet, LV_ALIGN_IN_LEFT_MID,0, 0);
+		#endif
 
 	}
 

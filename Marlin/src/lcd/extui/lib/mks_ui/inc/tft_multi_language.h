@@ -214,6 +214,7 @@ typedef struct machine_common_disp
 	const char *Z2andZ2Endstop;
 	const char *EnablePinsInvert;
 	const char *PausePosition;
+	const char *WifiSettings;
 	
 	const char *Z2ConfTitle;
 	const char *Z2Enable;
@@ -248,7 +249,15 @@ typedef struct machine_common_disp
 	const char *xPos;
 	const char *yPos;
 	const char *zPos;
-	
+
+	const char *WifiConfTitle;
+	const char *wifiMode;
+	const char *wifiName;
+	const char *wifiPassWord;
+	const char *wifiCloud;
+	const char *wifiConfig;
+	const char *wifiEdit;
+	const char *wifiConfigTips;
 }machine_common_def;
 extern machine_common_def machine_menu;
 
@@ -799,8 +808,8 @@ extern eeprom_def eeprom_menu;
 #define WIFI_IP_TEXT			"IP: "
 #define WIFI_NAME_TEXT		"WiFi: "
 #define WIFI_KEY_TEXT		"Key: "
-#define WIFI_STATE_AP_TEXT			"State: AP"
-#define WIFI_STATE_STA_TEXT			"State: STA"
+#define WIFI_STATE_AP_TEXT			"State: AP    "
+#define WIFI_STATE_STA_TEXT			"State: STA   "
 #define WIFI_CONNECTED_TEXT			"Connected"
 #define WIFI_DISCONNECTED_TEXT  "Disconnected"
 #define WIFI_EXCEPTION_TEXT				"Exception"
@@ -815,6 +824,7 @@ extern eeprom_def eeprom_menu;
 #define DIALOG_UPLOAD_SPEED_EN				"Speed"
 #define DIALOG_UPDATE_WIFI_FIRMWARE_EN		"Updating wifi model firmware"
 #define DIALOG_UPDATE_WIFI_WEB_EN			"Updating wifi model web data"
+#define DIALOG_UPDATE_NO_DEVICE_EN 			"please check \nwether memory device insert!"
 
 #define ZOFFSET_STEP001      "0.01mm"
 #define ZOFFSET_STEP01      "0.1mm"

@@ -41,6 +41,23 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #include "../inc/draw_max_feedrate_settings.h"
 #include "../inc/draw_tmc_step_mode_settings.h"
 
+
+#include "../inc/wifiSerial.h"
+#include "../inc/wifi_module.h"
+#include "../inc/wifi_upload.h"
+#include "../inc/draw_wifi_settings.h"
+#include "../inc/draw_keyboard.h"
+#include "../inc/draw_wifi.h"
+#include "../inc/draw_wifi_list.h"
+#include "../inc/draw_wifi_tips.h"
+
+#define FILE_SYS_USB	0
+#define FILE_SYS_SD	1
+
+#define TICK_CYCLE 1
+
+#define PARA_SEL_ICON_TEXT_COLOR	LV_COLOR_MAKE(0x4a, 0x52, 0xff);
+
 #define  TFT35
 
 #ifdef TFT35
@@ -72,7 +89,7 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define PREVIEW_LITTLE_PIC_SIZE		40910//400*100+9*101+1
 #define PREVIEW_SIZE			202720//(PREVIEW_LITTLE_PIC_SIZE+800*200+201*9+1)
 
-#define GCFG_FLAG_VALUE 0xee
+#define GCFG_FLAG_VALUE 0xef
 
 //machine parameter ui
 #define PARA_UI_POS_X	10
@@ -116,6 +133,10 @@ typedef struct
 	uint8_t from_flash_pic;
 	uint8_t finish_power_off;
 	uint8_t pause_reprint;
+	uint8_t wifi_mode_sel;
+	uint8_t fileSysType;
+	uint8_t wifi_type;
+	bool  cloud_enable;
 	float pausePosX;
 	float pausePosY;
 	float pausePosZ;
@@ -129,13 +150,21 @@ typedef struct
 			curSprayerChoose:3,
 			stepHeat:4;
 	uint8_t leveling_first_time:1,
-			para_ui_page:1;
+			para_ui_page:1,
+			configWifi:1,
+			command_send:1;
+	uint8_t wifi_name[32];
+	uint8_t wifi_key[64];
+	uint8_t cloud_hostUrl[96];
 	uint8_t extruStep;
 	uint8_t extruSpeed;
 	uint8_t print_state;
 	uint8_t stepPrintSpeed;
 	uint8_t waitEndMoves;
+	uint8_t dialogType;
 	uint16_t moveSpeed;
+	uint16_t cloud_port;
+	uint32_t totalSend;
 	float   move_dist;
 }UI_CFG;
 
@@ -177,7 +206,7 @@ typedef enum
 	HARDWARE_TEST_UI,
 	WIFI_LIST_UI,
 	KEY_BOARD_UI,
-	TIPS_UI,
+	WIFI_TIPS_UI,
 	MACHINE_PARA_UI,
 	MACHINE_SETTINGS_UI,
 	TEMPERATURE_SETTINGS_UI,
@@ -208,7 +237,8 @@ typedef enum
 	PAUSE_POS_UI,
 	TMC_CURRENT_UI,
 	TMC_MODE_UI,
-	EEPROM_SETTINGS_UI
+	EEPROM_SETTINGS_UI,
+	WIFI_SETTINGS_UI
 } DISP_STATE;
 
 typedef struct
@@ -267,10 +297,18 @@ typedef enum
 
 	pause_pos_x,
 	pause_pos_y,
-	pause_pos_z
+	pause_pos_z	
+}num_key_value_state;
+extern num_key_value_state value;
 
-}value_state;
-extern value_state value;
+typedef enum
+{
+	wifiName,
+	wifiPassWord,
+	wifiConfig
+}keyboard_value_state;
+extern keyboard_value_state keyboard_value;
+
 
 extern CFG_ITMES gCfgItems;
 extern UI_CFG uiCfg;
@@ -287,7 +325,7 @@ extern lv_style_t style_para_value_rel;
 extern lv_style_t style_num_key_pre;
 extern lv_style_t style_num_key_rel;
 extern lv_style_t style_num_text;
-
+extern lv_style_t style_sel_text;
 
 extern lv_point_t line_points[4][2];
 

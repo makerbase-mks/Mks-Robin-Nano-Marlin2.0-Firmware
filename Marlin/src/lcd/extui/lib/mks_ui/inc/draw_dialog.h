@@ -52,6 +52,9 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define DIALOG_READ_EEPROM_TIPS		33
 #define DIALOG_REVERT_EEPROM_TIPS		34
 
+#define DIALOG_WIFI_CONFIG_TIPS		35
+#define DIALOG_TRANSFER_NO_DEVICE		36
+
 #define BTN_OK_X		100
 #define BTN_OK_Y		180
 #define BTN_CANCEL_X	280

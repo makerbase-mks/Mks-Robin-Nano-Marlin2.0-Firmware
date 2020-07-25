@@ -14,9 +14,6 @@
 #if ENABLED(POWER_LOSS_RECOVERY)
 #include "../../../../../feature/powerloss.h"
 #endif
-#if BOTH(LCD_SET_PROGRESS_MANUALLY, USE_M73_REMAINING_TIME)
-#include "../../../../ultralcd.h"
-#endif
 
 static lv_obj_t * scr;
 static lv_obj_t * labelExt1,* labelExt2,* labelFan,* labelZpos,* labelTime;
@@ -366,12 +363,7 @@ void disp_fan_speed()
 void disp_print_time()
 {
 	memset(public_buf_l, 0, sizeof(public_buf_l));
-#if BOTH(LCD_SET_PROGRESS_MANUALLY, USE_M73_REMAINING_TIME)
-	int r = ui.get_remaining_time();
-	sprintf(public_buf_l, "%02d:%02d R", r / 3600, (r % 3600) / 60);
-#else
 	sprintf(public_buf_l, "%d%d:%d%d:%d%d", print_time.hours/10, print_time.hours%10, print_time.minutes/10, print_time.minutes%10,  print_time.seconds/10, print_time.seconds%10);
-#endif
 	lv_label_set_text(labelTime, public_buf_l);
 }
 
@@ -421,7 +413,7 @@ void setProBarRate()
 		#endif
 		rate = (rate_tmp_r-(PREVIEW_SIZE+To_pre_view))* 100 / (gCfgItems.curFilesize-(PREVIEW_SIZE+To_pre_view));
 	}
-	//gCurFileState.totalSend = rate;
+	uiCfg.totalSend = rate;
 	
 	if(rate <= 0)
 		return;

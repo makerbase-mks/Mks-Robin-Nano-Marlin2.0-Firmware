@@ -190,6 +190,7 @@
 #define HAVE_UPS_CN											"机器配备UPS电源"
 #define Z2_AND_Z2ENDSTOP_CONF_CN				"双Z轴双限位功能设置"
 #define ENABLE_PINS_CONF_CN							"电机使能脚电平设置"
+#define WIFI_SETTINGS_CN                "Wi-Fi参数设置"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_CN  "双z双限位设置"
 #define Z2_ENABLE_CN											 "启用Z2轴"
@@ -206,6 +207,15 @@
 #define PAUSE_POSITION_X_CN  "X轴暂停位置(绝对位置,-1无效)"
 #define PAUSE_POSITION_Y_CN  "Y轴暂停位置(绝对位置,-1无效)"
 #define PAUSE_POSITION_Z_CN  "Z轴暂停位置(相对位置,-1无效)"
+
+#define WIFI_SETTINGS_TITLE_CN		"机器参数>Wi-Fi设置"
+#define WIFI_SETTINGS_MODE_CN			"Wi-Fi 模式"
+#define WIFI_SETTINGS_NAME_CN			"Wi-Fi 名称: "
+#define WIFI_SETTINGS_PASSWORD_CN	"Wi-Fi 密码: "
+#define WIFI_SETTINGS_CLOUD_CN		"是否使用云服务?"
+#define WIFI_SETTINGS_CONFIG_CN		"配置"
+#define WIFI_SETTINGS_EDIT_CN			"编辑"
+#define WIFI_CONFIG_TIPS_CN			  "进行Wi-Fi配置?"
 
 #define TOOL_TEXT_CN			    "工具"
 #define PREHEAT_TEXT_CN 	        "预热"

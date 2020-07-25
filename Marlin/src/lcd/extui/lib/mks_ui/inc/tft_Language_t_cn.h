@@ -190,6 +190,7 @@
 #define HAVE_UPS_T_CN											"機器配備UPS電壓"
 #define Z2_AND_Z2ENDSTOP_CONF_T_CN				"雙z軸雙限位功能設置"
 #define ENABLE_PINS_CONF_T_CN							"電機使能腳電平設置"
+#define WIFI_SETTINGS_T_CN                "Wi-Fi參數設置"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_T_CN  "雙z軸雙限位設置"
 #define Z2_ENABLE_T_CN											 "啟用Z2軸"
@@ -206,6 +207,15 @@
 #define PAUSE_POSITION_X_T_CN  "X軸暫停位置(絕對位置,-1無效)"
 #define PAUSE_POSITION_Y_T_CN  "Y軸暫停位置(絕對位置,-1無效)"
 #define PAUSE_POSITION_Z_T_CN  "Z軸暫停位置(相對位置,-1無效)"
+
+#define WIFI_SETTINGS_TITLE_T_CN		"機器參數>Wi-Fi設置"
+#define WIFI_SETTINGS_MODE_T_CN			"Wi-Fi 模式"
+#define WIFI_SETTINGS_NAME_T_CN			"Wi-Fi 名稱: "
+#define WIFI_SETTINGS_PASSWORD_T_CN	"Wi-Fi 密碼: "
+#define WIFI_SETTINGS_CLOUD_T_CN		"是否使用雲服務?"
+#define WIFI_SETTINGS_CONFIG_T_CN		"配置"
+#define WIFI_SETTINGS_EDIT_T_CN			"編輯"
+#define WIFI_CONFIG_TIPS_T_CN			  "進行Wi-Fi配置?"
 
 #define TOOL_TEXT_T_CN							"工具"
 #define PREHEAT_TEXT_T_CN 					    "預熱"

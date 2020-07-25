@@ -204,7 +204,8 @@
 #define PWROFF_AFTER_PRINT_EN					"Auto Shutdown after print"
 #define HAVE_UPS_EN								"Has UPS power supply"
 #define Z2_AND_Z2ENDSTOP_CONF_EN				"Z2 Settings"
-#define ENABLE_PINS_CONF_EN						"Enable pins level settings"
+#define ENABLE_PINS_CONF_EN					"Enable pins level settings"
+#define WIFI_SETTINGS_EN							"Wi-Fi parameter settings"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_EN  "Z2 Settings"
 #define Z2_ENABLE_EN					"Z2 Enable"
@@ -221,6 +222,15 @@
 #define PAUSE_POSITION_X_EN  "X axis position (Absolute position,-1 invalid)"
 #define PAUSE_POSITION_Y_EN  "Y axis position (Absolute position,-1 invalid)"
 #define PAUSE_POSITION_Z_EN  "Z axis position (Relative position,-1 invalid)"
+
+#define WIFI_SETTINGS_TITLE_EN			"Machine Settings>Wi-Fi Parameter"
+#define WIFI_SETTINGS_MODE_EN			"Wi-Fi Mode"
+#define WIFI_SETTINGS_NAME_EN			"Wi-Fi Name: "
+#define WIFI_SETTINGS_PASSWORD_EN	"Wi-Fi Password: "
+#define WIFI_SETTINGS_CLOUD_EN		"Do you use cloud services?"
+#define WIFI_SETTINGS_CONFIG_EN		"Config"
+#define WIFI_SETTINGS_EDIT_EN		"Edit"
+#define WIFI_CONFIG_TIPS_EN			"Wi-Fi configuration?"
 
 #define TOOL_TEXT_EN		    "Tool"
 #define PREHEAT_TEXT_EN         "Preheat"
@@ -472,11 +482,9 @@
 #define TEXT_WIFI_SYMBOL_EN  "#+="
 #define TEXT_WIFI_PASSWORD_EN "Password"
 
-#define TEXT_WIFI_POINT_BOLD_EN "`"
-
-#define TEXT_WIFI_JOINING_EN  "Joining\nNetwork..."
-#define TEXT_WIFI_FAILED_JOIN_EN  "Failed to\nJoin Wi-Fi"
-#define TEXT_WIFI_WIFI_CONECTED_EN "Wi-Fi\nConnected"
+#define TEXT_WIFI_JOINING_EN  "Joining Network..."
+#define TEXT_WIFI_FAILED_JOIN_EN  "Failed to Join Wi-Fi"
+#define TEXT_WIFI_WIFI_CONECTED_EN "Wi-Fi Connected"
 
 #define TEXT_BUTTON_DISCONECTED_EN "Disconnect"
 #define TEXT_WIFI_FORGET_EN "Forget Network"
@@ -660,24 +668,6 @@
 #define MANUAL_IP_INIT_DATA_EN           "0.0.0.0"
 #define MANUAL_TEXT_POINT_EN             "."
 #define MANUAL_TEXT_ENTER_EN             "enter"
-
-//Wifi name
-//#define TEXT_WIFI_MENU_TITLE_EN "WI-FI"
-//#define TEXT_WIFI_SAPCE_EN  "space"
-//#define TEXT_WIFI_LETTER_EN  "abc"
-//#define TEXT_WIFI_DIGITAL_EN  "123"
-//#define TEXT_WIFI_SYMBOL_EN  "#+="
-//#define TEXT_WIFI_PASSWORD_EN "Password"
-
-//#define TEXT_WIFI_POINT_BOLD_EN "`"
-
-//#define TEXT_WIFI_JOINING_EN  "Joining\nNetwork..."
-//#define TEXT_WIFI_FAILED_JOIN_EN  "Failed to\nJoin Wi-Fi"
-//#define TEXT_WIFI_WIFI_CONECTED_EN "Wi-Fi\nConnected"
-
-//#define TEXT_BUTTON_DISCONECTED_EN "Disconnect"
-//#define TEXT_WIFI_FORGET_EN "Forget Network"
-//#define TEXT_DISCONECTED_EN "Wi-Fi Connected"
 
 #define TEXT_FORGET_TIPS_TITLE_EN "Forget Network"
 #define TEXT_FORGET_NETWORK_TIPS1_EN "Are you sure you want to\nforget this network?"

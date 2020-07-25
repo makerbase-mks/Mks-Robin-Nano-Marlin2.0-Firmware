@@ -257,7 +257,7 @@ void mks_gpio_test()
   test_gpio_readlevel_L();
 	test_gpio_readlevel_H();
 	test_gpio_readlevel_L();  
-  if((pw_det_sta == 1)&&(mt_det_sta == 1)&&(mt_det2_sta == 1)&&(mt_det3_sta == 1))
+  if((pw_det_sta == 1)&&(mt_det_sta == 1)&&(mt_det2_sta == 1))//&&(mt_det3_sta == 1))
 	{
 		    disp_det_ok();
 	}
