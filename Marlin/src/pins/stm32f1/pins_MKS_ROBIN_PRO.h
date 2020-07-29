@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 #pragma once
@@ -103,16 +103,6 @@
 #ifndef E2_CS_PIN
   #define E2_CS_PIN                         PG9
 #endif
-
-//SPI FLASH
-#define SPI_FLASH
-
-#if ENABLED(SPI_FLASH)
-	#define 	W25QXX_CS_PIN		PB12
-	#define 	W25QXX_MOSI_PIN		PB15
-	#define 	W25QXX_MISO_PIN		PB14
-	#define 	W25QXX_SCK_PIN		PB13
-#endif
 //
 // Software SPI pins for TMC2130 stepper drivers
 //
@@ -192,17 +182,9 @@
 //#define MAX6675_SS_PIN                    PE5   // TC1 - CS1
 //#define MAX6675_SS_PIN                    PF11  // TC2 - CS2
 
-//#define POWER_LOSS_PIN                   PA2   // PW_DET
-//#define PS_ON_PIN                             PG11  // PW_OFF
-
-//MKS_PWC
-//#define KILL_PIN							PA2		// MKS_PWC PW_DET
-//#define KILL_PIN_INVERTING 					true
-//#define SUICIDE_PIN							PG11	// MKS_PWC PW_OFF
-//#define SUICIDE_PIN_INVERTING 				false
-
-
-#define FIL_RUNOUT_PIN                    PA4   // MT_DET1
+#define POWER_LOSS_PIN                      PA2   // PW_DET
+#define PS_ON_PIN                           PG11  // PW_OFF
+#define FIL_RUNOUT_PIN                      PA4   // MT_DET1
 //#define FIL_RUNOUT_PIN                    PE6   // MT_DET2
 //#define FIL_RUNOUT_PIN                    PG14  // MT_DET3
 
@@ -236,26 +218,11 @@
   #define FSMC_CS_PIN                       PD7   // NE4
   #define FSMC_RS_PIN                       PD11  // A0
 
-  #define LCD_USE_DMA_FSMC //
-  #define FSMC_DMA_DEV DMA2
-  #define FSMC_DMA_CHANNEL DMA_CH5
-
-  #define LCD_RESET_PIN    PF6
-  #define NO_LCD_REINIT             // Suppress LCD re-initialization
-
+  #define LCD_RESET_PIN                     PF6
   #define LCD_BACKLIGHT_PIN                 PD13
 
   #if ENABLED(TOUCH_BUTTONS)
-    #define TOUCH_CS_PIN     PA7
-    #define TOUCH_SCK_PIN    PB13
-    #define TOUCH_MOSI_PIN   PB15
-    #define TOUCH_MISO_PIN   PB14
-
-    #define BEEPER_PIN       PC5
-    #define WIFI_IO2_PIN       PC7
-    #define FIL_RUNOUT_2_PIN     PE6   // MT_DET2
-    #define FIL_RUNOUT_3_PIN     PG14  // MT_DET3
-
+    #define TOUCH_CS_PIN                    PA7
   #else
     #define BEEPER_PIN                      PC5
     #define BTN_ENC                         PG2
@@ -294,12 +261,12 @@
   #endif // !MKS_MINI_12864 && !ENDER2_STOCKDISPLAY
 #endif
 
-#ifndef ST7920_DELAY_1
-  #define ST7920_DELAY_1           DELAY_NS(125)
+#ifndef BOARD_ST7920_DELAY_1
+  #define BOARD_ST7920_DELAY_1     DELAY_NS(125)
 #endif
-#ifndef ST7920_DELAY_2
-  #define ST7920_DELAY_2           DELAY_NS(125)
+#ifndef BOARD_ST7920_DELAY_2
+  #define BOARD_ST7920_DELAY_2     DELAY_NS(125)
 #endif
-#ifndef ST7920_DELAY_3
-  #define ST7920_DELAY_3           DELAY_NS(125)
+#ifndef BOARD_ST7920_DELAY_3
+  #define BOARD_ST7920_DELAY_3     DELAY_NS(125)
 #endif
