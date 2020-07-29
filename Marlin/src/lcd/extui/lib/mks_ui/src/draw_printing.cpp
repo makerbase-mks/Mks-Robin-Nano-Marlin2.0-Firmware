@@ -430,6 +430,9 @@ void setProBarRate()
 				
 				flash_preview_begin = 0;
 				default_preview_flg = 0;
+				
+				uiCfg.print_state = IDLE;
+				
 				lv_clear_printing();
 				lv_draw_dialog(DIALOG_TYPE_FINISH_PRINT);
                 			

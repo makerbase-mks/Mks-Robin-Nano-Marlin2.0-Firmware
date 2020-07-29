@@ -66,7 +66,7 @@ typedef struct
 	uint32_t now_tick;
 	
 } WIFI_TRANS_ERROR;
-
+extern volatile WIFI_TRANS_ERROR wifiTransError;
 
 
 typedef  struct
@@ -135,6 +135,8 @@ typedef enum
 	TRANSFERING,
 	TRANSFER_STORE,
 } TRANSFER_STATE;
+extern volatile TRANSFER_STATE esp_state;
+
 typedef struct
 {
 	char buf[20][80];
@@ -193,6 +195,7 @@ extern int package_to_wifi(WIFI_RET_TYPE type, char *buf, int len);
 extern void get_wifi_list_command_send();
 extern void get_wifi_commands();
 extern int readWifiBuf(int8_t *buf, int32_t len);
+extern int storeRcvData(int32_t len);
 
 #endif
 
