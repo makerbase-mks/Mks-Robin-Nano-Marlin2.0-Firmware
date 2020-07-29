@@ -142,7 +142,7 @@
 
 #define WIFI_IO0_PIN                        PC13
 #define WIFI_IO1_PIN       			            PC7
-#define WIFI_RESET_PIN			              	PE9
+#define WIFI_RESET_PIN			              	PA5
 
 //
 // SD Card
