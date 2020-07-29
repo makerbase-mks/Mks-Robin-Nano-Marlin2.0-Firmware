@@ -237,7 +237,7 @@ uint32_t lv_get_pic_addr(uint8_t *Pname) {
         addr = PIC_DATA_ADDR_TFT35 + i * PER_PIC_MAX_SPACE_TFT35;
       else
         addr = PIC_DATA_ADDR_TFT32 + i * PER_PIC_MAX_SPACE_TFT32;
-      return addr;
+      return addr + 8;
     }
   }
 
