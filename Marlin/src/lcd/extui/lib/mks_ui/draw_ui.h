@@ -34,7 +34,12 @@
 #undef LV_COLOR_BACKGROUND
 #define LV_COLOR_BACKGROUND LV_COLOR_MAKE(0x1A, 0x1A, 0x1A) // LV_COLOR_MAKE(0x00, 0x00, 0x00)
 
+#define TFT_LV_PARA_BACK_BODY_COLOR  LV_COLOR_MAKE(0x4A, 0x52, 0xFF)
+
+
+
 #include "tft_multi_language.h"
+#include "pic_manager.h"
 #include "draw_ready_print.h"
 #include "draw_language.h"
 #include "draw_set.h"
@@ -66,6 +71,9 @@
 #include "draw_eeprom_settings.h"
 #include "draw_max_feedrate_settings.h"
 #include "draw_tmc_step_mode_settings.h"
+#include "draw_level_settings.h"
+#include "draw_manual_level_pos_settings.h"
+#include "draw_auto_level_offset_settings.h"
 
 #include "wifiSerial.h"
 #include "wifi_module.h"
@@ -118,26 +126,36 @@
   #define GCFG_FLAG_VALUE   0xEF
 
   // machine parameter ui
-  #define PARA_UI_POS_X            10
-  #define PARA_UI_POS_Y            50
+  #define PARA_UI_POS_X             10
+  #define PARA_UI_POS_Y             50
 
-  #define PARA_UI_SIZE_X          450
-  #define PARA_UI_SIZE_Y           40
+  #define PARA_UI_SIZE_X            450
+  #define PARA_UI_SIZE_Y            40
 
   #define PARA_UI_ARROW_V          12
 
-  #define PARA_UI_BACL_POS_X      400
-  #define PARA_UI_BACL_POS_Y      270
+  #define PARA_UI_BACL_POS_X        400
+  #define PARA_UI_BACL_POS_Y        270
 
-  #define PARA_UI_TURN_PAGE_POS_X 320
-  #define PARA_UI_TURN_PAGE_POS_Y 270
+  #define PARA_UI_TURN_PAGE_POS_X   320
+  #define PARA_UI_TURN_PAGE_POS_Y   270
 
-  #define PARA_UI_VALUE_SIZE_X    370
-  #define PARA_UI_VALUE_POS_X     400
+  #define PARA_UI_VALUE_SIZE_X      370
+  #define PARA_UI_VALUE_POS_X       400
   #define PARA_UI_VALUE_V           5
 
-  #define PARA_UI_STATE_POS_X     380
+  #define PARA_UI_STATE_POS_X       380
   #define PARA_UI_STATE_V           2
+
+  #define PARA_UI_VALUE_SIZE_X_2    200
+  #define PARA_UI_VALUE_POS_X_2     320
+  #define PARA_UI_VALUE_V_2         5
+
+  #define PARA_UI_VALUE_BTN_X_SIZE  70
+  #define PARA_UI_VALUE_BTN_Y_SIZE  28
+
+  #define PARA_UI_BACK_BTN_X_SIZE   70
+  #define PARA_UI_BACK_BTN_Y_SIZE   40
 
 #else // ifdef TFT35
 
@@ -161,6 +179,7 @@ typedef struct {
   uint8_t fileSysType;
   uint8_t wifi_type;
   bool  cloud_enable;
+  int   levelingPos[5][2];
   float pausePosX;
   float pausePosY;
   float pausePosZ;
@@ -184,11 +203,11 @@ typedef struct {
   uint8_t stepPrintSpeed;
   uint8_t waitEndMoves;
   uint8_t dialogType;
+  uint8_t F[4];
   uint16_t moveSpeed;
   uint16_t cloud_port;
   uint32_t totalSend;
   float move_dist;
-  uint8_t	F[4];
 } UI_CFG;
 
 typedef enum {
@@ -223,7 +242,9 @@ typedef enum {
   LEVELING_UI,
   MESHLEVELING_UI,
   BIND_UI,
-  ZOFFSET_UI,
+  #if HAS_BED_PROBE
+    NOZZLE_PROBE_OFFSET_UI,
+  #endif
   TOOL_UI,
   HARDWARE_TEST_UI,
   WIFI_LIST_UI,
@@ -241,7 +262,7 @@ typedef enum {
   LEVELING_SETTIGNS_UI,
   LEVELING_PARA_UI,
   DELTA_LEVELING_PARA_UI,
-  XYZ_LEVELING_PARA_UI,
+  MANUAL_LEVELING_POSIGION_UI,
   MAXFEEDRATE_UI,
   STEPS_UI,
   ACCELERATION_UI,
@@ -313,15 +334,32 @@ typedef enum {
 
   pause_pos_x,
   pause_pos_y,
-  pause_pos_z
+  pause_pos_z,
 
+  level_pos_x1,
+  level_pos_y1,
+  level_pos_x2,
+  level_pos_y2,
+  level_pos_x3,
+  level_pos_y3,
+  level_pos_x4,
+  level_pos_y4,
+  level_pos_x5,
+  level_pos_y5
+  #if HAS_BED_PROBE
+    ,
+    x_offset,
+    y_offset,
+    z_offset
+  #endif
 } num_key_value_state;
 extern num_key_value_state value;
 
 typedef enum {
 	wifiName,
 	wifiPassWord,
-	wifiConfig
+	wifiConfig,
+  gcodeCommand
 } keyboard_value_state;
 extern keyboard_value_state keyboard_value;
 
@@ -341,6 +379,8 @@ extern lv_style_t style_num_key_pre;
 extern lv_style_t style_num_key_rel;
 extern lv_style_t style_num_text;
 extern lv_style_t style_sel_text;
+extern lv_style_t style_para_value;
+extern lv_style_t style_para_back;
 
 extern lv_point_t line_points[4][2];
 
@@ -350,6 +390,8 @@ extern void tft_style_init();
 extern char *creat_title_text(void);
 extern void preview_gcode_prehandle(char *path);
 extern void update_spi_flash();
+extern void update_gcode_command(int addr,uint8_t *s);
+extern void get_gcode_command(int addr,uint8_t *d);
 #if HAS_GCODE_PREVIEW
   extern void disp_pre_gcode(int xpos_pixel, int ypos_pixel);
 #endif
@@ -357,7 +399,6 @@ extern void GUI_RefreshPage();
 extern void clear_cur_ui();
 extern void draw_return_ui();
 extern void sd_detection();
-extern void gCfg_to_spiFlah();
 extern void print_time_count();
 
 extern void LV_TASK_HANDLER();

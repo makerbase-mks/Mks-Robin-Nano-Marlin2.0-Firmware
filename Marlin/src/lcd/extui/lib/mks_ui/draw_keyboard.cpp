@@ -159,6 +159,13 @@ static void lv_kb_event_cb(lv_obj_t * kb, lv_event_t event) {
 					wifi_tips_type = TIPS_TYPE_JOINING;
 					lv_draw_wifi_tips();
 					break;
+                case gcodeCommand:
+                    uint8_t buf[100];
+                    memcpy(buf,ret_ta_txt,sizeof(buf));
+                    update_gcode_command(AUTO_LEVELING_COMMAND_ADDR,buf);
+                    lv_clear_keyboard();
+					draw_return_ui();
+                    break;
 				default:
 					break;
 			}
@@ -244,7 +251,15 @@ void lv_draw_keyboard() {
     /*Create a text area. The keyboard will write here*/
     lv_obj_t *ta = lv_ta_create(scr, NULL);
     lv_obj_align(ta, NULL, LV_ALIGN_IN_TOP_MID, 0, 10);
-    lv_ta_set_text(ta, "");
+    if(keyboard_value == gcodeCommand) {
+        get_gcode_command(AUTO_LEVELING_COMMAND_ADDR,(uint8_t *)public_buf_m);
+        public_buf_m[sizeof(public_buf_m)-1] = 0;
+        lv_ta_set_text(ta, public_buf_m);
+    }
+    else {
+        lv_ta_set_text(ta, "");
+    }
+    
 
     /*Assign the text area to the keyboard*/
     lv_kb_set_ta(kb, ta);

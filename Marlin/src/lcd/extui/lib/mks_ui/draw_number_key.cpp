@@ -45,6 +45,9 @@
   #include "../../../../module/stepper/indirection.h"
   #include "../../../../feature/tmc_util.h"
 #endif
+#if HAS_BED_PROBE
+  #include "../../../../module/probe.h"
+#endif
 
 static lv_obj_t * scr;
 static lv_obj_t *buttonValue = NULL;
@@ -76,113 +79,92 @@ static void disp_key_value() {
     float milliamps;
   #endif
 
+  ZERO(public_buf_m);
+
   switch (value) {
     case PrintAcceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.acceleration);
       break;
     case RetractAcceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.retract_acceleration);
       break;
     case TravelAcceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.travel_acceleration);
       break;
     case XAcceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%d"), (int)planner.settings.max_acceleration_mm_per_s2[X_AXIS]);
       break;
     case YAcceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%d"), (int)planner.settings.max_acceleration_mm_per_s2[Y_AXIS]);
       break;
     case ZAcceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%d"), (int)planner.settings.max_acceleration_mm_per_s2[Z_AXIS]);
       break;
     case E0Acceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%d"), (int)planner.settings.max_acceleration_mm_per_s2[E_AXIS]);
       break;
     case E1Acceleration:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%d"), (int)planner.settings.max_acceleration_mm_per_s2[E_AXIS_N(1)]);
       break;
     case XMaxFeedRate:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.max_feedrate_mm_s[X_AXIS]);
       break;
     case YMaxFeedRate:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.max_feedrate_mm_s[Y_AXIS]);
       break;
     case ZMaxFeedRate:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.max_feedrate_mm_s[Z_AXIS]);
       break;
     case E0MaxFeedRate:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.max_feedrate_mm_s[E_AXIS]);
       break;
     case E1MaxFeedRate:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.max_feedrate_mm_s[E_AXIS_N(1)]);
       break;
 
     case XJerk:
       #if HAS_CLASSIC_JERK
-        ZERO(public_buf_m);
         sprintf_P(public_buf_m, PSTR("%.1f"), planner.max_jerk[X_AXIS]);
       #endif
       break;
     case YJerk:
       #if HAS_CLASSIC_JERK
-        ZERO(public_buf_m);
         sprintf_P(public_buf_m, PSTR("%.1f"), planner.max_jerk[Y_AXIS]);
       #endif
       break;
     case ZJerk:
       #if HAS_CLASSIC_JERK
-        ZERO(public_buf_m);
         sprintf_P(public_buf_m, PSTR("%.1f"), planner.max_jerk[Z_AXIS]);
       #endif
       break;
     case EJerk:
       #if HAS_CLASSIC_JERK
-        ZERO(public_buf_m);
         sprintf_P(public_buf_m, PSTR("%.1f"), planner.max_jerk[E_AXIS]);
       #endif
       break;
 
     case Xstep:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.axis_steps_per_mm[X_AXIS]);
 
       break;
     case Ystep:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.axis_steps_per_mm[Y_AXIS]);
 
       break;
     case Zstep:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.axis_steps_per_mm[Z_AXIS]);
 
       break;
     case E0step:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.axis_steps_per_mm[E_AXIS]);
 
       break;
     case E1step:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), planner.settings.axis_steps_per_mm[E_AXIS_N(1)]);
       break;
 
     case Xcurrent:
       #if AXIS_IS_TMC(X)
-        ZERO(public_buf_m);
         milliamps = stepperX.getMilliamps();
         sprintf_P(public_buf_m, PSTR("%.1f"), milliamps);
       #endif
@@ -190,7 +172,6 @@ static void disp_key_value() {
 
     case Ycurrent:
       #if AXIS_IS_TMC(Y)
-        ZERO(public_buf_m);
         milliamps = stepperY.getMilliamps();
         sprintf_P(public_buf_m, PSTR("%.1f"), milliamps);
       #endif
@@ -198,7 +179,6 @@ static void disp_key_value() {
 
     case Zcurrent:
       #if AXIS_IS_TMC(Z)
-        ZERO(public_buf_m);
         milliamps = stepperZ.getMilliamps();
         sprintf_P(public_buf_m, PSTR("%.1f"), milliamps);
       #endif
@@ -206,7 +186,6 @@ static void disp_key_value() {
 
     case E0current:
       #if AXIS_IS_TMC(E0)
-        ZERO(public_buf_m);
         milliamps = stepperE0.getMilliamps();
         sprintf_P(public_buf_m, PSTR("%.1f"), milliamps);
       #endif
@@ -214,24 +193,65 @@ static void disp_key_value() {
 
     case E1current:
       #if AXIS_IS_TMC(E1)
-        ZERO(public_buf_m);
         milliamps = stepperE1.getMilliamps();
         sprintf_P(public_buf_m, PSTR("%.1f"), milliamps);
       #endif
       break;
 
     case pause_pos_x:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), gCfgItems.pausePosX);
       break;
     case pause_pos_y:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), gCfgItems.pausePosY);
       break;
     case pause_pos_z:
-      ZERO(public_buf_m);
       sprintf_P(public_buf_m, PSTR("%.1f"), gCfgItems.pausePosZ);
       break;
+    case level_pos_x1:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[0][0]);
+      break;
+    case level_pos_y1:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[0][1]);
+      break;
+    case level_pos_x2:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[1][0]);
+      break;
+    case level_pos_y2:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[1][1]);
+      break;
+    case level_pos_x3:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[2][0]);
+      break;
+    case level_pos_y3:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[2][1]);
+      break;
+    case level_pos_x4:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[3][0]);
+      break;
+    case level_pos_y4:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[3][1]);
+      break;
+    case level_pos_x5:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[4][0]);
+      break;
+    case level_pos_y5:
+      sprintf_P(public_buf_m, PSTR("%d"), (int)gCfgItems.levelingPos[4][1]);
+      break;
+    #if HAS_BED_PROBE
+      case x_offset:
+        #if HAS_PROBE_XY_OFFSET
+        sprintf_P(public_buf_m, PSTR("%.1f"), probe.offset.x);
+        #endif
+        break; 
+      case y_offset:
+        #if HAS_PROBE_XY_OFFSET
+        sprintf_P(public_buf_m, PSTR("%.1f"), probe.offset.y);
+        #endif
+        break;
+      case z_offset:
+        sprintf_P(public_buf_m, PSTR("%.1f"), probe.offset.z);
+        break;
+    #endif
   }
   ZERO(key_value);
   strcpy(key_value, public_buf_m);
@@ -253,15 +273,12 @@ static void set_value_confirm() {
   switch (value) {
     case PrintAcceleration:
       planner.settings.acceleration = atof(key_value);
-
       break;
     case RetractAcceleration:
       planner.settings.retract_acceleration = atof(key_value);
-
       break;
     case TravelAcceleration:
       planner.settings.travel_acceleration = atof(key_value);
-
       break;
     case XAcceleration:
       planner.settings.max_acceleration_mm_per_s2[X_AXIS] = atof(key_value);
@@ -293,7 +310,6 @@ static void set_value_confirm() {
     case E1MaxFeedRate:
       planner.settings.max_feedrate_mm_s[E_AXIS_N(1)] = atof(key_value);
       break;
-
     case XJerk:
       #if HAS_CLASSIC_JERK
         planner.max_jerk[X_AXIS] = atof(key_value);
@@ -314,7 +330,6 @@ static void set_value_confirm() {
         planner.max_jerk[E_AXIS] = atof(key_value);
       #endif
       break;
-
     case Xstep:
       planner.settings.axis_steps_per_mm[X_AXIS] = atof(key_value);
       break;
@@ -330,42 +345,35 @@ static void set_value_confirm() {
     case E1step:
       planner.settings.axis_steps_per_mm[E_AXIS_N(1)] = atof(key_value);
       break;
-
     case Xcurrent:
       #if AXIS_IS_TMC(X)
         current_mA = atoi(key_value);
         stepperX.rms_current(current_mA);
       #endif
       break;
-
     case Ycurrent:
       #if AXIS_IS_TMC(Y)
         current_mA = atoi(key_value);
         stepperY.rms_current(current_mA);
       #endif
       break;
-
     case Zcurrent:
       #if AXIS_IS_TMC(Z)
         current_mA = atoi(key_value);
         stepperZ.rms_current(current_mA);
       #endif
       break;
-
     case E0current:
       #if AXIS_IS_TMC(E0)
         current_mA = atoi(key_value);
         stepperE0.rms_current(current_mA);
       #endif
       break;
-
     case E1current:
       #if AXIS_IS_TMC(E1)
         current_mA = atoi(key_value);
         stepperE1.rms_current(current_mA);
       #endif
-      break;
-
       break;
     case pause_pos_x:
       gCfgItems.pausePosX = atof(key_value);
@@ -379,6 +387,70 @@ static void set_value_confirm() {
       gCfgItems.pausePosZ = atof(key_value);
       update_spi_flash();
       break;
+    case level_pos_x1:
+      gCfgItems.levelingPos[0][0] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_y1:
+      gCfgItems.levelingPos[0][1] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_x2:
+      gCfgItems.levelingPos[1][0] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_y2:
+      gCfgItems.levelingPos[1][1] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_x3:
+      gCfgItems.levelingPos[2][0] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_y3:
+      gCfgItems.levelingPos[2][1] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_x4:
+      gCfgItems.levelingPos[3][0] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_y4:
+      gCfgItems.levelingPos[3][1] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_x5:
+      gCfgItems.levelingPos[4][0] = atoi(key_value);
+      update_spi_flash();
+      break;
+    case level_pos_y5:
+      gCfgItems.levelingPos[4][1] = atoi(key_value);
+      update_spi_flash();
+      break;
+    #if HAS_BED_PROBE
+      case x_offset:
+        #if HAS_PROBE_XY_OFFSET
+          float x;
+          x = atof(key_value);
+          if (WITHIN(x, -(X_BED_SIZE), X_BED_SIZE))
+            probe.offset.x = x;
+        #endif
+        break; 
+      case y_offset:
+        #if HAS_PROBE_XY_OFFSET
+          float y;
+          y = atof(key_value);
+          if (WITHIN(y, -(Y_BED_SIZE), Y_BED_SIZE))
+            probe.offset.y = y;
+        #endif
+        break;
+      case z_offset:
+        float z;
+        z = atof(key_value);
+        if (WITHIN(z, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX))
+          probe.offset.z = z;
+        break;
+    #endif
   }
   gcode.process_subcommands_now_P(PSTR("M500"));
 }

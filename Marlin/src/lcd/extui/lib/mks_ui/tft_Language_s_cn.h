@@ -31,8 +31,8 @@
 
 #define MACHINE_PARA_TITLE_CN         "机器参数"
 #define MACHINE_TYPE_CNOFIG_CN        "机器设置"
-#define TEMPERATURE_CONFIG_CN         "温度设置"
 #define MOTOR_CONFIG_CN               "电机设置"
+#define MACHINE_LEVELING_CONFIG_CN    "调平设置"
 #define ADVANCE_CONFIG_CN             "高级设置"
 
 #define MACHINE_CONFIG_TITLE_CN       "机器参数>机器配置"
@@ -41,7 +41,6 @@
 #define MACHINE_HOMEDIR_CN            "归零方向"
 #define MACHINE_ENDSTOP_TYPE_CN       "限位开关类型"
 #define MACHINE_FILAMENT_CONFIG_CN    "换料设置"
-#define MACHINE_LEVELING_CONFIG_CN    "调平设置"
 
 #define MACHINE_TYPE_CONFIG_TITLE_CN  "机器参数>机型选择"
 #define MACHINE_TYPE_XYZ_CN           "XYZ机型"
@@ -84,10 +83,11 @@
 #define FILAMENT_OUT_LENGTH_CN        "退料长度"
 #define FILAMENT_OUT_SPEED_CN         "退料速度"
 
-#define LEVELING_CONF_TITLE_CN        "调平设置"
+#define LEVELING_CONF_TITLE_CN        "机器参数>调平设置"
 #define LEVELING_PARA_CONF_CN         "调平设置"
-#define LEVELING_DELTA_CN             "delta机型设置"
-#define LEVELING_XYZ_CN               "手动调平坐标设置"
+#define LEVELING_MANUAL_POS_CN        "手动调平坐标设置"
+#define LEVELING_AUTO_COMMAND_CN      "自动调平指令设置"
+#define LEVELING_AUTO_ZOFFSET_CN      "挤出头与调平开关偏移设置"
 
 #define LEVELING_PARA_CONF_TITLE_CN   "调平参数"
 #define AUTO_LEVELING_ENABLE_CN       "自动调平"
@@ -236,6 +236,12 @@
 #define WIFI_SETTINGS_CONFIG_CN		"配置"
 #define WIFI_SETTINGS_EDIT_CN			"编辑"
 #define WIFI_CONFIG_TIPS_CN			  "进行Wi-Fi配置?"
+
+#define OFFSET_TITLE_CN  "机器参数>偏移设置"
+#define OFFSET_X_CN      "X轴与调平开关偏移"
+#define OFFSET_Y_CN      "Y轴与调平开关偏移"
+#define OFFSET_Z_CN      "Z轴与调平开关偏移"
+
 #define TOOL_TEXT_CN                "工具"
 #define PREHEAT_TEXT_CN             "预热"
 #define MOVE_TEXT_CN                "移动"
@@ -404,10 +410,6 @@
 #define STEP_5PERCENT_CN            "5%"
 #define STEP_10PERCENT_CN           "10%"
 
-#define ZOFFSET_CN                  "Z Offset"
-#define ZOFFSET_INC_CN              "增加"
-#define ZOFFSET_DEC_CN              "减少"
-
 #define TITLE_READYPRINT_CN         "准备打印"
 #define TITLE_PREHEAT_CN            "预热"
 #define TITLE_MOVE_CN               "移动"
@@ -430,7 +432,6 @@
 #define TITLE_CLOUD_TEXT_CN         "云服务"
 #define TITLE_DIALOG_CONFIRM_CN     "确认"
 #define TITLE_FILESYS_CN            "文件系统"
-#define TITLE_ZOFFSET_CN            "Z Offset"
 
 #define AUTO_SHUTDOWN_CN            "自动关机"
 #define MANUAL_SHUTDOWN_CN          "手动关机"

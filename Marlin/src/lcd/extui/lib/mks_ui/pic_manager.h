@@ -124,6 +124,14 @@ extern "C" { /* C-declarations for C++ */
 #define FLASH_INF_VALID_FLAG            0xAA558761
 // SD card information first addr
 #define VAR_INF_ADDR                    0x000000
+//Store some gcode commands, such as auto leveling commands
+#define GCODE_COMMAND_ADDR              VAR_INF_ADDR + 3*1024
+#define AUTO_LEVELING_COMMAND_ADDR      GCODE_COMMAND_ADDR
+#define OTHERS_COMMAND_ADDR_1           AUTO_LEVELING_COMMAND_ADDR + 100
+#define OTHERS_COMMAND_ADDR_2           OTHERS_COMMAND_ADDR_1 + 100
+#define OTHERS_COMMAND_ADDR_3           OTHERS_COMMAND_ADDR_2 + 100
+#define OTHERS_COMMAND_ADDR_4           OTHERS_COMMAND_ADDR_3 + 100
+
 
 union union32 {
   uint8_t bytes[4];

@@ -75,6 +75,14 @@ extern uint8_t bmp_public_buf[17 * 1024];
 
 extern void LCD_IO_WriteData(uint16_t RegValue);
 
+static const char custom_gcode_command[][100] = {
+  "G28\nG29\nM500",
+  "G28",
+  "G28",
+  "G28",
+  "G28"
+};
+
 lv_point_t line_points[4][2] = {
   {{PARA_UI_POS_X, PARA_UI_POS_Y + PARA_UI_SIZE_Y}, {TFT_WIDTH, PARA_UI_POS_Y + PARA_UI_SIZE_Y}},
   {{PARA_UI_POS_X, PARA_UI_POS_Y*2 + PARA_UI_SIZE_Y}, {TFT_WIDTH, PARA_UI_POS_Y*2 + PARA_UI_SIZE_Y}},
@@ -110,18 +118,28 @@ void gCfgItems_init() {
   #elif LCD_LANGUAGE == pt
     gCfgItems.language = LANG_PORTUGUESE;
   #endif
-  gCfgItems.leveling_mode    = 0;
-  gCfgItems.from_flash_pic   = 0;
-  gCfgItems.curFilesize      = 0;
-  gCfgItems.finish_power_off = 0;
-  gCfgItems.pause_reprint    = 0;
-  gCfgItems.pausePosX        = -1;
-  gCfgItems.pausePosY        = -1;
-  gCfgItems.pausePosZ        = 5;
-  gCfgItems.cloud_enable = true;
+  gCfgItems.leveling_mode     = 0;
+  gCfgItems.from_flash_pic    = 0;
+  gCfgItems.curFilesize       = 0;
+  gCfgItems.finish_power_off  = 0;
+  gCfgItems.pause_reprint     = 0;
+  gCfgItems.pausePosX         = -1;
+  gCfgItems.pausePosY         = -1;
+  gCfgItems.pausePosZ         = 5;
+  gCfgItems.levelingPos[0][0] = X_MIN_POS + 30;
+  gCfgItems.levelingPos[0][1] = Y_MIN_POS + 30;
+  gCfgItems.levelingPos[1][0] = X_MAX_POS - 30;
+  gCfgItems.levelingPos[1][1] = Y_MIN_POS + 30;
+  gCfgItems.levelingPos[2][0] = X_MAX_POS - 30;
+  gCfgItems.levelingPos[2][1] = Y_MAX_POS - 30;
+  gCfgItems.levelingPos[3][0] = X_MIN_POS + 30;
+  gCfgItems.levelingPos[3][1] = Y_MAX_POS - 30;
+  gCfgItems.levelingPos[4][0] = X_BED_SIZE / 2;
+  gCfgItems.levelingPos[4][1] = Y_BED_SIZE / 2;
+  gCfgItems.cloud_enable  = true;
   gCfgItems.wifi_mode_sel = STA_MODEL;
-  gCfgItems.fileSysType = FILE_SYS_SD;
-  gCfgItems.wifi_type = ESP_WIFI;
+  gCfgItems.fileSysType   = FILE_SYS_SD;
+  gCfgItems.wifi_type     = ESP_WIFI;
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems.spi_flash_flag, VAR_INF_ADDR, sizeof(gCfgItems.spi_flash_flag));
   if (gCfgItems.spi_flash_flag == GCFG_FLAG_VALUE) {
     W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
@@ -130,6 +148,12 @@ void gCfgItems_init() {
     gCfgItems.spi_flash_flag = GCFG_FLAG_VALUE;
     W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
     W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
+    //init gcode command
+    W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[0], AUTO_LEVELING_COMMAND_ADDR, 100);
+    W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[1], OTHERS_COMMAND_ADDR_1, 100);
+    W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[2], OTHERS_COMMAND_ADDR_2, 100);
+    W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[3], OTHERS_COMMAND_ADDR_3, 100);
+    W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[4], OTHERS_COMMAND_ADDR_4, 100);
   }
 
   uiCfg.F[0] = 'N';
@@ -138,11 +162,6 @@ void gCfgItems_init() {
   uiCfg.F[3] = 'O';
   W25QXX.SPI_FLASH_BlockErase(REFLSHE_FLGA_ADD + 32 - 64*1024);
   W25QXX.SPI_FLASH_BufferWrite(uiCfg.F,REFLSHE_FLGA_ADD,4);
-}
-
-void gCfg_to_spiFlah() {
-  W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
-  W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
 }
 
 void ui_cfg_init() {
@@ -190,9 +209,49 @@ void ui_cfg_init() {
 }
 
 void update_spi_flash() {
+  uint8_t command_buf[512];
+
   W25QXX.init(SPI_QUARTER_SPEED);
+  //read back the gcode command befor erase spi flash
+  W25QXX.SPI_FLASH_BufferRead((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
   W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
   W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
+  W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
+}
+
+void update_gcode_command(int addr,uint8_t *s) {
+  uint8_t command_buf[512];
+
+  W25QXX.init(SPI_QUARTER_SPEED);
+  //read back the gcode command befor erase spi flash
+  W25QXX.SPI_FLASH_BufferRead((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
+  W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
+  W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
+  switch(addr) {
+      case AUTO_LEVELING_COMMAND_ADDR:
+        memcpy(&command_buf[0*100],s,100);
+        break;
+      case OTHERS_COMMAND_ADDR_1:
+        memcpy(&command_buf[1*100],s,100);
+        break;
+      case OTHERS_COMMAND_ADDR_2:
+        memcpy(&command_buf[2*100],s,100);
+        break;
+      case OTHERS_COMMAND_ADDR_3:
+        memcpy(&command_buf[3*100],s,100);
+        break;
+      case OTHERS_COMMAND_ADDR_4:
+        memcpy(&command_buf[4*100],s,100);
+        break;
+      default:
+        break;
+  }
+  W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
+}
+
+void get_gcode_command(int addr,uint8_t *d) {
+  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.SPI_FLASH_BufferRead((uint8_t *)d, addr, 100);
 }
 
 lv_style_t tft_style_scr;
@@ -207,6 +266,10 @@ lv_style_t style_num_key_rel;
 
 lv_style_t style_num_text;
 lv_style_t style_sel_text;
+
+lv_style_t style_para_value;
+lv_style_t style_para_back;
+
 void tft_style_init() {
   lv_style_copy(&tft_style_scr, &lv_style_scr);
   tft_style_scr.body.main_color   = LV_COLOR_BACKGROUND;
@@ -235,6 +298,7 @@ void tft_style_init() {
   tft_style_label_rel.text.letter_space = 0;
   tft_style_label_pre.text.line_space   = -5;
   tft_style_label_rel.text.line_space   = -5;
+
   lv_style_copy(&style_para_value_pre, &lv_style_scr);
   lv_style_copy(&style_para_value_rel, &lv_style_scr);
   style_para_value_pre.body.main_color = LV_COLOR_BACKGROUND;
@@ -253,6 +317,7 @@ void tft_style_init() {
   style_para_value_rel.text.letter_space = 0;
   style_para_value_pre.text.line_space   = -5;
   style_para_value_rel.text.line_space   = -5;
+
   lv_style_copy(&style_num_key_pre, &lv_style_scr);
   lv_style_copy(&style_num_key_rel, &lv_style_scr);
   style_num_key_pre.body.main_color = LV_COLOR_KEY_BACKGROUND;
@@ -291,8 +356,8 @@ void tft_style_init() {
   lv_style_copy(&style_sel_text, &lv_style_scr);
   style_sel_text.body.main_color	= LV_COLOR_BACKGROUND;
   style_sel_text.body.grad_color	= LV_COLOR_BACKGROUND;	
-  style_sel_text.text.color     		= LV_COLOR_YELLOW;
-  style_sel_text.text.sel_color     	= LV_COLOR_YELLOW;
+  style_sel_text.text.color       = LV_COLOR_YELLOW;
+  style_sel_text.text.sel_color   = LV_COLOR_YELLOW;
   style_sel_text.text.font     		= &gb2312_puhui32;
   style_sel_text.line.width   		= 0;
   style_sel_text.text.letter_space 	= 0;
@@ -301,6 +366,26 @@ void tft_style_init() {
   style_line.line.color   = LV_COLOR_MAKE(0x49, 0x54, 0xff);
   style_line.line.width   = 1;
   style_line.line.rounded = 1;
+
+  lv_style_copy(&style_para_value, &lv_style_plain); 
+  style_para_value.body.border.color = LV_COLOR_BACKGROUND;
+  style_para_value.body.border.width = 1;
+  style_para_value.body.main_color   = LV_COLOR_WHITE;
+  style_para_value.body.grad_color   = LV_COLOR_WHITE;
+  style_para_value.body.shadow.width = 0;
+  style_para_value.body.radius       = 3;
+  style_para_value.text.color        = LV_COLOR_BLACK;
+  style_para_value.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
+
+  lv_style_copy(&style_para_back, &lv_style_plain); 
+  style_para_back.body.border.color = LV_COLOR_BACKGROUND;
+  style_para_back.body.border.width = 1;
+  style_para_back.body.main_color   = TFT_LV_PARA_BACK_BODY_COLOR;
+  style_para_back.body.grad_color   = TFT_LV_PARA_BACK_BODY_COLOR;
+  style_para_back.body.shadow.width = 0;
+  style_para_back.body.radius       = 3;
+  style_para_back.text.color        = LV_COLOR_WHITE;
+  style_para_back.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
 }
 
 #define MAX_TITLE_LEN 28
@@ -406,9 +491,6 @@ char *getDispText(int index) {
       break;
     case BIND_UI:
       strcpy(public_buf_l, cloud_menu.title);
-      break;
-    case ZOFFSET_UI:
-      strcpy(public_buf_l, zoffset_menu.title);
       break;
     case TOOL_UI:
       strcpy(public_buf_l, tool_menu.title);
@@ -1187,9 +1269,11 @@ void clear_cur_ui() {
     case BIND_UI:
       //Clear_Bind();
       break;
-    case ZOFFSET_UI:
-      //Clear_Zoffset();
-      break;
+    #if HAS_BED_PROBE
+      case NOZZLE_PROBE_OFFSET_UI:
+        lv_clear_auto_level_offset_settings();
+        break;
+    #endif
     case TOOL_UI:
       lv_clear_tool();
       break;
@@ -1203,10 +1287,10 @@ void clear_cur_ui() {
       lv_clear_wifi_list();
       break;
     case KEY_BOARD_UI:
-	  lv_clear_keyboard();
+	    lv_clear_keyboard();
       break;
 	case WIFI_TIPS_UI:
-	lv_clear_wifi_tips();
+	    lv_clear_wifi_tips();
       break;
     case MACHINE_PARA_UI:
       lv_clear_machine_para();
@@ -1239,13 +1323,13 @@ void clear_cur_ui() {
       //Clear_LevelingSettings();
       break;
     case LEVELING_PARA_UI:
-      //Clear_LevelingPara();
+      lv_clear_level_settings();
       break;
     case DELTA_LEVELING_PARA_UI:
       //Clear_DeltaLevelPara();
       break;
-    case XYZ_LEVELING_PARA_UI:
-      //Clear_XYZLevelPara();
+    case MANUAL_LEVELING_POSIGION_UI:
+      lv_clear_manual_level_pos_settings();
       break;
     case MAXFEEDRATE_UI:
       lv_clear_max_feedrate_settings();
@@ -1375,12 +1459,6 @@ void draw_return_ui() {
         lv_draw_about();
         break;
 
-        #if tan_mask
-          case LOG_UI:
-            //draw_Connect();
-            break;
-        #endif
-
       case CALIBRATE_UI:
         //draw_calibrate();
         break;
@@ -1405,13 +1483,11 @@ void draw_return_ui() {
       case BIND_UI:
         //draw_bind();
         break;
-
-        #if tan_mask
-          case ZOFFSET_UI:
-            //draw_Zoffset();
-            break;
-        #endif
-
+      #if HAS_BED_PROBE
+        case NOZZLE_PROBE_OFFSET_UI:
+          lv_draw_auto_level_offset_settings();
+          break;
+      #endif
       case TOOL_UI:
         lv_draw_tool();
         break;
@@ -1422,13 +1498,13 @@ void draw_return_ui() {
         //draw_Hardwaretest();
         break;
       case WIFI_LIST_UI:
-	    lv_draw_wifi_list();
+	      lv_draw_wifi_list();
         break;
       case KEY_BOARD_UI:
-	    lv_draw_keyboard();
+	      lv_draw_keyboard();
         break;
-		case WIFI_TIPS_UI:
-	    lv_draw_wifi_tips();
+		  case WIFI_TIPS_UI:
+	      lv_draw_wifi_tips();
         break;
       case MACHINE_PARA_UI:
         lv_draw_machine_para();
@@ -1461,13 +1537,13 @@ void draw_return_ui() {
         //draw_LevelingSettings();
         break;
       case LEVELING_PARA_UI:
-        //draw_LevelingPara();
+        lv_draw_level_settings();
         break;
       case DELTA_LEVELING_PARA_UI:
         //draw_DeltaLevelPara();
         break;
-      case XYZ_LEVELING_PARA_UI:
-        //draw_XYZLevelPara();
+      case MANUAL_LEVELING_POSIGION_UI:
+        lv_draw_manual_level_pos_settings();
         break;
       case MAXFEEDRATE_UI:
         lv_draw_max_feedrate_settings();

@@ -46,8 +46,8 @@
 
 #define MACHINE_PARA_TITLE_EN       "Config"
 #define MACHINE_TYPE_CNOFIG_EN      "Machine settings"
-#define TEMPERATURE_CONFIG_EN       "Temperature settings"
 #define MOTOR_CONFIG_EN             "Motor settings"
+#define MACHINE_LEVELING_CONFIG_EN  "Leveling settings"
 #define ADVANCE_CONFIG_EN           "Adavance settings"
 
 #define MACHINE_CONFIG_TITLE_EN     "Machine Settings"
@@ -56,7 +56,6 @@
 #define MACHINE_HOMEDIR_EN          "Home direction"
 #define MACHINE_ENDSTOP_TYPE_EN     "Endstop type"
 #define MACHINE_FILAMENT_CONFIG_EN  "Filament settings"
-#define MACHINE_LEVELING_CONFIG_EN  "Leveling settings"
 
 #define MACHINE_TYPE_CONFIG_TITLE_EN    "Machine Settings>Machine type"
 #define MACHINE_TYPE_XYZ_EN             "XYZ Machine"
@@ -91,7 +90,7 @@
 #define ENDSTOP_OPENED_EN               "Open"
 #define ENDSTOP_CLOSED_EN               "Close"
 
-#define FILAMENT_CONF_TITLE_EN          "Filament settings"
+#define FILAMENT_CONF_TITLE_EN          "Machine Settings>Filament settings"
 #define FILAMENT_IN_TEMPERATURE_EN      "Load temperature"
 #define FILAMENT_IN_LENGTH_EN           "Load length"
 #define FILAMENT_IN_SPEED_EN            "Load speed"
@@ -101,8 +100,9 @@
 
 #define LEVELING_CONF_TITLE_EN          "Leveling settings"
 #define LEVELING_PARA_CONF_EN           "Leveling settings"
-#define LEVELING_DELTA_EN               "delta machine leveling"
-#define LEVELING_XYZ_EN                 "Manual leveling coordinate settings"
+#define LEVELING_MANUAL_POS_EN          "Manual leveling coordinate settings"
+#define LEVELING_AUTO_COMMAND_EN        "AutoLeveling command settings"
+#define LEVELING_AUTO_ZOFFSET_EN        "Nozzle-to-probe offsets settings"
 
 #define LEVELING_PARA_CONF_TITLE_EN     "leveling setting"
 #define AUTO_LEVELING_ENABLE_EN         "Enable auto leveling"
@@ -244,14 +244,19 @@
 #define PAUSE_POSITION_Y_EN  "Y axis position (Absolute position,-1 invalid)"
 #define PAUSE_POSITION_Z_EN  "Z axis position (Relative position,-1 invalid)"
 
-#define WIFI_SETTINGS_TITLE_EN			"Machine Settings>Wi-Fi Parameter"
+#define WIFI_SETTINGS_TITLE_EN		"Machine Settings>Wi-Fi Parameter"
 #define WIFI_SETTINGS_MODE_EN			"Wi-Fi Mode"
 #define WIFI_SETTINGS_NAME_EN			"Wi-Fi Name: "
 #define WIFI_SETTINGS_PASSWORD_EN	"Wi-Fi Password: "
 #define WIFI_SETTINGS_CLOUD_EN		"Do you use cloud services?"
 #define WIFI_SETTINGS_CONFIG_EN		"Config"
-#define WIFI_SETTINGS_EDIT_EN		"Edit"
-#define WIFI_CONFIG_TIPS_EN			"Wi-Fi configuration?"
+#define WIFI_SETTINGS_EDIT_EN	    "Edit"
+#define WIFI_CONFIG_TIPS_EN			  "Wi-Fi configuration?"
+
+#define OFFSET_TITLE_EN  "Machine Settings>Offset"
+#define OFFSET_X_EN      "X offset"
+#define OFFSET_Y_EN      "Y offset"
+#define OFFSET_Z_EN      "Z offset"
 
 #define TOOL_TEXT_EN            "Tool"
 #define PREHEAT_TEXT_EN         "Preheat"
@@ -439,10 +444,6 @@
 #define STEP_5PERCENT_EN                    "5%"
 #define STEP_10PERCENT_EN                   "10%"
 
-#define ZOFFSET_EN                          "Z Offset"
-#define ZOFFSET_INC_EN                      "Add"
-#define ZOFFSET_DEC_EN                      "Dec"
-
 #define TITLE_READYPRINT_EN                 "ReadyPrint"
 #define TITLE_PREHEAT_EN                    "Preheat"
 #define TITLE_MOVE_EN                       "Move"
@@ -465,7 +466,6 @@
 #define TITLE_CLOUD_TEXT_EN                 "Cloud"
 #define TITLE_DIALOG_CONFIRM_EN             "Confirm"
 #define TITLE_FILESYS_EN                    "FileSys"
-#define TITLE_ZOFFSET_EN                    "Z Offset"
 
 #define AUTO_SHUTDOWN_EN                    "Auto"
 #define MANUAL_SHUTDOWN_EN                  "Manual"

@@ -63,7 +63,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         disp_language(gCfgItems.language, UNSELECTED);
         lv_obj_set_event_cb_mks(buttonCN, event_handler, ID_CN, "bmp_simplified_cn_sel.bin", 0);
         gCfgItems.language = LANG_SIMPLE_CHINESE;
-        gCfg_to_spiFlah();
+        update_spi_flash();
         disp_language_init();
       }
       break;
@@ -75,7 +75,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         disp_language(gCfgItems.language, UNSELECTED);
         lv_obj_set_event_cb_mks(buttonT_CN, event_handler, ID_T_CN, "bmp_traditional_cn_sel.bin", 0);
         gCfgItems.language = LANG_COMPLEX_CHINESE;
-        gCfg_to_spiFlah();
+        update_spi_flash();
         disp_language_init();
       }
       break;
@@ -87,7 +87,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         disp_language(gCfgItems.language, UNSELECTED);
         lv_obj_set_event_cb_mks(buttonEN, event_handler, ID_EN, "bmp_english_sel.bin", 0);
         gCfgItems.language = LANG_ENGLISH;
-        gCfg_to_spiFlah();
+        update_spi_flash();
         disp_language_init();
       }
       break;
@@ -99,7 +99,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         disp_language(gCfgItems.language, UNSELECTED);
         lv_obj_set_event_cb_mks(buttonRU, event_handler, ID_RU, "bmp_russian_sel.bin", 0);
         gCfgItems.language = LANG_RUSSIAN;
-        gCfg_to_spiFlah();
+        update_spi_flash();
         disp_language_init();
       }
       break;
@@ -111,7 +111,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         disp_language(gCfgItems.language, UNSELECTED);
         lv_obj_set_event_cb_mks(buttonES, event_handler, ID_ES, "bmp_spanish_sel.bin", 0);
         gCfgItems.language = LANG_SPANISH;
-        gCfg_to_spiFlah();
+        update_spi_flash();
         disp_language_init();
       }
       break;
@@ -123,7 +123,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         disp_language(gCfgItems.language, UNSELECTED);
         lv_obj_set_event_cb_mks(buttonFR, event_handler, ID_FR, "bmp_french_sel.bin", 0);
         gCfgItems.language = LANG_FRENCH;
-        gCfg_to_spiFlah();
+        update_spi_flash();
         disp_language_init();
       }
       break;
@@ -135,7 +135,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         disp_language(gCfgItems.language, UNSELECTED);
         lv_obj_set_event_cb_mks(buttonIT, event_handler, ID_FR, "bmp_italy_sel.bin", 0);
         gCfgItems.language = LANG_ITALY;
-        gCfg_to_spiFlah();
+        update_spi_flash();
         disp_language_init();
       }
       break;

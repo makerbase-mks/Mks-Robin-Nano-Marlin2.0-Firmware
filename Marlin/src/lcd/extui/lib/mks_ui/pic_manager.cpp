@@ -40,7 +40,7 @@ extern unsigned char bmp_public_buf[17 * 1024];
   extern char *createFilename(char * const buffer, const dir_t &p);
 #endif
 
-static char assets[][LONG_FILENAME_LENGTH] = {
+static const char assets[][LONG_FILENAME_LENGTH] = {
   //homing screen
   "bmp_Zero.bin",
   "bmp_zeroX.bin",
