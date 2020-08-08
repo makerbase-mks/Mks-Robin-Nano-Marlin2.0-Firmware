@@ -31,6 +31,9 @@
 //#include "../lvgl/src/lv_core/lv_refr.h"
 
 #include "../../../../MarlinCore.h"
+#include "../../../../module/temperature.h"
+#include "../../../../module/motion.h"
+#include "../../../../sd/cardreader.h"
 
 static lv_obj_t * scr;
 
@@ -42,9 +45,12 @@ static lv_obj_t * scr;
 #define ID_O_RETURN     6
 #define ID_O_FAN        7
 #define ID_O_POWER_OFF  8
+#define ID_O_BABY_STEP  9
 
 static lv_obj_t *label_PowerOff;
 static lv_obj_t *buttonPowerOff;
+
+extern feedRate_t feedrate_mm_s;
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
   switch (obj->mks_obj_id) {
@@ -80,6 +86,20 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         // nothing to do
       }
       else if (event == LV_EVENT_RELEASED) {
+        if(EXTRUDERS == 2) {
+					uiCfg.curSprayerChoose_bak= active_extruder;
+					uiCfg.moveSpeed_bak = (uint16_t)feedrate_mm_s;
+				}
+        if (uiCfg.print_state == WORKING) {
+          #if ENABLED(SDSUPPORT)
+            card.pauseSDPrint();
+            stop_print_time();
+            uiCfg.print_state = PAUSING;
+          #endif
+        }
+				uiCfg.desireSprayerTempBak = thermalManager.temp_hotend[active_extruder].target;
+        lv_clear_operation();
+        lv_draw_filament_change();
       }
       break;
     case ID_O_FAN:
@@ -132,7 +152,15 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         }
       }
       break;
-
+    case ID_O_BABY_STEP:
+      if (event == LV_EVENT_CLICKED) {
+        // nothing to do
+      }
+      else if (event == LV_EVENT_RELEASED) {
+        lv_clear_operation();
+        lv_draw_baby_stepping();
+      }
+      break;
   }
 }
 
@@ -142,6 +170,8 @@ void lv_draw_operation(void) {
   lv_obj_t *labelPreHeat, *labelExtrusion;
   lv_obj_t *label_Back, *label_Speed, *label_Fan;
   lv_obj_t *buttonMove = NULL, *label_Move = NULL;
+  lv_obj_t *buttonBabyStep = NULL, *label_BabyStep = NULL;
+  lv_obj_t *buttonFilament = NULL, *label_Filament = NULL;
 
   if (disp_state_stack._disp_state[disp_state_stack._disp_index] != OPERATE_UI) {
     disp_state_stack._disp_index++;
@@ -175,8 +205,12 @@ void lv_draw_operation(void) {
     //} else {
     buttonMove = lv_imgbtn_create(scr, NULL);
   }
+  else {
+    buttonBabyStep = lv_imgbtn_create(scr, NULL);
+  }
 
   buttonPowerOff = lv_imgbtn_create(scr, NULL);
+  buttonFilament = lv_imgbtn_create(scr, NULL);
   buttonBack     = lv_imgbtn_create(scr, NULL);
 
   lv_obj_set_event_cb_mks(buttonPreHeat, event_handler, ID_O_PRE_HEAT, "bmp_temp.bin", 0);
@@ -219,6 +253,13 @@ void lv_draw_operation(void) {
       lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_PR, &tft_style_label_pre);
       lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_REL, &tft_style_label_rel);
     }
+    else {
+      lv_obj_set_event_cb_mks(buttonBabyStep, event_handler, ID_O_BABY_STEP, "bmp_mov.bin", 0);
+      lv_imgbtn_set_src(buttonBabyStep, LV_BTN_STATE_REL, &bmp_pic);
+      lv_imgbtn_set_src(buttonBabyStep, LV_BTN_STATE_PR, &bmp_pic);
+      lv_imgbtn_set_style(buttonBabyStep, LV_BTN_STATE_PR, &tft_style_label_pre);
+      lv_imgbtn_set_style(buttonBabyStep, LV_BTN_STATE_REL, &tft_style_label_rel);
+    }
     if (gCfgItems.finish_power_off == 1)
       lv_obj_set_event_cb_mks(buttonPowerOff, event_handler, ID_O_POWER_OFF, "bmp_auto_off.bin", 0);
     else
@@ -235,6 +276,12 @@ void lv_draw_operation(void) {
     lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
   #endif // if 1
 
+  lv_obj_set_event_cb_mks(buttonFilament, event_handler, ID_O_FILAMENT, "bmp_filamentchange.bin", 0);
+  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_REL, &bmp_pic);
+  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_PR, &bmp_pic);
+  lv_imgbtn_set_style(buttonFilament, LV_BTN_STATE_PR, &tft_style_label_pre);
+  lv_imgbtn_set_style(buttonFilament, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
   lv_obj_set_pos(buttonPreHeat, INTERVAL_V, titleHeight);
   lv_obj_set_pos(buttonExtrusion, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight);
 
@@ -248,10 +295,14 @@ void lv_draw_operation(void) {
     */
     lv_obj_set_pos(buttonMove, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
     lv_obj_set_pos(buttonPowerOff, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+    lv_obj_set_pos(buttonFilament, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
   }
   else {
     lv_obj_set_pos(buttonPowerOff, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+    lv_obj_set_pos(buttonBabyStep, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+    lv_obj_set_pos(buttonFilament, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
   }
+  
   lv_obj_set_pos(buttonBack, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
 
   /*Create a label on the Image button*/
@@ -267,7 +318,11 @@ void lv_draw_operation(void) {
     */
     lv_btn_set_layout(buttonMove, LV_LAYOUT_OFF);
   }
+  else {
+    lv_btn_set_layout(buttonBabyStep, LV_LAYOUT_OFF);
+  }
   lv_btn_set_layout(buttonPowerOff, LV_LAYOUT_OFF);
+  lv_btn_set_layout(buttonFilament, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
 
   labelPreHeat   = lv_label_create(buttonPreHeat, NULL);
@@ -283,8 +338,11 @@ void lv_draw_operation(void) {
     */
       label_Move = lv_label_create(buttonMove, NULL);
   }
+  else {
+    label_BabyStep = lv_label_create(buttonBabyStep, NULL);
+  }
   label_PowerOff = lv_label_create(buttonPowerOff, NULL);
-
+  label_Filament = lv_label_create(buttonFilament, NULL);
   label_Back = lv_label_create(buttonBack, NULL);
 
   if (gCfgItems.multiple_language != 0) {
@@ -309,12 +367,19 @@ void lv_draw_operation(void) {
       lv_label_set_text(label_Move, operation_menu.move);
       lv_obj_align(label_Move, buttonMove, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
     }
+    else {
+      lv_label_set_text(label_BabyStep, operation_menu.babystep);
+      lv_obj_align(label_BabyStep, buttonBabyStep, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
+    }
 
     if (gCfgItems.finish_power_off == 1)
       lv_label_set_text(label_PowerOff, printing_more_menu.auto_close);
     else
       lv_label_set_text(label_PowerOff, printing_more_menu.manual);
     lv_obj_align(label_PowerOff, buttonPowerOff, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
+
+    lv_label_set_text(label_Filament, operation_menu.filament);
+    lv_obj_align(label_Filament, buttonFilament, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
 
     lv_label_set_text(label_Back, common_menu.text_back);
     lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);

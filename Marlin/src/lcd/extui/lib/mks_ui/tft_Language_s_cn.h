@@ -76,10 +76,9 @@
 #define ENDSTOP_CLOSED_CN             "常闭"
 
 #define FILAMENT_CONF_TITLE_CN        "换料设置"
-#define FILAMENT_IN_TEMPERATURE_CN    "进料温度"
 #define FILAMENT_IN_LENGTH_CN         "进料长度"
 #define FILAMENT_IN_SPEED_CN          "进料速度"
-#define FILAMENT_OUT_TEMPERATURE_CN   "退料温度"
+#define FILAMENT_TEMPERATURE_CN       "换料温度"
 #define FILAMENT_OUT_LENGTH_CN        "退料长度"
 #define FILAMENT_OUT_SPEED_CN         "退料速度"
 
@@ -146,6 +145,7 @@
 #define TMC_STEP_MODE_CN              "TMC 驱动模式设置"
 #define MOTORDIRCONF_CN               "电机方向设置"
 #define HOMEFEEDRATECONF_CN           "归零速度设置"
+#define HOMING_SENSITIVITY_CONF_CN    "无限位回零灵敏度调节"
 
 #define MAXFEEDRATE_CONF_TITLE_CN     "机器参数>最大速度"
 #define X_MAXFEEDRATE_CN              "X轴最大速度"
@@ -241,6 +241,12 @@
 #define OFFSET_X_CN      "X轴与调平开关偏移"
 #define OFFSET_Y_CN      "Y轴与调平开关偏移"
 #define OFFSET_Z_CN      "Z轴与调平开关偏移"
+
+#define HOMING_SENSITIVITY_CONF_TITLE_CN      "机器参数>灵敏度调节"
+#define X_SENSITIVITY_CN                      "X轴灵敏度"
+#define Y_SENSITIVITY_CN                      "Y轴灵敏度"
+#define Z_SENSITIVITY_CN                      "Z轴灵敏度"
+#define Z2_SENSITIVITY_CN                     "Z2轴灵敏度"
 
 #define TOOL_TEXT_CN                "工具"
 #define PREHEAT_TEXT_CN             "预热"

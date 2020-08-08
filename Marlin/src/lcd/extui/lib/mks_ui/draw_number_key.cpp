@@ -252,6 +252,41 @@ static void disp_key_value() {
         sprintf_P(public_buf_m, PSTR("%.1f"), probe.offset.z);
         break;
     #endif
+    case load_length:
+      sprintf_P(public_buf_m, PSTR("%d"), gCfgItems.filamentchange_load_length);
+      break;
+    case load_speed:
+      sprintf_P(public_buf_m, PSTR("%d"), gCfgItems.filamentchange_load_speed);
+      break;
+    case unload_length:
+      sprintf_P(public_buf_m, PSTR("%d"), gCfgItems.filamentchange_unload_length);
+      break;
+    case unload_speed:
+      sprintf_P(public_buf_m, PSTR("%d"), gCfgItems.filamentchange_unload_speed);
+      break;
+    case filament_temp:
+      sprintf_P(public_buf_m, PSTR("%d"), gCfgItems.filament_limit_temper);
+      break;
+    case x_sensitivity:
+      #if X_SENSORLESS
+        sprintf_P(public_buf_m, PSTR("%d"), TERN(X_SENSORLESS, stepperX.homing_threshold(), 0));
+      #endif
+      break;
+    case y_sensitivity:
+      #if Y_SENSORLESS
+        sprintf_P(public_buf_m, PSTR("%d"), TERN(Y_SENSORLESS, stepperY.homing_threshold(), 0));
+      #endif
+      break;
+    case z_sensitivity:
+      #if Z_SENSORLESS
+        sprintf_P(public_buf_m, PSTR("%d"), TERN(Z_SENSORLESS, stepperZ.homing_threshold(), 0));
+      #endif
+      break;
+    case z2_sensitivity:
+      #if Z2_SENSORLESS
+        sprintf_P(public_buf_m, PSTR("%d"), TERN(Z2_SENSORLESS, stepperZ2.homing_threshold(), 0));
+      #endif
+      break;
   }
   ZERO(key_value);
   strcpy(key_value, public_buf_m);
@@ -451,6 +486,46 @@ static void set_value_confirm() {
           probe.offset.z = z;
         break;
     #endif
+	  case load_length:
+      gCfgItems.filamentchange_load_length = atoi(key_value);
+	    update_spi_flash();
+      break;
+	  case load_speed:
+	    gCfgItems.filamentchange_load_speed = atoi(key_value);
+	    update_spi_flash();
+      break;
+	  case unload_length:
+	    gCfgItems.filamentchange_unload_length = atoi(key_value);
+	    update_spi_flash();
+      break;
+	  case unload_speed:
+	    gCfgItems.filamentchange_unload_speed = atoi(key_value);
+	    update_spi_flash();
+      break;
+	  case filament_temp:
+	    gCfgItems.filament_limit_temper = atoi(key_value);
+	    update_spi_flash();
+      break;
+    case x_sensitivity:
+      #if X_SENSORLESS
+        stepperX.homing_threshold(atoi(key_value));
+      #endif
+      break;
+    case y_sensitivity:
+      #if Y_SENSORLESS
+        stepperY.homing_threshold(atoi(key_value));
+      #endif
+      break;
+    case z_sensitivity:
+      #if Z_SENSORLESS
+        stepperZ.homing_threshold(atoi(key_value));
+      #endif
+      break;
+    case z2_sensitivity:
+      #if Z2_SENSORLESS
+        stepperZ2.homing_threshold(atoi(key_value));
+      #endif
+      break;
   }
   gcode.process_subcommands_now_P(PSTR("M500"));
 }

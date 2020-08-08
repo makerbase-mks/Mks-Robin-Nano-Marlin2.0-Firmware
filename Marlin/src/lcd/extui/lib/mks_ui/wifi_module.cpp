@@ -2049,7 +2049,7 @@ int readWifiBuf(int8_t *buf, int32_t len) {
 	int i = 0 ;
 
 	while(i < len) {
-		if(WIFISERIAL.available()) {
+		if (WIFISERIAL.available()) {
 			buf[i] = WIFISERIAL.read();
 			i++;	
 		}

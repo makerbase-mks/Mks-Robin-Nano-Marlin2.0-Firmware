@@ -95,10 +95,9 @@ typedef struct machine_common_disp{
   const char *closed;
 
   const char *FilamentConfTitle;
-  const char *InTemperature;
   const char *InLength;
   const char *InSpeed;
-  const char *OutTemperature;
+  const char *FilamentTemperature;
   const char *OutLength;
   const char *OutSpeed;
 
@@ -165,6 +164,7 @@ typedef struct machine_common_disp{
   const char *HomeFeedRateConf;
   const char *TMCcurrentConf;
   const char *TMCStepModeConf;
+  const char *HomingSensitivityConf;
 
   const char *MaxFeedRateConfTitle;
   const char *XMaxFeedRate;
@@ -209,6 +209,12 @@ typedef struct machine_common_disp{
   const char *Z_StepMode;
   const char *E0_StepMode;
   const char *E1_StepMode;
+
+  const char *HomingSensitivityConfTitle;
+  const char *X_Sensitivity;
+  const char *Y_Sensitivity;
+  const char *Z_Sensitivity;
+  const char *Z2_Sensitivity;
 
   const char *MotorDirConfTitle;
   const char *X_MotorDir;

@@ -19,55 +19,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-#include "../../../../inc/MarlinConfigPre.h"
-
-#if HAS_TFT_LVGL_UI
-
-#include "draw_ui.h"
-#include "wifiSerial.h"
-
-#include <libmaple/libmaple.h>
-#include <libmaple/gpio.h>
-#include <libmaple/timer.h>
-#include <libmaple/usart.h>
-#include <libmaple/ring_buffer.h>
-
-#include "../../../../inc/MarlinConfig.h"
+#pragma once
 
 #ifdef __cplusplus
 extern "C" { /* C-declarations for C++ */
 #endif
 
-#define WIFI_IO1_SET()			WRITE(WIFI_IO1_PIN, HIGH);     
-#define WIFI_IO1_RESET()		WRITE(WIFI_IO1_PIN, LOW);
+extern void lv_draw_baby_stepping(void);
+extern void lv_clear_baby_stepping();
+extern void disp_baby_step_dist();
+extern void disp_z_offset_value();
 
-void __irq_usart1(void) {
-   WIFISERIAL.wifi_usart_irq(USART1_BASE);
-   if(wifi_link_state == WIFI_TRANS_FILE) {
-	   if(WIFISERIAL.available() == (600)) {
-	   	//WIFI_IO1_SET();
-	   }
-	   if(WIFISERIAL.wifi_rb_is_full()) {
-	   	if(esp_state == TRANSFER_IDLE) {
-			esp_state = TRANSFERING;
-		}
-		if(storeRcvData(UART_RX_BUFFER_SIZE)) {
-       		if(wifiTransError.flag != 0x1) {
-				WIFI_IO1_RESET();
-			}
-		}
-		else {
-            WIFI_IO1_SET();
-			esp_state = TRANSFER_STORE;
-
-		}
-	   }
-   }
-}
-
+//extern void disp_temp_ready_print();
 #ifdef __cplusplus
 } /* C-declarations for C++ */
 #endif
-
-
-#endif	// HAS_TFT_LVGL_UI

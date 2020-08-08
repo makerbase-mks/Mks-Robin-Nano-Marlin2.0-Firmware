@@ -87,6 +87,25 @@ void SysTick_Callback() {
   if(tips_disp.timer == TIPS_TIMER_START) {
   	tips_disp.timer_count++;
   }
+  if(uiCfg.filament_loading_time_flg == 1) {
+	  uiCfg.filament_loading_time_cnt++;
+	  uiCfg.filament_rate = (uint32_t)(((uiCfg.filament_loading_time_cnt / (uiCfg.filament_loading_time * 1000.0)) * 100.0) + 0.5);
+	  if(uiCfg.filament_loading_time_cnt >= (uiCfg.filament_loading_time * 1000)) {
+		  uiCfg.filament_loading_time_cnt  = 0;
+		  uiCfg.filament_loading_time_flg  = 0;
+		  uiCfg.filament_loading_completed = 1;
+	  }
+  }
+  if(uiCfg.filament_unloading_time_flg == 1) {
+	  uiCfg.filament_unloading_time_cnt++;
+	  uiCfg.filament_rate = (uint32_t)(((uiCfg.filament_unloading_time_cnt / (uiCfg.filament_unloading_time * 1000.0)) * 100.0) + 0.5);
+	  if(uiCfg.filament_unloading_time_cnt >= (uiCfg.filament_unloading_time * 1000)) {
+      uiCfg.filament_unloading_time_cnt  = 0;
+      uiCfg.filament_unloading_time_flg  = 0;
+      uiCfg.filament_unloading_completed = 1;
+      uiCfg.filament_rate                = 100;
+	  }
+  }
 }
 
 #if DISABLED(TFT_LVGL_UI_SPI)

@@ -70,17 +70,17 @@ typedef enum{
 #define TRANS_RCV_FIFO_BLOCK_NUM	8
 
 
-typedef struct			{
+typedef struct {
 	unsigned char *bufferAddr[TRANS_RCV_FIFO_BLOCK_NUM];		
 	unsigned char *p;	
 	UDISK_DATA_BUFFER_STATE state[TRANS_RCV_FIFO_BLOCK_NUM];		
 	unsigned char read_cur; 
 	unsigned char write_cur;	
-}WIFI_DMA_RCV_FIFO;		
+} WIFI_DMA_RCV_FIFO;		
 
 
 
-typedef struct{
+typedef struct {
 	uint8_t flag; // 0x0: no error;  0x01: error
 	uint32_t start_tick; //error start time
 	uint32_t now_tick;
@@ -89,22 +89,22 @@ typedef struct{
 extern volatile WIFI_TRANS_ERROR wifiTransError;
 
 
-typedef  struct{
+typedef struct {
 	char ap_name[32];	//wifi-name
 	char keyCode[64]; //wifi password
-	int   decodeType; 
-	int baud;
-	int mode;
+	int  decodeType; 
+	int  baud;
+	int  mode;
 } WIFI_PARA;
 
-typedef  struct{
+typedef struct {
 	char state;	
 	char hostUrl[96];
-	int port;		
+	int  port;		
 	char id[21];
 } CLOUD_PARA;
 
-typedef struct{
+typedef struct {
 	char  dhcp_flag;	
 	char  ip_addr[16];	
 	char  mask[16];	
@@ -121,7 +121,7 @@ typedef struct{
 } IP_PARA;
 
 
-typedef enum{
+typedef enum {
 	WIFI_NOT_CONFIG,
 	WIFI_CONFIG_MODE,
 	WIFI_CONFIG_DHCP,
@@ -145,21 +145,21 @@ typedef enum{
 	WIFI_EXCEPTION,
 } WIFI_STATE;
 
-typedef enum{
+typedef enum {
 	TRANSFER_IDLE,
 	TRANSFERING,
 	TRANSFER_STORE,
 } TRANSFER_STATE;
 extern volatile TRANSFER_STATE esp_state;
 
-typedef struct{
+typedef struct {
 	char buf[20][80];
-	int rd_index;
-	int wt_index;
+	int  rd_index;
+	int  wt_index;
 } QUEUE;
 
 
-typedef enum{
+typedef enum {
 	WIFI_PARA_SET, 	//0x0:net parameter
 	WIFI_PRINT_INF, 	//0x1:print message
 	WIFI_TRANS_INF, 	//0x2:Pass through information
@@ -177,7 +177,7 @@ typedef struct {
 
 #define WIFI_GCODE_BUFFER_LEAST_SIZE	96
 #define WIFI_GCODE_BUFFER_SIZE	(WIFI_GCODE_BUFFER_LEAST_SIZE * 3)
-typedef struct{
+typedef struct {
 	uint8_t wait_tick;
 	uint8_t Buffer[WIFI_GCODE_BUFFER_SIZE];
 	uint32_t r;
@@ -195,15 +195,15 @@ extern uint32_t  getWifiTick();
 extern uint32_t  getWifiTickDiff(int32_t lastTick, int32_t  curTick);
 
 extern void mks_esp_wifi_init();
-extern int cfg_cloud_flag;
-extern int send_to_wifi(char *buf, int len);
+extern int  cfg_cloud_flag;
+extern int  send_to_wifi(char *buf, int len);
 extern void wifi_looping();
-extern int raw_send_to_wifi(char *buf, int len);
-extern int package_to_wifi(WIFI_RET_TYPE type,char *buf, int len);
+extern int  raw_send_to_wifi(char *buf, int len);
+extern int  package_to_wifi(WIFI_RET_TYPE type,char *buf, int len);
 extern void get_wifi_list_command_send();
 extern void get_wifi_commands();
-extern int readWifiBuf(int8_t *buf, int32_t len);
-extern int storeRcvData(int32_t len);
+extern int  readWifiBuf(int8_t *buf, int32_t len);
+extern int  storeRcvData(int32_t len);
 
 #ifdef __cplusplus
 } /* C-declarations for C++ */

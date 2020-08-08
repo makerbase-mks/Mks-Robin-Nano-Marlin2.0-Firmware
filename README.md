@@ -22,7 +22,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - SD card is connected to the motherboard, and you can see the update interface after powering on.
 
 ## MKS Robin Nano V2.0 build and update firmware
-Please refer to [MKS Robin Nano wiki](https://github.com/makerbase-mks/MKS-Robin-Nano/wiki/MKS-Robin-Nano-V2.0-build-and-update-firmware).
+Please refer to [MKS Robin Nano wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V2/wiki/Marlin_firmware).
 
 ## More information about the Robin Nano
 Please refer to [MKS Robin Nano github](https://github.com/makerbase-mks/MKS-Robin-Nano).

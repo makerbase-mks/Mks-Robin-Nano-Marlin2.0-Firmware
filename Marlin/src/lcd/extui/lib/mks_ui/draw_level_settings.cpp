@@ -117,8 +117,9 @@ void lv_draw_level_settings(void) {
   lv_obj_t *buttonCommand, *labelCommand, *buttonCommandNarrow;
   #if HAS_BED_PROBE
     lv_obj_t *buttonZoffset, *labelZoffset, *buttonZoffsetNarrow;
+    lv_obj_t * line3;
   #endif
-  lv_obj_t * line1, * line2, * line3;
+  lv_obj_t * line1, * line2;
   if (disp_state_stack._disp_state[disp_state_stack._disp_index] != LEVELING_PARA_UI) {
     disp_state_stack._disp_index++;
     disp_state_stack._disp_state[disp_state_stack._disp_index] = LEVELING_PARA_UI;

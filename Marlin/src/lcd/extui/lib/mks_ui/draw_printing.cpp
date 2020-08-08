@@ -57,8 +57,6 @@ static lv_obj_t * buttonPause, *buttonOperat, *buttonStop;
 #define ID_STOP   2
 #define ID_OPTION 3
 
-lv_style_t lv_bar_style_indic;
-
 uint8_t once_flag = 0;
 extern uint32_t To_pre_view;
 extern uint8_t flash_preview_begin;
@@ -316,14 +314,6 @@ void lv_draw_printing(void) {
     lv_label_set_text(labelOperat, printing_menu.option);
     lv_obj_align(labelOperat, buttonOperat, LV_ALIGN_CENTER, 20, 0);
   }
-
-  lv_style_copy(&lv_bar_style_indic, &lv_style_pretty_color);
-  lv_bar_style_indic.text.color        = lv_color_hex3(0xADF);
-  lv_bar_style_indic.image.color       = lv_color_hex3(0xADF);
-  lv_bar_style_indic.line.color        = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.main_color   = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.grad_color   = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.border.color = lv_color_hex3(0xADF);
 
   bar1 = lv_bar_create(scr, NULL);
   lv_obj_set_pos(bar1, 205, 36);
