@@ -35,7 +35,7 @@
 #include "../../../../module/temperature.h"
 #include "../../../../gcode/queue.h"
 #if ENABLED(POWER_LOSS_RECOVERY)
-  #include "../../../../../feature/powerloss.h"
+  #include "../../../../feature/powerloss.h"
 #endif
 
 #include "../../../../gcode/gcode.h"
