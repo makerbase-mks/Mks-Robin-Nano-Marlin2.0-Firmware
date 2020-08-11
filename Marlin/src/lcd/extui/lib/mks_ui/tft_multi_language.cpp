@@ -841,13 +841,15 @@ void disp_language_init() {
   machine_menu.key_point = KEYBOARD_KEY_POINT_EN;
   machine_menu.negative  = KEYBOARD_KEY_NEGATIVE_EN;
   // wifi-list
-  list_menu.title        = TEXT_WIFI_MENU_TITLE_EN;
-  list_menu.file_pages   = FILE_PAGES_EN;
+  #if USE_WIFI_FUNCTION
+    list_menu.title        = TEXT_WIFI_MENU_TITLE_EN;
+    list_menu.file_pages   = FILE_PAGES_EN;
 
-  // tips
-  tips_menu.joining      = TEXT_WIFI_JOINING_EN;
-  tips_menu.failedJoin   = TEXT_WIFI_FAILED_JOIN_EN;
-  tips_menu.wifiConected = TEXT_WIFI_WIFI_CONECTED_EN;
+    // tips
+    tips_menu.joining      = TEXT_WIFI_JOINING_EN;
+    tips_menu.failedJoin   = TEXT_WIFI_FAILED_JOIN_EN;
+    tips_menu.wifiConected = TEXT_WIFI_WIFI_CONECTED_EN;
+  #endif  //USE_WIFI_FUNCTION
   machine_setting_disp();
 
   operation_menu.babystep = TEXT_BABY_STEP_EN;

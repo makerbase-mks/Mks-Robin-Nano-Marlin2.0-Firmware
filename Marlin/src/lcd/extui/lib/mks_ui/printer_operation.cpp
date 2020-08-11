@@ -123,7 +123,9 @@ void printer_state_polling() {
   if (uiCfg.print_state == WORKING)
     filament_check();
 	
-  wifi_looping();
+  #if USE_WIFI_FUNCTION
+    wifi_looping();
+  #endif
 }
 
 void filament_pin_setup() {

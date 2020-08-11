@@ -22,8 +22,6 @@
 
 #pragma once
 
-
-#define USE_WIFI_FUNCTION		1
 #define WIFI_BAUDRATE			115200
 #define WIFI_UPLOAD_BAUDRATE	1958400
 

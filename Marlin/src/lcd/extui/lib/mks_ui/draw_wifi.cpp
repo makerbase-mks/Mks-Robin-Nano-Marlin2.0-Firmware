@@ -26,6 +26,8 @@
 #include "lv_conf.h"
 #include "draw_ui.h"
 
+#if USE_WIFI_FUNCTION
+
 #include "../../../../../Configuration.h"
 #include "../../../../module/temperature.h"
 
@@ -215,5 +217,7 @@ void disp_wifi_state() {
 }
 
 void lv_clear_wifi() { lv_obj_del(scr); }
+
+#endif  //USE_WIFI_FUNCTION
 
 #endif  // HAS_TFT_LVGL_UI

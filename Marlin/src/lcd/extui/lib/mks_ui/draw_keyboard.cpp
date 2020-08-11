@@ -122,43 +122,45 @@ static void lv_kb_event_cb(lv_obj_t * kb, lv_event_t event) {
             const char * ret_ta_txt = lv_ta_get_text(ext->ta);
 			switch(keyboard_value)
 			{
-				case wifiName:
-					memcpy(uiCfg.wifi_name,ret_ta_txt,sizeof(uiCfg.wifi_name));
-					lv_clear_keyboard();
-					draw_return_ui();
-					break;
-				case wifiPassWord:
-					memcpy(uiCfg.wifi_key,ret_ta_txt,sizeof(uiCfg.wifi_name));
-					lv_clear_keyboard();
-					draw_return_ui();
-					break;
-				case wifiConfig:
-					memset((void *)uiCfg.wifi_name, 0, sizeof(uiCfg.wifi_name));
-					memcpy((void *)uiCfg.wifi_name, wifi_list.wifiName[wifi_list.nameIndex], 32);
+                #if USE_WIFI_FUNCTION
+                    case wifiName:
+                        memcpy(uiCfg.wifi_name,ret_ta_txt,sizeof(uiCfg.wifi_name));
+                        lv_clear_keyboard();
+                        draw_return_ui();
+                        break;
+                    case wifiPassWord:
+                        memcpy(uiCfg.wifi_key,ret_ta_txt,sizeof(uiCfg.wifi_name));
+                        lv_clear_keyboard();
+                        draw_return_ui();
+                        break;
+                    case wifiConfig:
+                        memset((void *)uiCfg.wifi_name, 0, sizeof(uiCfg.wifi_name));
+                        memcpy((void *)uiCfg.wifi_name, wifi_list.wifiName[wifi_list.nameIndex], 32);
 
-					memset((void *)uiCfg.wifi_key, 0, sizeof(uiCfg.wifi_key));
-					memcpy((void *)uiCfg.wifi_key, ret_ta_txt, sizeof(uiCfg.wifi_key));
+                        memset((void *)uiCfg.wifi_key, 0, sizeof(uiCfg.wifi_key));
+                        memcpy((void *)uiCfg.wifi_key, ret_ta_txt, sizeof(uiCfg.wifi_key));
 
-					gCfgItems.wifi_mode_sel = STA_MODEL;
-					
-					package_to_wifi(WIFI_PARA_SET, (char *)0, 0);
+                        gCfgItems.wifi_mode_sel = STA_MODEL;
+                        
+                        package_to_wifi(WIFI_PARA_SET, (char *)0, 0);
 
-					memset(public_buf_l,0,sizeof(public_buf_l));
-					
-					public_buf_l[0] = 0xA5;
-					public_buf_l[1] = 0x09;
-					public_buf_l[2] = 0x01;
-					public_buf_l[3] = 0x00;
-					public_buf_l[4] = 0x01;
-					public_buf_l[5] = 0xFC;
-					public_buf_l[6] = 0x00;
-					raw_send_to_wifi(public_buf_l, 6);
+                        memset(public_buf_l,0,sizeof(public_buf_l));
+                        
+                        public_buf_l[0] = 0xA5;
+                        public_buf_l[1] = 0x09;
+                        public_buf_l[2] = 0x01;
+                        public_buf_l[3] = 0x00;
+                        public_buf_l[4] = 0x01;
+                        public_buf_l[5] = 0xFC;
+                        public_buf_l[6] = 0x00;
+                        raw_send_to_wifi(public_buf_l, 6);
 
-					last_disp_state = KEY_BOARD_UI;
-					lv_clear_keyboard();
-					wifi_tips_type = TIPS_TYPE_JOINING;
-					lv_draw_wifi_tips();
-					break;
+                        last_disp_state = KEY_BOARD_UI;
+                        lv_clear_keyboard();
+                        wifi_tips_type = TIPS_TYPE_JOINING;
+                        lv_draw_wifi_tips();
+                        break;
+                #endif //USE_WIFI_FUNCTION
                 case gcodeCommand:
                     uint8_t buf[100];
                     memcpy(buf,ret_ta_txt,sizeof(buf));

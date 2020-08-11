@@ -26,6 +26,8 @@
 #include "lv_conf.h"
 #include "draw_ui.h"
 
+#if USE_WIFI_FUNCTION
+
 #include "../../../../../Configuration.h"
 #include "../../../../module/planner.h"
 
@@ -317,5 +319,7 @@ void lv_draw_wifi_settings(void) {
 }
 
 void lv_clear_wifi_settings() { lv_obj_del(scr); }
+
+#endif  //USE_WIFI_FUNCTION
 
 #endif	// HAS_TFT_LVGL_UI

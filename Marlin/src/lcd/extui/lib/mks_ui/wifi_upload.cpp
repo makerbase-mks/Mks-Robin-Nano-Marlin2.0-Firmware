@@ -23,6 +23,7 @@
 
 #if HAS_TFT_LVGL_UI
 
+#include "draw_ui.h"
 #include "wifi_module.h"
 #include "wifi_upload.h"
 

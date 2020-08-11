@@ -37,7 +37,7 @@
 #define TFT_LV_PARA_BACK_BODY_COLOR  LV_COLOR_MAKE(0x4A, 0x52, 0xFF)
 
 
-
+#include "tft_lvgl_configuration.h"
 #include "tft_multi_language.h"
 #include "pic_manager.h"
 #include "draw_ready_print.h"
@@ -78,15 +78,17 @@
 #include "draw_filament_settings.h"
 #include "draw_homing_sensitivity_settings.h"
 #include "draw_baby_stepping.h"
-
-#include "wifiSerial.h"
-#include "wifi_module.h"
-#include "wifi_upload.h"
-#include "draw_wifi_settings.h"
 #include "draw_keyboard.h"
-#include "draw_wifi.h"
-#include "draw_wifi_list.h"
-#include "draw_wifi_tips.h"
+
+#if USE_WIFI_FUNCTION
+  #include "wifiSerial.h"
+  #include "wifi_module.h"
+  #include "wifi_upload.h"
+  #include "draw_wifi_settings.h"
+  #include "draw_wifi.h"
+  #include "draw_wifi_list.h"
+  #include "draw_wifi_tips.h"
+#endif  //USE_WIFI_FUNCTION
 
 #include "../../inc/MarlinConfigPre.h"
 #define FILE_SYS_USB	0

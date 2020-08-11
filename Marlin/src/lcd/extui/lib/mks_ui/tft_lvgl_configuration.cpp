@@ -84,9 +84,11 @@ extern uint8_t gcode_preview_over, flash_preview_begin, default_preview_flg;
 void SysTick_Callback() {
   lv_tick_inc(1);
   print_time_count();
-  if(tips_disp.timer == TIPS_TIMER_START) {
-  	tips_disp.timer_count++;
-  }
+  #if USE_WIFI_FUNCTION
+    if(tips_disp.timer == TIPS_TIMER_START) {
+      tips_disp.timer_count++;
+    }
+  #endif  //USE_WIFI_FUNCTION
   if(uiCfg.filament_loading_time_flg == 1) {
 	  uiCfg.filament_loading_time_cnt++;
 	  uiCfg.filament_rate = (uint32_t)(((uiCfg.filament_loading_time_cnt / (uiCfg.filament_loading_time * 1000.0)) * 100.0) + 0.5);
@@ -436,7 +438,7 @@ void tft_lvgl_init() {
   ui_cfg_init();
   disp_language_init();
 
-  #if USE_WIFI_FUNCTION
+  #if 0//USE_WIFI_FUNCTION
 	mks_esp_wifi_init();
 	WIFISERIAL.begin(WIFI_BAUDRATE);
 	uint32_t serial_connect_timeout = millis() + 1000UL;
