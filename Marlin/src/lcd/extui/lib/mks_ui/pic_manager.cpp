@@ -24,9 +24,9 @@
 #if HAS_TFT_LVGL_UI
 
 #include "../../../../MarlinCore.h"
-
 #include "string.h"
 
+#include "draw_ui.h"
 #include "pic_manager.h"
 #include "W25Qxx.h"
 #include "../../../../sd/cardreader.h"
@@ -54,6 +54,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_Mov.bin",
   // "bmp_Zero.bin",
   "bmp_Leveling.bin",
+  "bmp_filamentchange.bin",
 
   //fan screen
   "bmp_Add.bin",
@@ -111,9 +112,9 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_Speed.bin",
   //"bmp_Mamual.bin", //TODO: didn't find it.. changed to bmp_manual_off.bin
   "bmp_Fan.bin",
-  //"bmp_PreHeat.bin",
-  //"bmp_Extruct.bin",
-  // "bmp_Mov.bin",
+  "bmp_temp.bin",
+  "bmp_extrude_opr.bin",
+  "bmp_move_opr.bin",
 
   //change speed screen
   "bmp_Step1_percent.bin",
@@ -123,6 +124,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_mov_changespeed.bin",
   // "bmp_extrude_opr.bin", equal to "bmp_Extruct.bin"
   "bmp_mov_sel.bin",
+  "bmp_speed_extruct.bin",
 
   //printing screen
   "bmp_Pause.bin",
@@ -186,12 +188,6 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_Set.bin",
   "bmp_Tool.bin",
 
-  #if ENABLED(HAS_STEALTHCHOP)
-    //"bmp_back70x40.bin",
-    "bmp_disable.bin",
-    "bmp_enable.bin",
-  #endif
-
   // settings screen
   "bmp_eeprom_settings.bin",
   "bmp_machine_para.bin",
@@ -201,7 +197,20 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_arrow.bin",
   "bmp_back70x40.bin",
   "bmp_value_blank.bin",
+  "bmp_blank_sel.bin",
+  "bmp_disable.bin",
+  "bmp_enable.bin",
   "bmp_Return.bin"
+
+  #if USE_WIFI_FUNCTION
+    //wifi screen
+    ,
+    "bmp_wifi.bin",
+  #endif
+
+  //babystep screen
+  "bmp_step_move0_05.bin",
+  "bmp_step_move0_01.bin"
 };
 
 #if HAS_SPI_FLASH_FONT
