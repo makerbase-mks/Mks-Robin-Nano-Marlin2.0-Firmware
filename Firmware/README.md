@@ -3,7 +3,8 @@
 ## Problem Description 
 - No "Booting..." is displayed on the screen after the motherboard is powered on.
 - The motherboard displays the following phenomena after power-on.
-![](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/blob/Restore-spi_falsh-config/Images/display-disorder.png)
+
+![](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/blob/Restore-spi_flash-config/Images/display-disorder.png)
 
 - If the above two phenomena, please follow the steps below to fix the problem.
 
