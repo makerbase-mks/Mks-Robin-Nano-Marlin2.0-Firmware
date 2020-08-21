@@ -42,6 +42,7 @@ extern unsigned char bmp_public_buf[17 * 1024];
 
 static const char assets[][LONG_FILENAME_LENGTH] = {
   //homing screen
+  "bmp_zeroAll",
   "bmp_Zero.bin",
   "bmp_zeroX.bin",
   "bmp_zeroY.bin",
@@ -209,8 +210,9 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   #endif
 
   //babystep screen
-  "bmp_step_move0_05.bin",
-  "bmp_step_move0_01.bin"
+  "bmp_baby_move0_01.bin",
+  "bmp_baby_move0_05.bin",
+  "bmp_baby_move0_1.bin",
 };
 
 #if HAS_SPI_FLASH_FONT

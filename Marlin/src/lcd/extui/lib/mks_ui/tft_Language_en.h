@@ -226,7 +226,8 @@
 #define Z2_AND_Z2ENDSTOP_CONF_EN        "Z2 Settings"
 #define ENABLE_PINS_CONF_EN             "Enable pins level settings"
 #define WIFI_SETTINGS_EN							  "Wi-Fi parameter settings"
-#define HOMING_SENSITIVITY_CONF_EN    "Homing sensitivity settings"
+#define HOMING_SENSITIVITY_CONF_EN      "Homing sensitivity settings"
+#define ENCODER_SETTINGS_EN             "Rotary encoder settings"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_EN  "Z2 Settings"
 #define Z2_ENABLE_EN                    "Z2 Enable"
@@ -263,6 +264,9 @@
 #define Y_SENSITIVITY_EN                      "Y Axis Sensitivity"
 #define Z_SENSITIVITY_EN                      "Z Axis Sensitivity"
 #define Z2_SENSITIVITY_EN                     "Z2 Axis Sensitivity"
+
+#define ENCODER_CONF_TITLE_EN                 "Machine Settings>Rotary encoder settings"
+#define ENCODER_CONF_TEXT_EN                  "Is the encoder function used?"
 
 #define TOOL_TEXT_EN            "Tool"
 #define PREHEAT_TEXT_EN         "Preheat"

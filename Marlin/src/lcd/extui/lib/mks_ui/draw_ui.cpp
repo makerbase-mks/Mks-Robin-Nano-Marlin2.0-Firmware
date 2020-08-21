@@ -71,7 +71,7 @@ uint8_t printing_rate_update_flag;
 extern uint8_t once_flag;
 extern uint8_t sel_id;
 extern uint8_t public_buf[512];
-extern uint8_t bmp_public_buf[17 * 1024];
+uint8_t bmp_public_buf[17 * 1024];
 
 extern void LCD_IO_WriteData(uint16_t RegValue);
 
@@ -1443,6 +1443,11 @@ void clear_cur_ui() {
         lv_clear_homing_sensitivity_settings();
         break;
     #endif
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+    case ENCODER_SETTINGS_UI:
+    lv_clear_encoder_settings();
+    break;
+    #endif
     default: break;  
   }
   //GUI_Clear();
@@ -1670,6 +1675,11 @@ void draw_return_ui() {
           lv_draw_homing_sensitivity_settings();
           break;
       #endif
+      #if BUTTONS_EXIST(EN1, EN2, ENC)
+    case ENCODER_SETTINGS_UI:
+    lv_draw_encoder_settings();
+    break;
+    #endif
       default: break;
     }
   }
@@ -1714,6 +1724,12 @@ void LV_TASK_HANDLER() {
     get_wifi_commands();
   #endif  //USE_WIFI_FUNCTION
   //sd_detection();
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+  if (gCfgItems.encoder_enable == true) {
+  	lv_update_encoder();
+  }
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+
 }
 
 #endif // HAS_TFT_LVGL_UI

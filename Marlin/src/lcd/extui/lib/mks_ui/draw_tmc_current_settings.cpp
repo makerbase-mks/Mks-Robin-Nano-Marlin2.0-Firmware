@@ -31,6 +31,7 @@
 #include "../../../../module/stepper/indirection.h"
 #include "../../../../feature/tmc_util.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_TMC_CURRENT_RETURN 1
@@ -163,10 +164,6 @@ void lv_draw_tmc_current_settings(void) {
 
   lv_refr_now(lv_refr_get_disp_refreshing());
 
-  LV_IMG_DECLARE(bmp_para_back);
-  // LV_IMG_DECLARE(bmp_para_arrow);
-  LV_IMG_DECLARE(bmp_para_bank);
-
   if (uiCfg.para_ui_page != 1) {
     buttonXText = lv_btn_create(scr, NULL);                                 /*Add a button the current screen*/
     lv_obj_set_pos(buttonXText, PARA_UI_POS_X, PARA_UI_POS_Y);              /*Set its position*/
@@ -179,13 +176,14 @@ void lv_draw_tmc_current_settings(void) {
 
     buttonXValue = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonXValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y + PARA_UI_VALUE_V);
-    lv_obj_set_event_cb_mks(buttonXValue, event_handler, ID_TMC_CURRENT_X, "bmp_value_blank.bin", 0);
-    lv_imgbtn_set_src(buttonXValue, LV_BTN_STATE_REL, &bmp_para_bank);
-    lv_imgbtn_set_src(buttonXValue, LV_BTN_STATE_PR, &bmp_para_bank);
+    lv_obj_set_event_cb_mks(buttonXValue, event_handler, ID_TMC_CURRENT_X, NULL, 0);
+    lv_imgbtn_set_src(buttonXValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
+    lv_imgbtn_set_src(buttonXValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
     lv_imgbtn_set_style(buttonXValue, LV_BTN_STATE_PR, &style_para_value_pre);
     lv_imgbtn_set_style(buttonXValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_layout(buttonXValue, LV_LAYOUT_OFF);
     labelXValue = lv_label_create(buttonXValue, NULL);
+    
 
     line1 = lv_line_create(scr, NULL);
     lv_ex_line(line1, line_points[0]);
@@ -201,13 +199,14 @@ void lv_draw_tmc_current_settings(void) {
 
     buttonYValue = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonYValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 2 + PARA_UI_VALUE_V);
-    lv_obj_set_event_cb_mks(buttonYValue, event_handler, ID_TMC_CURRENT_Y, "bmp_value_blank.bin", 0);
-    lv_imgbtn_set_src(buttonYValue, LV_BTN_STATE_REL, &bmp_para_bank);
-    lv_imgbtn_set_src(buttonYValue, LV_BTN_STATE_PR, &bmp_para_bank);
+    lv_obj_set_event_cb_mks(buttonYValue, event_handler, ID_TMC_CURRENT_Y, NULL, 0);
+    lv_imgbtn_set_src(buttonYValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
+    lv_imgbtn_set_src(buttonYValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
     lv_imgbtn_set_style(buttonYValue, LV_BTN_STATE_PR, &style_para_value_pre);
     lv_imgbtn_set_style(buttonYValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_layout(buttonYValue, LV_LAYOUT_OFF);
     labelYValue = lv_label_create(buttonYValue, NULL);
+    
 
     line2 = lv_line_create(scr, NULL);
     lv_ex_line(line2, line_points[1]);
@@ -223,13 +222,14 @@ void lv_draw_tmc_current_settings(void) {
 
     buttonZValue = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonZValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 3 + PARA_UI_VALUE_V);
-    lv_obj_set_event_cb_mks(buttonZValue, event_handler, ID_TMC_CURRENT_Z, "bmp_value_blank.bin", 0);
-    lv_imgbtn_set_src(buttonZValue, LV_BTN_STATE_REL, &bmp_para_bank);
-    lv_imgbtn_set_src(buttonZValue, LV_BTN_STATE_PR, &bmp_para_bank);
+    lv_obj_set_event_cb_mks(buttonZValue, event_handler, ID_TMC_CURRENT_Z, NULL, 0);
+    lv_imgbtn_set_src(buttonZValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
+    lv_imgbtn_set_src(buttonZValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
     lv_imgbtn_set_style(buttonZValue, LV_BTN_STATE_PR, &style_para_value_pre);
     lv_imgbtn_set_style(buttonZValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_layout(buttonZValue, LV_LAYOUT_OFF);
     labelZValue = lv_label_create(buttonZValue, NULL);
+    
 
     line3 = lv_line_create(scr, NULL);
     lv_ex_line(line3, line_points[2]);
@@ -245,24 +245,39 @@ void lv_draw_tmc_current_settings(void) {
 
     buttonE0Value = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonE0Value, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 4 + PARA_UI_VALUE_V);
-    lv_obj_set_event_cb_mks(buttonE0Value, event_handler, ID_TMC_CURRENT_E0, "bmp_value_blank.bin", 0);
-    lv_imgbtn_set_src(buttonE0Value, LV_BTN_STATE_REL, &bmp_para_bank);
-    lv_imgbtn_set_src(buttonE0Value, LV_BTN_STATE_PR, &bmp_para_bank);
+    lv_obj_set_event_cb_mks(buttonE0Value, event_handler, ID_TMC_CURRENT_E0, NULL, 0);
+    lv_imgbtn_set_src(buttonE0Value, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
+    lv_imgbtn_set_src(buttonE0Value, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
     lv_imgbtn_set_style(buttonE0Value, LV_BTN_STATE_PR, &style_para_value_pre);
     lv_imgbtn_set_style(buttonE0Value, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_layout(buttonE0Value, LV_LAYOUT_OFF);
     labelE0Value = lv_label_create(buttonE0Value, NULL);
+    
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonXValue);
+    		lv_group_add_obj(g, buttonYValue);
+    		lv_group_add_obj(g, buttonZValue);
+		lv_group_add_obj(g, buttonE0Value);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
     line4 = lv_line_create(scr, NULL);
     lv_ex_line(line4, line_points[3]);
 
     #if AXIS_IS_TMC(E1)
       buttonTurnPage = lv_imgbtn_create(scr, NULL);
-      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_CURRENT_DOWN, "bmp_back70x40.bin", 0);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, &bmp_para_back);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, &bmp_para_back);
+      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_CURRENT_DOWN, NULL, 0);
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_PR, &tft_style_label_pre);
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_REL, &tft_style_label_rel);
+      
+      #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonTurnPage);
+	}
+      #endif // BUTTONS_EXIST(EN1, EN2, ENC)
     #endif
   }
   else {
@@ -278,23 +293,31 @@ void lv_draw_tmc_current_settings(void) {
 
       buttonE1Value = lv_imgbtn_create(scr, NULL);
       lv_obj_set_pos(buttonE1Value, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y + PARA_UI_VALUE_V);
-      lv_obj_set_event_cb_mks(buttonE1Value, event_handler, ID_TMC_CURRENT_E1, "bmp_value_blank.bin", 0);
-      lv_imgbtn_set_src(buttonE1Value, LV_BTN_STATE_REL, &bmp_para_bank);
-      lv_imgbtn_set_src(buttonE1Value, LV_BTN_STATE_PR, &bmp_para_bank);
+      lv_obj_set_event_cb_mks(buttonE1Value, event_handler, ID_TMC_CURRENT_E1, NULL, 0);
+      lv_imgbtn_set_src(buttonE1Value, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
+      lv_imgbtn_set_src(buttonE1Value, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
       lv_imgbtn_set_style(buttonE1Value, LV_BTN_STATE_PR, &style_para_value_pre);
       lv_imgbtn_set_style(buttonE1Value, LV_BTN_STATE_REL, &style_para_value_rel);
       lv_btn_set_layout(buttonE1Value, LV_LAYOUT_OFF);
       labelE1Value = lv_label_create(buttonE1Value, NULL);
+      
 
       line1 = lv_line_create(scr, NULL);
       lv_ex_line(line1, line_points[0]);
 
       buttonTurnPage = lv_imgbtn_create(scr, NULL);
-      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_CURRENT_UP, "bmp_back70x40.bin", 0);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, &bmp_para_back);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, &bmp_para_back);
+      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_CURRENT_UP, NULL, 0);
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_PR, &tft_style_label_pre);
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_REL, &tft_style_label_rel);
+      
+      #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonE1Value);
+		lv_group_add_obj(g, buttonTurnPage);
+	}
+      #endif // BUTTONS_EXIST(EN1, EN2, ENC)
     #endif
   }
   #if AXIS_IS_TMC(E1)
@@ -304,11 +327,17 @@ void lv_draw_tmc_current_settings(void) {
   #endif
 
   buttonBack = lv_imgbtn_create(scr, NULL);
-  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_TMC_CURRENT_RETURN, "bmp_back70x40.bin", 0);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_para_back);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_para_back);
+  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_TMC_CURRENT_RETURN, NULL, 0);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y);
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
@@ -381,6 +410,13 @@ void lv_draw_tmc_current_settings(void) {
   }
 }
 
-void lv_clear_tmc_current_settings() { lv_obj_del(scr); }
+void lv_clear_tmc_current_settings() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI && HAS_TRINAMIC_CONFIG

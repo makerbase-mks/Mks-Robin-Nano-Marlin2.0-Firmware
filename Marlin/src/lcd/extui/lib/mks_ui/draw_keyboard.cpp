@@ -28,6 +28,7 @@
 
 #include "../../../../../Configuration.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define LV_KB_CTRL_BTN_FLAGS (LV_BTNM_CTRL_NO_REPEAT | LV_BTNM_CTRL_CLICK_TRIG)
@@ -249,6 +250,12 @@ void lv_draw_keyboard() {
     lv_kb_set_style(kb, LV_KB_STYLE_BG, &lv_style_transp_tight);
     lv_kb_set_style(kb, LV_KB_STYLE_BTN_REL, &rel_style);
     lv_kb_set_style(kb, LV_KB_STYLE_BTN_PR, &pr_style);
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		//lv_group_add_obj(g, kb);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+    
 
     /*Create a text area. The keyboard will write here*/
     lv_obj_t *ta = lv_ta_create(scr, NULL);
@@ -267,7 +274,14 @@ void lv_draw_keyboard() {
     lv_kb_set_ta(kb, ta);
 }
 
-void lv_clear_keyboard() { lv_obj_del(scr); }
+void lv_clear_keyboard() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		//lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 
 #endif  // HAS_TFT_LVGL_UI

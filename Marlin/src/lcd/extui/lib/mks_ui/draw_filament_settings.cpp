@@ -29,6 +29,7 @@
 #include "../../../../MarlinCore.h"
 #include "../../../../module/planner.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_FILAMENT_SET_RETURN      1
@@ -165,6 +166,7 @@ void lv_draw_filament_settings(void) {
     lv_btn_set_style(buttonInLengthValue, LV_BTN_STYLE_REL, &style_para_value);
 	  lv_btn_set_style(buttonInLengthValue, LV_BTN_STYLE_PR, &style_para_value);
     labelInLengthValue = lv_label_create(buttonInLengthValue, NULL);
+    
 
     line1 = lv_line_create(scr, NULL);
     lv_ex_line(line1, line_points[0]);
@@ -181,6 +183,7 @@ void lv_draw_filament_settings(void) {
     lv_btn_set_style(buttonInSpeedValue, LV_BTN_STYLE_REL, &style_para_value);
 	  lv_btn_set_style(buttonInSpeedValue, LV_BTN_STYLE_PR, &style_para_value);
     labelInSpeedValue = lv_label_create(buttonInSpeedValue, NULL);
+    
 
     line2 = lv_line_create(scr, NULL);
     lv_ex_line(line2, line_points[1]);
@@ -197,6 +200,7 @@ void lv_draw_filament_settings(void) {
     lv_btn_set_style(buttonOutLengthValue, LV_BTN_STYLE_REL, &style_para_value);
 	  lv_btn_set_style(buttonOutLengthValue, LV_BTN_STYLE_PR, &style_para_value);
     labelOutLengthValue = lv_label_create(buttonOutLengthValue, NULL);
+    
 
     line3 = lv_line_create(scr, NULL);
     lv_ex_line(line3, line_points[2]);
@@ -213,6 +217,7 @@ void lv_draw_filament_settings(void) {
     lv_btn_set_style(buttonOutSpeedValue, LV_BTN_STYLE_REL, &style_para_value);
 	  lv_btn_set_style(buttonOutSpeedValue, LV_BTN_STYLE_PR, &style_para_value);
     labelOutSpeedValue = lv_label_create(buttonOutSpeedValue, NULL);
+    
 
     line4 = lv_line_create(scr, NULL);
     lv_ex_line(line4, line_points[3]);
@@ -221,6 +226,16 @@ void lv_draw_filament_settings(void) {
     lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_FILAMENT_SET_DOWN, NULL, 0);
     lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_REL, &style_para_back);
 	  lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_PR, &style_para_back);
+    
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonInLengthValue);
+    		lv_group_add_obj(g, buttonInSpeedValue);
+    		lv_group_add_obj(g, buttonOutLengthValue);
+    		lv_group_add_obj(g, buttonOutSpeedValue);
+		lv_group_add_obj(g, buttonTurnPage);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
   }
   else {
     labelTemperText = lv_label_create(scr, NULL);
@@ -235,6 +250,7 @@ void lv_draw_filament_settings(void) {
     lv_btn_set_style(buttonTemperValue, LV_BTN_STYLE_REL, &style_para_value);
 	  lv_btn_set_style(buttonTemperValue, LV_BTN_STYLE_PR, &style_para_value);
     labelTemperValue = lv_label_create(buttonTemperValue, NULL);
+    
 
     line1 = lv_line_create(scr, NULL);
     lv_ex_line(line1, line_points[0]);
@@ -243,6 +259,13 @@ void lv_draw_filament_settings(void) {
     lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_FILAMENT_SET_UP, NULL, 0);
     lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_REL, &style_para_back);
 	  lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_PR, &style_para_back);
+    
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonTemperValue);
+		lv_group_add_obj(g, buttonTurnPage);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
   }
   
   lv_obj_set_pos(buttonTurnPage, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y);
@@ -256,6 +279,12 @@ void lv_draw_filament_settings(void) {
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y);
   lv_obj_set_size(buttonBack, PARA_UI_BACK_BTN_X_SIZE, PARA_UI_BACK_BTN_Y_SIZE);
   label_Back = lv_label_create(buttonBack, NULL);
+  
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
   if (gCfgItems.multiple_language != 0) {
     if (uiCfg.para_ui_page != 1) {
@@ -297,6 +326,13 @@ void lv_draw_filament_settings(void) {
   }
 }
 
-void lv_clear_filament_settings() { lv_obj_del(scr); }
+void lv_clear_filament_settings() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI

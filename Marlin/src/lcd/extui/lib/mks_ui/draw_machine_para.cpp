@@ -28,6 +28,7 @@
 
 #include "../../../../MarlinCore.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_PARA_RETURN        1
@@ -152,8 +153,6 @@ void lv_draw_machine_para(void) {
 
   lv_refr_now(lv_refr_get_disp_refreshing());
 
-  LV_IMG_DECLARE(bmp_para_back);
-  LV_IMG_DECLARE(bmp_para_arrow);
 
   buttonMachine = lv_btn_create(scr, NULL);                                 /*Add a button the current screen*/
   lv_obj_set_pos(buttonMachine, PARA_UI_POS_X, PARA_UI_POS_Y);              /*Set its position*/
@@ -164,12 +163,13 @@ void lv_draw_machine_para(void) {
   lv_btn_set_style(buttonMachine, LV_BTN_STYLE_PR, &tft_style_label_pre);   /*Set the button's pressed style*/
   lv_btn_set_layout(buttonMachine, LV_LAYOUT_OFF);
   labelMachine = lv_label_create(buttonMachine, NULL);                      /*Add a label to the button*/
+  
 
   buttonMachineNarrow = lv_imgbtn_create(scr, NULL);
   lv_obj_set_pos(buttonMachineNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y + PARA_UI_ARROW_V);
-  lv_obj_set_event_cb_mks(buttonMachineNarrow, event_handler, ID_PARA_MACHINE_ARROW, "bmp_arrow.bin", 0);
-  lv_imgbtn_set_src(buttonMachineNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-  lv_imgbtn_set_src(buttonMachineNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+  lv_obj_set_event_cb_mks(buttonMachineNarrow, event_handler, ID_PARA_MACHINE_ARROW, NULL, 0);
+  lv_imgbtn_set_src(buttonMachineNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+  lv_imgbtn_set_src(buttonMachineNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
   lv_imgbtn_set_style(buttonMachineNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonMachineNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_btn_set_layout(buttonMachineNarrow, LV_LAYOUT_OFF);
@@ -186,12 +186,13 @@ void lv_draw_machine_para(void) {
   lv_btn_set_style(buttonMotor, LV_BTN_STYLE_PR, &tft_style_label_pre);     /*Set the button's pressed style*/
   lv_btn_set_layout(buttonMotor, LV_LAYOUT_OFF);
   labelMotor = lv_label_create(buttonMotor, NULL);                          /*Add a label to the button*/
+  
 
   buttonMotorNarrow = lv_imgbtn_create(scr, NULL);
   lv_obj_set_pos(buttonMotorNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y * 2 + PARA_UI_ARROW_V);
-  lv_obj_set_event_cb_mks(buttonMotorNarrow, event_handler, ID_PARA_MOTOR_ARROW, "bmp_arrow.bin", 0);
-  lv_imgbtn_set_src(buttonMotorNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-  lv_imgbtn_set_src(buttonMotorNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+  lv_obj_set_event_cb_mks(buttonMotorNarrow, event_handler, ID_PARA_MOTOR_ARROW, NULL, 0);
+  lv_imgbtn_set_src(buttonMotorNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+  lv_imgbtn_set_src(buttonMotorNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
   lv_imgbtn_set_style(buttonMotorNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonMotorNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_btn_set_layout(buttonMotorNarrow, LV_LAYOUT_OFF);
@@ -209,11 +210,12 @@ void lv_draw_machine_para(void) {
   lv_btn_set_layout(buttonLevel, LV_LAYOUT_OFF);
   labelLevel = lv_label_create(buttonLevel, NULL);                      /*Add a label to the button*/
 
+
   buttonLevelNarrow = lv_imgbtn_create(scr, NULL);
   lv_obj_set_pos(buttonLevelNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y * 3 + PARA_UI_ARROW_V);
-  lv_obj_set_event_cb_mks(buttonLevelNarrow, event_handler, ID_PARA_LEVEL_ARROW, "bmp_arrow.bin", 0);
-  lv_imgbtn_set_src(buttonLevelNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-  lv_imgbtn_set_src(buttonLevelNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+  lv_obj_set_event_cb_mks(buttonLevelNarrow, event_handler, ID_PARA_LEVEL_ARROW, NULL, 0);
+  lv_imgbtn_set_src(buttonLevelNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+  lv_imgbtn_set_src(buttonLevelNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
   lv_imgbtn_set_style(buttonLevelNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonLevelNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_btn_set_layout(buttonLevelNarrow, LV_LAYOUT_OFF);
@@ -230,12 +232,13 @@ void lv_draw_machine_para(void) {
   lv_btn_set_style(buttonAdvance, LV_BTN_STYLE_PR, &tft_style_label_pre);   /*Set the button's pressed style*/
   lv_btn_set_layout(buttonAdvance, LV_LAYOUT_OFF);
   labelAdvance = lv_label_create(buttonAdvance, NULL);                      /*Add a label to the button*/
+  
 
   buttonAdvanceNarrow = lv_imgbtn_create(scr, NULL);
   lv_obj_set_pos(buttonAdvanceNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y * 4 + PARA_UI_ARROW_V);
-  lv_obj_set_event_cb_mks(buttonAdvanceNarrow, event_handler, ID_PARA_ADVANCE_ARROW, "bmp_arrow.bin", 0);
-  lv_imgbtn_set_src(buttonAdvanceNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-  lv_imgbtn_set_src(buttonAdvanceNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+  lv_obj_set_event_cb_mks(buttonAdvanceNarrow, event_handler, ID_PARA_ADVANCE_ARROW, NULL, 0);
+  lv_imgbtn_set_src(buttonAdvanceNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+  lv_imgbtn_set_src(buttonAdvanceNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
   lv_imgbtn_set_style(buttonAdvanceNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonAdvanceNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_btn_set_layout(buttonAdvanceNarrow, LV_LAYOUT_OFF);
@@ -244,11 +247,12 @@ void lv_draw_machine_para(void) {
   lv_ex_line(line4, line_points[3]);
 
   buttonBack = lv_imgbtn_create(scr, NULL);
-  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_PARA_RETURN, "bmp_back70x40.bin", 0);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_para_back);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_para_back);
+  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_PARA_RETURN, NULL, 0);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X + 10, PARA_UI_BACL_POS_Y);
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
@@ -270,9 +274,25 @@ void lv_draw_machine_para(void) {
     lv_label_set_text(labelAdvance, MachinePara_menu.AdvanceSetting);
     lv_obj_align(labelAdvance, buttonAdvance, LV_ALIGN_IN_LEFT_MID, 0, -3);
   }
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonMachine);
+  		lv_group_add_obj(g, buttonMotor);
+		lv_group_add_obj(g, buttonLevel);
+		lv_group_add_obj(g, buttonAdvance);
+  		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
 }
 
-void lv_clear_machine_para() { lv_obj_del(scr); }
+void lv_clear_machine_para() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI

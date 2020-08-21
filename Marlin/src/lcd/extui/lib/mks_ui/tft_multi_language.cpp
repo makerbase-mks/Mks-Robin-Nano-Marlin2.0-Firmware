@@ -185,6 +185,7 @@ void machine_setting_disp() {
     machine_menu.PausePosition         = PAUSE_POSITION_CN;
 	  machine_menu.WifiSettings          = WIFI_SETTINGS_CN;
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_CN;
+    machine_menu.EncoderSettings         = ENCODER_SETTINGS_CN;
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_CN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_CN;
@@ -289,6 +290,9 @@ void machine_setting_disp() {
     machine_menu.Y_Sensitivity              = Y_SENSITIVITY_CN;
     machine_menu.Z_Sensitivity              = Z_SENSITIVITY_CN;
     machine_menu.Z2_Sensitivity             = Z2_SENSITIVITY_CN;
+
+    machine_menu.EncoderConfTitle = ENCODER_CONF_TITLE_CN;
+    machine_menu.EncoderConfText              = ENCODER_CONF_TEXT_CN;
   }
   else if (gCfgItems.language == LANG_COMPLEX_CHINESE) {
     MachinePara_menu.title              = MACHINE_PARA_TITLE_T_CN;
@@ -414,6 +418,7 @@ void machine_setting_disp() {
     machine_menu.PausePosition         = PAUSE_POSITION_T_CN;
 	  machine_menu.WifiSettings          = WIFI_SETTINGS_T_CN;
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_T_CN;
+    machine_menu.EncoderSettings         = ENCODER_SETTINGS_T_CN;
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_T_CN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_T_CN;
@@ -521,6 +526,9 @@ void machine_setting_disp() {
     machine_menu.Y_Sensitivity              = Y_SENSITIVITY_T_CN;
     machine_menu.Z_Sensitivity              = Z_SENSITIVITY_T_CN;
     machine_menu.Z2_Sensitivity             = Z2_SENSITIVITY_T_CN;
+
+    machine_menu.EncoderConfTitle = ENCODER_CONF_TITLE_T_CN;
+    machine_menu.EncoderConfText              = ENCODER_CONF_TEXT_T_CN;
   }
   else {
     MachinePara_menu.title              = MACHINE_PARA_TITLE_EN;
@@ -646,6 +654,7 @@ void machine_setting_disp() {
     machine_menu.PausePosition         = PAUSE_POSITION_EN;
     machine_menu.WifiSettings          = WIFI_SETTINGS_EN;
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_EN;
+    machine_menu.EncoderSettings         = ENCODER_SETTINGS_EN;
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_EN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_EN;
@@ -753,6 +762,9 @@ void machine_setting_disp() {
     machine_menu.Y_Sensitivity              = Y_SENSITIVITY_EN;
     machine_menu.Z_Sensitivity              = Z_SENSITIVITY_EN;
     machine_menu.Z2_Sensitivity             = Z2_SENSITIVITY_EN;
+
+    machine_menu.EncoderConfTitle = ENCODER_CONF_TITLE_EN;
+    machine_menu.EncoderConfText              = ENCODER_CONF_TEXT_EN;
   }
 }
 

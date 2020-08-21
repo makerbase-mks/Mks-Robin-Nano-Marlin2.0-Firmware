@@ -28,6 +28,7 @@
 
 #include "../../../../MarlinCore.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_LEVEL_RETURN           1
@@ -139,8 +140,6 @@ void lv_draw_level_settings(void) {
 
   lv_refr_now(lv_refr_get_disp_refreshing());
 
-  LV_IMG_DECLARE(bmp_para_back);
-  LV_IMG_DECLARE(bmp_para_arrow);
 
   buttonPosition = lv_btn_create(scr, NULL);                                   /*Add a button the current screen*/
   lv_obj_set_pos(buttonPosition, PARA_UI_POS_X, PARA_UI_POS_Y);                /*Set its position*/
@@ -150,12 +149,18 @@ void lv_draw_level_settings(void) {
   lv_btn_set_style(buttonPosition, LV_BTN_STYLE_PR, &tft_style_label_pre);     /*Set the button's pressed style*/
   lv_btn_set_layout(buttonPosition, LV_LAYOUT_OFF);
   labelPosition = lv_label_create(buttonPosition, NULL);                       /*Add a label to the button*/
-
+  
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonPosition);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+  
   buttonPositionNarrow = lv_imgbtn_create(scr, NULL);
   lv_obj_set_pos(buttonPositionNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y + PARA_UI_ARROW_V);
-  lv_obj_set_event_cb_mks(buttonPositionNarrow, event_handler, ID_LEVEL_POSITION_ARROW, "bmp_arrow.bin", 0);
-  lv_imgbtn_set_src(buttonPositionNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-  lv_imgbtn_set_src(buttonPositionNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+  lv_obj_set_event_cb_mks(buttonPositionNarrow, event_handler, ID_LEVEL_POSITION_ARROW, NULL, 0);
+  lv_imgbtn_set_src(buttonPositionNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+  lv_imgbtn_set_src(buttonPositionNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
   lv_imgbtn_set_style(buttonPositionNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonPositionNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_btn_set_layout(buttonPositionNarrow, LV_LAYOUT_OFF);
@@ -171,12 +176,18 @@ void lv_draw_level_settings(void) {
   lv_btn_set_style(buttonCommand, LV_BTN_STYLE_PR, &tft_style_label_pre);
   lv_btn_set_layout(buttonCommand, LV_LAYOUT_OFF);
   labelCommand = lv_label_create(buttonCommand, NULL);
-
+  
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonCommand);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+  
   buttonCommandNarrow = lv_imgbtn_create(scr, NULL);
   lv_obj_set_pos(buttonCommandNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y * 2 + PARA_UI_ARROW_V);
-  lv_obj_set_event_cb_mks(buttonCommandNarrow, event_handler, ID_LEVEL_COMMAND_ARROW, "bmp_arrow.bin", 0);
-  lv_imgbtn_set_src(buttonCommandNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-  lv_imgbtn_set_src(buttonCommandNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+  lv_obj_set_event_cb_mks(buttonCommandNarrow, event_handler, ID_LEVEL_COMMAND_ARROW, NULL, 0);
+  lv_imgbtn_set_src(buttonCommandNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+  lv_imgbtn_set_src(buttonCommandNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
   lv_imgbtn_set_style(buttonCommandNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonCommandNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_btn_set_layout(buttonCommandNarrow, LV_LAYOUT_OFF);
@@ -192,12 +203,18 @@ void lv_draw_level_settings(void) {
     lv_btn_set_style(buttonZoffset, LV_BTN_STYLE_PR, &tft_style_label_pre);   /*Set the button's pressed style*/
     lv_btn_set_layout(buttonZoffset, LV_LAYOUT_OFF);
     labelZoffset = lv_label_create(buttonZoffset, NULL);                      /*Add a label to the button*/
-
+    
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonZoffset);
+	}
+   #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	
     buttonZoffsetNarrow = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonZoffsetNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y * 3 + PARA_UI_ARROW_V);
-    lv_obj_set_event_cb_mks(buttonZoffsetNarrow, event_handler, ID_LEVEL_ZOFFSET_ARROW, "bmp_arrow.bin", 0);
-    lv_imgbtn_set_src(buttonZoffsetNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-    lv_imgbtn_set_src(buttonZoffsetNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+    lv_obj_set_event_cb_mks(buttonZoffsetNarrow, event_handler, ID_LEVEL_ZOFFSET_ARROW, NULL, 0);
+    lv_imgbtn_set_src(buttonZoffsetNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+    lv_imgbtn_set_src(buttonZoffsetNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
     lv_imgbtn_set_style(buttonZoffsetNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonZoffsetNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
     lv_btn_set_layout(buttonZoffsetNarrow, LV_LAYOUT_OFF);
@@ -206,12 +223,18 @@ void lv_draw_level_settings(void) {
     lv_ex_line(line3, line_points[2]);
   #endif
   buttonBack = lv_imgbtn_create(scr, NULL);
-  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_LEVEL_RETURN, "bmp_back70x40.bin", 0);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_para_back);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_para_back);
+  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_LEVEL_RETURN, NULL, 0);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
-
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+  
+  
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y);
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
   label_Back = lv_label_create(buttonBack, NULL);
@@ -233,6 +256,13 @@ void lv_draw_level_settings(void) {
 
 }
 
-void lv_clear_level_settings() { lv_obj_del(scr); }
+void lv_clear_level_settings() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI

@@ -79,6 +79,7 @@
 #include "draw_homing_sensitivity_settings.h"
 #include "draw_baby_stepping.h"
 #include "draw_keyboard.h"
+#include "draw_encoder_settings.h"
 
 #if USE_WIFI_FUNCTION
   #include "wifiSerial.h"
@@ -185,6 +186,7 @@ typedef struct {
   uint8_t fileSysType;
   uint8_t wifi_type;
   bool  cloud_enable;
+  bool  encoder_enable;
   int   levelingPos[5][2];
   int   filamentchange_load_length;
   int   filamentchange_load_speed;
@@ -310,7 +312,8 @@ typedef enum {
   TMC_MODE_UI,
 	EEPROM_SETTINGS_UI,
 	WIFI_SETTINGS_UI,
-  HOMING_SENSITIVITY_UI
+  HOMING_SENSITIVITY_UI,
+  ENCODER_SETTINGS_UI
 } DISP_STATE;
 
 typedef struct {

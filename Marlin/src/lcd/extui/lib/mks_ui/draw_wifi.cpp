@@ -31,6 +31,7 @@
 #include "../../../../../Configuration.h"
 #include "../../../../module/temperature.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 static lv_obj_t * wifi_name_text,*wifi_key_text,*wifi_state_text,*wifi_ip_text;
 
@@ -94,8 +95,6 @@ void lv_draw_wifi(void) {
   
     lv_refr_now(lv_refr_get_disp_refreshing());
 	
-	LV_IMG_DECLARE(bmp_pic);
-	
     /*Create an Image button*/
 	buttonBack = lv_imgbtn_create(scr, NULL);
 	if(gCfgItems.wifi_mode_sel == STA_MODEL) {
@@ -103,30 +102,33 @@ void lv_draw_wifi(void) {
 		buttonReconnect = lv_imgbtn_create(scr, NULL);
 	}
 
-	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_W_RETURN,"bmp_return.bin",0);	
-    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
-    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic);	
+	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_W_RETURN, NULL,0);	
+    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_return.bin");
+    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_return.bin");	
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+		if (gCfgItems.encoder_enable == true) {
+			lv_group_add_obj(g, buttonBack);
+		}
+	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
 	lv_obj_set_pos(buttonBack,BTN_X_PIXEL*3+INTERVAL_V*4,  BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 	lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
 
 	if(gCfgItems.wifi_mode_sel == STA_MODEL) {
-		//lv_obj_set_event_cb_mks(buttonCloud, event_handler,ID_W_CLOUD,"bmp_cloud.bin",0);	
-	    //lv_imgbtn_set_src(buttonCloud, LV_BTN_STATE_REL, &bmp_pic);
-	    //lv_imgbtn_set_src(buttonCloud, LV_BTN_STATE_PR, &bmp_pic);	
-		//lv_imgbtn_set_style(buttonCloud, LV_BTN_STATE_PR, &tft_style_label_pre);
-		//lv_imgbtn_set_style(buttonCloud, LV_BTN_STATE_REL, &tft_style_label_rel);
 
-		//lv_obj_set_pos(buttonCloud,BTN_X_PIXEL+INTERVAL_V*2,  BTN_Y_PIXEL+INTERVAL_H+titleHeight);
-		//lv_btn_set_layout(buttonCloud, LV_LAYOUT_OFF);
-
-		lv_obj_set_event_cb_mks(buttonReconnect, event_handler,ID_W_RECONNECT,"bmp_wifi.bin",0);	
-	    lv_imgbtn_set_src(buttonReconnect, LV_BTN_STATE_REL, &bmp_pic);
-	    lv_imgbtn_set_src(buttonReconnect, LV_BTN_STATE_PR, &bmp_pic);	
+		lv_obj_set_event_cb_mks(buttonReconnect, event_handler,ID_W_RECONNECT, NULL,0);	
+	    lv_imgbtn_set_src(buttonReconnect, LV_BTN_STATE_REL, "F:/bmp_wifi.bin");
+	    lv_imgbtn_set_src(buttonReconnect, LV_BTN_STATE_PR, "F:/bmp_wifi.bin");	
 		lv_imgbtn_set_style(buttonReconnect, LV_BTN_STATE_PR, &tft_style_label_pre);
 		lv_imgbtn_set_style(buttonReconnect, LV_BTN_STATE_REL, &tft_style_label_rel);
+		
+		#if BUTTONS_EXIST(EN1, EN2, ENC)
+			if (gCfgItems.encoder_enable == true) {
+				lv_group_add_obj(g, buttonReconnect);
+			}
+	  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
 		lv_obj_set_pos(buttonReconnect,BTN_X_PIXEL*2+INTERVAL_V*3,  BTN_Y_PIXEL+INTERVAL_H+titleHeight);
 		lv_btn_set_layout(buttonReconnect, LV_LAYOUT_OFF);
@@ -151,6 +153,7 @@ void lv_draw_wifi(void) {
 			lv_obj_align(label_Reconnect, buttonReconnect, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
 		}
 	}
+	
 
 	wifi_ip_text = lv_label_create(scr, NULL);
 	lv_obj_set_style(wifi_ip_text, &tft_style_label_rel);
@@ -216,7 +219,14 @@ void disp_wifi_state() {
 	}
 }
 
-void lv_clear_wifi() { lv_obj_del(scr); }
+void lv_clear_wifi() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif  //USE_WIFI_FUNCTION
 

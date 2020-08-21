@@ -28,6 +28,7 @@
 
 #include "../../../../MarlinCore.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_EEPROM_RETURN        1
@@ -134,53 +135,6 @@ void lv_draw_eeprom_settings(void) {
 
   lv_refr_now(lv_refr_get_disp_refreshing());
 
-  LV_IMG_DECLARE(bmp_para_back);
-  LV_IMG_DECLARE(bmp_para_arrow);
-  #if 0
-    buttonStore = lv_btn_create(scr, NULL); /*Add a button the current screen*/
-    lv_obj_set_pos(buttonStore, PARA_UI_POS_X, PARA_UI_POS_Y);                       /*Set its position*/
-    lv_obj_set_size(buttonStore, PARA_UI_SIZE_X, PARA_UI_SIZE_Y);                     /*Set its size*/
-    //lv_obj_set_event_cb(buttonMachine, event_handler);
-    lv_obj_set_event_cb_mks(buttonStore, event_handler, ID_EEPROM_STORE, NULL, 0);
-    lv_btn_set_style(buttonStore, LV_BTN_STYLE_REL, &tft_style_label_rel); /*Set the button's released style*/
-    lv_btn_set_style(buttonStore, LV_BTN_STYLE_PR, &tft_style_label_pre);  /*Set the button's pressed style*/
-    lv_btn_set_layout(buttonStore, LV_LAYOUT_OFF);
-    labelStore = lv_label_create(buttonStore, NULL);      /*Add a label to the button*/
-
-    buttonStoreNarrow = lv_imgbtn_create(scr, NULL);
-    lv_obj_set_pos(buttonStoreNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y + PARA_UI_ARROW_V);
-    lv_obj_set_event_cb_mks(buttonStoreNarrow, event_handler, ID_EEPROM_STORE_ARROW, "bmp_arrow.bin", 0);
-    lv_imgbtn_set_src(buttonStoreNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-    lv_imgbtn_set_src(buttonStoreNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
-    lv_imgbtn_set_style(buttonStoreNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
-    lv_imgbtn_set_style(buttonStoreNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
-    lv_btn_set_layout(buttonStoreNarrow, LV_LAYOUT_OFF);
-
-    line1 = lv_line_create(scr, NULL);
-    lv_ex_line(line1, line_points[0]);
-
-    buttonRead = lv_btn_create(scr, NULL); /*Add a button the current screen*/
-    lv_obj_set_pos(buttonRead, PARA_UI_POS_X, PARA_UI_POS_Y * 2);                     /*Set its position*/
-    lv_obj_set_size(buttonRead, PARA_UI_SIZE_X, PARA_UI_SIZE_Y);                     /*Set its size*/
-    //lv_obj_set_event_cb(buttonMotor, event_handler);
-    lv_obj_set_event_cb_mks(buttonRead, event_handler, ID_EEPROM_READ, NULL, 0);
-    lv_btn_set_style(buttonRead, LV_BTN_STYLE_REL, &tft_style_label_rel); /*Set the button's released style*/
-    lv_btn_set_style(buttonRead, LV_BTN_STYLE_PR, &tft_style_label_pre);  /*Set the button's pressed style*/
-    lv_btn_set_layout(buttonRead, LV_LAYOUT_OFF);
-    labelRead = lv_label_create(buttonRead, NULL);      /*Add a label to the button*/
-
-    buttonReadNarrow = lv_imgbtn_create(scr, NULL);
-    lv_obj_set_pos(buttonReadNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y * 2 + PARA_UI_ARROW_V);
-    lv_obj_set_event_cb_mks(buttonReadNarrow, event_handler, ID_EEPROM_READ_ARROW, "bmp_arrow.bin", 0);
-    lv_imgbtn_set_src(buttonReadNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-    lv_imgbtn_set_src(buttonReadNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
-    lv_imgbtn_set_style(buttonReadNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
-    lv_imgbtn_set_style(buttonReadNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
-    lv_btn_set_layout(buttonReadNarrow, LV_LAYOUT_OFF);
-
-    line2 = lv_line_create(scr, NULL);
-    lv_ex_line(line2, line_points[1]);
-  #endif // if 0
   buttonRevert = lv_btn_create(scr, NULL);   /*Add a button the current screen*/
   lv_obj_set_pos(buttonRevert, PARA_UI_POS_X, PARA_UI_POS_Y);                         /*Set its position*/
   lv_obj_set_size(buttonRevert, PARA_UI_SIZE_X, PARA_UI_SIZE_Y);                       /*Set its size*/
@@ -190,12 +144,13 @@ void lv_draw_eeprom_settings(void) {
   lv_btn_set_style(buttonRevert, LV_BTN_STYLE_PR, &tft_style_label_pre);    /*Set the button's pressed style*/
   lv_btn_set_layout(buttonRevert, LV_LAYOUT_OFF);
   labelRevert = lv_label_create(buttonRevert, NULL);        /*Add a label to the button*/
+  
 
   buttonRevertNarrow = lv_imgbtn_create(scr, NULL);
   lv_obj_set_pos(buttonRevertNarrow, PARA_UI_POS_X + PARA_UI_SIZE_X, PARA_UI_POS_Y + PARA_UI_ARROW_V);
-  lv_obj_set_event_cb_mks(buttonRevertNarrow, event_handler, ID_EEPROM_REVERT_ARROW, "bmp_arrow.bin", 0);
-  lv_imgbtn_set_src(buttonRevertNarrow, LV_BTN_STATE_REL, &bmp_para_arrow);
-  lv_imgbtn_set_src(buttonRevertNarrow, LV_BTN_STATE_PR, &bmp_para_arrow);
+  lv_obj_set_event_cb_mks(buttonRevertNarrow, event_handler, ID_EEPROM_REVERT_ARROW, NULL, 0);
+  lv_imgbtn_set_src(buttonRevertNarrow, LV_BTN_STATE_REL, "F:/bmp_arrow.bin");
+  lv_imgbtn_set_src(buttonRevertNarrow, LV_BTN_STATE_PR, "F:/bmp_arrow.bin");
   lv_imgbtn_set_style(buttonRevertNarrow, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonRevertNarrow, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_btn_set_layout(buttonRevertNarrow, LV_LAYOUT_OFF);
@@ -206,11 +161,12 @@ void lv_draw_eeprom_settings(void) {
   lv_ex_line(line1, line_points[0]);
 
   buttonBack = lv_imgbtn_create(scr, NULL);
-  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_EEPROM_RETURN, "bmp_back70x40.bin", 0);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_para_back);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_para_back);
+  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_EEPROM_RETURN, NULL, 0);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y);
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
@@ -229,9 +185,22 @@ void lv_draw_eeprom_settings(void) {
     lv_label_set_text(labelRevert, eeprom_menu.revert);
     lv_obj_align(labelRevert, buttonRevert, LV_ALIGN_IN_LEFT_MID, 0, 0);
   }
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonRevert);
+ 	 	lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
 }
 
-void lv_clear_eeprom_settings() { lv_obj_del(scr); }
+void lv_clear_eeprom_settings() {
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI

@@ -31,6 +31,7 @@
 #include "../../../../gcode/queue.h"
 #include "../../../../gcode/gcode.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 static lv_obj_t *buttoType;
 static lv_obj_t * labelType;
@@ -124,7 +125,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           feedrate_mm_s = (float)uiCfg.moveSpeed_bak ;
         }
         thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
-        
+
         clear_cur_ui();
         draw_return_ui();
       }
@@ -155,7 +156,6 @@ void lv_draw_filament_change(void) {
 
   lv_refr_now(lv_refr_get_disp_refreshing());
 
-  LV_IMG_DECLARE(bmp_pic);
 
   /*Create an Image button*/
   buttonIn   = lv_imgbtn_create(scr, NULL);
@@ -163,29 +163,32 @@ void lv_draw_filament_change(void) {
   buttoType  = lv_imgbtn_create(scr, NULL);
   buttonBack = lv_imgbtn_create(scr, NULL);
 
-  lv_obj_set_event_cb_mks(buttonIn, event_handler, ID_FILAMNT_IN, "bmp_in.bin", 0);
-  lv_imgbtn_set_src(buttonIn, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonIn, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonIn, event_handler, ID_FILAMNT_IN, NULL, 0);
+  lv_imgbtn_set_src(buttonIn, LV_BTN_STATE_REL, "F:/bmp_in.bin");
+  lv_imgbtn_set_src(buttonIn, LV_BTN_STATE_PR, "F:/bmp_in.bin");
   lv_imgbtn_set_style(buttonIn, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonIn, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_obj_clear_protect(buttonIn, LV_PROTECT_FOLLOW);
+  
 
-  lv_obj_set_event_cb_mks(buttonOut, event_handler, ID_FILAMNT_OUT, "bmp_out.bin", 0);
-  lv_imgbtn_set_src(buttonOut, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonOut, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonOut, event_handler, ID_FILAMNT_OUT, NULL, 0);
+  lv_imgbtn_set_src(buttonOut, LV_BTN_STATE_REL, "F:/bmp_out.bin");
+  lv_imgbtn_set_src(buttonOut, LV_BTN_STATE_PR, "F:/bmp_out.bin");
   lv_imgbtn_set_style(buttonOut, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonOut, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
-  lv_imgbtn_set_src(buttoType, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttoType, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttoType, event_handler, ID_FILAMNT_TYPE, NULL, 0);
   lv_imgbtn_set_style(buttoType, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttoType, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
-  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_FILAMNT_RETURN, "bmp_return.bin", 0);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_FILAMNT_RETURN, NULL, 0);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_return.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_return.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
   lv_obj_set_pos(buttonIn, INTERVAL_V, titleHeight);
   lv_obj_set_pos(buttonOut, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight);
@@ -213,6 +216,14 @@ void lv_draw_filament_change(void) {
     lv_label_set_text(label_Back, common_menu.text_back);
     lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
   }
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonIn);
+  		lv_group_add_obj(g, buttonOut);
+  		lv_group_add_obj(g, buttoType);
+  		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
   disp_filament_type();
 
@@ -223,14 +234,16 @@ void lv_draw_filament_change(void) {
 
 void disp_filament_type() {
     if (uiCfg.curSprayerChoose == 1) {
-      lv_obj_set_event_cb_mks(buttoType, event_handler, ID_FILAMNT_TYPE, "bmp_extru2.bin", 0);
+      lv_imgbtn_set_src(buttoType, LV_BTN_STATE_REL, "F:/bmp_extru2.bin");
+      lv_imgbtn_set_src(buttoType, LV_BTN_STATE_PR, "F:/bmp_extru2.bin");
       if (gCfgItems.multiple_language != 0) {
         lv_label_set_text(labelType, preheat_menu.ext2);
         lv_obj_align(labelType, buttoType, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
       }
     }
     else {
-      lv_obj_set_event_cb_mks(buttoType, event_handler, ID_FILAMNT_TYPE, "bmp_extru1.bin", 0);
+      lv_imgbtn_set_src(buttoType, LV_BTN_STATE_REL, "F:/bmp_extru1.bin");
+      lv_imgbtn_set_src(buttoType, LV_BTN_STATE_PR, "F:/bmp_extru1.bin");
       if (gCfgItems.multiple_language != 0) {
         lv_label_set_text(labelType, preheat_menu.ext1);
         lv_obj_align(labelType, buttoType, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
@@ -255,6 +268,13 @@ void disp_filament_temp() {
   lv_obj_align(tempText1, NULL, LV_ALIGN_CENTER, 0, -50);
 }
 
-void lv_clear_filament_change() { lv_obj_del(scr); }
+void lv_clear_filament_change() {
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI

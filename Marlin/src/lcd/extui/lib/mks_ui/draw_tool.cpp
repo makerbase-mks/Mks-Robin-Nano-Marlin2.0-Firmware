@@ -34,7 +34,7 @@
 #include "../../../../gcode/queue.h"
 #include "../../../../module/temperature.h"
 
-// static lv_obj_t *buttonMoveZ,*buttonTest,*buttonZ0,*buttonStop,*buttonReturn;
+extern lv_group_t * g; 
 static lv_obj_t * scr;
 
 #define ID_T_PRE_HEAT   1
@@ -108,7 +108,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
 	      uiCfg.desireSprayerTempBak = thermalManager.temp_hotend[uiCfg.curSprayerChoose].target;
-        lv_obj_del(scr);
+        lv_clear_tool();
         lv_draw_filament_change();
       }
       break;
@@ -119,7 +119,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         TERN_(MKS_TEST, curent_disp_ui = 1);
-        lv_obj_del(scr);
+        lv_clear_tool();
         lv_draw_ready_print();
       }
       break;
@@ -152,8 +152,6 @@ void lv_draw_tool(void) {
 
   lv_refr_now(lv_refr_get_disp_refreshing());
 
-  LV_IMG_DECLARE(bmp_pic);
-
   /*Create an Image button*/
   buttonPreHeat   = lv_imgbtn_create(scr, NULL);
   buttonExtrusion = lv_imgbtn_create(scr, NULL);
@@ -164,54 +162,53 @@ void lv_draw_tool(void) {
   // buttonMore = lv_imgbtn_create(scr, NULL);
   buttonBack = lv_imgbtn_create(scr, NULL);
 
-  lv_obj_set_event_cb_mks(buttonPreHeat, event_handler, ID_T_PRE_HEAT, "bmp_preHeat.bin", 0);
-  lv_imgbtn_set_src(buttonPreHeat, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonPreHeat, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonPreHeat, event_handler, ID_T_PRE_HEAT, NULL, 0);
+  lv_imgbtn_set_src(buttonPreHeat, LV_BTN_STATE_REL, "F:/bmp_preHeat.bin");
+  lv_imgbtn_set_src(buttonPreHeat, LV_BTN_STATE_PR, "F:/bmp_preHeat.bin");
   lv_imgbtn_set_style(buttonPreHeat, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonPreHeat, LV_BTN_STATE_REL, &tft_style_label_rel);
-  lv_obj_clear_protect(buttonPreHeat, LV_PROTECT_FOLLOW);
+  
 
-  lv_obj_set_event_cb_mks(buttonExtrusion, event_handler, ID_T_EXTRUCT, "bmp_extruct.bin", 0);
-  lv_imgbtn_set_src(buttonExtrusion, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonExtrusion, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonExtrusion, event_handler, ID_T_EXTRUCT, NULL, 0);
+  lv_imgbtn_set_src(buttonExtrusion, LV_BTN_STATE_REL, "F:/bmp_extruct.bin");
+  lv_imgbtn_set_src(buttonExtrusion, LV_BTN_STATE_PR, "F:/bmp_extruct.bin");
   lv_imgbtn_set_style(buttonExtrusion, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonExtrusion, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
-  lv_obj_set_event_cb_mks(buttonMove, event_handler, ID_T_MOV, "bmp_mov.bin", 0);
-  lv_imgbtn_set_src(buttonMove, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonMove, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonMove, event_handler, ID_T_MOV, NULL, 0);
+  lv_imgbtn_set_src(buttonMove, LV_BTN_STATE_REL, "F:/bmp_mov.bin");
+  lv_imgbtn_set_src(buttonMove, LV_BTN_STATE_PR, "F:/bmp_mov.bin");
   lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
-  lv_obj_set_event_cb_mks(buttonHome, event_handler, ID_T_HOME, "bmp_zero.bin", 0);
-  lv_imgbtn_set_src(buttonHome, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonHome, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonHome, event_handler, ID_T_HOME, NULL, 0);
+  lv_imgbtn_set_src(buttonHome, LV_BTN_STATE_REL, "F:/bmp_zero.bin");
+  lv_imgbtn_set_src(buttonHome, LV_BTN_STATE_PR, "F:/bmp_zero.bin");
   lv_imgbtn_set_style(buttonHome, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonHome, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
-  lv_obj_set_event_cb_mks(buttonLevel, event_handler, ID_T_LEVELING, "bmp_leveling.bin", 0);
-  lv_imgbtn_set_src(buttonLevel, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonLevel, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonLevel, event_handler, ID_T_LEVELING, NULL, 0);
+  lv_imgbtn_set_src(buttonLevel, LV_BTN_STATE_REL, "F:/bmp_leveling.bin");
+  lv_imgbtn_set_src(buttonLevel, LV_BTN_STATE_PR, "F:/bmp_leveling.bin");
   lv_imgbtn_set_style(buttonLevel, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonLevel, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
-  lv_obj_set_event_cb_mks(buttonFilament, event_handler,ID_T_FILAMENT,"bmp_filamentchange.bin",0);
-  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonFilament, event_handler,ID_T_FILAMENT,NULL,0);
+  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_REL, "F:/bmp_filamentchange.bin");
+  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_PR, "F:/bmp_filamentchange.bin");
   lv_imgbtn_set_style(buttonFilament, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonFilament, LV_BTN_STATE_REL, &tft_style_label_rel);
 
-  //lv_obj_set_event_cb_mks(buttonMore, event_handler,ID_T_MORE,"bmp_More.bin",0);
-  //lv_imgbtn_set_src(buttonMore, LV_BTN_STATE_REL, &bmp_pic);
-  //lv_imgbtn_set_src(buttonMore, LV_BTN_STATE_PR, &bmp_pic);
-  //lv_imgbtn_set_style(buttonMore, LV_BTN_STATE_PR, &tft_style_label_pre);
-  //lv_imgbtn_set_style(buttonMore, LV_BTN_STATE_REL, &tft_style_label_rel);
-
-  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_T_RETURN, "bmp_return.bin", 0);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic);
+  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_T_RETURN, NULL, 0);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_return.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_return.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+  
 
   lv_obj_set_pos(buttonPreHeat, INTERVAL_V, titleHeight);
   lv_obj_set_pos(buttonExtrusion, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight);
@@ -266,8 +263,26 @@ void lv_draw_tool(void) {
     lv_label_set_text(label_Back, common_menu.text_back);
     lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
   }
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+    	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonPreHeat);
+		lv_group_add_obj(g, buttonExtrusion);
+		lv_group_add_obj(g, buttonMove);
+		lv_group_add_obj(g, buttonHome);
+		lv_group_add_obj(g, buttonLevel);
+		lv_group_add_obj(g, buttonFilament);
+		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 }
 
-void lv_clear_tool() { lv_obj_del(scr); }
+void lv_clear_tool() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+    	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI

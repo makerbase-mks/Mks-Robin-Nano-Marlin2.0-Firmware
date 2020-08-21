@@ -212,6 +212,7 @@
 #define Z2_AND_Z2ENDSTOP_CONF_CN        "双Z轴双限位功能设置"
 #define ENABLE_PINS_CONF_CN             "电机使能脚电平设置"
 #define WIFI_SETTINGS_CN                "Wi-Fi参数设置"
+#define ENCODER_SETTINGS_CN             "旋钮设置"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_CN  "双z双限位设置"
 #define Z2_ENABLE_CN                    "启用Z2轴"
@@ -247,6 +248,9 @@
 #define Y_SENSITIVITY_CN                      "Y轴灵敏度"
 #define Z_SENSITIVITY_CN                      "Z轴灵敏度"
 #define Z2_SENSITIVITY_CN                     "Z2轴灵敏度"
+
+#define ENCODER_CONF_TITLE_CN                 "机器参数>旋钮设置"
+#define ENCODER_CONF_TEXT_CN                  "是否使用旋钮功能?"
 
 #define TOOL_TEXT_CN                "工具"
 #define PREHEAT_TEXT_CN             "预热"

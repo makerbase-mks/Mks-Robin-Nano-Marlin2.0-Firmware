@@ -40,6 +40,7 @@
 WIFI_LIST wifi_list;
 list_menu_def list_menu;
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 static lv_obj_t *buttonWifiN[NUMBER_OF_PAGE];
 static lv_obj_t *lableWifiText[NUMBER_OF_PAGE];
@@ -128,22 +129,20 @@ void lv_draw_wifi_list(void) {
 	lv_label_set_text(title, creat_title_text());
   
   	lv_refr_now(lv_refr_get_disp_refreshing());
-	
-	LV_IMG_DECLARE(bmp_pic_117x92);
-	
+		
 	buttonDown = lv_imgbtn_create(scr, NULL);
 	buttonBack = lv_imgbtn_create(scr, NULL);
 
-	lv_obj_set_event_cb_mks(buttonDown, event_handler,ID_WL_DOWN,"bmp_pageDown.bin",0);
-	lv_imgbtn_set_src(buttonDown, LV_BTN_STATE_REL, &bmp_pic_117x92);
-	lv_imgbtn_set_src(buttonDown, LV_BTN_STATE_PR, &bmp_pic_117x92);
+	lv_obj_set_event_cb_mks(buttonDown, event_handler,ID_WL_DOWN,NULL,0);
+	lv_imgbtn_set_src(buttonDown, LV_BTN_STATE_REL, "F:/bmp_pageDown.bin");
+	lv_imgbtn_set_src(buttonDown, LV_BTN_STATE_PR, "F:/bmp_pageDown.bin");
 	lv_imgbtn_set_style(buttonDown, LV_BTN_STATE_PR, &tft_style_label_pre);
 	lv_imgbtn_set_style(buttonDown, LV_BTN_STATE_REL, &tft_style_label_rel);
 
 	
-	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_WL_RETURN,"bmp_back.bin",0);	
-    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_pic_117x92);
-    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_pic_117x92);	
+	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_WL_RETURN,NULL,0);	
+    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back.bin");
+    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back.bin");	
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
 
@@ -152,7 +151,7 @@ void lv_draw_wifi_list(void) {
 
 	lv_btn_set_layout(buttonDown, LV_LAYOUT_OFF);
 	lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
-
+	
 	for(uint8_t i = 0; i < NUMBER_OF_PAGE; i++) {
 		buttonWifiN[i] = lv_btn_create(scr, NULL);     /*Add a button the current screen*/
 		lv_obj_set_pos(buttonWifiN[i], 0,NAME_BTN_Y*i+10+titleHeight);                            /*Set its position*/
@@ -162,6 +161,13 @@ void lv_draw_wifi_list(void) {
 		lv_btn_set_style(buttonWifiN[i], LV_BTN_STYLE_PR, &tft_style_label_pre);      /*Set the button's pressed style*/
 		lv_btn_set_layout(buttonWifiN[i], LV_LAYOUT_OFF);
 		lableWifiText[i] = lv_label_create(buttonWifiN[i], NULL);
+		#if BUTTONS_EXIST(EN1, EN2, ENC)
+			uint8_t j = 0;
+			if (gCfgItems.encoder_enable == true) {
+				j = wifi_list.nameIndex + i;
+				if(j < wifi_list.getNameNum) lv_group_add_obj(g, buttonWifiN[i]);
+			}
+	  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
 	}
 
 	lablePageText = lv_label_create(scr, NULL);
@@ -174,6 +180,12 @@ void lv_draw_wifi_list(void) {
 		memset(wifi_list.wifiConnectedName, 0, sizeof(&wifi_list.wifiConnectedName));
 		memcpy(wifi_list.wifiConnectedName, wifiPara.ap_name, sizeof(wifi_list.wifiConnectedName));
 	}
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonDown);
+		lv_group_add_obj(g, buttonBack);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
 	    
 	disp_wifi_list();
 }
@@ -225,7 +237,14 @@ void wifi_scan_handle() {
 	 }
 }
 
-void lv_clear_wifi_list() { lv_obj_del(scr); }
+void lv_clear_wifi_list() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif //USE_WIFI_FUNCTION
 

@@ -31,6 +31,7 @@
 #include "../../../../../Configuration.h"
 #include "../../../../module/planner.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 static lv_obj_t *labelModelValue=NULL,*buttonModelValue=NULL;
 static lv_obj_t *labelCloudValue=NULL;
@@ -149,11 +150,6 @@ void lv_draw_wifi_settings(void) {
   
   	lv_refr_now(lv_refr_get_disp_refreshing());
 	
-	LV_IMG_DECLARE(bmp_para_back);
-	//LV_IMG_DECLARE(bmp_para_arrow);
-	LV_IMG_DECLARE(bmp_para_bank);
-	LV_IMG_DECLARE(bmp_para_state);
-
 	buttonModelText = lv_btn_create(scr, NULL);     /*Add a button the current screen*/
 	lv_obj_set_pos(buttonModelText, PARA_UI_POS_X,PARA_UI_POS_Y);                            /*Set its position*/
 	lv_obj_set_size(buttonModelText, PARA_UI_VALUE_SIZE_X-110,PARA_UI_SIZE_Y);                          /*Set its size*/
@@ -165,13 +161,14 @@ void lv_draw_wifi_settings(void) {
 	
 	buttonModelValue = lv_imgbtn_create(scr, NULL);
 	lv_obj_set_pos(buttonModelValue,PARA_UI_VALUE_POS_X,PARA_UI_POS_Y+PARA_UI_VALUE_V);
-	lv_obj_set_event_cb_mks(buttonModelValue, event_handler,ID_WIFI_MODEL,"bmp_blank_sel.bin",0);	
-   	lv_imgbtn_set_src(buttonModelValue, LV_BTN_STATE_REL, &bmp_para_bank);
-    lv_imgbtn_set_src(buttonModelValue, LV_BTN_STATE_PR, &bmp_para_bank);	
+	lv_obj_set_event_cb_mks(buttonModelValue, event_handler,ID_WIFI_MODEL, NULL,0);	
+   	lv_imgbtn_set_src(buttonModelValue, LV_BTN_STATE_REL, "F:/bmp_blank_sel.bin");
+    lv_imgbtn_set_src(buttonModelValue, LV_BTN_STATE_PR, "F:/bmp_blank_sel.bin");	
 	lv_imgbtn_set_style(buttonModelValue, LV_BTN_STATE_PR, &style_para_value_pre);
 	lv_imgbtn_set_style(buttonModelValue, LV_BTN_STATE_REL, &style_para_value_pre);
 	lv_btn_set_layout(buttonModelValue, LV_LAYOUT_OFF);
 	labelModelValue = lv_label_create(buttonModelValue, NULL);
+	
 
 	line1 = lv_line_create(scr, NULL);
 	lv_ex_line(line1,line_points[0]);
@@ -187,13 +184,14 @@ void lv_draw_wifi_settings(void) {
 
 	buttonNameValue = lv_imgbtn_create(scr, NULL);
 	lv_obj_set_pos(buttonNameValue,PARA_UI_VALUE_POS_X,PARA_UI_POS_Y*2+PARA_UI_VALUE_V);
-	lv_obj_set_event_cb_mks(buttonNameValue, event_handler,ID_WIFI_NAME,"bmp_value_blank.bin",0);	
-    lv_imgbtn_set_src(buttonNameValue, LV_BTN_STATE_REL, &bmp_para_bank);
-   	lv_imgbtn_set_src(buttonNameValue, LV_BTN_STATE_PR, &bmp_para_bank);	
+	lv_obj_set_event_cb_mks(buttonNameValue, event_handler,ID_WIFI_NAME, NULL,0);	
+    lv_imgbtn_set_src(buttonNameValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
+   	lv_imgbtn_set_src(buttonNameValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");	
 	lv_imgbtn_set_style(buttonNameValue, LV_BTN_STATE_PR, &style_para_value_rel);
 	lv_imgbtn_set_style(buttonNameValue, LV_BTN_STATE_REL, &style_para_value_rel);
 	lv_btn_set_layout(buttonNameValue, LV_LAYOUT_OFF);
 	labelNameValue = lv_label_create(buttonNameValue, NULL);
+	
 
 	line2 = lv_line_create(scr, NULL);
 	lv_ex_line(line2,line_points[1]);
@@ -209,13 +207,14 @@ void lv_draw_wifi_settings(void) {
 	
 	buttonPassWordValue = lv_imgbtn_create(scr, NULL);
 	lv_obj_set_pos(buttonPassWordValue,PARA_UI_VALUE_POS_X,PARA_UI_POS_Y*3+PARA_UI_VALUE_V);
-	lv_obj_set_event_cb_mks(buttonPassWordValue, event_handler,ID_WIFI_PASSWORD,"bmp_value_blank.bin",0);	
-    lv_imgbtn_set_src(buttonPassWordValue, LV_BTN_STATE_REL, &bmp_para_bank);
-    lv_imgbtn_set_src(buttonPassWordValue, LV_BTN_STATE_PR, &bmp_para_bank);	
+	lv_obj_set_event_cb_mks(buttonPassWordValue, event_handler,ID_WIFI_PASSWORD, NULL,0);	
+    lv_imgbtn_set_src(buttonPassWordValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
+    lv_imgbtn_set_src(buttonPassWordValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");	
 	lv_imgbtn_set_style(buttonPassWordValue, LV_BTN_STATE_PR, &style_para_value_pre);
 	lv_imgbtn_set_style(buttonPassWordValue, LV_BTN_STATE_REL, &style_para_value_rel);
 	lv_btn_set_layout(buttonPassWordValue, LV_LAYOUT_OFF);
 	labelPassWordValue = lv_label_create(buttonPassWordValue, NULL);
+	
 
 	line3 = lv_line_create(scr, NULL);
 	lv_ex_line(line3,line_points[2]);
@@ -232,38 +231,42 @@ void lv_draw_wifi_settings(void) {
 	buttonCloudValue = lv_imgbtn_create(scr, NULL);
 	lv_obj_set_pos(buttonCloudValue,PARA_UI_STATE_POS_X,PARA_UI_POS_Y*4+PARA_UI_STATE_V);
 	if(gCfgItems.cloud_enable == true) {
-		lv_obj_set_event_cb_mks(buttonCloudValue, event_handler,ID_WIFI_CLOUD,"bmp_enable.bin",0);	
+		lv_imgbtn_set_src(buttonCloudValue, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+    		lv_imgbtn_set_src(buttonCloudValue, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
 	}
 	else {
-		lv_obj_set_event_cb_mks(buttonCloudValue, event_handler,ID_WIFI_CLOUD,"bmp_disable.bin",0);
-	}	
-    lv_imgbtn_set_src(buttonCloudValue, LV_BTN_STATE_REL, &bmp_para_state);
-    lv_imgbtn_set_src(buttonCloudValue, LV_BTN_STATE_PR, &bmp_para_state);	
+		lv_imgbtn_set_src(buttonCloudValue, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+    		lv_imgbtn_set_src(buttonCloudValue, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
+	}
+    	lv_obj_set_event_cb_mks(buttonCloudValue, event_handler,ID_WIFI_CLOUD, NULL,0);	
 	lv_imgbtn_set_style(buttonCloudValue, LV_BTN_STATE_PR, &tft_style_label_pre);
 	lv_imgbtn_set_style(buttonCloudValue, LV_BTN_STATE_REL, &tft_style_label_rel);
 	lv_btn_set_layout(buttonCloudValue, LV_LAYOUT_OFF);
 	labelCloudValue = lv_label_create(buttonCloudValue, NULL);
+	
 
 	line4 = lv_line_create(scr, NULL);
 	lv_ex_line(line4,line_points[3]);
 	
 	buttonConfig = lv_imgbtn_create(scr, NULL);
-	lv_obj_set_event_cb_mks(buttonConfig, event_handler,ID_WIFI_CONFIG,"bmp_back70x40.bin",0);	
-    lv_imgbtn_set_src(buttonConfig, LV_BTN_STATE_REL, &bmp_para_back);
-    lv_imgbtn_set_src(buttonConfig, LV_BTN_STATE_PR, &bmp_para_back);	
+	lv_obj_set_event_cb_mks(buttonConfig, event_handler,ID_WIFI_CONFIG, NULL,0);	
+    lv_imgbtn_set_src(buttonConfig, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+    lv_imgbtn_set_src(buttonConfig, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");	
 	lv_imgbtn_set_style(buttonConfig, LV_BTN_STATE_PR, &tft_style_label_pre);
 	lv_imgbtn_set_style(buttonConfig, LV_BTN_STATE_REL, &tft_style_label_rel);
+	
 	
 	lv_obj_set_pos(buttonConfig,PARA_UI_TURN_PAGE_POS_X,PARA_UI_TURN_PAGE_POS_Y);
 	lv_btn_set_layout(buttonConfig, LV_LAYOUT_OFF);
 	labelConfig = lv_label_create(buttonConfig, NULL);
 
 	buttonBack = lv_imgbtn_create(scr, NULL);
-	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_WIFI_RETURN,"bmp_back70x40.bin",0);	
-    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_para_back);
-    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_para_back);	
+	lv_obj_set_event_cb_mks(buttonBack, event_handler,ID_WIFI_RETURN, NULL,0);	
+    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+    lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");	
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
 	lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+	
 
 	lv_obj_set_pos(buttonBack,PARA_UI_BACL_POS_X,PARA_UI_BACL_POS_Y);
 	lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
@@ -316,9 +319,26 @@ void lv_draw_wifi_settings(void) {
 		lv_label_set_text(label_Back, common_menu.text_back);
 		lv_obj_align(label_Back, buttonBack, LV_ALIGN_CENTER,0, 0);
 	}
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonModelValue);
+		lv_group_add_obj(g, buttonNameValue);
+		lv_group_add_obj(g, buttonPassWordValue);
+		lv_group_add_obj(g, buttonCloudValue);
+		lv_group_add_obj(g, buttonConfig);
+		lv_group_add_obj(g, buttonBack);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
 }
 
-void lv_clear_wifi_settings() { lv_obj_del(scr); }
+void lv_clear_wifi_settings() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif  //USE_WIFI_FUNCTION
 

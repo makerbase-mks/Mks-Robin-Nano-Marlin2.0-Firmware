@@ -33,6 +33,7 @@
 #include "../../../../gcode/gcode.h"
 #include "../../../../module/planner.h"
 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_TMC_MODE_RETURN 1
@@ -71,7 +72,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         if (stepperX.stored.stealthChop_enabled == true) {
           stepperX.stored.stealthChop_enabled = false;
           stepperX.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonXState, event_handler, ID_TMC_MODE_X, "bmp_disable.bin", 0);
+          lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      	   lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
           lv_label_set_text(labelXState, machine_menu.disable);
           //lv_obj_align(labelXState, buttonE1State, LV_ALIGN_IN_LEFT_MID,0, 0);
           // gcode.process_subcommands_now_P(PSTR("M500"));
@@ -79,7 +81,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         else {
           stepperX.stored.stealthChop_enabled = true;
           stepperX.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonXState, event_handler, ID_TMC_MODE_X, "bmp_enable.bin", 0);
+          lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      	   lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
           lv_label_set_text(labelXState, machine_menu.enable);
           // gcode.process_subcommands_now_P(PSTR("M500"));
         }
@@ -94,14 +97,16 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         if (stepperY.stored.stealthChop_enabled == true) {
           stepperY.stored.stealthChop_enabled = false;
           stepperY.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonYState, event_handler, ID_TMC_MODE_Y, "bmp_disable.bin", 0);
+          lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      	   lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
           lv_label_set_text(labelYState, machine_menu.disable);
           //lv_obj_align(labelXState, buttonE1State, LV_ALIGN_IN_LEFT_MID,0, 0);
         }
         else {
           stepperY.stored.stealthChop_enabled = true;
           stepperY.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonYState, event_handler, ID_TMC_MODE_Y, "bmp_enable.bin", 0);
+          lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      	   lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
           lv_label_set_text(labelYState, machine_menu.enable);
         }
         gcode.process_subcommands_now_P(PSTR("M500"));
@@ -115,14 +120,16 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         if (stepperZ.stored.stealthChop_enabled == true) {
           stepperZ.stored.stealthChop_enabled = false;
           stepperZ.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonZState, event_handler, ID_TMC_MODE_Z, "bmp_disable.bin", 0);
+	   lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      	   lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
           lv_label_set_text(labelZState, machine_menu.disable);
           //lv_obj_align(labelXState, buttonE1State, LV_ALIGN_IN_LEFT_MID,0, 0);
         }
         else {
           stepperZ.stored.stealthChop_enabled = true;
           stepperZ.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonZState, event_handler, ID_TMC_MODE_Z, "bmp_enable.bin", 0);
+	   lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      	   lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
           lv_label_set_text(labelZState, machine_menu.enable);
         }
         gcode.process_subcommands_now_P(PSTR("M500"));
@@ -136,14 +143,16 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         if (stepperE0.stored.stealthChop_enabled == true) {
           stepperE0.stored.stealthChop_enabled = false;
           stepperE0.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonE0State, event_handler, ID_TMC_MODE_E0, "bmp_disable.bin", 0);
+          lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      	   lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
           lv_label_set_text(labelE0State, machine_menu.disable);
           //lv_obj_align(labelXState, buttonE1State, LV_ALIGN_IN_LEFT_MID,0, 0);
         }
         else {
           stepperE0.stored.stealthChop_enabled = true;
           stepperE0.refresh_stepping_mode();
-          lv_obj_set_event_cb_mks(buttonE0State, event_handler, ID_TMC_MODE_E0, "bmp_enable.bin", 0);
+          lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      	   lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
           lv_label_set_text(labelE0State, machine_menu.enable);
         }
         gcode.process_subcommands_now_P(PSTR("M500"));
@@ -158,14 +167,16 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
             if (stepperE1.stored.stealthChop_enabled == true) {
               stepperE1.stored.stealthChop_enabled = false;
               stepperE1.refresh_stepping_mode();
-              lv_obj_set_event_cb_mks(buttonE1State, event_handler, ID_TMC_MODE_E1, "bmp_disable.bin", 0);
+	       lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      	   	lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
               lv_label_set_text(labelE1State, machine_menu.disable);
               //lv_obj_align(labelXState, buttonE1State, LV_ALIGN_IN_LEFT_MID,0, 0);
             }
             else {
               stepperE1.stored.stealthChop_enabled = true;
               stepperE1.refresh_stepping_mode();
-              lv_obj_set_event_cb_mks(buttonE1State, event_handler, ID_TMC_MODE_E1, "bmp_enable.bin", 0);
+		lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      	   	lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
               lv_label_set_text(labelE1State, machine_menu.enable);
             }
             gcode.process_subcommands_now_P(PSTR("M500"));
@@ -242,10 +253,6 @@ void lv_draw_tmc_step_mode_settings(void) {
 
   lv_refr_now(lv_refr_get_disp_refreshing());
 
-  LV_IMG_DECLARE(bmp_para_back);
-  LV_IMG_DECLARE(bmp_para_state);
-  // LV_IMG_DECLARE(bmp_para_bank);
-
   if (uiCfg.para_ui_page != 1) {
     buttonXText = lv_btn_create(scr, NULL);                                 /*Add a button the current screen*/
     lv_obj_set_pos(buttonXText, PARA_UI_POS_X, PARA_UI_POS_Y);              /*Set its position*/
@@ -258,16 +265,28 @@ void lv_draw_tmc_step_mode_settings(void) {
 
     buttonXState = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonXState, PARA_UI_STATE_POS_X, PARA_UI_POS_Y + PARA_UI_STATE_V);
-    if (stepperX.get_stealthChop_status())
-      lv_obj_set_event_cb_mks(buttonXState, event_handler, ID_TMC_MODE_X, "bmp_enable.bin", 0);
-    else
-      lv_obj_set_event_cb_mks(buttonXState, event_handler, ID_TMC_MODE_X, "bmp_disable.bin", 0);
-    lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_REL, &bmp_para_state);
-    lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_PR, &bmp_para_state);
+    if (stepperX.get_stealthChop_status()) {
+      lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
+    }
+      lv_obj_set_event_cb_mks(buttonXState, event_handler, ID_TMC_MODE_X, , 0);
+    else {
+      lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
+    }
+    
+    lv_obj_set_event_cb_mks(buttonXState, event_handler, ID_TMC_MODE_X, NULL, 0);
+    
     lv_imgbtn_set_style(buttonXState, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonXState, LV_BTN_STATE_REL, &tft_style_label_rel);
     lv_btn_set_layout(buttonXState, LV_LAYOUT_OFF);
     labelXState = lv_label_create(buttonXState, NULL);
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonXState);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+    
 
     line1 = lv_line_create(scr, NULL);
     lv_ex_line(line1, line_points[0]);
@@ -283,16 +302,27 @@ void lv_draw_tmc_step_mode_settings(void) {
 
     buttonYState = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonYState, PARA_UI_STATE_POS_X, PARA_UI_POS_Y * 2 + PARA_UI_STATE_V);
-    if (stepperY.get_stealthChop_status())
-      lv_obj_set_event_cb_mks(buttonYState, event_handler, ID_TMC_MODE_Y, "bmp_enable.bin", 0);
-    else
-      lv_obj_set_event_cb_mks(buttonYState, event_handler, ID_TMC_MODE_Y, "bmp_disable.bin", 0);
-    lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_REL, &bmp_para_state);
-    lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_PR, &bmp_para_state);
+    if (stepperY.get_stealthChop_status()) {
+      lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
+    }
+    else {
+      lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      lv_imgbtn_set_src(buttonYState, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
+    }
+	
+    lv_obj_set_event_cb_mks(buttonYState, event_handler, ID_TMC_MODE_Y, NULL, 0);
+    
     lv_imgbtn_set_style(buttonYState, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonYState, LV_BTN_STATE_REL, &tft_style_label_rel);
     lv_btn_set_layout(buttonYState, LV_LAYOUT_OFF);
     labelYState = lv_label_create(buttonYState, NULL);
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonYState);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+    
 
     line2 = lv_line_create(scr, NULL);
     lv_ex_line(line2, line_points[1]);
@@ -308,17 +338,26 @@ void lv_draw_tmc_step_mode_settings(void) {
 
     buttonZState = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonZState, PARA_UI_STATE_POS_X, PARA_UI_POS_Y * 3 + PARA_UI_STATE_V);
-    if (stepperZ.get_stealthChop_status())
-      lv_obj_set_event_cb_mks(buttonZState, event_handler, ID_TMC_MODE_Z, "bmp_enable.bin", 0);
-    else
-      lv_obj_set_event_cb_mks(buttonZState, event_handler, ID_TMC_MODE_Z, "bmp_disable.bin", 0);
-    lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_REL, &bmp_para_state);
-    lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_PR, &bmp_para_state);
+    if (stepperZ.get_stealthChop_status()) {
+      lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+      lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
+    }
+    else {
+      lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+      lv_imgbtn_set_src(buttonZState, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
+    }
+    lv_obj_set_event_cb_mks(buttonZState, event_handler, ID_TMC_MODE_Z, NULL, 0);
     lv_imgbtn_set_style(buttonZState, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonZState, LV_BTN_STATE_REL, &tft_style_label_rel);
     lv_btn_set_layout(buttonZState, LV_LAYOUT_OFF);
     labelZState = lv_label_create(buttonZState, NULL);
-
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonZState);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+    
+	
     line3 = lv_line_create(scr, NULL);
     lv_ex_line(line3, line_points[2]);
 
@@ -333,27 +372,44 @@ void lv_draw_tmc_step_mode_settings(void) {
 
     buttonE0State = lv_imgbtn_create(scr, NULL);
     lv_obj_set_pos(buttonE0State, PARA_UI_STATE_POS_X, PARA_UI_POS_Y * 4 + PARA_UI_STATE_V);
-    if (stepperE0.get_stealthChop_status())
-      lv_obj_set_event_cb_mks(buttonE0State, event_handler, ID_TMC_MODE_E0, "bmp_enable.bin", 0);
-    else
-      lv_obj_set_event_cb_mks(buttonE0State, event_handler, ID_TMC_MODE_E0, "bmp_disable.bin", 0);
-    lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_REL, &bmp_para_state);
-    lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_PR, &bmp_para_state);
+    if (stepperE0.get_stealthChop_status()) {
+	lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+    	lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_PR, "F:/bmp_enable.bin");	
+    }
+    else {
+	lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+    	lv_imgbtn_set_src(buttonE0State, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
+    }
+	
+    lv_obj_set_event_cb_mks(buttonE0State, event_handler, ID_TMC_MODE_E0, NULL, 0);
+    
     lv_imgbtn_set_style(buttonE0State, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonE0State, LV_BTN_STATE_REL, &tft_style_label_rel);
     lv_btn_set_layout(buttonE0State, LV_LAYOUT_OFF);
     labelE0State = lv_label_create(buttonE0State, NULL);
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonE0State);
+	}
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+    
 
     line4 = lv_line_create(scr, NULL);
     lv_ex_line(line4, line_points[3]);
 
     #if AXIS_HAS_STEALTHCHOP(E1)
       buttonTurnPage = lv_imgbtn_create(scr, NULL);
-      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_MODE_DOWN, "bmp_back70x40.bin", 0);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, &bmp_para_back);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, &bmp_para_back);
+      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_MODE_DOWN, NULL, 0);
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_PR, &tft_style_label_pre);
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_REL, &tft_style_label_rel);
+      #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonTurnPage);
+	}
+      #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+      
     #endif
   }
   else {
@@ -369,24 +425,33 @@ void lv_draw_tmc_step_mode_settings(void) {
 
       buttonE1State = lv_imgbtn_create(scr, NULL);
       lv_obj_set_pos(buttonE1State, PARA_UI_STATE_POS_X, PARA_UI_POS_Y + PARA_UI_STATE_V);
-      if (stepperE1.get_stealthChop_status())
-        lv_obj_set_event_cb_mks(buttonE1State, event_handler, ID_TMC_MODE_E1, "bmp_enable.bin", 0);
-      else
-        lv_obj_set_event_cb_mks(buttonE1State, event_handler, ID_TMC_MODE_E1, "bmp_disable.bin", 0);
-      lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_REL, &bmp_para_state);
-      lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_PR, &bmp_para_state);
+      if (stepperE1.get_stealthChop_status()) {
+        lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
+        lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
+      	}
+      else {
+	 lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
+        lv_imgbtn_set_src(buttonE1State, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
+      }
+      lv_obj_set_event_cb_mks(buttonE1State, event_handler, ID_TMC_MODE_E1, NULL, 0);
       lv_imgbtn_set_style(buttonE1State, LV_BTN_STATE_PR, &tft_style_label_pre);
       lv_imgbtn_set_style(buttonE1State, LV_BTN_STATE_REL, &tft_style_label_rel);
       lv_btn_set_layout(buttonE1State, LV_LAYOUT_OFF);
       labelE1State = lv_label_create(buttonE1State, NULL);
+      #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonE1State);
+	}
+      #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+      
 
       line1 = lv_line_create(scr, NULL);
       lv_ex_line(line1, line_points[0]);
 
       buttonTurnPage = lv_imgbtn_create(scr, NULL);
-      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_MODE_UP, "bmp_back70x40.bin", 0);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, &bmp_para_back);
-      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, &bmp_para_back);
+      lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_MODE_UP, NULL, 0);
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+      lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_PR, &tft_style_label_pre);
       lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_REL, &tft_style_label_rel);
     #endif
@@ -398,11 +463,17 @@ void lv_draw_tmc_step_mode_settings(void) {
   #endif
 
   buttonBack = lv_imgbtn_create(scr, NULL);
-  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_TMC_MODE_RETURN, "bmp_back70x40.bin", 0);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, &bmp_para_back);
-  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, &bmp_para_back);
+  lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_TMC_MODE_RETURN, NULL, 0);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+  
 
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y);
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
@@ -473,6 +544,13 @@ void lv_draw_tmc_step_mode_settings(void) {
   }
 }
 
-void lv_clear_tmc_step_mode_settings() { lv_obj_del(scr); }
+void lv_clear_tmc_step_mode_settings() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI && HAS_STEALTHCHOP

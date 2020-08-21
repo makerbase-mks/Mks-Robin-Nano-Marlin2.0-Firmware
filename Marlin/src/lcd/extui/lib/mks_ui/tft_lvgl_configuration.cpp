@@ -43,6 +43,7 @@
 
 #include "../../../../MarlinCore.h"
 #include "../../../../feature/touch/xpt2046.h"
+#include "../../../ultralcd.h"
 
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/powerloss.h"
@@ -55,6 +56,7 @@
 #endif
 
 static lv_disp_buf_t disp_buf;
+lv_group_t*  g;
 #if ENABLED(SDSUPPORT)
   extern void UpdateAssets();
 #endif
@@ -84,11 +86,9 @@ extern uint8_t gcode_preview_over, flash_preview_begin, default_preview_flg;
 void SysTick_Callback() {
   lv_tick_inc(1);
   print_time_count();
-  #if USE_WIFI_FUNCTION
-    if(tips_disp.timer == TIPS_TIMER_START) {
-      tips_disp.timer_count++;
-    }
-  #endif  //USE_WIFI_FUNCTION
+  if(tips_disp.timer == TIPS_TIMER_START) {
+  	tips_disp.timer_count++;
+  }
   if(uiCfg.filament_loading_time_flg == 1) {
 	  uiCfg.filament_loading_time_cnt++;
 	  uiCfg.filament_rate = (uint32_t)(((uiCfg.filament_loading_time_cnt / (uiCfg.filament_loading_time * 1000.0)) * 100.0) + 0.5);
@@ -428,6 +428,7 @@ void init_tft() {
 
 extern uint8_t bmp_public_buf[17 * 1024];
 
+
 void tft_lvgl_init() {
 
   //uint16_t test_id=0;
@@ -438,7 +439,7 @@ void tft_lvgl_init() {
   ui_cfg_init();
   disp_language_init();
 
-  #if 0//USE_WIFI_FUNCTION
+  #if USE_WIFI_FUNCTION
 	mks_esp_wifi_init();
 	WIFISERIAL.begin(WIFI_BAUDRATE);
 	uint32_t serial_connect_timeout = millis() + 1000UL;
@@ -477,6 +478,36 @@ void tft_lvgl_init() {
   indev_drv.type = LV_INDEV_TYPE_POINTER; /*Touch pad is a pointer-like device*/
   indev_drv.read_cb = my_touchpad_read;  /*Set your driver function*/
   lv_indev_drv_register(&indev_drv);   /*Finally register the driver*/
+  
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	  g = lv_group_create();
+	  lv_indev_drv_t enc_drv;
+	  lv_indev_drv_init(&enc_drv);
+	  enc_drv.type = LV_INDEV_TYPE_ENCODER;
+	  enc_drv.read_cb = my_mousewheel_read;
+	  lv_indev_t * enc_indev = lv_indev_drv_register(&enc_drv);
+	  lv_indev_set_group(enc_indev, g);
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+
+  lv_fs_drv_t spi_flash_drv;
+  lv_fs_drv_init(&spi_flash_drv);
+  spi_flash_drv.letter = 'F';
+  spi_flash_drv.open_cb = spi_flash_open_cb;
+  spi_flash_drv.close_cb = spi_flash_close_cb;
+  spi_flash_drv.read_cb = spi_flash_read_cb;
+  spi_flash_drv.seek_cb = spi_flash_seek_cb;
+  spi_flash_drv.tell_cb = spi_flash_tell_cb;
+  lv_fs_drv_register(&spi_flash_drv);
+
+  lv_fs_drv_t sd_drv;
+  lv_fs_drv_init(&sd_drv);
+  sd_drv.letter = 'S';
+  sd_drv.open_cb = sd_open_cb;
+  sd_drv.close_cb = sd_close_cb;
+  sd_drv.read_cb = sd_read_cb;
+  sd_drv.seek_cb = sd_seek_cb;
+  sd_drv.tell_cb = sd_tell_cb;
+  lv_fs_drv_register(&sd_drv);
 
   systick_attach_callback(SysTick_Callback);
 
@@ -487,6 +518,8 @@ void tft_lvgl_init() {
   tft_style_init();
 
   filament_pin_setup();
+
+  lv_encoder_pin_init();
 
   #if ENABLED(POWER_LOSS_RECOVERY)
     if (recovery.valid()) {
@@ -793,5 +826,304 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
 
   return false; /*Return `false` because we are not buffering and no more data to read*/
 }
+
+int16_t enc_diff = 0;
+lv_indev_state_t state = LV_INDEV_STATE_REL;
+
+bool my_mousewheel_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data) {
+    (void) indev_drv;   /*Unused*/
+
+    data->state = state;
+    data->enc_diff = enc_diff;
+    enc_diff = 0;
+
+    return false;       /*No more data to read so return false*/
+}
+
+uint32_t pic_read_base_addr = 0,pic_read_addr_offset = 0;
+//spi_flash
+lv_fs_res_t spi_flash_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_fs_mode_t mode)
+{
+	//char *name = strstr(path,"/");
+	//name++;
+	//lv_label_set_text(title, path);
+	//path++;
+    pic_read_base_addr = lv_get_pic_addr((uint8_t *)path);
+	pic_read_addr_offset = pic_read_base_addr;
+    return LV_FS_RES_OK;
+}
+
+lv_fs_res_t spi_flash_close_cb (lv_fs_drv_t * drv, void * file_p)
+{
+    lv_fs_res_t res = LV_FS_RES_OK;
+
+    /* Add your code here*/
+    pic_read_addr_offset = pic_read_base_addr;
+    return res;
+}
+
+lv_fs_res_t spi_flash_read_cb (lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
+{
+    lv_pic_test((uint8_t *)buf,pic_read_addr_offset,btr);
+    *br = btr;
+    return LV_FS_RES_OK;
+}
+
+lv_fs_res_t spi_flash_seek_cb(lv_fs_drv_t * drv, void * file_p, uint32_t pos)
+{
+    pic_read_addr_offset = pic_read_base_addr + pos;
+    return LV_FS_RES_OK;
+}
+
+lv_fs_res_t spi_flash_tell_cb(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
+{
+    *pos_p = pic_read_addr_offset - pic_read_base_addr;
+    return LV_FS_RES_OK;
+}
+
+//sd
+char *cur_namefff;
+lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_fs_mode_t mode)
+{
+  //cur_namefff = strrchr(path, '/');
+  char name_buf[100];
+  ZERO(name_buf);
+  strcat(name_buf,"/");
+  strcat(name_buf,path);
+  char *temp = strstr(name_buf,".bin");
+  if (temp) { strcpy(temp,".GCO"); }
+	pic_read_base_addr = lv_open_gcode_file((char *)name_buf);
+	pic_read_addr_offset = pic_read_base_addr;
+    return LV_FS_RES_OK;
+}
+
+lv_fs_res_t sd_close_cb (lv_fs_drv_t * drv, void * file_p)
+{
+    /* Add your code here*/
+    lv_close_gcode_file();
+    return LV_FS_RES_OK;
+}
+
+lv_fs_res_t sd_read_cb (lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
+{
+    if(btr == 200) {
+	lv_gcode_file_read((uint8_t *)buf);
+	//pic_read_addr_offset += 208;
+	*br = 200;
+    }
+    else if(btr == 4) {
+	uint8_t header_pic[4] = {0x04, 0x90, 0x81, 0x0C};
+	memcpy(buf,header_pic,4);
+ 	//pic_read_addr_offset += 4;
+	*br = 4;
+    }
+    return LV_FS_RES_OK;
+}
+
+lv_fs_res_t sd_seek_cb(lv_fs_drv_t * drv, void * file_p, uint32_t pos)
+{
+    pic_read_addr_offset = pic_read_base_addr + (pos - 4) / 200 * 409;
+    lv_gcode_file_seek(pic_read_addr_offset);
+    return LV_FS_RES_OK;
+}
+
+lv_fs_res_t sd_tell_cb(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
+{
+    if (pic_read_addr_offset) *pos_p = 0;
+    else *pos_p = (pic_read_addr_offset - pic_read_base_addr) / 409 * 200 + 4;
+    return LV_FS_RES_OK;
+}
+
+
+void lv_encoder_pin_init() {
+  #if 1//HAS_DIGITAL_BUTTONS
+
+    #if BUTTON_EXISTS(EN1)
+      SET_INPUT_PULLUP(BTN_EN1);
+    #endif
+    #if BUTTON_EXISTS(EN2)
+      SET_INPUT_PULLUP(BTN_EN2);
+    #endif
+    #if BUTTON_EXISTS(ENC)
+      SET_INPUT_PULLUP(BTN_ENC);
+    #endif
+
+    #if BUTTON_EXISTS(BACK)
+      SET_INPUT_PULLUP(BTN_BACK);
+    #endif
+
+    #if BUTTON_EXISTS(UP)
+      SET_INPUT(BTN_UP);
+    #endif
+    #if BUTTON_EXISTS(DWN)
+      SET_INPUT(BTN_DWN);
+    #endif
+    #if BUTTON_EXISTS(LFT)
+      SET_INPUT(BTN_LFT);
+    #endif
+    #if BUTTON_EXISTS(RT)
+      SET_INPUT(BTN_RT);
+    #endif
+
+  #endif // !HAS_DIGITAL_BUTTONS
+}
+
+#if 1//HAS_ENCODER_ACTION
+  static uint8_t buttons;
+  static const int8_t encoderDirection = 1;
+  static int16_t enc_Direction;
+  void lv_update_encoder() {
+    const millis_t now = millis();
+    if (ELAPSED(now, 0)) {
+
+      #if 1//HAS_DIGITAL_BUTTONS
+
+        #if ANY_BUTTON(EN1, EN2, ENC, BACK)
+
+          uint8_t newbutton = 0;
+
+          #if BUTTON_EXISTS(EN1)
+            if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
+          #endif
+          #if BUTTON_EXISTS(EN2)
+            if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
+          #endif
+          #if BUTTON_EXISTS(ENC)
+            if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
+          #endif
+          #if BUTTON_EXISTS(BACK)
+            if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+          #endif
+
+        #else
+
+          constexpr uint8_t newbutton = 0;
+
+        #endif
+
+        //
+        // Directional buttons
+        //
+        #if ANY_BUTTON(UP, DWN, LFT, RT)
+
+          const int8_t pulses = epps * encoderDirection;
+
+          if (false) {
+            // for the else-ifs below
+          }
+          #if BUTTON_EXISTS(UP)
+            else if (BUTTON_PRESSED(UP)) {
+              encoderDiff = (ENCODER_STEPS_PER_MENU_ITEM) * pulses;
+              next_button_update_ms = now + 300;
+            }
+          #endif
+          #if BUTTON_EXISTS(DWN)
+            else if (BUTTON_PRESSED(DWN)) {
+              encoderDiff = -(ENCODER_STEPS_PER_MENU_ITEM) * pulses;
+              next_button_update_ms = now + 300;
+            }
+          #endif
+          #if BUTTON_EXISTS(LFT)
+            else if (BUTTON_PRESSED(LFT)) {
+              encoderDiff = -pulses;
+              next_button_update_ms = now + 300;
+            }
+          #endif
+          #if BUTTON_EXISTS(RT)
+            else if (BUTTON_PRESSED(RT)) {
+              encoderDiff = pulses;
+              next_button_update_ms = now + 300;
+            }
+          #endif
+
+        #endif // UP || DWN || LFT || RT
+
+        buttons = (newbutton
+          #if HAS_SLOW_BUTTONS
+            | slow_buttons
+          #endif
+          #if BOTH(HAS_TOUCH_XPT2046, HAS_ENCODER_ACTION)
+            | (touch_buttons & TERN(HAS_ENCODER_WHEEL, ~(EN_A | EN_B), 0xFF))
+          #endif
+        );
+
+      #elif HAS_ADC_BUTTONS
+
+        buttons = 0;
+
+      #endif
+
+      #if HAS_ADC_BUTTONS
+        if (keypad_buttons == 0) {
+          const uint8_t b = get_ADC_keyValue();
+          if (WITHIN(b, 1, 8)) keypad_buttons = _BV(b - 1);
+        }
+      #endif
+
+      #if HAS_SHIFT_ENCODER
+        /**
+         * Set up Rotary Encoder bit values (for two pin encoders to indicate movement).
+         * These values are independent of which pins are used for EN_A / EN_B indications.
+         * The rotary encoder part is also independent of the LCD chipset.
+         */
+        uint8_t val = 0;
+        WRITE(SHIFT_LD, LOW);
+        WRITE(SHIFT_LD, HIGH);
+        LOOP_L_N(i, 8) {
+          val >>= 1;
+          if (READ(SHIFT_OUT)) SBI(val, 7);
+          WRITE(SHIFT_CLK, HIGH);
+          WRITE(SHIFT_CLK, LOW);
+        }
+        TERN(REPRAPWORLD_KEYPAD, keypad_buttons, buttons) = ~val;
+      #endif
+
+    } // next_button_update_ms
+
+    #if HAS_ENCODER_WHEEL
+      static uint8_t lastEncoderBits;
+
+      #define encrot0 0
+      #define encrot1 2
+      #define encrot2 3
+      #define encrot3 1
+
+      // Manage encoder rotation
+      #define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: enc_Direction += encoderDirection; break; case _E2: enc_Direction -= encoderDirection; }
+
+      uint8_t enc = 0;
+      if (buttons & EN_A) enc |= B01;
+      if (buttons & EN_B) enc |= B10;
+      if (enc != lastEncoderBits) {
+        switch (enc) {
+          case encrot0: ENCODER_SPIN(encrot3, encrot1); break;
+          case encrot1: ENCODER_SPIN(encrot0, encrot2); break;
+          case encrot2: ENCODER_SPIN(encrot1, encrot3); break;
+          case encrot3: ENCODER_SPIN(encrot2, encrot0); break;
+        }
+        #if BOTH(HAS_LCD_MENU, AUTO_BED_LEVELING_UBL)
+          external_encoder();
+        #endif
+		if(enc_Direction == 2) { enc_diff++; enc_Direction = 0; }
+		if(enc_Direction == -2) { enc_diff--; enc_Direction = 0; }
+        lastEncoderBits = enc;
+      }
+	  static uint8_t last_button_state = LV_INDEV_STATE_REL;
+
+	  uint8_t enc_c = LV_INDEV_STATE_REL;
+      if (buttons & EN_C) enc_c = LV_INDEV_STATE_PR;
+	  if(enc_c != last_button_state) {
+	  	
+	  	if(enc_c) state = LV_INDEV_STATE_PR;
+		else state = LV_INDEV_STATE_REL;
+
+		last_button_state = enc_c;
+	  }
+
+    #endif // HAS_ENCODER_WHEEL
+  }
+
+#endif // HAS_ENCODER_ACTION
+
 
 #endif // HAS_TFT_LVGL_UI

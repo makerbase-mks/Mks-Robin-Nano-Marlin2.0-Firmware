@@ -30,7 +30,7 @@
 #include "../../../../module/planner.h"
 #include "../../../../module/probe.h"
 
-
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_OFFSET_RETURN   1
@@ -119,6 +119,7 @@ void lv_draw_auto_level_offset_settings(void) {
   lv_btn_set_style(buttonXValue, LV_BTN_STYLE_REL, &style_para_value);
   lv_btn_set_style(buttonXValue, LV_BTN_STYLE_PR, &style_para_value);
   labelXValue = lv_label_create(buttonXValue, NULL);
+  
 
   line1 = lv_line_create(scr, NULL);
   lv_ex_line(line1, line_points[0]);
@@ -135,6 +136,7 @@ void lv_draw_auto_level_offset_settings(void) {
   lv_btn_set_style(buttonYValue, LV_BTN_STYLE_REL, &style_para_value);
   lv_btn_set_style(buttonYValue, LV_BTN_STYLE_PR, &style_para_value);
   labelYValue = lv_label_create(buttonYValue, NULL);
+  
 
   line2 = lv_line_create(scr, NULL);
   lv_ex_line(line2, line_points[1]);
@@ -151,6 +153,7 @@ void lv_draw_auto_level_offset_settings(void) {
   lv_btn_set_style(buttonZValue, LV_BTN_STYLE_REL, &style_para_value);
   lv_btn_set_style(buttonZValue, LV_BTN_STYLE_PR, &style_para_value);
   labelZValue = lv_label_create(buttonZValue, NULL);
+  
 
   line3 = lv_line_create(scr, NULL);
   lv_ex_line(line3, line_points[2]);
@@ -162,6 +165,15 @@ void lv_draw_auto_level_offset_settings(void) {
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y);
   lv_obj_set_size(buttonBack, PARA_UI_BACK_BTN_X_SIZE, PARA_UI_BACK_BTN_Y_SIZE);
   label_Back = lv_label_create(buttonBack, NULL);
+  
+  #if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_add_obj(g, buttonXValue);
+  		lv_group_add_obj(g, buttonYValue);
+  		lv_group_add_obj(g, buttonZValue);
+  		lv_group_add_obj(g, buttonBack);
+	}
+  #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
   if (gCfgItems.multiple_language != 0) {
     ZERO(public_buf_l);
@@ -184,6 +196,13 @@ void lv_draw_auto_level_offset_settings(void) {
   }
 }
 
-void lv_clear_auto_level_offset_settings() { lv_obj_del(scr); }
+void lv_clear_auto_level_offset_settings() { 
+	#if BUTTONS_EXIST(EN1, EN2, ENC)
+	if (gCfgItems.encoder_enable == true) {
+		lv_group_remove_all_objs(g);
+	}
+  	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
+	lv_obj_del(scr); 
+}
 
 #endif // HAS_TFT_LVGL_UI && HAS_BED_PROBE
