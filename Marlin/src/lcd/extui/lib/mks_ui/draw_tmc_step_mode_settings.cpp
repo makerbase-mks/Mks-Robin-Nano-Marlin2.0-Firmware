@@ -269,7 +269,6 @@ void lv_draw_tmc_step_mode_settings(void) {
       lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_REL, "F:/bmp_enable.bin");
       lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_PR, "F:/bmp_enable.bin");
     }
-      lv_obj_set_event_cb_mks(buttonXState, event_handler, ID_TMC_MODE_X, , 0);
     else {
       lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_REL, "F:/bmp_disable.bin");
       lv_imgbtn_set_src(buttonXState, LV_BTN_STATE_PR, "F:/bmp_disable.bin");
