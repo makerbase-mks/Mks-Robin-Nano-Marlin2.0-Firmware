@@ -171,6 +171,7 @@
 #define BOARD_STB_11                  1508  // STB V1.1
 #define BOARD_AZTEEG_X1               1509  // Azteeg X1
 #define BOARD_ANET_10                 1510  // Anet 1.0 (Melzi clone)
+#define BOARD_ZMIB_V2                 1511  // ZoneStar ZMIB V2
 
 //
 // Other ATmega644P, ATmega644, ATmega1284P
@@ -312,7 +313,8 @@
 #define BOARD_CHITU3D_V5              4031  // Chitu3D TronXY X5SA V5 Board
 #define BOARD_CHITU3D_V6              4032  // Chitu3D TronXY X5SA V5 Board
 #define BOARD_CREALITY_V4             4033  // Creality v4.x (STM32F103RE)
-#define BOARD_TRIGORILLA_PRO          4034  // Trigorilla Pro (STM32F103ZET6)
+#define BOARD_CREALITY_V427           4034  // Creality v4.2.7 (STM32F103RE)
+#define BOARD_TRIGORILLA_PRO          4035  // Trigorilla Pro (STM32F103ZET6)
 
 //
 // ARM Cortex-M4F
@@ -365,6 +367,11 @@
 // SAMD51 ARM Cortex M4
 //
 #define BOARD_AGCM4_RAMPS_144         6100  // RAMPS 1.4.4
+
+//
+// Custom board
+//
+#define BOARD_CUSTOM                  9998  // Custom pins definition for development and/or rare boards
 
 //
 // Simulations

@@ -46,8 +46,8 @@ extern "C" { /* C-declarations for C++ */
 void __irq_usart1(void) {
    WIFISERIAL.wifi_usart_irq(USART1_BASE);
    if(wifi_link_state == WIFI_TRANS_FILE) {
-	   if(WIFISERIAL.available() == (600)) {
-	   	//WIFI_IO1_SET();
+	   if(WIFISERIAL.available() == (500)) {
+	   	WIFI_IO1_SET();
 	   }
 	   if(WIFISERIAL.wifi_rb_is_full()) {
 	   	if(esp_state == TRANSFER_IDLE) {

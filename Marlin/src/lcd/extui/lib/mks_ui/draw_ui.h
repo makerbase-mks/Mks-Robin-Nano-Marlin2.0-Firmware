@@ -443,6 +443,7 @@ extern void GUI_RefreshPage();
 extern void clear_cur_ui();
 extern void draw_return_ui();
 extern void sd_detection();
+extern void gCfg_to_spiFlah();
 extern void print_time_count();
 
 extern void LV_TASK_HANDLER();

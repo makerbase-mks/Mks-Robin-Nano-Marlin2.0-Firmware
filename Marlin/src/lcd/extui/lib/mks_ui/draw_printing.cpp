@@ -170,11 +170,11 @@ void lv_draw_printing(void) {
   #endif
 
   buttonFanstate = lv_imgbtn_create(scr, NULL);
+  buttonTime     = lv_imgbtn_create(scr, NULL);
   buttonZpos     = lv_imgbtn_create(scr, NULL);
   buttonPause    = lv_imgbtn_create(scr, NULL);
   buttonStop     = lv_imgbtn_create(scr, NULL);
   buttonOperat   = lv_imgbtn_create(scr, NULL);
-  buttonTime     = lv_imgbtn_create(scr, NULL);
 
   lv_imgbtn_set_src(buttonExt1, LV_BTN_STATE_REL, "F:/bmp_ext1_state.bin");
   lv_imgbtn_set_src(buttonExt1, LV_BTN_STATE_PR, "F:/bmp_ext1_state.bin");
@@ -272,6 +272,7 @@ void lv_draw_printing(void) {
   #endif
 
   lv_btn_set_layout(buttonFanstate, LV_LAYOUT_OFF);
+  lv_btn_set_layout(buttonTime, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonZpos, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonPause, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonStop, LV_LAYOUT_OFF);
@@ -297,13 +298,13 @@ void lv_draw_printing(void) {
   lv_obj_set_style(labelFan, &tft_style_label_rel);
   lv_obj_set_pos(labelFan, 395, 196);
 
-  labelZpos = lv_label_create(scr, NULL);
-  lv_obj_set_style(labelZpos, &tft_style_label_rel);
-  lv_obj_set_pos(labelZpos, 395, 96);
-
   labelTime = lv_label_create(scr, NULL);
   lv_obj_set_style(labelTime, &tft_style_label_rel);
   lv_obj_set_pos(labelTime, 250, 96);
+
+  labelZpos = lv_label_create(scr, NULL);
+  lv_obj_set_style(labelZpos, &tft_style_label_rel);
+  lv_obj_set_pos(labelZpos, 395, 96);
 
   labelPause  = lv_label_create(buttonPause, NULL);
   labelStop   = lv_label_create(buttonStop, NULL);

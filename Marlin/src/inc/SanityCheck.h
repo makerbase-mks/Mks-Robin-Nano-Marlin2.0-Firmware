@@ -419,8 +419,10 @@
   #error "SPINDLE_DIR_CHANGE is now SPINDLE_CHANGE_DIR. Please update your Configuration_adv.h."
 #elif defined(SPINDLE_STOP_ON_DIR_CHANGE)
   #error "SPINDLE_STOP_ON_DIR_CHANGE is now SPINDLE_CHANGE_DIR_STOP. Please update your Configuration_adv.h."
+#elif defined(SPINDLE_LASER_ACTIVE_HIGH)
+  #error "SPINDLE_LASER_ACTIVE_HIGH is now SPINDLE_LASER_ACTIVE_STATE. Please update your Configuration_adv.h."
 #elif defined(SPINDLE_LASER_ENABLE_INVERT)
-  #error "SPINDLE_LASER_ENABLE_INVERT is now SPINDLE_LASER_ACTIVE_HIGH. Please update your Configuration_adv.h."
+  #error "SPINDLE_LASER_ENABLE_INVERT is now SPINDLE_LASER_ACTIVE_STATE. Please update your Configuration_adv.h."
 #elif defined(CUTTER_POWER_DISPLAY)
   #error "CUTTER_POWER_DISPLAY is now CUTTER_POWER_UNIT. Please update your Configuration_adv.h."
 #elif defined(CHAMBER_HEATER_PIN)
@@ -441,18 +443,18 @@
   #error "USB_SD_DISABLED is now NO_SD_HOST_DRIVE. Please update your Configuration_adv.h."
 #elif defined(USB_SD_ONBOARD)
   #error "USB_SD_ONBOARD is obsolete. Disable NO_SD_HOST_DRIVE instead."
+#elif defined(PSU_ACTIVE_HIGH)
+  #error "PSU_ACTIVE_HIGH is now PSU_ACTIVE_STATE. Please update your configuration."
 #elif POWER_SUPPLY == 1
-  #error "Replace POWER_SUPPLY 1 by enabling PSU_CONTROL and setting PSU_ACTIVE_HIGH to 'false'."
+  #error "Replace POWER_SUPPLY 1 by enabling PSU_CONTROL and setting PSU_ACTIVE_STATE to 'LOW'."
 #elif POWER_SUPPLY == 2
-  #error "Replace POWER_SUPPLY 2 by enabling PSU_CONTROL and setting PSU_ACTIVE_HIGH to 'true'."
+  #error "Replace POWER_SUPPLY 2 by enabling PSU_CONTROL and setting PSU_ACTIVE_STATE to 'HIGH'."
 #elif defined(POWER_SUPPLY)
   #error "POWER_SUPPLY is now obsolete. Please remove it from Configuration.h."
 #elif defined(MKS_ROBIN_TFT)
   #error "MKS_ROBIN_TFT is now FSMC_GRAPHICAL_TFT. Please update your configuration."
 #elif defined(TFT_LVGL_UI)
   #error "TFT_LVGL_UI is now TFT_LVGL_UI_FSMC. Please update your configuration."
-#elif defined(SPI_GRAPHICAL_TFT)
-  #error "SPI_GRAPHICAL_TFT is now TFT_LVGL_UI_SPI. Please update your configuration."
 #elif defined(SDPOWER)
   #error "SDPOWER is now SDPOWER_PIN. Please update your configuration and/or pins."
 #elif defined(STRING_SPLASH_LINE1) || defined(STRING_SPLASH_LINE2)
@@ -515,6 +517,18 @@
   #error "[XYZ]_HOME_BUMP_MM is now HOMING_BUMP_MM. Please update Configuration_adv.h."
 #elif defined(DIGIPOT_I2C)
   #error "DIGIPOT_I2C is now DIGIPOT_MCP4451 (or DIGIPOT_MCP4018). Please update Configuration_adv.h."
+#elif defined(TOUCH_BUTTONS)
+  #error "TOUCH_BUTTONS is now TOUCH_SCREEN. Please update your Configuration.h."
+#elif defined(LCD_FULL_PIXEL_HEIGHT)
+  #error "LCD_FULL_PIXEL_HEIGHT is deprecated and should be removed. Please update your Configuration.h."
+#elif defined(LCD_FULL_PIXEL_WIDTH)
+  #error "LCD_FULL_PIXEL_WIDTH is deprecated and should be removed. Please update your Configuration.h."
+#elif defined(FSMC_UPSCALE)
+  #error "FSMC_UPSCALE is now GRAPHICAL_TFT_UPSCALE. Please update your Configuration.h."
+#elif defined(ANYCUBIC_TFT_MODEL)
+  #error "ANYCUBIC_TFT_MODEL is now ANYCUBIC_LCD_I3MEGA. Please update your Configuration.h."
+#elif defined(EVENT_GCODE_SD_STOP)
+  #error "EVENT_GCODE_SD_STOP is now EVENT_GCODE_SD_ABORT. Please update your Configuration.h."
 #endif
 
 #ifdef FIL_RUNOUT_INVERTING
@@ -689,8 +703,8 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
   #elif PROGRESS_MSG_EXPIRE < 0
     #error "PROGRESS_MSG_EXPIRE must be greater than or equal to 0."
   #endif
-#elif ENABLED(LCD_SET_PROGRESS_MANUALLY) && NONE(HAS_GRAPHICAL_LCD, EXTENSIBLE_UI)
-  #error "LCD_SET_PROGRESS_MANUALLY requires LCD_PROGRESS_BAR, Graphical LCD, or EXTENSIBLE_UI."
+#elif ENABLED(LCD_SET_PROGRESS_MANUALLY) && NONE(HAS_GRAPHICAL_LCD, HAS_GRAPHICAL_TFT, EXTENSIBLE_UI)
+  #error "LCD_SET_PROGRESS_MANUALLY requires LCD_PROGRESS_BAR, Graphical LCD, TFT, or EXTENSIBLE_UI."
 #endif
 
 #if !HAS_LCD_MENU && ENABLED(SD_REPRINT_LAST_SELECTED_FILE)
@@ -740,8 +754,8 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
   #endif
 #endif
 
-#if defined(EVENT_GCODE_SD_STOP) && DISABLED(NOZZLE_PARK_FEATURE)
-  static_assert(nullptr == strstr(EVENT_GCODE_SD_STOP, "G27"), "NOZZLE_PARK_FEATURE is required to use G27 in EVENT_GCODE_SD_STOP.");
+#if defined(EVENT_GCODE_SD_ABORT) && DISABLED(NOZZLE_PARK_FEATURE)
+  static_assert(nullptr == strstr(EVENT_GCODE_SD_ABORT, "G27"), "NOZZLE_PARK_FEATURE is required to use G27 in EVENT_GCODE_SD_ABORT.");
 #endif
 
 /**
@@ -819,7 +833,7 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
  */
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #if !HAS_RESUME_CONTINUE
-    #error "ADVANCED_PAUSE_FEATURE currently requires an LCD controller or EMERGENCY_PARSER."
+    #error "ADVANCED_PAUSE_FEATURE requires a supported LCD controller (or EMERGENCY_PARSER)."
   #elif DISABLED(NOZZLE_PARK_FEATURE)
     #error "ADVANCED_PAUSE_FEATURE requires NOZZLE_PARK_FEATURE."
   #elif !defined(FILAMENT_UNLOAD_PURGE_FEEDRATE)
@@ -1100,6 +1114,13 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
   #endif
 #elif PIN_EXISTS(FANMUX2)
   #error "FANMUX0_PIN and FANMUX1_PIN must be set before FANMUX2_PIN can be set."
+#endif
+
+/**
+ * Limited user-controlled fans
+ */
+#if NUM_M106_FANS > FAN_COUNT
+  #error "The selected board doesn't support enough user-controlled fans. Reduce NUM_M106_FANS."
 #endif
 
 /**
@@ -1799,7 +1820,7 @@ static_assert(hbm[Z_AXIS] >= 0, "HOMING_BUMP_MM.Z must be greater than or equal 
 /**
  * Test Heater, Temp Sensor, and Extruder Pins
  */
-#if !HAS_HEATER_0
+#if !HAS_HEATER_0 && EXTRUDERS
   #error "HEATER_0_PIN not defined for this board."
 #elif !ANY_PIN(TEMP_0, MAX6675_SS)
   #error "TEMP_0_PIN not defined for this board."
@@ -2073,6 +2094,13 @@ static_assert(hbm[Z_AXIS] >= 0, "HOMING_BUMP_MM.Z must be greater than or equal 
 #endif
 
 /**
+ * G35 Assisted Tramming
+ */
+#if ENABLED(ASSISTED_TRAMMING) && !HAS_BED_PROBE
+  #error "ASSISTED_TRAMMING requires a bed probe."
+#endif
+
+/**
  * G38 Probe Target
  */
 #if ENABLED(G38_PROBE_TARGET)
@@ -2218,6 +2246,9 @@ static_assert(hbm[Z_AXIS] >= 0, "HOMING_BUMP_MM.Z must be greater than or equal 
   + ENABLED(OLED_PANEL_TINYBOY2) \
   + ENABLED(MKS_12864OLED) \
   + ENABLED(MKS_12864OLED_SSD1306) \
+  + ENABLED(ZONESTAR_12864LCD) \
+  + ENABLED(ZONESTAR_12864OLED) \
+  + ENABLED(ZONESTAR_12864OLED_SSD1306) \
   + ENABLED(U8GLIB_SH1106_EINSTART) \
   + ENABLED(OVERLORD_OLED) \
   + ENABLED(FYSETC_242_OLED_12864) \
@@ -2226,10 +2257,14 @@ static_assert(hbm[Z_AXIS] >= 0, "HOMING_BUMP_MM.Z must be greater than or equal 
   + ENABLED(DGUS_LCD_UI_HIPRECY) \
   + ENABLED(MALYAN_LCD) \
   + ENABLED(TOUCH_UI_FTDI_EVE) \
+  + ENABLED(TFT_320x240) \
+  + ENABLED(TFT_320x240_SPI) \
   + ENABLED(FSMC_GRAPHICAL_TFT) \
   + ENABLED(TFT_LVGL_UI_FSMC) \
-  + ENABLED(TFT_LVGL_UI_SPI)
-  #error "Please select no more than one LCD controller option."
+  + ENABLED(TFT_LVGL_UI_SPI) \
+  + ENABLED(ANYCUBIC_LCD_I3MEGA) \
+  + ENABLED(ANYCUBIC_LCD_CHIRON)
+  #error "Please select only one LCD controller option."
 #endif
 
 #undef IS_RRD_SC
@@ -2892,8 +2927,8 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
  * Ensure this option is set intentionally
  */
 #if ENABLED(PSU_CONTROL)
-  #ifndef PSU_ACTIVE_HIGH
-    #error "PSU_CONTROL requires PSU_ACTIVE_HIGH to be defined as 'true' or 'false'."
+  #ifndef PSU_ACTIVE_STATE
+    #error "PSU_CONTROL requires PSU_ACTIVE_STATE to be defined as 'HIGH' or 'LOW'."
   #elif !PIN_EXISTS(PS_ON)
     #error "PSU_CONTROL requires PS_ON_PIN."
   #endif
@@ -3036,19 +3071,46 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
 #endif
 
 /**
- * Sanity checks for stepper chunk support
+ * Stepper Chunk support
  */
-#if ENABLED(DIRECT_STEPPING)
-  #if ENABLED(LIN_ADVANCE)
-    #error "DIRECT_STEPPING is incompatible with LIN_ADVANCE. Enable in external planner if possible."
+#if BOTH(DIRECT_STEPPING, LIN_ADVANCE)
+  #error "DIRECT_STEPPING is incompatible with LIN_ADVANCE. Enable in external planner if possible."
+#endif
+
+/**
+ * Touch Buttons
+ */
+#if ENABLED(TOUCH_SCREEN)
+  #ifndef XPT2046_X_CALIBRATION
+    #error "XPT2046_X_CALIBRATION must be defined with TOUCH_SCREEN."
+  #endif
+  #ifndef XPT2046_Y_CALIBRATION
+    #error "XPT2046_Y_CALIBRATION must be defined with TOUCH_SCREEN."
+  #endif
+  #ifndef XPT2046_X_OFFSET
+    #error "XPT2046_X_OFFSET must be defined with TOUCH_SCREEN."
+  #endif
+  #ifndef XPT2046_Y_OFFSET
+    #error "XPT2046_Y_OFFSET must be defined with TOUCH_SCREEN."
   #endif
 #endif
 
 /**
  * Sanity check for WIFI
  */
-#if ENABLED(ESP3D_WIFISUPPORT) && DISABLED(ARDUINO_ARCH_ESP32) 
-  #error "ESP3D_WIFISUPPORT requires an ESP32 controller. Use WIFISUPPORT for standalone ESP3D modules."
+#if EITHER(ESP3D_WIFISUPPORT, WIFISUPPORT) && DISABLED(ARDUINO_ARCH_ESP32)
+  #error "ESP3D_WIFISUPPORT or WIFISUPPORT requires an ESP32 controller."
+#endif
+
+/**
+ * Sanity Check for Password Feature
+ */
+#if ENABLED(PASSWORD_FEATURE)
+  #if NONE(HAS_LCD_MENU, PASSWORD_UNLOCK_GCODE, PASSWORD_CHANGE_GCODE)
+    #error "Without PASSWORD_UNLOCK_GCODE, PASSWORD_CHANGE_GCODE, or a supported LCD there's no way to unlock the printer or set a password."
+  #elif DISABLED(EEPROM_SETTINGS)
+    #warning "PASSWORD_FEATURE settings will be lost on power-off without EEPROM_SETTINGS."
+  #endif
 #endif
 
 // Misc. Cleanup

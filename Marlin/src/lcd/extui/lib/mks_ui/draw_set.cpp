@@ -381,7 +381,9 @@ void lv_draw_set(void) {
 		lv_group_add_obj(g, buMotorOff);
 		lv_group_add_obj(g, buttonMachinePara);
 		lv_group_add_obj(g, buttonLanguage);
-	  	lv_group_add_obj(g, buttonWifi);
+		#if USE_WIFI_FUNCTION
+	  		lv_group_add_obj(g, buttonWifi);
+		#endif
 	  	lv_group_add_obj(g, buttonBack);
 	}
   #endif // BUTTONS_EXIST(EN1, EN2, ENC)
