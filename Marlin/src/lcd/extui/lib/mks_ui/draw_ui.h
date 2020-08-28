@@ -130,7 +130,7 @@
   #define PREVIEW_LITTLE_PIC_SIZE  40910  // 400*100+9*101+1
   #define PREVIEW_SIZE      202720        // (PREVIEW_LITTLE_PIC_SIZE+800*200+201*9+1)
 
-  #define GCFG_FLAG_VALUE   0xEF
+  #define GCFG_FLAG_VALUE   0x20200828
 
   // machine parameter ui
   #define PARA_UI_POS_X             10
@@ -175,7 +175,7 @@ extern char public_buf_m[100];
 extern char public_buf_l[30];
 
 typedef struct {
-  uint8_t spi_flash_flag;
+  uint32_t spi_flash_flag;
   uint8_t multiple_language;
   uint8_t language;
   uint8_t leveling_mode;
@@ -197,7 +197,6 @@ typedef struct {
   float pausePosY;
   float pausePosZ;
   uint32_t curFilesize;
-  
 } CFG_ITMES;
 
 typedef struct {

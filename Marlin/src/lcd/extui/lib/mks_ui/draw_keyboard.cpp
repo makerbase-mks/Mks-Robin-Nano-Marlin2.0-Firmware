@@ -66,11 +66,6 @@ static const lv_btnm_ctrl_t kb_ctrl_spec_map[] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     LV_KB_CTRL_BTN_FLAGS | 2, 2, 6, 2, LV_KB_CTRL_BTN_FLAGS | 2};
 
-static const char * kb_map_num[] = {"1", "2", "3", LV_SYMBOL_CLOSE, "\n",
-                                    "4", "5", "6", LV_SYMBOL_OK, "\n",
-                                    "7", "8", "9", LV_SYMBOL_BACKSPACE, "\n",
-                                    "+/-", "0", ".", LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, ""};
-
 static const lv_btnm_ctrl_t kb_ctrl_num_map[] = {
         1, 1, 1, LV_KB_CTRL_BTN_FLAGS | 2,
         1, 1, 1, LV_KB_CTRL_BTN_FLAGS | 2,
@@ -78,7 +73,7 @@ static const lv_btnm_ctrl_t kb_ctrl_num_map[] = {
         1, 1, 1, 1, 1};
 
 static void lv_kb_event_cb(lv_obj_t * kb, lv_event_t event) {
-    LV_ASSERT_OBJ(kb, LV_OBJX_NAME);
+    //LV_ASSERT_OBJ(kb, LV_OBJX_NAME);
 
     if(event != LV_EVENT_VALUE_CHANGED) return;
 
@@ -164,7 +159,7 @@ static void lv_kb_event_cb(lv_obj_t * kb, lv_event_t event) {
                 #endif //USE_WIFI_FUNCTION
                 case gcodeCommand:
                     uint8_t buf[100];
-                    memcpy(buf,ret_ta_txt,sizeof(buf));
+                    strncpy((char *)buf,ret_ta_txt,sizeof(buf));
                     update_gcode_command(AUTO_LEVELING_COMMAND_ADDR,buf);
                     lv_clear_keyboard();
 					draw_return_ui();

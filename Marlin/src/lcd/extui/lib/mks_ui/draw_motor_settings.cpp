@@ -216,9 +216,9 @@ void lv_draw_motor_settings(void) {
     labelSensitivity = lv_label_create(buttonSensitivity, NULL);                  /*Add a label to the button*/
     
     #if BUTTONS_EXIST(EN1, EN2, ENC)
-	if (gCfgItems.encoder_enable == true) {
-		lv_group_add_obj(g, buttonSensitivity);
-	}
+      if (gCfgItems.encoder_enable == true) {
+        lv_group_add_obj(g, buttonSensitivity);
+      }
    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
     buttonSensitivityNarrow = lv_imgbtn_create(scr, NULL);
@@ -246,9 +246,9 @@ void lv_draw_motor_settings(void) {
     lv_btn_set_layout(buttonTMCcurrent, LV_LAYOUT_OFF);
     labelTMCcurrent = lv_label_create(buttonTMCcurrent, NULL);                  /*Add a label to the button*/
     #if BUTTONS_EXIST(EN1, EN2, ENC)
-	if (gCfgItems.encoder_enable == true) {
-		lv_group_add_obj(g, buttonTMCcurrent);
-	}
+      if (gCfgItems.encoder_enable == true) {
+        lv_group_add_obj(g, buttonTMCcurrent);
+      }
    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
     buttonTMCcurrentNarrow = lv_imgbtn_create(scr, NULL);
@@ -278,9 +278,9 @@ void lv_draw_motor_settings(void) {
       labelStepMode = lv_label_create(buttonStepMode, NULL);                    /*Add a label to the button*/
       
       #if BUTTONS_EXIST(EN1, EN2, ENC)
-	if (gCfgItems.encoder_enable == true) {
-		lv_group_add_obj(g, buttonTMCcurrent);
-	}
+        if (gCfgItems.encoder_enable == true) {
+          lv_group_add_obj(g, buttonStepMode);
+        }
      #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 	  
       buttonStepModeNarrow = lv_imgbtn_create(scr, NULL);
@@ -301,13 +301,16 @@ void lv_draw_motor_settings(void) {
       #endif
     #endif
   #endif // HAS_TRINAMIC_CONFIG
-  buttonBack = lv_btn_create(scr, NULL);
+  buttonBack = lv_imgbtn_create(scr, NULL);
   lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_MOTOR_RETURN, NULL, 0);
-  lv_btn_set_style(buttonBack, LV_BTN_STYLE_REL, &style_para_back);
-	lv_btn_set_style(buttonBack, LV_BTN_STYLE_PR, &style_para_back);
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
+  lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
+  lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
+  lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_obj_set_pos(buttonBack, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y);
-  lv_obj_set_size(buttonBack, PARA_UI_BACK_BTN_X_SIZE, PARA_UI_BACK_BTN_Y_SIZE);
+  lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
   label_Back = lv_label_create(buttonBack, NULL);
+
   #if BUTTONS_EXIST(EN1, EN2, ENC)
 	if (gCfgItems.encoder_enable == true) {
 		lv_group_add_obj(g, buttonBack);

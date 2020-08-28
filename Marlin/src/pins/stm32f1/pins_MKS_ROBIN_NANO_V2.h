@@ -192,11 +192,11 @@
 //
 // Misc. Functions
 //
-#define POWER_LOSS_PIN                      PA2   // PW_DET
-#define PS_ON_PIN                           PB2   // PW_OFF
+//#define POWER_LOSS_PIN                      PA2   // PW_DET
+//#define PS_ON_PIN                           PB2   // PW_OFF
 
 //#define SUICIDE_PIN                       PB2   // Enable MKSPWC support ROBIN NANO v1.2 ONLY
-//#define SUICIDE_PIN_INVERTING            false
+//#define SUICIDE_PIN_INVERTING             false
 
 //#define KILL_PIN                          PA2   // Enable MKSPWC support ROBIN NANO v1.2 ONLY
 //#define KILL_PIN_INVERTING                true  // Enable MKSPWC support ROBIN NANO v1.2 ONLY
@@ -207,28 +207,28 @@
 
 #define MT_DET_1_PIN                        PA4
 #define MT_DET_2_PIN                        PE6
-#define MT_DET_PIN_INVERTING               false
+#define MT_DET_PIN_INVERTING                false
 
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN            MT_DET_1_PIN
+  #define FIL_RUNOUT_PIN                    MT_DET_1_PIN
 #endif
 #ifndef FIL_RUNOUT2_PIN
-  #define FIL_RUNOUT2_PIN           MT_DET_2_PIN
+  #define FIL_RUNOUT2_PIN                   MT_DET_2_PIN
 #endif
 
 #define WIFI_IO0_PIN                        PC13
-#define WIFI_IO1_PIN       			PC7
-#define WIFI_RESET_PIN				PE9
+#define WIFI_IO1_PIN       			            PC7
+#define WIFI_RESET_PIN				              PE9
 
 //
 // SD Card
 //
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION              ONBOARD
+  #define SDCARD_CONNECTION                 ONBOARD
 #endif
 
 #define SDIO_SUPPORT
-#define SDIO_CLOCK                       4500000  // 4.5 MHz
+#define SDIO_CLOCK                          4500000  // 4.5 MHz
 #define SD_DETECT_PIN                       PD12
 #define ONBOARD_SD_CS_PIN                   PC11
 

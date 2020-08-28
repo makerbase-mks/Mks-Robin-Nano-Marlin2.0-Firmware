@@ -200,10 +200,6 @@ void lv_draw_acceleration_settings(void) {
     lv_obj_set_pos(buttonPrintValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y + PARA_UI_VALUE_V);
     lv_obj_set_size(buttonPrintValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);
     lv_obj_set_event_cb_mks(buttonPrintValue, event_handler, ID_ACCE_PRINT, NULL, 0);
-    //lv_imgbtn_set_src(buttonPrintValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonPrintValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonPrintValue, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonPrintValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_style(buttonPrintValue, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonPrintValue, LV_BTN_STYLE_PR, &style_para_value);
     labelPrintValue = lv_label_create(buttonPrintValue, NULL);
@@ -220,10 +216,6 @@ void lv_draw_acceleration_settings(void) {
     lv_obj_set_pos(buttonRetraValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 2 + PARA_UI_VALUE_V);
     lv_obj_set_size(buttonRetraValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);
     lv_obj_set_event_cb_mks(buttonRetraValue, event_handler, ID_ACCE_RETRA, NULL, 0);
-    //lv_imgbtn_set_src(buttonRetraValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonRetraValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonRetraValue, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonRetraValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_style(buttonRetraValue, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonRetraValue, LV_BTN_STYLE_PR, &style_para_value);
     labelRetraValue = lv_label_create(buttonRetraValue, NULL);
@@ -240,10 +232,6 @@ void lv_draw_acceleration_settings(void) {
     lv_obj_set_pos(buttonTravelValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 3 + PARA_UI_VALUE_V);
     lv_obj_set_size(buttonTravelValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);
     lv_obj_set_event_cb_mks(buttonTravelValue, event_handler, ID_ACCE_TRAVEL, NULL, 0);
-    //lv_imgbtn_set_src(buttonTravelValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonTravelValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonTravelValue, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonTravelValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_style(buttonTravelValue, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonTravelValue, LV_BTN_STYLE_PR, &style_para_value);
     labelTravelValue = lv_label_create(buttonTravelValue, NULL);
@@ -260,10 +248,6 @@ void lv_draw_acceleration_settings(void) {
     lv_obj_set_pos(buttonXValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 4 + PARA_UI_VALUE_V);
     lv_obj_set_size(buttonXValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);
     lv_obj_set_event_cb_mks(buttonXValue, event_handler, ID_ACCE_X, NULL, 0);
-    //lv_imgbtn_set_src(buttonXValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonXValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonXValue, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonXValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_style(buttonXValue, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonXValue, LV_BTN_STYLE_PR, &style_para_value);
     labelXValue = lv_label_create(buttonXValue, NULL);
@@ -273,10 +257,6 @@ void lv_draw_acceleration_settings(void) {
 
     buttonTurnPage = lv_btn_create(scr, NULL);
     lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_ACCE_DOWN, NULL, 0);
-    //lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_REL, "F:/bmp_back70x40.bin");
-    //lv_imgbtn_set_src(buttonTurnPage, LV_BTN_STATE_PR, "F:/bmp_back70x40.bin");
-    //lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_PR, &tft_style_label_pre);
-    //lv_imgbtn_set_style(buttonTurnPage, LV_BTN_STATE_REL, &tft_style_label_rel);
     lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_REL, &style_para_back);
     lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_PR, &style_para_back);
     
@@ -298,11 +278,8 @@ void lv_draw_acceleration_settings(void) {
 
     buttonYValue = lv_btn_create(scr, NULL);
     lv_obj_set_pos(buttonYValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y + PARA_UI_VALUE_V);
-    lv_obj_set_size(buttonYValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);    lv_obj_set_event_cb_mks(buttonYValue, event_handler, ID_ACCE_Y, NULL, 0);
-    //lv_imgbtn_set_src(buttonYValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonYValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonYValue, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonYValue, LV_BTN_STATE_REL, &style_para_value_rel);
+    lv_obj_set_size(buttonYValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);    
+    lv_obj_set_event_cb_mks(buttonYValue, event_handler, ID_ACCE_Y, NULL, 0);
     lv_btn_set_style(buttonYValue, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonYValue, LV_BTN_STYLE_PR, &style_para_value);    
     labelYValue = lv_label_create(buttonYValue, NULL);
@@ -320,10 +297,6 @@ void lv_draw_acceleration_settings(void) {
     lv_obj_set_pos(buttonZValue, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 2 + PARA_UI_VALUE_V);
     lv_obj_set_size(buttonZValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);    lv_obj_set_event_cb_mks(buttonYValue, event_handler, ID_ACCE_Y, NULL, 0);
     lv_obj_set_event_cb_mks(buttonZValue, event_handler, ID_ACCE_Z, NULL, 0);
-    //lv_imgbtn_set_src(buttonZValue, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonZValue, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonZValue, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonZValue, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_style(buttonZValue, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonZValue, LV_BTN_STYLE_PR, &style_para_value);   
     labelZValue = lv_label_create(buttonZValue, NULL);
@@ -341,10 +314,6 @@ void lv_draw_acceleration_settings(void) {
     lv_obj_set_pos(buttonE0Value, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 3 + PARA_UI_VALUE_V);
     lv_obj_set_size(buttonE0Value, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);    lv_obj_set_event_cb_mks(buttonYValue, event_handler, ID_ACCE_Y, NULL, 0);
     lv_obj_set_event_cb_mks(buttonE0Value, event_handler, ID_ACCE_E0, NULL, 0);
-    //lv_imgbtn_set_src(buttonE0Value, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonE0Value, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonE0Value, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonE0Value, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_style(buttonE0Value, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonE0Value, LV_BTN_STYLE_PR, &style_para_value); 
     labelE0Value = lv_label_create(buttonE0Value, NULL);
@@ -362,10 +331,6 @@ void lv_draw_acceleration_settings(void) {
     lv_obj_set_pos(buttonE1Value, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 4 + PARA_UI_VALUE_V);
     lv_obj_set_size(buttonE1Value, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);    lv_obj_set_event_cb_mks(buttonYValue, event_handler, ID_ACCE_Y, NULL, 0);
     lv_obj_set_event_cb_mks(buttonE1Value, event_handler, ID_ACCE_E1, NULL, 0);
-    //lv_imgbtn_set_src(buttonE1Value, LV_BTN_STATE_REL, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_src(buttonE1Value, LV_BTN_STATE_PR, "F:/bmp_value_blank.bin");
-    //lv_imgbtn_set_style(buttonE1Value, LV_BTN_STATE_PR, &style_para_value_pre);
-    //lv_imgbtn_set_style(buttonE1Value, LV_BTN_STATE_REL, &style_para_value_rel);
     lv_btn_set_style(buttonE1Value, LV_BTN_STYLE_REL, &style_para_value);
     lv_btn_set_style(buttonE1Value, LV_BTN_STYLE_PR, &style_para_value); 
     labelE1Value = lv_label_create(buttonE1Value, NULL);

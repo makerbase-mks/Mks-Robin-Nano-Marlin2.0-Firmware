@@ -296,7 +296,7 @@ void LCD_Clear(uint16_t Color) {
 
 #include HAL_PATH(../../HAL, tft/tft_fsmc.h)
 extern TFT_IO tftio;
-void init_tft() {
+void fsmc_tft_init() {
   uint16_t i;
 
   TERN_(HAS_LCD_CONTRAST, refresh_contrast());
@@ -431,7 +431,7 @@ void tft_lvgl_init() {
     SPI_TFT.spi_init(SPI_FULL_SPEED);
     SPI_TFT.LCD_init();
   #else
-    init_tft();
+    fsmc_tft_init();
   #endif
 
   //spi_flash_read_test();
@@ -501,6 +501,7 @@ void tft_lvgl_init() {
   lv_encoder_pin_init();
 
   #if ENABLED(POWER_LOSS_RECOVERY)
+    recovery.load();
     if (recovery.valid()) {
       if (gCfgItems.from_flash_pic == 1)
         flash_preview_begin = 1;
