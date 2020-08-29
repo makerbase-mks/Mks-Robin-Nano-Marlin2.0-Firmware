@@ -792,6 +792,10 @@ void kill(PGM_P const lcd_error/*=nullptr*/, PGM_P const lcd_component/*=nullptr
     UNUSED(lcd_component);
   #endif
 
+  #if HAS_TFT_LVGL_UI
+    lv_draw_error_message(lcd_error);
+  #endif
+
   #ifdef ACTION_ON_KILL
     host_action_kill();
   #endif

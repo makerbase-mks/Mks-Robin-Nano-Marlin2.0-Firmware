@@ -97,9 +97,11 @@ extern uint8_t gcode_preview_over, flash_preview_begin, default_preview_flg;
 void SysTick_Callback() {
   lv_tick_inc(1);
   print_time_count();
-  if(tips_disp.timer == TIPS_TIMER_START) {
-  	tips_disp.timer_count++;
-  }
+  #if USE_WIFI_FUNCTION
+    if (tips_disp.timer == TIPS_TIMER_START) {
+      tips_disp.timer_count++;
+    }
+  #endif
   if(uiCfg.filament_loading_time_flg == 1) {
 	  uiCfg.filament_loading_time_cnt++;
 	  uiCfg.filament_rate = (uint32_t)(((uiCfg.filament_loading_time_cnt / (uiCfg.filament_loading_time * 1000.0)) * 100.0) + 0.5);
@@ -589,6 +591,7 @@ static bool get_point(int16_t *x, int16_t *y) {
 }
 
 static int16_t last_x = 0, last_y = 0;
+static uint8_t last_touch_state = LV_INDEV_STATE_REL;
 bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
   uint32_t tmpTime, diffTime = 0;
 
@@ -599,9 +602,10 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
   //if (data->state == LV_INDEV_STATE_PR)  ADS7843_Rd_Addata((u16 *)&last_x, (u16 *)&last_y);
   //touchpad_get_xy(&last_x, &last_y);
   /*Save the pressed coordinates and the state*/
-  if (diffTime > 10) {
+  if (diffTime > 20) {
     if (get_point(&last_x, &last_y)) {
 
+      if (last_touch_state == LV_INDEV_STATE_PR) return false;
       data->state = LV_INDEV_STATE_PR;
 
       // Set the coordinates (if released use the last-pressed coordinates)
@@ -610,9 +614,13 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
       data->point.y = last_y;
 
       last_x = last_y = 0;
+      last_touch_state = LV_INDEV_STATE_PR;
     }
-    else
-      data->state = LV_INDEV_STATE_REL;
+    else {
+      if (last_touch_state == LV_INDEV_STATE_PR)
+        data->state = LV_INDEV_STATE_REL;
+      last_touch_state = LV_INDEV_STATE_REL;
+    }
 
     touch_time1 = tmpTime;
   }

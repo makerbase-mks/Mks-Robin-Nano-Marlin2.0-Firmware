@@ -489,18 +489,22 @@ static void set_value_confirm() {
     #endif
 	  case load_length:
       gCfgItems.filamentchange_load_length = atoi(key_value);
+      uiCfg.filament_loading_time = (uint32_t)((gCfgItems.filamentchange_load_length*60.0/gCfgItems.filamentchange_load_speed)+0.5);
 	    update_spi_flash();
       break;
 	  case load_speed:
 	    gCfgItems.filamentchange_load_speed = atoi(key_value);
+      uiCfg.filament_loading_time = (uint32_t)((gCfgItems.filamentchange_load_length*60.0/gCfgItems.filamentchange_load_speed)+0.5);
 	    update_spi_flash();
       break;
 	  case unload_length:
 	    gCfgItems.filamentchange_unload_length = atoi(key_value);
+      uiCfg.filament_unloading_time = (uint32_t)((gCfgItems.filamentchange_unload_length*60.0/gCfgItems.filamentchange_unload_speed)+0.5);
 	    update_spi_flash();
       break;
 	  case unload_speed:
 	    gCfgItems.filamentchange_unload_speed = atoi(key_value);
+      uiCfg.filament_unloading_time = (uint32_t)((gCfgItems.filamentchange_unload_length*60.0/gCfgItems.filamentchange_unload_speed)+0.5);
 	    update_spi_flash();
       break;
 	  case filament_temp:

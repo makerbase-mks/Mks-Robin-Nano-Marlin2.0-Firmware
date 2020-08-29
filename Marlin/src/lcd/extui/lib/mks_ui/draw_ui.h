@@ -130,8 +130,6 @@
   #define PREVIEW_LITTLE_PIC_SIZE  40910  // 400*100+9*101+1
   #define PREVIEW_SIZE      202720        // (PREVIEW_LITTLE_PIC_SIZE+800*200+201*9+1)
 
-  #define GCFG_FLAG_VALUE   0x20200828
-
   // machine parameter ui
   #define PARA_UI_POS_X             10
   #define PARA_UI_POS_Y             50
@@ -237,6 +235,9 @@ typedef struct {
   uint32_t filament_unloading_time_cnt;
   float move_dist;
   float desireSprayerTempBak;
+  float current_x_position_bak;
+  float current_y_position_bak;
+  float current_e_position_bak;
 } UI_CFG;
 
 typedef enum {

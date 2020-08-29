@@ -33,7 +33,7 @@
 #include <lvgl.h>
 
 #define LV_USE_ROTATION_180     0
-#define USE_WIFI_FUNCTION		1
+#define USE_WIFI_FUNCTION		0
 
 void tft_lvgl_init();
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p);

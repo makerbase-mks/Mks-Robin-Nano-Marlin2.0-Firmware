@@ -30,6 +30,7 @@
 #include "../../../../module/temperature.h"
 #include "../../../../gcode/queue.h"
 #include "../../../../gcode/gcode.h"
+#include "../../../../module/motion.h"
 
 extern lv_group_t * g;
 static lv_obj_t * scr;
@@ -122,8 +123,10 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           else {
             gcode.process_subcommands_now_P(PSTR("T0"));
          }
-          feedrate_mm_s = (float)uiCfg.moveSpeed_bak ;
         }
+        feedrate_mm_s = (float)uiCfg.moveSpeed_bak;
+        if(uiCfg.print_state == PAUSED)
+          current_position.e = destination.e = uiCfg.current_e_position_bak;
         thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
 
         clear_cur_ui();

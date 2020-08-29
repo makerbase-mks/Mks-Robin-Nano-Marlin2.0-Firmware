@@ -83,9 +83,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 
 void lv_draw_pause_position(void) {
   lv_obj_t *buttonBack = NULL, *label_Back = NULL;
-  lv_obj_t *buttonXText = NULL, *labelXText = NULL, *buttonXValue = NULL, *labelXValue = NULL;
-  lv_obj_t *buttonYText = NULL, *labelYText = NULL, *buttonYValue = NULL, *labelYValue = NULL;
-  lv_obj_t *buttonZText = NULL, *labelZText = NULL, *buttonZValue = NULL, *labelZValue = NULL;
+  lv_obj_t *labelXText = NULL, *buttonXValue = NULL, *labelXValue = NULL;
+  lv_obj_t *labelYText = NULL, *buttonYValue = NULL, *labelYValue = NULL;
+  lv_obj_t *labelZText = NULL, *buttonZValue = NULL, *labelZValue = NULL;
 
   lv_obj_t * line1 = NULL, * line2 = NULL, * line3 = NULL;
   if (disp_state_stack._disp_state[disp_state_stack._disp_index] != PAUSE_POS_UI) {
@@ -117,6 +117,7 @@ void lv_draw_pause_position(void) {
   lv_obj_set_size(buttonXValue, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);
   lv_btn_set_style(buttonXValue, LV_BTN_STYLE_REL, &style_para_value);
   lv_btn_set_style(buttonXValue, LV_BTN_STYLE_PR, &style_para_value);
+  lv_obj_set_event_cb_mks(buttonXValue, event_handler, ID_PAUSE_X, NULL, 0);
   labelXValue = lv_label_create(buttonXValue, NULL);
   
   line1 = lv_line_create(scr, NULL);

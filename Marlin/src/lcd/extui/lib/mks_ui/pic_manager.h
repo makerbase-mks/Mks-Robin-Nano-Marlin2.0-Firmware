@@ -119,9 +119,10 @@
 
 // Flash flag
 #define REFLSHE_FLGA_ADD                (0X800000-32)
-#define FLASH_INF_VALID_FLAG            0xAA558761
+
 // SD card information first addr
 #define VAR_INF_ADDR                    0x000000
+#define FLASH_INF_VALID_FLAG            0x20200829
 
 //Store some gcode commands, such as auto leveling commands
 #define GCODE_COMMAND_ADDR              VAR_INF_ADDR + 3*1024

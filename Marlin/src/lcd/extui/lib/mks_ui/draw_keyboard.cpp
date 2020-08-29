@@ -250,7 +250,6 @@ void lv_draw_keyboard() {
 		//lv_group_add_obj(g, kb);
 	}
     #endif // BUTTONS_EXIST(EN1, EN2, ENC)
-    
 
     /*Create a text area. The keyboard will write here*/
     lv_obj_t *ta = lv_ta_create(scr, NULL);
