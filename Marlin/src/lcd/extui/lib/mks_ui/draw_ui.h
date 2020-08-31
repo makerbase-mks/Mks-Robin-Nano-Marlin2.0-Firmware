@@ -174,6 +174,7 @@ extern char public_buf_l[30];
 
 typedef struct {
   uint32_t spi_flash_flag;
+  uint8_t disp_rotation_180;
   uint8_t multiple_language;
   uint8_t language;
   uint8_t leveling_mode;

@@ -59,23 +59,22 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           if (uiCfg.curSprayerChoose == 0) {
             if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > (HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1))) {
               thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
-              thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
             }
           }
           #if !defined(SINGLENOZZLE) && EXTRUDERS >= 2
             else if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > (HEATER_1_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1))) {
               thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)HEATER_1_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
-              thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
             }
           #endif
+          thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
         }
         #if HAS_HEATED_BED
           else {
             thermalManager.temp_bed.target += uiCfg.stepHeat;
             if ((int)thermalManager.temp_bed.target > BED_MAXTEMP - (WATCH_BED_TEMP_INCREASE + TEMP_BED_HYSTERESIS + 1)) {
               thermalManager.temp_bed.target = (float)BED_MAXTEMP - (WATCH_BED_TEMP_INCREASE + TEMP_BED_HYSTERESIS + 1);
-              thermalManager.start_watching_bed();
             }
+            thermalManager.start_watching_bed();
           }
         #endif
         disp_desire_temp();
@@ -89,23 +88,21 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         if (uiCfg.curTempType == 0) {
           if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > uiCfg.stepHeat) {
             thermalManager.temp_hotend[uiCfg.curSprayerChoose].target -= uiCfg.stepHeat;
-            thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
           }
           else {
             thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)0;
-            thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
           }
+          thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
         }
         #if HAS_HEATED_BED
           else {
             if ((int)thermalManager.temp_bed.target > uiCfg.stepHeat) {
               thermalManager.temp_bed.target -= uiCfg.stepHeat;
-              thermalManager.start_watching_bed();
             }
             else {
               thermalManager.temp_bed.target = (float)0;
-              thermalManager.start_watching_bed();
             }
+            thermalManager.start_watching_bed();
           }
         #endif
         disp_desire_temp();

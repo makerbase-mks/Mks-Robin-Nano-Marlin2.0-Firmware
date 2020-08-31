@@ -51,12 +51,14 @@ void printer_state_polling() {
       if (uiCfg.waitEndMoves > 20) {
         uiCfg.waitEndMoves = 0;
         planner.synchronize();
+
+        gcode.process_subcommands_now_P(PSTR("M25"));
+
         //save the positon
         uiCfg.current_x_position_bak = current_position.x;
         uiCfg.current_y_position_bak = current_position.y;
         uiCfg.current_e_position_bak = current_position.e;
-
-        gcode.process_subcommands_now_P(PSTR("M25"));
+        
         if (gCfgItems.pausePosZ != (float)-1) {
           gcode.process_subcommands_now_P(PSTR("G91"));
           ZERO(public_buf_l);
@@ -89,7 +91,7 @@ void printer_state_polling() {
     if (IS_SD_PAUSED()) {
       if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
         ZERO(public_buf_m);
-        sprintf_P(public_buf_m, PSTR("G1 X%f Y%f"), uiCfg.current_x_position_bak, uiCfg.current_y_position_bak);
+        sprintf_P(public_buf_m, PSTR("G1 X%.1f Y%.1f"), uiCfg.current_x_position_bak, uiCfg.current_y_position_bak);
         gcode.process_subcommands_now(public_buf_m);
       }
       if (gCfgItems.pausePosZ != (float)-1) {

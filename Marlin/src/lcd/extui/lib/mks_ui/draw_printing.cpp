@@ -429,8 +429,10 @@ void setProBarRate() {
         once_flag = 1;
 
         #if HAS_SUICIDE
-          if (gCfgItems.finish_power_off == 1)
-            suicide();
+          if (gCfgItems.finish_power_off == 1) {
+            queue.inject_P(PSTR("M1001\nM81"));
+            marlin_state = MF_RUNNING;
+          }
         #endif
       }
     }

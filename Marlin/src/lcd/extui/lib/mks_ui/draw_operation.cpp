@@ -89,7 +89,6 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       else if (event == LV_EVENT_RELEASED) {
         if(EXTRUDERS == 2) {
 					uiCfg.curSprayerChoose_bak= active_extruder;
-					uiCfg.moveSpeed_bak = (uint16_t)feedrate_mm_s;
 				}
         if (uiCfg.print_state == WORKING) {
           #if ENABLED(SDSUPPORT)
@@ -98,6 +97,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
             uiCfg.print_state = PAUSING;
           #endif
         }
+        uiCfg.moveSpeed_bak = (uint16_t)feedrate_mm_s;
 				uiCfg.desireSprayerTempBak = thermalManager.temp_hotend[active_extruder].target;
         lv_clear_operation();
         lv_draw_filament_change();

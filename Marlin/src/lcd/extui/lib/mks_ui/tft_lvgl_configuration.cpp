@@ -182,7 +182,7 @@ void LCD_WriteReg(uint16_t LCD_Reg, uint16_t LCD_RegValue) {
   SetCs
 }
 
-void ili9320_SetWindows(uint16_t StartX, uint16_t StartY, uint16_t width, uint16_t heigh) {
+void LCD_setWindowArea(uint16_t StartX, uint16_t StartY, uint16_t width, uint16_t heigh) {
   uint16_t s_h, s_l, e_h, e_l;
   uint16_t xEnd, yEnd;
   xEnd = StartX + width;
@@ -260,7 +260,7 @@ void LCD_Clear(uint16_t Color) {
 
   if (DeviceCode == 0x9488) {
     tft_set_cursor(0, 0);
-    ili9320_SetWindows(0, 0, TFT_WIDTH, TFT_HEIGHT);
+    LCD_setWindowArea(0, 0, TFT_WIDTH, TFT_HEIGHT);
     LCD_WriteRAM_Prepare();
     #ifdef LCD_USE_DMA_FSMC
       LCD_IO_WriteMultiple(Color, (TFT_WIDTH) * (TFT_HEIGHT));
@@ -365,13 +365,11 @@ void fsmc_tft_init() {
     LCD_IO_WriteData(0x0080);
 
     LCD_IO_WriteReg(0x0036);
-    //ILI9488_WriteData(0x0068);
-    //if (gCfgItems.overturn_180 != 0xEE) {
-    LCD_IO_WriteData(0x0068);
-    //}
-    //else {
-    //ILI9488_WriteData(0x00A8);
-    //}
+    #if ENABLED(GRAPHICAL_TFT_ROTATE_180)
+      LCD_IO_WriteData(0xE8);
+    #else
+      LCD_IO_WriteData(0x0068);
+    #endif
 
     LCD_IO_WriteReg(0x003A); //Interface Mode Control
     LCD_IO_WriteData(0x0055);
@@ -407,13 +405,38 @@ void fsmc_tft_init() {
     for (i = 0; i < 65535; i++);
     LCD_IO_WriteReg(0x0029);
 
-    ili9320_SetWindows(0, 0, TFT_WIDTH, TFT_HEIGHT);
+    LCD_setWindowArea(0, 0, TFT_WIDTH, TFT_HEIGHT);
+    
+    OUT_WRITE(LCD_BACKLIGHT_PIN, LOW);
     LCD_Clear(0x0000);
+	
+    lcd_draw_logo();
 
     OUT_WRITE(LCD_BACKLIGHT_PIN, HIGH);
+    delay(2000);
   }
 }
 
+extern unsigned char bmp_public_buf[17 * 1024];
+extern void LCD_IO_WriteSequence(uint16_t *data, uint16_t length);
+
+void lcd_draw_logo() {
+	LCD_setWindowArea(0, 0, TFT_WIDTH, TFT_HEIGHT);
+	LCD_WriteRAM_Prepare();
+	
+	for (uint16_t i = 0; i < (TFT_HEIGHT); i ++) {
+	  Pic_Logo_Read((uint8_t *)"", (uint8_t *)bmp_public_buf, (TFT_WIDTH) * 2);
+    #ifdef LCD_USE_DMA_FSMC
+      LCD_IO_WriteSequence((uint16_t *)bmp_public_buf, TFT_WIDTH);
+    #else
+      int index = 0;,x_off = 0;
+      for (x_off = 0; x_off < TFT_WIDTH; x_off++) {				
+        LCD_IO_WriteData((uint16_t)bmp_public_buf[index]);
+        index += 2;
+      }
+		#endif
+	}
+}
 #endif // !TFT_LVGL_UI_SPI
 
 extern uint8_t bmp_public_buf[17 * 1024];
@@ -550,7 +573,7 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
       //uint16_t clr_temp;
       width = area->x2 - area->x1 + 1;
       height = area->y2 - area->y1 + 1;
-      ili9320_SetWindows((uint16_t)area->x1, (uint16_t)area->y1, width, height);
+      LCD_setWindowArea((uint16_t)area->x1, (uint16_t)area->y1, width, height);
       LCD_WriteRAM_Prepare();
       for (i = 0; i < width * height - 2; i++) {
         //clr_temp = (uint16_t)(((uint16_t)color_p->ch.red << 11)
@@ -583,8 +606,8 @@ static bool get_point(int16_t *x, int16_t *y) {
   }
 
   #if ENABLED(GRAPHICAL_TFT_ROTATE_180)
-    x = (TFT_WIDTH) - x;
-    y = (TFT_HEIGHT) - y;
+    *x = int16_t((TFT_WIDTH) - (int)x);
+    *y = int16_t((TFT_HEIGHT) - (int)y);
   #endif
 
   return is_touched;
