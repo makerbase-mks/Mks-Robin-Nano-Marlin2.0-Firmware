@@ -27,6 +27,7 @@
 #include "draw_ui.h"
 
 #include "../../../../../Configuration.h"
+#include "../../../../MarlinCore.h"
 
 extern lv_group_t * g;
 static lv_obj_t * scr;
@@ -248,6 +249,7 @@ void lv_draw_keyboard() {
     #if BUTTONS_EXIST(EN1, EN2, ENC)
 	if (gCfgItems.encoder_enable == true) {
 		//lv_group_add_obj(g, kb);
+        //lv_group_set_editing(g, true);
 	}
     #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 

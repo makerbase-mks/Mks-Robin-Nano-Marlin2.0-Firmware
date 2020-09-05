@@ -606,8 +606,8 @@ static bool get_point(int16_t *x, int16_t *y) {
   }
 
   #if ENABLED(GRAPHICAL_TFT_ROTATE_180)
-    *x = int16_t((TFT_WIDTH) - (int)x);
-    *y = int16_t((TFT_HEIGHT) - (int)y);
+    *x = int16_t((TFT_WIDTH) - (int)(*x));
+    *y = int16_t((TFT_HEIGHT) - (int)(*y));
   #endif
 
   return is_touched;

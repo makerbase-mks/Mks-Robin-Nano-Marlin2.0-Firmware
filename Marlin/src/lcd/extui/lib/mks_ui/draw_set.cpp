@@ -49,7 +49,9 @@ extern lv_group_t*  g;
 #define ID_S_RETURN			  9
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
-  char buf[6]={0};
+  #if USE_WIFI_FUNCTION
+    char buf[6]={0};
+  #endif
   switch (obj->mks_obj_id) {
     
     case ID_S_FAN:

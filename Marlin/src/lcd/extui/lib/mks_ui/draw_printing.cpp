@@ -35,6 +35,7 @@
 #include "../../../../module/motion.h"
 #include "../../../../sd/cardreader.h"
 #include "../../../../gcode/queue.h"
+#include "../../../../gcode/gcode.h"
 
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/powerloss.h"
@@ -47,7 +48,7 @@ extern lv_group_t * g;
 static lv_obj_t * scr;
 static lv_obj_t * labelExt1, * labelExt2, * labelFan, * labelZpos, * labelTime;
 static lv_obj_t * labelPause, * labelStop, * labelOperat;
-static lv_obj_t * bar1;
+static lv_obj_t * bar1, *bar1ValueText;
 static lv_obj_t * buttonPause, *buttonOperat, *buttonStop;
 
 #if HAS_HEATED_BED
@@ -330,6 +331,9 @@ void lv_draw_printing(void) {
   lv_bar_set_style(bar1, LV_BAR_STYLE_INDIC, &lv_bar_style_indic);
   lv_bar_set_anim_time(bar1, 1000);
   lv_bar_set_value(bar1, 0, LV_ANIM_ON);
+  bar1ValueText  = lv_label_create(bar1, NULL);
+  lv_label_set_text(bar1ValueText,"0%");
+  lv_obj_align(bar1ValueText, bar1, LV_ALIGN_CENTER, 0, 0);
 
   disp_ext_temp();
   disp_bed_temp();
@@ -416,6 +420,10 @@ void setProBarRate() {
 
   if (disp_state == PRINTING_UI) {
     lv_bar_set_value(bar1, rate, LV_ANIM_ON);
+    ZERO(public_buf_l);
+    sprintf_P(public_buf_l, "%d%%", rate);
+    lv_label_set_text(bar1ValueText,public_buf_l);
+    lv_obj_align(bar1ValueText, bar1, LV_ALIGN_CENTER, 0, 0);
 
     if (marlin_state == MF_SD_COMPLETE) {
       if (once_flag == 0) {
@@ -430,7 +438,8 @@ void setProBarRate() {
 
         #if HAS_SUICIDE
           if (gCfgItems.finish_power_off == 1) {
-            queue.inject_P(PSTR("M1001\nM81"));
+	          gcode.process_subcommands_now_P(PSTR("M1001"));
+            queue.inject_P(PSTR("M81"));
             marlin_state = MF_RUNNING;
           }
         #endif
