@@ -368,18 +368,23 @@ static void set_value_confirm() {
       break;
     case Xstep:
       planner.settings.axis_steps_per_mm[X_AXIS] = atof(key_value);
+      planner.refresh_positioning();
       break;
     case Ystep:
       planner.settings.axis_steps_per_mm[Y_AXIS] = atof(key_value);
+      planner.refresh_positioning();
       break;
     case Zstep:
       planner.settings.axis_steps_per_mm[Z_AXIS] = atof(key_value);
+      planner.refresh_positioning();
       break;
     case E0step:
       planner.settings.axis_steps_per_mm[E_AXIS] = atof(key_value);
+      planner.refresh_positioning();
       break;
     case E1step:
       planner.settings.axis_steps_per_mm[E_AXIS_N(1)] = atof(key_value);
+      planner.refresh_positioning();
       break;
     case Xcurrent:
       #if AXIS_IS_TMC(X)

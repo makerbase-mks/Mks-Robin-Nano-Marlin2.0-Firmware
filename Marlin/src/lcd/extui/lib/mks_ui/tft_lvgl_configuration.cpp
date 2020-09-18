@@ -703,10 +703,10 @@ lv_fs_res_t spi_flash_seek_cb(lv_fs_drv_t * drv, void * file_p, uint32_t pos)
 {
     #if HAS_SPI_FLASH_COMPRESSION
     if (pos == 4) {
-	uint8_t bmp_header[4];
+	    uint8_t bmp_header[4];
     	SPIFlash.beginRead(pic_read_base_addr);
-       SPIFlash.readData(bmp_header, 4);
-	currentFlashPage = 1;
+      SPIFlash.readData(bmp_header, 4);
+	    currentFlashPage = 1;
     }
     pic_read_addr_offset = pic_read_base_addr;
     #else
@@ -811,13 +811,14 @@ void lv_encoder_pin_init() {
 
 #if 1//HAS_ENCODER_ACTION
   static uint8_t buttons;
-  static const int8_t encoderDirection = 1;
-  static int16_t enc_Direction;
+  //static const int8_t encoderDirection = 1;
+  //static int16_t enc_Direction;
+  static uint32_t encoder_time1;
   void lv_update_encoder() {
-    const millis_t now = millis();
-    if (ELAPSED(now, 0)) {
-
-      #if 1//HAS_DIGITAL_BUTTONS
+    uint32_t tmpTime, diffTime = 0;
+    tmpTime = millis();
+    diffTime = getTickDiff(tmpTime, encoder_time1);
+    if (diffTime > 50) {
 
         #if ANY_BUTTON(EN1, EN2, ENC, BACK)
 
@@ -842,111 +843,37 @@ void lv_encoder_pin_init() {
 
         #endif
 
-        //
-        // Directional buttons
-        //
-        #if ANY_BUTTON(UP, DWN, LFT, RT)
 
-          const int8_t pulses = epps * encoderDirection;
-
-          if (false) {
-            // for the else-ifs below
-          }
-          #if BUTTON_EXISTS(UP)
-            else if (BUTTON_PRESSED(UP)) {
-              encoderDiff = (ENCODER_STEPS_PER_MENU_ITEM) * pulses;
-              next_button_update_ms = now + 300;
-            }
-          #endif
-          #if BUTTON_EXISTS(DWN)
-            else if (BUTTON_PRESSED(DWN)) {
-              encoderDiff = -(ENCODER_STEPS_PER_MENU_ITEM) * pulses;
-              next_button_update_ms = now + 300;
-            }
-          #endif
-          #if BUTTON_EXISTS(LFT)
-            else if (BUTTON_PRESSED(LFT)) {
-              encoderDiff = -pulses;
-              next_button_update_ms = now + 300;
-            }
-          #endif
-          #if BUTTON_EXISTS(RT)
-            else if (BUTTON_PRESSED(RT)) {
-              encoderDiff = pulses;
-              next_button_update_ms = now + 300;
-            }
-          #endif
-
-        #endif // UP || DWN || LFT || RT
-
-        buttons = (newbutton
-          #if HAS_SLOW_BUTTONS
-            | slow_buttons
-          #endif
-          #if BOTH(HAS_TOUCH_XPT2046, HAS_ENCODER_ACTION)
-            | (touch_buttons & TERN(HAS_ENCODER_WHEEL, ~(EN_A | EN_B), 0xFF))
-          #endif
-        );
-
-      #elif HAS_ADC_BUTTONS
-
-        buttons = 0;
-
-      #endif
-
-      #if HAS_ADC_BUTTONS
-        if (keypad_buttons == 0) {
-          const uint8_t b = get_ADC_keyValue();
-          if (WITHIN(b, 1, 8)) keypad_buttons = _BV(b - 1);
-        }
-      #endif
-
-      #if HAS_SHIFT_ENCODER
-        /**
-         * Set up Rotary Encoder bit values (for two pin encoders to indicate movement).
-         * These values are independent of which pins are used for EN_A / EN_B indications.
-         * The rotary encoder part is also independent of the LCD chipset.
-         */
-        uint8_t val = 0;
-        WRITE(SHIFT_LD, LOW);
-        WRITE(SHIFT_LD, HIGH);
-        LOOP_L_N(i, 8) {
-          val >>= 1;
-          if (READ(SHIFT_OUT)) SBI(val, 7);
-          WRITE(SHIFT_CLK, HIGH);
-          WRITE(SHIFT_CLK, LOW);
-        }
-        TERN(REPRAPWORLD_KEYPAD, keypad_buttons, buttons) = ~val;
-      #endif
-
-    } // next_button_update_ms
-
+        buttons = newbutton;
+	  
     #if HAS_ENCODER_WHEEL
       static uint8_t lastEncoderBits;
 
       #define encrot0 0
-      #define encrot1 2
-      #define encrot2 3
-      #define encrot3 1
+      #define encrot1 1
+      #define encrot2 2
 
       // Manage encoder rotation
-      #define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: enc_Direction += encoderDirection; break; case _E2: enc_Direction -= encoderDirection; }
+      //#define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: enc_Direction += encoderDirection; break; case _E2: enc_Direction -= encoderDirection; }
 
       uint8_t enc = 0;
       if (buttons & EN_A) enc |= B01;
       if (buttons & EN_B) enc |= B10;
       if (enc != lastEncoderBits) {
         switch (enc) {
-          case encrot0: ENCODER_SPIN(encrot3, encrot1); break;
-          case encrot1: ENCODER_SPIN(encrot0, encrot2); break;
-          case encrot2: ENCODER_SPIN(encrot1, encrot3); break;
-          case encrot3: ENCODER_SPIN(encrot2, encrot0); break;
+          case encrot1: 
+            if(lastEncoderBits == encrot0) {
+              enc_diff--;
+              encoder_time1 = tmpTime;
+            }
+            break;
+          case encrot2: 
+            if(lastEncoderBits == encrot0) {
+              enc_diff++;
+              encoder_time1 = tmpTime;
+            }
+            break;
         }
-        #if BOTH(HAS_LCD_MENU, AUTO_BED_LEVELING_UBL)
-          external_encoder();
-        #endif
-		if(enc_Direction == 2) { enc_diff++; enc_Direction = 0; }
-		if(enc_Direction == -2) { enc_diff--; enc_Direction = 0; }
         lastEncoderBits = enc;
       }
 	  static uint8_t last_button_state = LV_INDEV_STATE_REL;
@@ -962,6 +889,8 @@ void lv_encoder_pin_init() {
 	  }
 
     #endif // HAS_ENCODER_WHEEL
+
+    } // next_button_update_ms
   }
 
 #endif // HAS_ENCODER_ACTION

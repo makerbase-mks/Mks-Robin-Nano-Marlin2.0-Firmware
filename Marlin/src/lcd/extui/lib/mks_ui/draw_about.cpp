@@ -35,7 +35,7 @@
 
 extern lv_group_t * g;
 static lv_obj_t * scr;
-static lv_obj_t * fw_type, *board, *fw_version;
+static lv_obj_t * fw_type, *board; //*fw_version;
 
 #define ID_A_RETURN   1
 
@@ -100,18 +100,20 @@ void lv_draw_about(void) {
     lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
   }
 
-  fw_version = lv_label_create(scr, NULL);
-  lv_obj_set_style(fw_version, &tft_style_label_rel);
-  lv_label_set_text(fw_version, SHORT_BUILD_VERSION);
-  lv_obj_align(fw_version, NULL, LV_ALIGN_CENTER, 0, -60);
+  //fw_version = lv_label_create(scr, NULL);
+  //lv_obj_set_style(fw_version, &tft_style_label_rel);
+  //lv_label_set_text(fw_version, SHORT_BUILD_VERSION);
+  //lv_obj_align(fw_version, NULL, LV_ALIGN_CENTER, 0, -60);
 
   fw_type = lv_label_create(scr, NULL);
   lv_obj_set_style(fw_type, &tft_style_label_rel);
   lv_label_set_text(fw_type,
     #if MB(MKS_ROBIN_PRO)
-      "Firmware: Robin_Pro35"
+      "Firmware: Marlin-bugfix2.0.x-MKS-2.1.0"
     #elif MB(MKS_ROBIN_NANO, MKS_ROBIN_NANO_V2)
-      "Firmware: Robin_Nano35"
+      "Firmware: Marlin-bugfix2.0.x-MKS-2.1.0"
+    #elif MB(MKS_ROBIN_E3P)
+      "Firmware: Marlin-bugfix2.0.x-MKS-2.1.0"
     #else
       CUSTOM_MACHINE_NAME
     #endif
@@ -121,7 +123,7 @@ void lv_draw_about(void) {
   board = lv_label_create(scr, NULL);
   lv_obj_set_style(board, &tft_style_label_rel);
   lv_label_set_text(board, "Board: " BOARD_INFO_NAME);
-  lv_obj_align(board, NULL, LV_ALIGN_CENTER, 0, 20);
+  lv_obj_align(board, NULL, LV_ALIGN_CENTER, 0, -60);
 }
 
 void lv_clear_about() {

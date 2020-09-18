@@ -27,13 +27,13 @@
 
 #ifndef __STM32F1__
   #error "Oops! Select an STM32F1 board in 'Tools > Board.'"
-#elif HOTENDS > 2 || E_STEPPERS > 2
-  #error "MKS Robin nano supports up to 2 hotends / E-steppers. Comment out this line to continue."
+#elif HOTENDS > 1 || E_STEPPERS > 1
+  #error "MKS Robin e3p supports up to 1 hotends / E-steppers. Comment out this line to continue."
 #elif HAS_FSMC_TFT
-  #error "MKS Robin nano v2 doesn't support FSMC-based TFT displays."
+  #error "MKS Robin e3p doesn't support FSMC-based TFT displays."
 #endif
 
-#define BOARD_INFO_NAME "MKS Robin nano V2.0"
+#define BOARD_INFO_NAME "MKS Robin e3p"
 
 //
 // Release PB4 (Y_ENABLE_PIN) from JTAG NRST role
@@ -65,7 +65,6 @@
 #define Y_DIAG_PIN                          PA12
 #define Z_DIAG_PIN                          PA11
 #define E0_DIAG_PIN                         PC4
-#define E1_DIAG_PIN                         PE7
 
 #define X_STOP_PIN                          PA15
 #define Y_STOP_PIN                          PA12
@@ -101,13 +100,6 @@
 #define E0_DIR_PIN                          PD3
 #ifndef E0_CS_PIN
   #define E0_CS_PIN                         PD9
-#endif
-
-#define E1_ENABLE_PIN                       PA3
-#define E1_STEP_PIN                         PD15
-#define E1_DIR_PIN                          PA1
-#ifndef E1_CS_PIN
-  #define E1_CS_PIN                         PD8
 #endif
 
 //
@@ -160,9 +152,6 @@
   #define E0_SERIAL_TX_PIN                  PD9
   #define E0_SERIAL_RX_PIN                  PD9
 
-  #define E1_SERIAL_TX_PIN                  PD8
-  #define E1_SERIAL_RX_PIN                  PD8
-
   // Reduce baud rate to improve software serial reliability
   #define TMC_BAUD_RATE                    19200
 #endif // TMC2208 || TMC2209
@@ -171,23 +160,15 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN                          PC1   // TH1
-#define TEMP_1_PIN                          PC2   // TH2
 #define TEMP_BED_PIN                        PC0   // TB1
 
 //
 // Heaters / Fans
 //
 #define HEATER_0_PIN                        PC3   // HEATER1
-#define HEATER_1_PIN                        PB0   // HEATER2
 #define HEATER_BED_PIN                      PA0   // HOT BED
 
 #define FAN_PIN                             PB1   // FAN
-
-//
-// Thermocouples
-//
-//#define MAX6675_SS_PIN                    PE5   // TC1 - CS1
-//#define MAX6675_SS_PIN                    PE6   // TC2 - CS2
 
 //
 // Misc. Functions
@@ -202,7 +183,6 @@
   #endif
 
   #define MT_DET_1_PIN                        PA4   // LVGL UI FILAMENT RUNOUT1 PIN
-  #define MT_DET_2_PIN                        PE6   // LVGL UI FILAMENT RUNOUT2 PIN
   #define MT_DET_PIN_INVERTING                false // LVGL UI filament RUNOUT PIN STATE
  
   #define WIFI_IO0_PIN                        PC13  // MKS ESP WIFI IO0 PIN
@@ -211,13 +191,12 @@
 
   #if ENABLED(MKS_TEST)
     #define MKS_TEST_POWER_LOSS_PIN           PA2   // PW_DET
-    #define MKS_TEST_PS_ON_PIN                PB2   // PW_OFF
+    #define MKS_TEST_PS_ON_PIN                PB0   // PW_OFF
   #endif
 #else
   //#define POWER_LOSS_PIN                      PA2   // PW_DET
   //#define PS_ON_PIN                           PB2   // PW_OFF
   #define FIL_RUNOUT_PIN                      PA4
-  #define FIL_RUNOUT2_PIN                     PE6
 #endif
 
 #define SERVO0_PIN                          PA8   // Enable BLTOUCH
