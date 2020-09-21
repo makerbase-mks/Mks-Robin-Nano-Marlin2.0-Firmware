@@ -233,7 +233,11 @@ void GcodeSuite::G28() {
     TERN_(PROBE_MANUALLY, g29_in_progress = false);
 
     TERN_(RESTORE_LEVELING_AFTER_G28, const bool leveling_was_active = planner.leveling_active);
-    set_bed_leveling_enabled(false);
+    #if ENABLED(BLTOUCH)
+      set_bed_leveling_enabled(true);
+    #else
+      set_bed_leveling_enabled(false);
+    #endif
   #endif
 
   TERN_(CNC_WORKSPACE_PLANES, workspace_plane = PLANE_XY);
