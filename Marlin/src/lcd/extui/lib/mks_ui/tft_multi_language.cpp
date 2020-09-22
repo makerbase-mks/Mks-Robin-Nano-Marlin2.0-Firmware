@@ -1633,6 +1633,102 @@ void disp_language_init() {
             wifi_menu.cloud     = CLOUD_TEXT_RU;
             wifi_menu.reconnect = WIFI_RECONNECT_TEXT_RU;
 
+//Start Malderin translate
+            machine_menu.next          = NEXT_RU;
+            machine_menu.previous      = PREVIOUS_RU;
+            machine_menu.enable        = ENABLE_RU;
+            machine_menu.disable       = DISABLE_RU;
+            machine_menu.key_confirm   = KEY_CONFIRM_RU;
+
+			      MachinePara_menu.MachineSetting     = MACHINE_TYPE_CNOFIG_RU;
+            MachinePara_menu.title              = MACHINE_PARA_TITLE_RU;
+            machine_menu.MachineConfigTitle     = MACHINE_CONFIG_TITLE_RU;
+			      MachinePara_menu.MotorSetting       = MOTOR_CONFIG_RU;
+			      MachinePara_menu.leveling           = MACHINE_LEVELING_CONFIG_RU;
+			      MachinePara_menu.AdvanceSetting     = ADVANCE_CONFIG_RU;
+            machine_menu.MotorConfTitle        = MOTOR_CONF_TITLE_RU;
+            machine_menu.MaxFeedRateConf       = MAXFEEDRATE_CONF_RU;
+            machine_menu.AccelerationConf      = ACCELERATION_CONF_RU;
+            machine_menu.JerkConf              = JERKCONF_RU;
+            machine_menu.StepsConf             = STEPSCONF_RU;
+            machine_menu.TMCcurrentConf        = TMC_CURRENT_RU;
+            machine_menu.TMCStepModeConf       = TMC_STEP_MODE_RU;
+            machine_menu.PausePosition         = PAUSE_POSITION_RU;
+            machine_menu.FilamentConf          = MACHINE_FILAMENT_CONFIG_RU;
+            machine_menu.EncoderSettings       = ENCODER_SETTINGS_RU;
+            machine_menu.AdvancedConfTitle     = ADVANCED_CONF_TITLE_RU;
+
+            machine_menu.LevelingParaConfTitle   = LEVELING_CONF_TITLE_RU;
+            machine_menu.LevelingParaConf        = LEVELING_PARA_CONF_RU;
+            machine_menu.LevelingManuPosConf     = LEVELING_MANUAL_POS_RU;
+        	  machine_menu.LevelingAutoCommandConf = LEVELING_AUTO_COMMAND_RU;
+        	  machine_menu.LevelingAutoZoffsetConf = LEVELING_AUTO_ZOFFSET_RU;
+
+            machine_menu.AccelerationConfTitle = ACCELERATION_CONF_TITLE_RU;
+            machine_menu.PrintAcceleration     = PRINT_ACCELERATION_RU;
+            machine_menu.RetractAcceleration   = RETRACT_ACCELERATION_RU;
+            machine_menu.TravelAcceleration    = TRAVEL_ACCELERATION_RU;
+            machine_menu.X_Acceleration        = X_ACCELERATION_RU;
+            machine_menu.Y_Acceleration        = Y_ACCELERATION_RU;
+            machine_menu.Z_Acceleration        = Z_ACCELERATION_RU;
+            machine_menu.E0_Acceleration       = E0_ACCELERATION_RU;
+            machine_menu.E1_Acceleration       = E1_ACCELERATION_RU;
+
+            machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_RU;
+            machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_RU;
+            machine_menu.YMaxFeedRate         = Y_MAXFEEDRATE_RU;
+            machine_menu.ZMaxFeedRate         = Z_MAXFEEDRATE_RU;
+            machine_menu.E0MaxFeedRate        = E0_MAXFEEDRATE_RU;
+            machine_menu.E1MaxFeedRate        = E1_MAXFEEDRATE_RU;
+
+            machine_menu.JerkConfTitle = JERK_CONF_TITLE_RU;
+            machine_menu.X_Jerk        = X_JERK_RU;
+            machine_menu.Y_Jerk        = Y_JERK_RU;
+            machine_menu.Z_Jerk        = Z_JERK_RU;
+            machine_menu.E_Jerk        = E_JERK_RU;
+
+            machine_menu.StepsConfTitle = STEPS_CONF_TITLE_RU;
+            machine_menu.X_Steps        = X_STEPS_RU;
+            machine_menu.Y_Steps        = Y_STEPS_RU;
+            machine_menu.Z_Steps        = Z_STEPS_RU;
+            machine_menu.E0_Steps       = E0_STEPS_RU;
+            machine_menu.E1_Steps       = E1_STEPS_RU;
+
+            machine_menu.TmcCurrentConfTitle = TMC_CURRENT_CONF_TITLE_RU;
+            machine_menu.X_Current           = X_TMC_CURRENT_RU;
+            machine_menu.Y_Current           = Y_TMC_CURRENT_RU;
+            machine_menu.Z_Current           = Z_TMC_CURRENT_RU;
+            machine_menu.E0_Current          = E0_TMC_CURRENT_RU;
+            machine_menu.E1_Current          = E1_TMC_CURRENT_RU;
+
+            machine_menu.TmcStepModeConfTitle = TMC_MODE_CONF_TITLE_RU;
+            machine_menu.X_StepMode           = X_TMC_MODE_RU;
+            machine_menu.Y_StepMode           = Y_TMC_MODE_RU;
+            machine_menu.Z_StepMode           = Z_TMC_MODE_RU;
+            machine_menu.E0_StepMode          = E0_TMC_MODE_RU;
+            machine_menu.E1_StepMode          = E1_TMC_MODE_RU;
+
+            machine_menu.PausePosText   = PAUSE_POSITION_RU;
+            machine_menu.xPos           = PAUSE_POSITION_X_RU;
+            machine_menu.yPos           = PAUSE_POSITION_Y_RU;
+            machine_menu.zPos           = PAUSE_POSITION_Z_RU;
+
+            machine_menu.OffsetConfTitle = OFFSET_TITLE_RU;
+            machine_menu.Xoffset         = OFFSET_X_RU;
+            machine_menu.Yoffset         = OFFSET_Y_RU;
+            machine_menu.Zoffset         = OFFSET_Z_RU;
+
+            machine_menu.FilamentConfTitle   = FILAMENT_CONF_TITLE_RU;
+            machine_menu.InLength            = FILAMENT_IN_LENGTH_RU;
+            machine_menu.InSpeed             = FILAMENT_IN_SPEED_RU;
+            machine_menu.FilamentTemperature = FILAMENT_TEMPERATURE_RU;
+            machine_menu.OutLength           = FILAMENT_OUT_LENGTH_RU;
+            machine_menu.OutSpeed            = FILAMENT_OUT_SPEED_RU;
+
+            machine_menu.EncoderConfTitle    = ENCODER_CONF_TITLE_RU;
+            machine_menu.EncoderConfText     = ENCODER_CONF_TEXT_RU;
+
+//End Malderin translate
 
             cloud_menu.title        = TITLE_CLOUD_TEXT_RU;
             cloud_menu.bind         = CLOUD_BINDED_RU;
