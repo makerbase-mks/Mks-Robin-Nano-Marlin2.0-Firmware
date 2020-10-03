@@ -38,21 +38,21 @@ picheight = 0
 # picwidth = 200
 # picheight = 200
 
-# TFT35 back
-# picwidth = 70
-# picheight = 40
+# TFT35 line
+# picwidth = 82
+# picheight = 1
 
 # TFT35 arrow
 # picwidth = 10
 # picheight = 16
 
-# TFT35 line
-# picwidth = 82
-# picheight = 1
-
 # TFT35 blank
 # picwidth = 70
 # picheight = 28
+
+# TFT35 back
+# picwidth = 70
+# picheight = 40
 
 # TFT35 operate
 # picwidth = 150
