@@ -7,69 +7,7 @@ import os.path
 import sys
 
 
-# TFT define
 header = 1
-picwidth = 0
-picheight = 0
-
-
-# TFT32 splash
-# picwidth = 320
-# picheight = 240
-
-# TFT32 little
-# picwidth = 32
-# picheight = 36
-
-# TFT32 small
-# picwidth = 60
-# picheight = 50
-
-# TFT32 normal
-# picwidth = 78
-# picheight = 104
-
-
-# TFT35 splash
-# picwidth = 480
-# picheight = 320
-
-# TFT35 preview
-# picwidth = 200
-# picheight = 200
-
-# TFT35 line
-# picwidth = 82
-# picheight = 1
-
-# TFT35 arrow
-# picwidth = 10
-# picheight = 16
-
-# TFT35 blank
-# picwidth = 70
-# picheight = 28
-
-# TFT35 back
-# picwidth = 70
-# picheight = 40
-
-# TFT35 operate
-# picwidth = 150
-# picheight = 80
-
-# TFT35 navigate
-# picwidth = 117
-# picheight = 92
-
-# TFT35 small
-# picwidth = 45
-# picheight = 45
-
-# TFT35 normal
-# picwidth = 117
-# picheight = 140
-
 
 source = os.getcwd() + '/bitmap'
 target = os.getcwd() + '/assets'
