@@ -3,11 +3,10 @@
 
 from PIL import Image
 from struct import pack
+import binascii
 import os.path
 import sys
 
-
-header = 1
 
 source = os.getcwd() + '/bitmap'
 target = os.getcwd() + '/assets'
@@ -21,16 +20,17 @@ for filename in os.listdir(source):
 		binfile = os.path.join(target, os.path.splitext(filename)[0]) + '.bin'
 		bindata = open(binfile, 'wb')
 
-		print('width: ', pngdata.width)
-		print('height: ', pngdata.height)
+		picwidth = pngdata.width
+		print('width: ', picwidth)
+		picheight = pngdata.height
+		print('height: ', picheight)
 
 		pixels = pngdata.load()
 
-		if header == 1:
-			bindata.write(pack('B', int('04')))  # descriptor 04
-			bindata.write(pack('B', int('212'))) # descriptor d4
-			bindata.write(pack('B', int('129'))) # descriptor 81
-			bindata.write(pack('B', int('17')))  # descriptor 11
+		if picwidth == 480 and picheight == 320:
+			bindata.write(binascii.unhexlify('04800728'))
+		elif picwidth == 117 and picheight == 140:
+			bindata.write(binascii.unhexlify('04d48111'))
 
 		for y in range(pngdata.size[1]):
 			for x in range(pngdata.size[0]):
@@ -49,6 +49,8 @@ for filename in os.listdir(source):
 					bindata.write(pack('B', int(strHex[2:4], 16)))
 				if strHex[0:2] != '':
 					bindata.write(pack('B', int(strHex[0:2], 16)))
+
+		bindata.write(pack('B', int('10')))  # endbyte 0A
 		bindata.close()
 
 print('bin files saved to assets folder')
