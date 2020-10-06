@@ -1,6 +1,6 @@
 # Mks-Robin-Nano-Marlin2.0-Firmware
 ## Features
-The firmware of Mks Robin Nano, based on [Marlin2.0.x](https://github.com/MarlinFirmware/Marlin)(The based version is based on Marlin2.0.5), added the [LittlevGL](https://github.com/littlevgl/lvgl), supporting colourful GUI and touch screen. It is developed on PlatformIO, we hope more and more developers will participate the development of this repository.
+The firmware of Mks Robin Nano, based on [Marlin2.0.x](https://github.com/MarlinFirmware/Marlin), added the [LittlevGL](https://github.com/littlevgl/lvgl), supporting colourful GUI and touch screen. It is developed on PlatformIO, we hope more and more developers will participate the development of this repository.
 
 ![](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/blob/master/Images/MKS_Robin_Nano_printing.png)
 
@@ -22,7 +22,8 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - Copy the assets folder to the SD card.
 - SD card is connected to the motherboard, and you can see the update interface after powering on.
 
-## MKS Robin Nano V1.2 build and update firmware
+## Firmware Can be run on Robin Nano V1.x and V2.x boards
+## MKS Robin Nano V1.x build and update firmware
 
 1. Build config:
      
@@ -35,7 +36,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
 - SD card is connected to the motherboard, and you can see the update interface after powering on.   
 
-## MKS Robin Nano V2.0 build and update firmware
+## MKS Robin Nano V2.x build and update firmware
 
 1. Build config:
      
