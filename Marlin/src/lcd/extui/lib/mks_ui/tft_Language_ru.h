@@ -275,3 +275,25 @@
 #define EEPROM_STORE_TIPS_RU          "Сохранить настройки в EEPROM?"
 #define EEPROM_READ_TIPS_RU           "Читать настройки из EEPROM?"
 #define EEPROM_REVERT_TIPS_RU         "Revert settings to factory defaults?"
+
+#if ENABLED(USER_CMD_1_ENABLE)
+  #define MORE_CUSTOM1_TEXT_RU  USER_DESC_1
+#endif
+#if ENABLED(USER_CMD_2_ENABLE)
+  #define MORE_CUSTOM2_TEXT_RU  USER_DESC_2
+#endif
+#if ENABLED(USER_CMD_3_ENABLE)
+  #define MORE_CUSTOM3_TEXT_RU  USER_DESC_3
+#endif
+#if ENABLED(USER_CMD_4_ENABLE)
+  #define MORE_CUSTOM4_TEXT_RU  USER_DESC_4
+#endif
+#if ENABLED(USER_CMD_5_ENABLE)
+  #define MORE_CUSTOM5_TEXT_RU  USER_DESC_5
+#endif
+#if ENABLED(USER_CMD_6_ENABLE)
+  #define MORE_CUSTOM6_TEXT_RU  USER_DESC_6
+#endif
+#if ENABLED(USER_CMD_7_ENABLE)
+  #define MORE_CUSTOM7_TEXT_RU  USER_DESC_7
+#endif
