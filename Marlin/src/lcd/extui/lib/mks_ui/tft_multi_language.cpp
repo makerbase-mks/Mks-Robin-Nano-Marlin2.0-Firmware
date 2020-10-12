@@ -136,6 +136,7 @@ void machine_setting_disp() {
     machine_menu.ProbeZspeed          = PROBE_Z_SPEED_CN;
     machine_menu.enable               = ENABLE_CN;
     machine_menu.disable              = DISABLE_CN;
+    machine_menu.locked               = LOCKED_CN;
     machine_menu.z_min                = Z_MIN_CN;
     machine_menu.z_max                = Z_MAX_CN;
 
@@ -369,6 +370,7 @@ void machine_setting_disp() {
     machine_menu.ProbeZspeed          = PROBE_Z_SPEED_T_CN;
     machine_menu.enable               = ENABLE_T_CN;
     machine_menu.disable              = DISABLE_T_CN;
+    machine_menu.locked               = LOCKED_T_CN;
     machine_menu.z_min                = Z_MIN_T_CN;
     machine_menu.z_max                = Z_MAX_T_CN;
 
@@ -605,6 +607,7 @@ void machine_setting_disp() {
     machine_menu.ProbeZspeed          = PROBE_Z_SPEED_EN;
     machine_menu.enable               = ENABLE_EN;
     machine_menu.disable              = DISABLE_EN;
+    machine_menu.locked               = LOCKED_EN;
     machine_menu.z_min                = Z_MIN_EN;
     machine_menu.z_max                = Z_MAX_EN;
 

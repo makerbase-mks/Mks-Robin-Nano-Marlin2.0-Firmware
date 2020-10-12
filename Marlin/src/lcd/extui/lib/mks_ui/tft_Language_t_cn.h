@@ -99,6 +99,7 @@
 #define PROBE_Z_SPEED_T_CN              "探针Z方向移動速度"
 #define ENABLE_T_CN                     "是"
 #define DISABLE_T_CN                    "否"
+#define LOCKED_T_CN                     "否"
 #define Z_MIN_T_CN                      "ZMin"
 #define Z_MAX_T_CN                      "ZMax"
 

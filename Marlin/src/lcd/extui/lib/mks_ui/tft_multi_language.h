@@ -118,6 +118,7 @@ typedef struct machine_common_disp{
   const char *ProbeZspeed;
   const char *enable;
   const char *disable;
+  const char *locked;
   const char *z_min;
   const char *z_max;
 

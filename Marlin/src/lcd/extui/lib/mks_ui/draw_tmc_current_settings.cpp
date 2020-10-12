@@ -43,6 +43,12 @@ static lv_obj_t * scr;
 #define ID_TMC_CURRENT_DOWN   7
 #define ID_TMC_CURRENT_UP     8
 
+#if (EXTRUDERS >= 2)
+  #define UI_TMC_CURRENT   2
+#else
+  #define UI_TMC_CURRENT   1
+#endif
+
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
   switch (obj->mks_obj_id) {
     case ID_TMC_CURRENT_RETURN:
@@ -107,7 +113,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         break;
     #endif
 
-    #if AXIS_IS_TMC(E1)
+    #if ((EXTRUDERS >= 2) && AXIS_IS_TMC(E1))
       case ID_TMC_CURRENT_E1:
         if (event == LV_EVENT_CLICKED) {
 
@@ -151,9 +157,13 @@ void lv_draw_tmc_current_settings(void) {
 
   lv_obj_t * line1 = NULL, * line2 = NULL, * line3 = NULL, * line4 = NULL;
   //#if AXIS_IS_TMC(E1)
-    lv_obj_t *buttonTurnPage = NULL, *labelTurnPage = NULL;
+  #if (EXTRUDERS >= 2)
     lv_obj_t *labelE1Text = NULL, *buttonE1Value = NULL, *labelE1Value = NULL;
-  //#endif
+  #endif
+  #if (UI_TMC_CURRENT >= 2)
+    lv_obj_t *buttonTurnPage = NULL, *labelTurnPage = NULL;
+  #endif
+
   float milliamps;
 
   if (disp_state_stack._disp_state[disp_state_stack._disp_index] != TMC_CURRENT_UI) {
@@ -237,19 +247,20 @@ void lv_draw_tmc_current_settings(void) {
     lv_btn_set_style(buttonE0Value, LV_BTN_STYLE_PR, &style_para_value); 
     labelE0Value = lv_label_create(buttonE0Value, NULL);
     
+    line4 = lv_line_create(scr, NULL);
+    lv_ex_line(line4, line_points[3]);
+
     #if BUTTONS_EXIST(EN1, EN2, ENC)
       if (gCfgItems.encoder_enable == true) {
         lv_group_add_obj(g, buttonXValue);
-            lv_group_add_obj(g, buttonYValue);
-            lv_group_add_obj(g, buttonZValue);
+        lv_group_add_obj(g, buttonYValue);
+        lv_group_add_obj(g, buttonZValue);
         lv_group_add_obj(g, buttonE0Value);
       }
     #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
-    line4 = lv_line_create(scr, NULL);
-    lv_ex_line(line4, line_points[3]);
-
     //#if AXIS_IS_TMC(E1)
+    #if (UI_TMC_CURRENT >= 2)
       buttonTurnPage = lv_btn_create(scr, NULL);
       lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_CURRENT_DOWN, NULL, 0);
       lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_REL, &style_para_back);
@@ -257,13 +268,14 @@ void lv_draw_tmc_current_settings(void) {
       
       #if BUTTONS_EXIST(EN1, EN2, ENC)
         if (gCfgItems.encoder_enable == true) {
-          lv_group_add_obj(g, buttonTurnPage);
+            lv_group_add_obj(g, buttonTurnPage);
         }
       #endif // BUTTONS_EXIST(EN1, EN2, ENC)
-    //#endif
+    #endif
   }
   else {
     //#if AXIS_IS_TMC(E1)
+    #if (EXTRUDERS >= 2)
       labelE1Text = lv_label_create(scr, NULL);
       lv_obj_set_style(labelE1Text, &tft_style_label_rel);
       lv_obj_set_pos(labelE1Text, PARA_UI_POS_X, PARA_UI_POS_Y + 10); 
@@ -279,25 +291,32 @@ void lv_draw_tmc_current_settings(void) {
       
       line1 = lv_line_create(scr, NULL);
       lv_ex_line(line1, line_points[0]);
+    #endif
 
+    #if (UI_TMC_CURRENT >= 2)
       buttonTurnPage = lv_btn_create(scr, NULL);
       lv_obj_set_event_cb_mks(buttonTurnPage, event_handler, ID_TMC_CURRENT_UP, NULL, 0);
       lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_REL, &style_para_back);
       lv_btn_set_style(buttonTurnPage, LV_BTN_STYLE_PR, &style_para_back);
+    #endif
       
-      #if BUTTONS_EXIST(EN1, EN2, ENC)
-        if (gCfgItems.encoder_enable == true) {
+    #if BUTTONS_EXIST(EN1, EN2, ENC)
+      if (gCfgItems.encoder_enable == true) {
+        #if (EXTRUDERS >= 2)
           lv_group_add_obj(g, buttonE1Value);
+        #endif
+        #if (UI_TMC_CURRENT >= 2)
           lv_group_add_obj(g, buttonTurnPage);
-        }
-      #endif // BUTTONS_EXIST(EN1, EN2, ENC)
-    //#endif
+        #endif
+      }
+    #endif // BUTTONS_EXIST(EN1, EN2, ENC)
   }
   //#if AXIS_IS_TMC(E1)
+  #if (UI_TMC_CURRENT >= 2)
     lv_obj_set_pos(buttonTurnPage, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y);
     lv_obj_set_size(buttonTurnPage, PARA_UI_BACK_BTN_X_SIZE, PARA_UI_BACK_BTN_Y_SIZE);
     labelTurnPage = lv_label_create(buttonTurnPage, NULL);
-  //#endif
+  #endif
 
   buttonBack = lv_btn_create(scr, NULL);
   lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_TMC_CURRENT_RETURN, NULL, 0);
@@ -317,9 +336,11 @@ void lv_draw_tmc_current_settings(void) {
   if (gCfgItems.multiple_language != 0) {
     if (uiCfg.para_ui_page != 1) {
       //#if AXIS_IS_TMC(E1)
+      #if (UI_TMC_CURRENT >= 2)
         lv_label_set_text(labelTurnPage, machine_menu.next);
         lv_obj_align(labelTurnPage, buttonTurnPage, LV_ALIGN_CENTER, 0, 0);
-      //#endif
+      #endif
+
       #if AXIS_IS_TMC(X)
         milliamps = stepperX.getMilliamps();
       #else
@@ -362,9 +383,8 @@ void lv_draw_tmc_current_settings(void) {
       
     }
     else {
-      //#if AXIS_IS_TMC(E1)
-        lv_label_set_text(labelTurnPage, machine_menu.previous);
-        lv_obj_align(labelTurnPage, buttonTurnPage, LV_ALIGN_CENTER, 0, 0);
+      //#if AXIS_IS_TMC(E1)      
+      #if (EXTRUDERS >= 2)
         #if AXIS_IS_TMC(E1)
           milliamps = stepperE1.getMilliamps();
         #else
@@ -374,7 +394,12 @@ void lv_draw_tmc_current_settings(void) {
         sprintf_P(public_buf_l, PSTR("%.1f"), milliamps);
         lv_label_set_text(labelE1Value, public_buf_l);
         lv_obj_align(labelE1Value, buttonE1Value, LV_ALIGN_CENTER, 0, 0);
-      //#endif
+      #endif
+
+      #if (UI_TMC_CURRENT >= 2)
+        lv_label_set_text(labelTurnPage, machine_menu.previous);
+        lv_obj_align(labelTurnPage, buttonTurnPage, LV_ALIGN_CENTER, 0, 0);
+      #endif
     }
 
     lv_label_set_text(label_Back, common_menu.text_back);

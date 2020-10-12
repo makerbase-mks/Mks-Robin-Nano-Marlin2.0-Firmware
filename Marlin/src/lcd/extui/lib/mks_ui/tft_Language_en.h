@@ -114,6 +114,7 @@
 #define PROBE_Z_SPEED_EN                "Probe z axis speed"
 #define ENABLE_EN                       "YES"
 #define DISABLE_EN                      "NO"
+#define LOCKED_EN                       "N/A"
 #define Z_MIN_EN                        "ZMin"
 #define Z_MAX_EN                        "ZMax"
 
