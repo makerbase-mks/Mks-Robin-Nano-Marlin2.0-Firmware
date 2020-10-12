@@ -460,6 +460,13 @@ extern filesys_menu_def filesys_menu;
 
 typedef struct more_menu_disp {
   const char *title;
+  const char *custom1;
+  const char *custom2;
+  const char *custom3;
+  const char *custom4;
+  const char *custom5;
+  const char *custom6;
+  const char *custom7;
   const char *back;
 } more_menu_def;
 
