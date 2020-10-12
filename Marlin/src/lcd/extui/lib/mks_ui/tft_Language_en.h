@@ -181,13 +181,13 @@
 #define JERK_CONF_TITLE_EN              "Machine Settings>Jerk speed"
 #define X_JERK_EN                       "X-axis jerk speed"
 #define Y_JERK_EN                       "Y-axis jerk speed"
-#define Z_JERK_EN                       "J-axis jerk speed"
-#define E_JERK_EN                       "E-axis jerk speed"
+#define Z_JERK_EN                       "Z-axis jerk speed"
+#define E_JERK_EN                       "Extruder jerk speed"
 
 #define STEPS_CONF_TITLE_EN             "Machine Settings>Steps settings"
 #define X_STEPS_EN                      "X-axis steps"
-#define Y_STEPS_EN                      "Y-axis stepS"
-#define Z_STEPS_EN                      "Z-axis stepS"
+#define Y_STEPS_EN                      "Y-axis steps"
+#define Z_STEPS_EN                      "Z-axis steps"
 #define E0_STEPS_EN                     "E0 steps"
 #define E1_STEPS_EN                     "E1 steps"
 
@@ -260,10 +260,10 @@
 #define OFFSET_Z_EN      "Z offset"
 
 #define HOMING_SENSITIVITY_CONF_TITLE_EN      "Machine Settings>Sensitivity"
-#define X_SENSITIVITY_EN                      "X-axis Sensitivity"
-#define Y_SENSITIVITY_EN                      "Y-axis Sensitivity"
-#define Z_SENSITIVITY_EN                      "Z-axis Sensitivity"
-#define Z2_SENSITIVITY_EN                     "Z2-axis Sensitivity"
+#define X_SENSITIVITY_EN                      "X-axis sensitivity"
+#define Y_SENSITIVITY_EN                      "Y-axis sensitivity"
+#define Z_SENSITIVITY_EN                      "Z-axis sensitivity"
+#define Z2_SENSITIVITY_EN                     "Z2-axis sensitivity"
 
 #define ENCODER_CONF_TITLE_EN                 "Machine Settings>Rotary encoder settings"
 #define ENCODER_CONF_TEXT_EN                  "Is the encoder function used?"
