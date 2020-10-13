@@ -51,6 +51,7 @@
 #include "draw_preHeat.h"
 #include "draw_extrusion.h"
 #include "draw_home.h"
+#include "draw_more.h"
 #include "draw_move_motor.h"
 #include "draw_fan.h"
 #include "draw_about.h"
