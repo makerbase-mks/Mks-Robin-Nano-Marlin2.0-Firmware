@@ -1451,7 +1451,7 @@ void disp_language_init() {
             set_menu.machine_para = MACHINE_PARA_EN;
             set_menu.eepromSet    = EEPROM_SETTINGS_EN;
             //
-            more_menu.title   = TITLE_MORE_EN;
+            more_menu.title       = TITLE_MORE_EN;
             #if ENABLED(USER_CMD_1_ENABLE)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_EN;
             #endif
@@ -1689,7 +1689,7 @@ void disp_language_init() {
             set_menu.machine_para = MACHINE_PARA_RU;
             set_menu.eepromSet    = EEPROM_SETTINGS_RU;
             //
-            more_menu.title   = TITLE_MORE_RU;
+            more_menu.title       = TITLE_MORE_RU;
             #if ENABLED(USER_CMD_1_ENABLE)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_RU;
             #endif
@@ -2026,7 +2026,7 @@ void disp_language_init() {
             set_menu.machine_para = MACHINE_PARA_SP;
             set_menu.eepromSet    = EEPROM_SETTINGS_SP;
             //
-            more_menu.title   = TITLE_MORE_SP;
+            more_menu.title       = TITLE_MORE_SP;
             #if ENABLED(USER_CMD_1_ENABLE)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_SP;
             #endif
@@ -2265,7 +2265,7 @@ void disp_language_init() {
           set_menu.machine_para = MACHINE_PARA_FR;
           set_menu.eepromSet    = EEPROM_SETTINGS_FR;
           //
-          more_menu.title   = TITLE_MORE_FR;
+          more_menu.title       = TITLE_MORE_FR;
             #if ENABLED(USER_CMD_1_ENABLE)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_FR;
             #endif
@@ -2506,7 +2506,7 @@ void disp_language_init() {
           set_menu.machine_para = MACHINE_PARA_IT;
           set_menu.eepromSet    = EEPROM_SETTINGS_IT;
           //
-          more_menu.title   = TITLE_MORE_IT;
+          more_menu.title       = TITLE_MORE_IT;
             #if ENABLED(USER_CMD_1_ENABLE)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_IT;
             #endif
