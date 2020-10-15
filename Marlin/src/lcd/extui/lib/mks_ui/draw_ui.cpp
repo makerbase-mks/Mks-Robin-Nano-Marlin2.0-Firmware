@@ -523,7 +523,6 @@ char *getDispText(int index) {
       strcpy(public_buf_l, wifi_menu.title);
       break;
     case MORE_UI:
-      strcpy(public_buf_l, more_menu.title);
     case PRINT_MORE_UI:
       strcpy(public_buf_l, more_menu.title);
       break;
@@ -1249,7 +1248,7 @@ void clear_cur_ui() {
         break;
     #endif
     case MORE_UI:
-      lv_clear_more();
+      //Clear_more();
       break;
     case FILETRANSFER_UI:
       //Clear_fileTransfer();
@@ -1487,7 +1486,7 @@ void draw_return_ui() {
           break;
       #endif  //USE_WIFI_FUNCTION
       case MORE_UI:
-        lv_draw_more();
+        //draw_More();
         break;
       case PRINT_MORE_UI:
         //draw_printmore();
