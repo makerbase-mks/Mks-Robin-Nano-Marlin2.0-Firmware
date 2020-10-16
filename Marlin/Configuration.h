@@ -131,6 +131,8 @@
   #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2
 #endif
 
+#define MKS_TEST
+
 // Name displayed in the LCD "Ready" message and Info menu
 #define CUSTOM_MACHINE_NAME "KP3_3DTouch"
 

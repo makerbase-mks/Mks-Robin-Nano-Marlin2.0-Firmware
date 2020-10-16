@@ -675,7 +675,7 @@ char *creat_title_text() {
           }
         }
 
-        card.setIndex((gPicturePreviewStart + To_pre_view) + size * row + 8);
+        card.setIndex(gPicturePreviewStart + size * row + 8);
         #if ENABLED(TFT_LVGL_UI_SPI)
           SPI_TFT.SetWindows(xpos_pixel, ypos_pixel + row, 200, 1);
         #else
