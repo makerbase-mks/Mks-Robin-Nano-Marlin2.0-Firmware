@@ -41,6 +41,8 @@ static lv_obj_t * scr;
 #define ID_M_POINT4      4
 #define ID_M_POINT5      5
 #define ID_MANUAL_RETURN 6
+#define ID_M_OFF_ALL      7 //Malderin Отключение двигателей
+
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
   switch (obj->mks_obj_id) {
@@ -59,7 +61,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           queue.enqueue_now_P(PSTR("G1 Z10"));
 
           ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d"), (int)gCfgItems.levelingPos[0][0], (int)gCfgItems.levelingPos[0][1]);
+          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d F5000"), (int)gCfgItems.levelingPos[0][0], (int)gCfgItems.levelingPos[0][1]);
           queue.enqueue_one_now(public_buf_l);
           queue.enqueue_now_P(PSTR("G1 Z0"));
         }
@@ -79,7 +81,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           queue.enqueue_now_P(PSTR("G1 Z10"));
 
           ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d"), (int)gCfgItems.levelingPos[1][0], (int)gCfgItems.levelingPos[1][1]);
+          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d F5000"), (int)gCfgItems.levelingPos[1][0], (int)gCfgItems.levelingPos[1][1]);
           queue.enqueue_one_now(public_buf_l);
           queue.enqueue_now_P(PSTR("G1 Z0"));
         }
@@ -99,7 +101,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           queue.enqueue_now_P(PSTR("G1 Z10"));
 
           ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d"), (int)gCfgItems.levelingPos[2][0], (int)gCfgItems.levelingPos[2][1]);
+          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d F5000"), (int)gCfgItems.levelingPos[2][0], (int)gCfgItems.levelingPos[2][1]);
           queue.enqueue_one_now(public_buf_l);
           queue.enqueue_now_P(PSTR("G1 Z0"));
         }
@@ -120,7 +122,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           queue.enqueue_now_P(PSTR("G1 Z10"));
 
           ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d"), (int)gCfgItems.levelingPos[3][0], (int)gCfgItems.levelingPos[3][1]);
+          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d F5000"), (int)gCfgItems.levelingPos[3][0], (int)gCfgItems.levelingPos[3][1]);
           queue.enqueue_one_now(public_buf_l);
           queue.enqueue_now_P(PSTR("G1 Z0"));
         }
@@ -140,13 +142,21 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           queue.enqueue_now_P(PSTR("G1 Z10"));
 
           ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d"), (int)gCfgItems.levelingPos[4][0], (int)gCfgItems.levelingPos[4][1]);
+          sprintf_P(public_buf_l, PSTR("G1 X%d Y%d F5000"), (int)gCfgItems.levelingPos[4][0], (int)gCfgItems.levelingPos[4][1]);
           queue.enqueue_one_now(public_buf_l);
           queue.enqueue_now_P(PSTR("G1 Z0"));
         }
       }
 
       break;
+    case ID_M_OFF_ALL: //Malderin
+      if (event == LV_EVENT_CLICKED) {
+      }
+      else if (event == LV_EVENT_RELEASED) {
+        queue.inject_P(PSTR("M84"));
+      }
+      break;
+
     case ID_MANUAL_RETURN:
       if (event == LV_EVENT_CLICKED) {
         // nothing to do
@@ -162,7 +172,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 
 void lv_draw_manualLevel(void) {
   lv_obj_t *buttonPoint1, *buttonPoint2, *buttonPoint3, *buttonPoint4, *buttonPoint5;
-  lv_obj_t *buttonBack;
+  lv_obj_t *buttonOffAll, *buttonBack;                                                  //Malderin
 
   if (disp_state_stack._disp_state[disp_state_stack._disp_index] != LEVELING_UI) {
     disp_state_stack._disp_index++;
@@ -192,6 +202,7 @@ void lv_draw_manualLevel(void) {
   buttonPoint3 = lv_imgbtn_create(scr, NULL);
   buttonPoint4 = lv_imgbtn_create(scr, NULL);
   buttonPoint5 = lv_imgbtn_create(scr, NULL);
+  buttonOffAll = lv_imgbtn_create(scr, NULL);         //Malderin
   buttonBack   = lv_imgbtn_create(scr, NULL);
 
   lv_obj_set_event_cb_mks(buttonPoint1, event_handler, ID_M_POINT1, NULL, 0);
@@ -203,8 +214,8 @@ void lv_draw_manualLevel(void) {
   
   #if 1
     lv_obj_set_event_cb_mks(buttonPoint2, event_handler, ID_M_POINT2, NULL, 0);
-    lv_imgbtn_set_src(buttonPoint2, LV_BTN_STATE_REL, "F:/bmp_leveling2.bin");
-    lv_imgbtn_set_src(buttonPoint2, LV_BTN_STATE_PR, "F:/bmp_leveling2.bin");
+    lv_imgbtn_set_src(buttonPoint2, LV_BTN_STATE_REL, "F:/bmp_leveling4.bin");
+    lv_imgbtn_set_src(buttonPoint2, LV_BTN_STATE_PR, "F:/bmp_leveling4.bin");
     lv_imgbtn_set_style(buttonPoint2, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonPoint2, LV_BTN_STATE_REL, &tft_style_label_rel);
     
@@ -217,8 +228,8 @@ void lv_draw_manualLevel(void) {
     
 
     lv_obj_set_event_cb_mks(buttonPoint4, event_handler, ID_M_POINT4, NULL, 0);
-    lv_imgbtn_set_src(buttonPoint4, LV_BTN_STATE_REL, "F:/bmp_leveling4.bin");
-    lv_imgbtn_set_src(buttonPoint4, LV_BTN_STATE_PR, "F:/bmp_leveling4.bin");
+    lv_imgbtn_set_src(buttonPoint4, LV_BTN_STATE_REL, "F:/bmp_leveling2.bin");
+    lv_imgbtn_set_src(buttonPoint4, LV_BTN_STATE_PR, "F:/bmp_leveling2.bin");
     lv_imgbtn_set_style(buttonPoint4, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonPoint4, LV_BTN_STATE_REL, &tft_style_label_rel);
     
@@ -229,6 +240,11 @@ void lv_draw_manualLevel(void) {
     lv_imgbtn_set_style(buttonPoint5, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonPoint5, LV_BTN_STATE_REL, &tft_style_label_rel);
     
+    lv_obj_set_event_cb_mks(buttonOffAll, event_handler,ID_M_OFF_ALL, NULL,0);  //Malderin
+    lv_imgbtn_set_src(buttonOffAll, LV_BTN_STATE_REL, "F:/bmp_function1.bin");
+    lv_imgbtn_set_src(buttonOffAll, LV_BTN_STATE_PR, "F:/bmp_function1.bin");
+    lv_imgbtn_set_style(buttonOffAll, LV_BTN_STATE_PR, &tft_style_label_pre);
+    lv_imgbtn_set_style(buttonOffAll, LV_BTN_STATE_REL, &tft_style_label_rel);
 
     lv_obj_set_event_cb_mks(buttonBack, event_handler, ID_MANUAL_RETURN, NULL, 0);
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_REL, "F:/bmp_return.bin");
@@ -243,6 +259,7 @@ void lv_draw_manualLevel(void) {
   lv_obj_set_pos(buttonPoint3, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight);
   lv_obj_set_pos(buttonPoint4, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight);
   lv_obj_set_pos(buttonPoint5, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+  lv_obj_set_pos(buttonOffAll, BTN_X_PIXEL+INTERVAL_V*2, BTN_Y_PIXEL+INTERVAL_H+titleHeight);         //Malderin
   lv_obj_set_pos(buttonBack, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
 
   /*Create a label on the Image button*/
@@ -251,14 +268,16 @@ void lv_draw_manualLevel(void) {
   lv_btn_set_layout(buttonPoint3, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonPoint4, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonPoint5, LV_LAYOUT_OFF);
+  lv_btn_set_layout(buttonOffAll, LV_LAYOUT_OFF); //Malderin
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
 
-  lv_obj_t * label_Point1 = lv_label_create(buttonPoint1, NULL);
-  lv_obj_t * label_Point2 = lv_label_create(buttonPoint2, NULL);
-  lv_obj_t * label_Point3 = lv_label_create(buttonPoint3, NULL);
-  lv_obj_t * label_Point4 = lv_label_create(buttonPoint4, NULL);
-  lv_obj_t * label_Point5 = lv_label_create(buttonPoint5, NULL);
-  lv_obj_t * label_Back   = lv_label_create(buttonBack, NULL);
+  lv_obj_t *label_Point1 = lv_label_create(buttonPoint1, NULL);
+  lv_obj_t *label_Point2 = lv_label_create(buttonPoint2, NULL);
+  lv_obj_t *label_Point3 = lv_label_create(buttonPoint3, NULL);
+  lv_obj_t *label_Point4 = lv_label_create(buttonPoint4, NULL);
+  lv_obj_t *label_Point5 = lv_label_create(buttonPoint5, NULL);
+  lv_obj_t *labelOffAll = lv_label_create(buttonOffAll, NULL); //Malderin
+  lv_obj_t *label_Back   = lv_label_create(buttonBack, NULL);
 
   if (gCfgItems.multiple_language != 0) {
     lv_label_set_text(label_Point1, leveling_menu.position1);
@@ -276,6 +295,9 @@ void lv_draw_manualLevel(void) {
     lv_label_set_text(label_Point5, leveling_menu.position5);
     lv_obj_align(label_Point5, buttonPoint5, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
 
+    lv_label_set_text(labelOffAll, set_menu.motoroff);            //Malderin
+    lv_obj_align(labelOffAll, buttonOffAll, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
+
     lv_label_set_text(label_Back, common_menu.text_back);
     lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
   }
@@ -286,6 +308,7 @@ void lv_draw_manualLevel(void) {
 		lv_group_add_obj(g, buttonPoint3);
 		lv_group_add_obj(g, buttonPoint4);
 		lv_group_add_obj(g, buttonPoint5);
+                lv_group_add_obj(g, buttonOffAll); //Malderin
 		lv_group_add_obj(g, buttonBack);
 	}
   #endif // BUTTONS_EXIST(EN1, EN2, ENC)

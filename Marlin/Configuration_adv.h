@@ -3208,9 +3208,9 @@
   #define USER_DESC_4 "Cool"
   #define USER_GCODE_4 "M108\nM106 255"
 
-  //#define USER_CMD_5_ENABLE
-  //#define USER_DESC_5 "More1"
-  //#define USER_GCODE_5 "G28"
+  #define USER_CMD_5_ENABLE
+  #define USER_DESC_5 "оси X30 Y60"
+  #define USER_GCODE_5 "G28 X0 Y0\nG1 X30 Y60.1 F4000"
 
   //#define USER_CMD_6_ENABLE
   //#define USER_DESC_6 "More2"
