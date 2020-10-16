@@ -67,7 +67,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         // nothing to do
       }
       else if (event == LV_EVENT_RELEASED) {
-        TERN_(MKS_TEST, curent_disp_ui = 1);
+//        TERN_(MKS_TEST, curent_disp_ui = 1);
         lv_clear_tool();
         lv_draw_tool();
       }
