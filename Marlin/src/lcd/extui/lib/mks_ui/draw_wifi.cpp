@@ -40,6 +40,9 @@ static lv_obj_t * wifi_name_text,*wifi_key_text,*wifi_state_text,*wifi_ip_text;
 #define ID_W_RECONNECT		3
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
+	#if USE_WIFI_FUNCTION
+    	char buf[6]={0};
+  	#endif
 	switch(obj->mks_obj_id) {
 		case ID_W_RETURN:
 	    if(event == LV_EVENT_CLICKED) {
@@ -64,8 +67,15 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
+			buf[0] = 0xA5;
+            buf[1] = 0x07;
+            buf[2] = 0x00;
+            buf[3] = 0x00;
+            buf[4] = 0xFC;
+            raw_send_to_wifi(buf, 5);
+			
 			clear_cur_ui();
-	        	lv_draw_wifi_list();
+	        lv_draw_wifi_list();
 	    }
 		break;
 	}

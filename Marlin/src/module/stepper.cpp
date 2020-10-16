@@ -1351,6 +1351,10 @@ HAL_STEP_TIMER_ISR() {
   #define STEP_MULTIPLY(A,B) MultiU24X32toH16(A, B)
 #endif
 
+#if ENABLED(MKS_TEST)
+  extern uint8_t mks_test_flag;
+#endif
+
 void Stepper::isr() {
 
   static uint32_t nextMainISR = 0;  // Interval until the next main Stepper Pulse phase (0 = Now)
@@ -1377,7 +1381,18 @@ void Stepper::isr() {
   do {
     // Enable ISRs to reduce USART processing latency
     ENABLE_ISRS();
-
+    #if ENABLED(MKS_TEST)
+      if(mks_test_flag == 0x1e) {
+        WRITE(X_STEP_PIN, HIGH);
+        WRITE(Y_STEP_PIN, HIGH);
+        WRITE(Z_STEP_PIN, HIGH);
+        WRITE(E0_STEP_PIN, HIGH);
+        #if !MB(MKS_ROBIN_E3P)
+          WRITE(E1_STEP_PIN, HIGH);
+        #endif
+        //WRITE(E2_STEP_PIN, HIGH);
+      }
+    #endif
     if (!nextMainISR) pulse_phase_isr();                            // 0 = Do coordinated axes Stepper pulses
 
     #if ENABLED(LIN_ADVANCE)
@@ -1464,6 +1479,18 @@ void Stepper::isr() {
      * is less than the current count due to something preempting between the
      * read and the write of the new period value).
      */
+    #if ENABLED(MKS_TEST)
+      if(mks_test_flag == 0x1e) {
+	     WRITE(X_STEP_PIN, LOW);
+	     WRITE(Y_STEP_PIN, LOW);
+	     WRITE(Z_STEP_PIN, LOW);
+	     WRITE(E0_STEP_PIN, LOW);
+       #if !MB(MKS_ROBIN_E3P)
+	      WRITE(E1_STEP_PIN, LOW);
+       #endif
+	     //WRITE(E2_STEP_PIN, LOW);
+      }
+    #endif
     DISABLE_ISRS();
 
     /**

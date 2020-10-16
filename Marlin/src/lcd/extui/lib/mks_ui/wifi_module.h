@@ -203,7 +203,6 @@ extern int  package_to_wifi(WIFI_RET_TYPE type,char *buf, int len);
 extern void get_wifi_list_command_send();
 extern void get_wifi_commands();
 extern int  readWifiBuf(int8_t *buf, int32_t len);
-extern int  storeRcvData(int32_t len);
 
 #ifdef __cplusplus
 } /* C-declarations for C++ */

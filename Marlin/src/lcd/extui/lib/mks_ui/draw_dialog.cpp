@@ -188,6 +188,10 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event) {
       clear_cur_ui();
       draw_return_ui();
     }
+    else {
+      clear_cur_ui();
+      draw_return_ui();
+    }
   }
 }
 
