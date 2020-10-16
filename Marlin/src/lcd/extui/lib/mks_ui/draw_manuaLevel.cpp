@@ -41,7 +41,7 @@ static lv_obj_t * scr;
 #define ID_M_POINT4      4
 #define ID_M_POINT5      5
 #define ID_MANUAL_RETURN 6
-#define ID_M_OFF_ALL      7 //Malderin Отключение двигателей
+#define ID_M_OFF_ALL      7 //Malderin
 
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
@@ -211,35 +211,35 @@ void lv_draw_manualLevel(void) {
   lv_imgbtn_set_style(buttonPoint1, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonPoint1, LV_BTN_STATE_REL, &tft_style_label_rel);
   lv_obj_clear_protect(buttonPoint1, LV_PROTECT_FOLLOW);
-  
+
   #if 1
     lv_obj_set_event_cb_mks(buttonPoint2, event_handler, ID_M_POINT2, NULL, 0);
     lv_imgbtn_set_src(buttonPoint2, LV_BTN_STATE_REL, "F:/bmp_leveling4.bin");
     lv_imgbtn_set_src(buttonPoint2, LV_BTN_STATE_PR, "F:/bmp_leveling4.bin");
     lv_imgbtn_set_style(buttonPoint2, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonPoint2, LV_BTN_STATE_REL, &tft_style_label_rel);
-    
+
 
     lv_obj_set_event_cb_mks(buttonPoint3, event_handler, ID_M_POINT3, NULL, 0);
     lv_imgbtn_set_src(buttonPoint3, LV_BTN_STATE_REL, "F:/bmp_leveling3.bin");
     lv_imgbtn_set_src(buttonPoint3, LV_BTN_STATE_PR, "F:/bmp_leveling3.bin");
     lv_imgbtn_set_style(buttonPoint3, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonPoint3, LV_BTN_STATE_REL, &tft_style_label_rel);
-    
+
 
     lv_obj_set_event_cb_mks(buttonPoint4, event_handler, ID_M_POINT4, NULL, 0);
     lv_imgbtn_set_src(buttonPoint4, LV_BTN_STATE_REL, "F:/bmp_leveling2.bin");
     lv_imgbtn_set_src(buttonPoint4, LV_BTN_STATE_PR, "F:/bmp_leveling2.bin");
     lv_imgbtn_set_style(buttonPoint4, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonPoint4, LV_BTN_STATE_REL, &tft_style_label_rel);
-    
+
 
     lv_obj_set_event_cb_mks(buttonPoint5, event_handler, ID_M_POINT5, NULL, 0);
     lv_imgbtn_set_src(buttonPoint5, LV_BTN_STATE_REL, "F:/bmp_leveling5.bin");
     lv_imgbtn_set_src(buttonPoint5, LV_BTN_STATE_PR, "F:/bmp_leveling5.bin");
     lv_imgbtn_set_style(buttonPoint5, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonPoint5, LV_BTN_STATE_REL, &tft_style_label_rel);
-    
+
     lv_obj_set_event_cb_mks(buttonOffAll, event_handler,ID_M_OFF_ALL, NULL,0);  //Malderin
     lv_imgbtn_set_src(buttonOffAll, LV_BTN_STATE_REL, "F:/bmp_function1.bin");
     lv_imgbtn_set_src(buttonOffAll, LV_BTN_STATE_PR, "F:/bmp_function1.bin");
@@ -251,7 +251,7 @@ void lv_draw_manualLevel(void) {
     lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_return.bin");
     lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
-    
+
   #endif
 
   lv_obj_set_pos(buttonPoint1, INTERVAL_V, titleHeight);
@@ -320,7 +320,7 @@ void lv_clear_manualLevel() {
 		lv_group_remove_all_objs(g);
 	}
   	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
-	lv_obj_del(scr); 
+	lv_obj_del(scr);
 }
 
 #endif // HAS_TFT_LVGL_UI

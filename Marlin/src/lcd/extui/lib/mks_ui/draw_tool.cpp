@@ -34,7 +34,7 @@
 #include "../../../../gcode/queue.h"
 #include "../../../../module/temperature.h"
 
-extern lv_group_t * g; 
+extern lv_group_t * g;
 static lv_obj_t * scr;
 
 #define ID_T_PRE_HEAT   1
@@ -43,7 +43,7 @@ static lv_obj_t * scr;
 #define ID_T_HOME       4
 #define ID_T_LEVELING   5
 //#define ID_T_FILAMENT   7
-#define ID_T_MLEVELING  6 //Malderin добавил меню "уровень"
+#define ID_T_MLEVELING  6 //Malderin
 #define ID_T_MORE       7
 #define ID_T_RETURN     8
 
@@ -128,8 +128,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         }
       #endif
       break;
-          //Malderin пункт левелинг
+          //Malderin
     case ID_T_MLEVELING:
+    #if ENABLED(BLTOUCH)
       if (event == LV_EVENT_CLICKED) {
           // nothing to do
         }
@@ -140,6 +141,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
                   lv_draw_manualLevel();
                 #endif
         }
+    #endif
         break;
     case ID_T_RETURN:
       if (event == LV_EVENT_CLICKED) {
@@ -155,7 +157,10 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 }
 
 void lv_draw_tool(void) {
-  lv_obj_t *buttonPreHeat, *buttonExtrusion, *buttonMove, *buttonHome, *buttonLevel, *buttonMLevel;
+  lv_obj_t *buttonPreHeat, *buttonExtrusion, *buttonMove, *buttonHome, *buttonLevel;
+  #if ENABLED(BLTOUCH)
+    lv_obj_t *buttonMLevel;
+  #endif
   //lv_obj_t *buttonFilament, *buttonMLevel;
   #if ENABLED(CUSTOM_USER_MENUS)
     lv_obj_t *buttonMore;
@@ -190,7 +195,9 @@ void lv_draw_tool(void) {
   buttonHome      = lv_imgbtn_create(scr, NULL);
   buttonLevel     = lv_imgbtn_create(scr, NULL);
 //  buttonFilament  = lv_imgbtn_create(scr, NULL);
-  buttonMLevel    = lv_imgbtn_create(scr, NULL);
+  #if ENABLED(BLTOUCH)
+    buttonMLevel    = lv_imgbtn_create(scr, NULL);
+  #endif
   #if ENABLED(CUSTOM_USER_MENUS)
     buttonMore    = lv_imgbtn_create(scr, NULL);
   #endif
@@ -201,46 +208,48 @@ void lv_draw_tool(void) {
   lv_imgbtn_set_src(buttonPreHeat, LV_BTN_STATE_PR, "F:/bmp_preHeat.bin");
   lv_imgbtn_set_style(buttonPreHeat, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonPreHeat, LV_BTN_STATE_REL, &tft_style_label_rel);
-  
+
 
   lv_obj_set_event_cb_mks(buttonExtrusion, event_handler, ID_T_EXTRUCT, NULL, 0);
   lv_imgbtn_set_src(buttonExtrusion, LV_BTN_STATE_REL, "F:/bmp_extruct.bin");
   lv_imgbtn_set_src(buttonExtrusion, LV_BTN_STATE_PR, "F:/bmp_extruct.bin");
   lv_imgbtn_set_style(buttonExtrusion, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonExtrusion, LV_BTN_STATE_REL, &tft_style_label_rel);
-  
+
 
   lv_obj_set_event_cb_mks(buttonMove, event_handler, ID_T_MOV, NULL, 0);
   lv_imgbtn_set_src(buttonMove, LV_BTN_STATE_REL, "F:/bmp_mov.bin");
   lv_imgbtn_set_src(buttonMove, LV_BTN_STATE_PR, "F:/bmp_mov.bin");
   lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonMove, LV_BTN_STATE_REL, &tft_style_label_rel);
-  
+
 
   lv_obj_set_event_cb_mks(buttonHome, event_handler, ID_T_HOME, NULL, 0);
   lv_imgbtn_set_src(buttonHome, LV_BTN_STATE_REL, "F:/bmp_zero.bin");
   lv_imgbtn_set_src(buttonHome, LV_BTN_STATE_PR, "F:/bmp_zero.bin");
   lv_imgbtn_set_style(buttonHome, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonHome, LV_BTN_STATE_REL, &tft_style_label_rel);
-  
+
 
   lv_obj_set_event_cb_mks(buttonLevel, event_handler, ID_T_LEVELING, NULL, 0);
   lv_imgbtn_set_src(buttonLevel, LV_BTN_STATE_REL, "F:/bmp_leveling.bin");
   lv_imgbtn_set_src(buttonLevel, LV_BTN_STATE_PR, "F:/bmp_leveling.bin");
   lv_imgbtn_set_style(buttonLevel, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonLevel, LV_BTN_STATE_REL, &tft_style_label_rel);
-  
+
 //  lv_obj_set_event_cb_mks(buttonFilament, event_handler,ID_T_FILAMENT,NULL,0);
 //  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_REL, "F:/bmp_filamentchange.bin");
 //  lv_imgbtn_set_src(buttonFilament, LV_BTN_STATE_PR, "F:/bmp_filamentchange.bin");
 //  lv_imgbtn_set_style(buttonFilament, LV_BTN_STATE_PR, &tft_style_label_pre);
 //  lv_imgbtn_set_style(buttonFilament, LV_BTN_STATE_REL, &tft_style_label_rel);
 
-  lv_obj_set_event_cb_mks(buttonMLevel, event_handler, ID_T_MLEVELING, NULL, 0);
-  lv_imgbtn_set_src(buttonMLevel, LV_BTN_STATE_REL, "F:/bmp_leveling.bin");
-  lv_imgbtn_set_src(buttonMLevel, LV_BTN_STATE_PR, "F:/bmp_leveling.bin");
-  lv_imgbtn_set_style(buttonMLevel, LV_BTN_STATE_PR, &tft_style_label_pre);
-  lv_imgbtn_set_style(buttonMLevel, LV_BTN_STATE_REL, &tft_style_label_rel);
+  #if ENABLED(BLTOUCH)
+    lv_obj_set_event_cb_mks(buttonMLevel, event_handler, ID_T_MLEVELING, NULL, 0);
+    lv_imgbtn_set_src(buttonMLevel, LV_BTN_STATE_REL, "F:/bmp_leveling.bin");
+    lv_imgbtn_set_src(buttonMLevel, LV_BTN_STATE_PR, "F:/bmp_leveling.bin");
+    lv_imgbtn_set_style(buttonMLevel, LV_BTN_STATE_PR, &tft_style_label_pre);
+    lv_imgbtn_set_style(buttonMLevel, LV_BTN_STATE_REL, &tft_style_label_rel);
+  #endif
 
   #if ENABLED(CUSTOM_USER_MENUS)
     lv_obj_set_event_cb_mks(buttonMore, event_handler,ID_T_MORE,NULL,0);
@@ -255,14 +264,16 @@ void lv_draw_tool(void) {
   lv_imgbtn_set_src(buttonBack, LV_BTN_STATE_PR, "F:/bmp_return.bin");
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_PR, &tft_style_label_pre);
   lv_imgbtn_set_style(buttonBack, LV_BTN_STATE_REL, &tft_style_label_rel);
-  
+
   lv_obj_set_pos(buttonPreHeat, INTERVAL_V, titleHeight);
   lv_obj_set_pos(buttonExtrusion, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight);
   lv_obj_set_pos(buttonMove, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight);
   lv_obj_set_pos(buttonHome, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight);
   lv_obj_set_pos(buttonLevel, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
-  lv_obj_set_pos(buttonMLevel,BTN_X_PIXEL+INTERVAL_V*2, BTN_Y_PIXEL+INTERVAL_H+titleHeight); //Malderin Порядок кнопок INTERVAL_V*2 -вторая
-  //lv_obj_set_pos(buttonFilament,BTN_X_PIXEL*2+INTERVAL_V*3,BTN_Y_PIXEL+INTERVAL_H+titleHeight); //Malderin BTN_X_PIXEL*2+INTERVAL_V*3 -третья
+
+  #if ENABLED(BLTOUCH)
+    lv_obj_set_pos(buttonMLevel,BTN_X_PIXEL+INTERVAL_V*2, BTN_Y_PIXEL+INTERVAL_H+titleHeight); //Malderin
+  #endif
   #if ENABLED(CUSTOM_USER_MENUS)
    lv_obj_set_pos(buttonMore ,BTN_X_PIXEL*2+INTERVAL_V*3, BTN_Y_PIXEL+INTERVAL_H+titleHeight);
   #endif
@@ -275,7 +286,9 @@ void lv_draw_tool(void) {
   lv_btn_set_layout(buttonHome, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonLevel, LV_LAYOUT_OFF);
 //  lv_btn_set_layout(buttonFilament, LV_LAYOUT_OFF);
-  lv_btn_set_layout(buttonMLevel, LV_LAYOUT_OFF);
+  #if ENABLED(BLTOUCH)
+    lv_btn_set_layout(buttonMLevel, LV_LAYOUT_OFF);
+  #endif
   #if ENABLED(CUSTOM_USER_MENUS)
     lv_btn_set_layout(buttonMore, LV_LAYOUT_OFF);
   #endif
@@ -287,7 +300,9 @@ void lv_draw_tool(void) {
   lv_obj_t *label_Home     = lv_label_create(buttonHome, NULL);
   lv_obj_t *label_Level    = lv_label_create(buttonLevel, NULL);
 //  lv_obj_t *label_Filament = lv_label_create(buttonFilament, NULL);
-  lv_obj_t *label_MLevel   = lv_label_create(buttonMLevel, NULL);
+  #if ENABLED(BLTOUCH)
+    lv_obj_t *label_MLevel   = lv_label_create(buttonMLevel, NULL);
+  #endif
   #if ENABLED(CUSTOM_USER_MENUS)
     lv_obj_t * label_More   = lv_label_create(buttonMore, NULL);
   #endif
@@ -312,8 +327,10 @@ void lv_draw_tool(void) {
 //    lv_label_set_text(label_Filament, tool_menu.filament);
 //    lv_obj_align(label_Filament, buttonFilament, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
 
-    lv_label_set_text(label_MLevel, tool_menu.mleveling);                                               //Malderin подпись под кнопкой
-    lv_obj_align(label_MLevel, buttonMLevel, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
+    #if ENABLED(BLTOUCH)
+      lv_label_set_text(label_MLevel, tool_menu.mleveling);                                               //Malderin
+      lv_obj_align(label_MLevel, buttonMLevel, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
+    #endif
 
     #if ENABLED(CUSTOM_USER_MENUS)
       lv_label_set_text(label_More, tool_menu.more);
@@ -331,7 +348,9 @@ void lv_draw_tool(void) {
 		lv_group_add_obj(g, buttonHome);
 		lv_group_add_obj(g, buttonLevel);
 //      lv_group_add_obj(g, buttonFilament);
+    #if ENABLED(BLTOUCH)
       lv_group_add_obj(g, buttonMLevel);
+    #endif
     #if ENABLED(CUSTOM_USER_MENUS)
       lv_group_add_obj(g, buttonMore);
     #endif
@@ -340,13 +359,13 @@ void lv_draw_tool(void) {
   #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 }
 
-void lv_clear_tool() { 
+void lv_clear_tool() {
 	#if BUTTONS_EXIST(EN1, EN2, ENC)
     	if (gCfgItems.encoder_enable == true) {
 		lv_group_remove_all_objs(g);
 	}
   	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
-	lv_obj_del(scr); 
+	lv_obj_del(scr);
 }
 
 #endif // HAS_TFT_LVGL_UI
