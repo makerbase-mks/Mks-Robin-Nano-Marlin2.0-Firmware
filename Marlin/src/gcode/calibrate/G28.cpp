@@ -233,11 +233,7 @@ void GcodeSuite::G28() {
     TERN_(PROBE_MANUALLY, g29_in_progress = false);
 
     TERN_(RESTORE_LEVELING_AFTER_G28, const bool leveling_was_active = planner.leveling_active);
-    #if ENABLED(BLTOUCH)
-      set_bed_leveling_enabled(true);
-    #else
-      set_bed_leveling_enabled(false);
-    #endif
+    set_bed_leveling_enabled(false);
   #endif
 
   TERN_(CNC_WORKSPACE_PLANES, workspace_plane = PLANE_XY);
@@ -482,4 +478,8 @@ void GcodeSuite::G28() {
       L64xxManager.set_param((L64XX_axis_t)cv, L6470_ABS_POS, stepper.position(L64XX_axis_xref[cv]));
     }
   #endif
+  //BLTOUCH Malderin
+#if ENABLED(BLTOUCH)
+  set_bed_leveling_enabled(true);
+#endif
 }
