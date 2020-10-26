@@ -22,13 +22,17 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" { /* C-declarations for C++ */
+extern "C" { /* C-declarations for C++ */
 #endif
 
-extern void lv_draw_extrusion_m(void);
-//extern void lv_clear_extrusion_m();
+extern void lv_draw_cloud_bind(void);
+extern void lv_clear_cloud_bind();
+extern void disp_bind_state();
+extern void refresh_bind_ui();
+extern void display_qrcode(uint8_t *qrcode_data);
+extern void cloud_unbind();
 
 //extern void disp_temp_ready_print();
 #ifdef __cplusplus
-  } /* C-declarations for C++ */
+} /* C-declarations for C++ */
 #endif

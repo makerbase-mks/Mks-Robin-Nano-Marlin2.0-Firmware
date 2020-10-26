@@ -44,6 +44,8 @@
 #define W25QXX_CS_H OUT_WRITE(SPI_FLASH_CS_PIN, HIGH)
 #define W25QXX_CS_L OUT_WRITE(SPI_FLASH_CS_PIN, LOW)
 
+char flash_dma_mode = 1;
+
 void W25QXXFlash::init(uint8_t spiRate) {
 
   OUT_WRITE(SPI_FLASH_CS_PIN, HIGH);
@@ -372,7 +374,7 @@ void W25QXXFlash::SPI_FLASH_BufferRead(uint8_t* pBuffer, uint32_t ReadAddr, uint
   /* Send ReadAddr low nibble address byte to read from */
   spi_flash_Send(ReadAddr & 0xFF);
 
-  if (NumByteToRead < 33) {
+  if ((NumByteToRead < 33) || (!flash_dma_mode)) {
     while (NumByteToRead--) { /* while there is data to be read */
       /* Read a byte from the FLASH */
       *pBuffer = spi_flash_Rec();

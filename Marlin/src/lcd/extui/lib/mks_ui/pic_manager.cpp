@@ -144,14 +144,14 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_zpos_state.bin",
   "bmp_operate.bin",
 
-//Malderin
-  //#if DISABLED(AUTO_BED_LEVELING_BILINEAR)
+  //manual leval screen (only if disabled auto level)
+  #if DISABLED(AUTO_BED_LEVELING_BILINEAR)
     "bmp_leveling1.bin",
     "bmp_leveling2.bin",
     "bmp_leveling3.bin",
     "bmp_leveling4.bin",
     "bmp_leveling5.bin",
-  //#endif
+  #endif
 
   //lang select screen
   #if HAS_LANG_SELECT_SCREEN
@@ -207,6 +207,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   #if USE_WIFI_FUNCTION
     //wifi screen
     "bmp_wifi.bin",
+    "bmp_cloud.bin",
   #endif
 
   //babystep screen
@@ -279,7 +280,7 @@ void spiFlashErase_PIC() {
   W25QXX.init(SPI_QUARTER_SPEED);
   //erase 0x001000 -64K
 	for (pic_sectorcnt = 0; pic_sectorcnt < (64 - 4) / 4; pic_sectorcnt++) {
-		W25QXX.SPI_FLASH_SectorErase(PICINFOADDR + pic_sectorcnt * 4 * 1024);
+		W25QXX.SPI_FLASH_SectorErase(PICINFOADDR + pic_sectorcnt * 4 * 1024); 
 	}
 	//erase 64K -- 6M
   for (pic_sectorcnt = 0; pic_sectorcnt < (PIC_SIZE_xM * 1024 / 64 - 1); pic_sectorcnt++)

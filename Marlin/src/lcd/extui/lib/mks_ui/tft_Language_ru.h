@@ -276,6 +276,10 @@
 #define EEPROM_SETTINGS_READ_RU       "Чтение настроек из EEPROM"
 #define EEPROM_SETTINGS_REVERT_RU     "Bосстановить заводские настройки по умолчанию"
 
+// #define EEPROM_STORE_TIPS_RU          "Сохранить настройки в EEPROM?"
+// #define EEPROM_READ_TIPS_RU           "Читать настройки из EEPROM?"
+// #define EEPROM_REVERT_TIPS_RU         "Revert settings to factory defaults?"
+
 #define MORE_CUSTOM1_TEXT_RU  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_RU  USER_DESC_2
 #define MORE_CUSTOM3_TEXT_RU  USER_DESC_3

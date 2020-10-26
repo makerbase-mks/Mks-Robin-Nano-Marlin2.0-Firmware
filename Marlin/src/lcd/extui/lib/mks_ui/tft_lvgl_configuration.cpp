@@ -589,6 +589,30 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
   #endif // !TFT_LVGL_UI_SPI
 }
 
+void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv_color_t bk_color) {
+  #if ENABLED(TFT_LVGL_UI_SPI)
+    uint16_t width, height;
+    width = x2 - x1 + 1;
+    height = y2 - y1 + 1;
+    const uint16 size = (uint16)width;
+    uint16_t buf[size];
+    for(uint16 j = 0; j < size; j++) {
+      buf[j] = bk_color.full;
+    }
+    SPI_TFT.SetWindows((uint16_t)x1, (uint16_t)y1, width, height);
+    for (uint16_t i = 0; i < height; i++) {
+      SPI_TFT.tftio.WriteSequence(buf, width);
+    }
+    W25QXX.init(SPI_QUARTER_SPEED);
+  #else
+    LCD_setWindowArea((uint16_t)x1, (uint16_t)y1, width, height);
+    LCD_WriteRAM_Prepare();
+    for (uint16_t i = 0; i < width * height - 2; i++) {
+        LCD_IO_WriteData(bk_color.full);
+    }
+  #endif
+}
+
 #define TICK_CYCLE 1
 
 static int32_t touch_time1 = 0;

@@ -149,7 +149,7 @@ void gCfgItems_init() {
   gCfgItems.filament_limit_temper        = 200;
 
   gCfgItems.encoder_enable = true;
-
+  
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems.spi_flash_flag, VAR_INF_ADDR, sizeof(gCfgItems.spi_flash_flag));
   if (gCfgItems.spi_flash_flag == FLASH_INF_VALID_FLAG) {
     W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
@@ -207,9 +207,9 @@ void ui_cfg_init() {
   uiCfg.filament_loading_time_cnt    = 0;
   uiCfg.filament_unloading_time_flg  = 0;
   uiCfg.filament_unloading_time_cnt  = 0;
-
+	
   #if USE_WIFI_FUNCTION
-
+	
   memset(&wifiPara, 0, sizeof(wifiPara));
   memset(&ipPara, 0, sizeof(ipPara));
   strcpy(wifiPara.ap_name,WIFI_AP_NAME);
@@ -219,9 +219,9 @@ void ui_cfg_init() {
   strcpy(ipPara.mask,IP_MASK);
   strcpy(ipPara.gate,IP_GATE);
   strcpy(ipPara.dns,IP_DNS);
-
+		
   ipPara.dhcp_flag = IP_DHCP_FLAG;
-
+		
   //AP
   strcpy(ipPara.dhcpd_ip,AP_IP_ADDR);
   strcpy(ipPara.dhcpd_mask,AP_IP_MASK);
@@ -229,9 +229,9 @@ void ui_cfg_init() {
   strcpy(ipPara.dhcpd_dns,AP_IP_DNS);
   strcpy(ipPara.start_ip_addr,IP_START_IP);
   strcpy(ipPara.end_ip_addr,IP_END_IP);
-
+	
   ipPara.dhcpd_flag = AP_IP_DHCP_FLAG;
-
+	
   strcpy((char*)uiCfg.cloud_hostUrl, "baizhongyun.cn");
   uiCfg.cloud_port = 10086;
 
@@ -390,7 +390,7 @@ void tft_style_init() {
 
   lv_style_copy(&style_sel_text, &lv_style_scr);
   style_sel_text.body.main_color	= LV_COLOR_BACKGROUND;
-  style_sel_text.body.grad_color	= LV_COLOR_BACKGROUND;
+  style_sel_text.body.grad_color	= LV_COLOR_BACKGROUND;	
   style_sel_text.text.color       = LV_COLOR_YELLOW;
   style_sel_text.text.sel_color   = LV_COLOR_YELLOW;
   style_sel_text.text.font     		= &gb2312_puhui32;
@@ -402,7 +402,7 @@ void tft_style_init() {
   style_line.line.width   = 1;
   style_line.line.rounded = 1;
 
-  lv_style_copy(&style_para_value, &lv_style_plain);
+  lv_style_copy(&style_para_value, &lv_style_plain); 
   style_para_value.body.border.color = LV_COLOR_BACKGROUND;
   style_para_value.body.border.width = 1;
   style_para_value.body.main_color   = LV_COLOR_WHITE;
@@ -412,7 +412,7 @@ void tft_style_init() {
   style_para_value.text.color        = LV_COLOR_BLACK;
   style_para_value.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
 
-  lv_style_copy(&style_para_back, &lv_style_plain);
+  lv_style_copy(&style_para_back, &lv_style_plain); 
   style_para_back.body.border.color = LV_COLOR_BACKGROUND;
   style_para_back.body.border.width = 1;
   style_para_back.body.main_color   = TFT_LV_PARA_BACK_BODY_COLOR;
@@ -429,7 +429,7 @@ void tft_style_init() {
   lv_bar_style_indic.body.main_color   = lv_color_hex3(0xADF);
   lv_bar_style_indic.body.grad_color   = lv_color_hex3(0xADF);
   lv_bar_style_indic.body.border.color = lv_color_hex3(0xADF);
-
+  
 }
 
 #define MAX_TITLE_LEN 28
@@ -487,9 +487,6 @@ char *getDispText(int index) {
     case EXTRUSION_UI:
       strcpy(public_buf_l, extrude_menu.title);
       break;
-    case EXTRUSION_UI_M:
-        strcpy(public_buf_l, extrude_menu.title);
-        break;
     case CHANGE_SPEED_UI:
       strcpy(public_buf_l, speed_menu.title);
       break;
@@ -545,7 +542,7 @@ char *getDispText(int index) {
       break;
     case WIFI_LIST_UI:
       #if USE_WIFI_FUNCTION
-	      strcpy(public_buf_l, list_menu.title);
+	      strcpy(public_buf_l, list_menu.title);			
         break;
       #endif  //USE_WIFI_FUNCTION
     case MACHINE_PARA_UI:
@@ -1006,7 +1003,6 @@ void GUI_RefreshPage() {
         disp_hotend_temp();
       }
       break;
-    case EXTRUSION_UI_M: break;
     case PRE_HEAT_UI:
       if (temperature_change_frequency == 1) {
         temperature_change_frequency = 0;
@@ -1085,14 +1081,14 @@ void GUI_RefreshPage() {
       break;
     #if USE_WIFI_FUNCTION
       case WIFI_UI:
-        if(temperature_change_frequency == 1) {
+        if(temperature_change_frequency == 1) {					
         disp_wifi_state();
         temperature_change_frequency = 0;
       }
         break;
     #endif  //USE_WIFI_FUNCTION
     case BIND_UI:
-      /*refresh_bind_ui();*/
+      refresh_bind_ui();
       break;
 
     case FILAMENTCHANGE_UI:
@@ -1104,7 +1100,7 @@ void GUI_RefreshPage() {
     case DIALOG_UI:
       filament_dialog_handle();
       #if USE_WIFI_FUNCTION
-        wifi_scan_handle();
+        wifi_scan_handle(); 
       #endif //USE_WIFI_FUNCTION
       break;
     case MESHLEVELING_UI:
@@ -1117,7 +1113,7 @@ void GUI_RefreshPage() {
         if(printing_rate_update_flag == 1) {
         disp_wifi_list();
         printing_rate_update_flag = 0;
-
+      
 	      }
       #endif //USE_WIFI_FUNCTION
       break;
@@ -1133,7 +1129,7 @@ void GUI_RefreshPage() {
 	  	{
 			tips_disp.timer = TIPS_TIMER_STOP;
 			tips_disp.timer_count = 0;
-
+					
 			lv_clear_wifi_tips();
 			wifi_tips_type = TIPS_TYPE_WIFI_CONECTED;
 			lv_draw_wifi_tips();
@@ -1143,7 +1139,7 @@ void GUI_RefreshPage() {
 		{
 			tips_disp.timer = TIPS_TIMER_STOP;
 			tips_disp.timer_count = 0;
-
+					
 			lv_clear_wifi_tips();
 			wifi_tips_type = TIPS_TYPE_TAILED_JOIN;
 			lv_draw_wifi_tips();
@@ -1214,9 +1210,6 @@ void clear_cur_ui() {
     case EXTRUSION_UI:
       lv_clear_extrusion();
       break;
-//    case EXTRUSION_UI_M:
-//        lv_clear_extrusion_m();
-//        break;
     case PRE_HEAT_UI:
       lv_clear_preHeat();
       break;
@@ -1277,7 +1270,7 @@ void clear_cur_ui() {
       lv_clear_manualLevel();
       break;
     case BIND_UI:
-      //Clear_Bind();
+      lv_clear_cloud_bind();
       break;
     #if HAS_BED_PROBE
       case NOZZLE_PROBE_OFFSET_UI:
@@ -1417,7 +1410,7 @@ void clear_cur_ui() {
     lv_clear_encoder_settings();
     break;
     #endif
-    default: break;
+    default: break;  
   }
   //GUI_Clear();
 }
@@ -1454,9 +1447,6 @@ void draw_return_ui() {
       case EXTRUSION_UI:
         lv_draw_extrusion();
         break;
-        case EXTRUSION_UI_M:
-          lv_draw_extrusion_m();
-          break;
       case PRE_HEAT_UI:
         lv_draw_preHeat();
         break;
@@ -1509,7 +1499,7 @@ void draw_return_ui() {
         lv_draw_manualLevel();
         break;
       case BIND_UI:
-        //draw_bind();
+        lv_draw_cloud_bind();
         break;
       #if HAS_BED_PROBE
         case NOZZLE_PROBE_OFFSET_UI:

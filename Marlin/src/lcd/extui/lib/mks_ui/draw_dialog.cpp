@@ -188,6 +188,11 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event) {
       clear_cur_ui();
       draw_return_ui();
     }
+    else if(uiCfg.dialogType == DIALOG_TYPE_UNBIND) {
+      cloud_unbind();
+      clear_cur_ui();
+      draw_return_ui();
+    }
     else {
       clear_cur_ui();
       draw_return_ui();
@@ -598,6 +603,10 @@ void lv_draw_dialog(uint8_t type) {
   }
   else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_UNLOADING) {
   	lv_label_set_text(labelDialog, filament_menu.filament_dialog_unloading);
+	  lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -70);
+  }
+  else if (uiCfg.dialogType == DIALOG_TYPE_UNBIND) {
+  	lv_label_set_text(labelDialog, common_menu.unbind_printer_tips);
 	  lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -70);
   }
   #if BUTTONS_EXIST(EN1, EN2, ENC)
