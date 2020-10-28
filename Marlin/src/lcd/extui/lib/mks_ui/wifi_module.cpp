@@ -117,7 +117,7 @@ extern uint8_t gcode_preview_over;
 
 extern char flash_dma_mode;
 
-extern uint8_t bmp_public_buf[17 * 1024];
+extern uint8_t bmp_public_buf[14 * 1024];
 
 uint32_t   getWifiTick(){
 	return millis();
