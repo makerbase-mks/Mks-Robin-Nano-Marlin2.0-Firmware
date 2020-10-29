@@ -54,19 +54,35 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
 	      uiCfg.filament_load_heat_flg = 1;
-	      if ((abs(thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius) <= 1)
-	          || (gCfgItems.filament_limit_temper <= thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
-        }
-	      else {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_LOAD_HEAT);
-          if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
-            thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
-            thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #if defined(SINGLENOZZLE)
+          if ((abs(thermalManager.temp_hotend[0].target - thermalManager.temp_hotend[0].celsius) <= 1)
+              || (gCfgItems.filament_limit_temper <= thermalManager.temp_hotend[0].celsius)) {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
           }
-        }
+          else {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_LOAD_HEAT);
+            if (thermalManager.temp_hotend[0].target < gCfgItems.filament_limit_temper) {
+              thermalManager.temp_hotend[0].target = gCfgItems.filament_limit_temper;
+              thermalManager.start_watching_hotend(0);
+            }
+          }
+        #else
+             if ((abs(thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius) <= 1)
+              || (gCfgItems.filament_limit_temper <= thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
+          }
+          else {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_LOAD_HEAT);
+            if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
+              thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
+              thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+            }
+          }
+        #endif
       }
       break;
     case ID_FILAMNT_OUT:
@@ -75,22 +91,41 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
 	      uiCfg.filament_unload_heat_flg=1;
-	      if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > 0)
-		      && ((abs((int)((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) <= 1)
-		      || ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= gCfgItems.filament_limit_temper))
-        ) {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);
-        }
-	      else {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_UNLOAD_HEAT);
-          if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
-            thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
-            thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #if defined(SINGLENOZZLE)
+          if ((thermalManager.temp_hotend[0].target > 0)
+            && ((abs((int)((int)thermalManager.temp_hotend[0].target - thermalManager.temp_hotend[0].celsius)) <= 1)
+            || ((int)thermalManager.temp_hotend[0].celsius >= gCfgItems.filament_limit_temper))
+          ) {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);
           }
-          filament_sprayer_temp();
-        }
+          else {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_UNLOAD_HEAT);
+            if (thermalManager.temp_hotend[0].target < gCfgItems.filament_limit_temper) {
+              thermalManager.temp_hotend[0].target = gCfgItems.filament_limit_temper;
+              thermalManager.start_watching_hotend(0);
+            }
+            filament_sprayer_temp();
+          }
+        #else
+          if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > 0)
+            && ((abs((int)((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) <= 1)
+            || ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= gCfgItems.filament_limit_temper))
+            ) {
+              lv_clear_filament_change();
+              lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);
+            }
+          else {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_UNLOAD_HEAT);
+            if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
+              thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
+              thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+            }
+            filament_sprayer_temp();
+          }
+        #endif
       }
       break;
     case ID_FILAMNT_TYPE:
@@ -229,6 +264,8 @@ void lv_draw_filament_change(void) {
   		lv_group_add_obj(g, buttonBack);
 	}
   #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+
+  uiCfg.curSprayerChoose = active_extruder;
 
   disp_filament_type();
 

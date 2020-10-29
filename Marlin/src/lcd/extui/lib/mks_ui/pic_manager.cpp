@@ -382,7 +382,7 @@ uint32_t Pic_Info_Write(uint8_t *P_name, uint32_t P_size) {
   return Pic_SaveAddr;
 }
 
-uint8_t public_buf[512];
+uint8_t public_buf[513];
 
 #if ENABLED(SDSUPPORT)
 
