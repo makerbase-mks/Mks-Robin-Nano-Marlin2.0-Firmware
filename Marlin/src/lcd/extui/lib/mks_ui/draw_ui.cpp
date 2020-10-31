@@ -137,7 +137,7 @@ void gCfgItems_init() {
   gCfgItems.levelingPos[4][0] = X_BED_SIZE / 2;
   gCfgItems.levelingPos[4][1] = Y_BED_SIZE / 2;
   gCfgItems.cloud_enable  = true;
-  #if USE_WIFI_FUNCTION
+  #if 1//USE_WIFI_FUNCTION
     gCfgItems.wifi_mode_sel = STA_MODEL;
     gCfgItems.fileSysType   = FILE_SYS_SD;
     gCfgItems.wifi_type     = ESP_WIFI;

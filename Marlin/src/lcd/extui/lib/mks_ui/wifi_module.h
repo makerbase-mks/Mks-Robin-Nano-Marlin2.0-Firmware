@@ -35,11 +35,6 @@ extern "C" { /* C-declarations for C++ */
 #define UART_RX_BUFFER_SIZE   		1024
 #define UART_FIFO_BUFFER_SIZE 		1024
 
-#define ESP_WIFI					0x02
-
-#define AP_MODEL					0x01
-#define STA_MODEL					0x02
-
 #define WIFI_DECODE_TYPE			1
 
 #define IP_DHCP_FLAG				1

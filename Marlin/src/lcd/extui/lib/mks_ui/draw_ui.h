@@ -95,11 +95,14 @@
   #include "draw_cloud_bind.h"
 #endif  //USE_WIFI_FUNCTION
 
+#define ESP_WIFI					0x02
+#define AP_MODEL					0x01
+#define STA_MODEL					0x02
 
-#define FILE_SYS_USB	0
-#define FILE_SYS_SD	1
+#define FILE_SYS_USB	    0
+#define FILE_SYS_SD	      1
 
-#define TICK_CYCLE 1
+#define TICK_CYCLE         1
 
 #define PARA_SEL_ICON_TEXT_COLOR	LV_COLOR_MAKE(0x4a, 0x52, 0xff);
 
