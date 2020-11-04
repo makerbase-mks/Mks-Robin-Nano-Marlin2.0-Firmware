@@ -249,6 +249,7 @@ typedef struct {
   float desireSprayerTempBak;
   float current_x_position_bak;
   float current_y_position_bak;
+  float current_z_position_bak;
   float current_e_position_bak;
 } UI_CFG;
 

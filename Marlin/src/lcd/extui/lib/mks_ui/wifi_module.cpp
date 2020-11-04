@@ -594,6 +594,7 @@ int write_to_file(char *buf, int len) {
 			res = upload_file.write(public_buf, file_writer.write_index);
 
 			if(res == -1) {
+				//WRITE(BEEPER_PIN, HIGH);
 				upload_file.close();
 				const char * const fname = card.diveToFile(true, upload_curDir, saveFilePath);
 	
@@ -824,24 +825,29 @@ static void wifi_gcode_exec(uint8_t *cmd_line) {
 							if(strlen((char *)&tmpStr[index]) < 80) {
 								memset(list_file.file_name[sel_id], 0, sizeof(list_file.file_name[sel_id]));
 								memset(list_file.long_name[sel_id], 0, sizeof(list_file.long_name[sel_id]));
-
+								uint8_t has_path_selected = 0;
 								if(gCfgItems.wifi_type == ESP_WIFI) {
 									if(strncmp((char *)&tmpStr[index], "1:", 2) == 0) {
 										gCfgItems.fileSysType = FILE_SYS_SD;									
-										
+										has_path_selected = 1;
 									}
 		 							else if(strncmp((char *)&tmpStr[index], "0:", 2) == 0) {
-		 								gCfgItems.fileSysType = FILE_SYS_USB;									
+		 								gCfgItems.fileSysType = FILE_SYS_USB;	
+										has_path_selected = 1;								
 									}
 									else {
 										if(tmpStr[index] != '/')
-											strcat((char *)list_file.file_name[0], "/");
+											strcat((char *)list_file.file_name[sel_id], "/");
 									}
 									if(file_writer.fileTransfer == 1) {
 										uint8_t dosName[FILENAME_LENGTH];
 										uint8_t fileName[sizeof(list_file.file_name[sel_id])];
 										fileName[0] = '\0';
-										strcat((char *)fileName, (char *)&tmpStr[index]);
+										if(has_path_selected == 1) {
+											strcat((char *)fileName, (char *)&tmpStr[index + 3]);
+											strcat((char *)list_file.file_name[sel_id], "/");
+										}
+										else strcat((char *)fileName, (char *)&tmpStr[index]);
 										if(!longName2DosName((const char *)fileName, dosName)) {
 											strcpy(list_file.file_name[sel_id], "notValid");
 										}
@@ -1544,7 +1550,7 @@ static void file_first_msg_handle(uint8_t * msg, uint16_t msgLen) {
 	const char * const fname = card.diveToFile(true, upload_curDir, saveFilePath);
 	
 	//card.openFileWrite(saveFilePath);
-	if (!upload_file.open(upload_curDir, fname, O_WRITE | O_CREAT)) {
+	if (!upload_file.open(upload_curDir, fname, O_CREAT | O_APPEND | O_WRITE | O_TRUNC)) {
 		//SERIAL_ECHOLNPAIR("Failed to open ", fname, " to write.");
 		clear_cur_ui();
 		upload_result = 2;
@@ -1874,18 +1880,20 @@ void stopEspTransfer() {
 	dma_clear_isr_bits(DMA1, DMA_CH5);
 	bb_peri_set_bit(&USART1_BASE->CR3, USART_CR3_DMAR_BIT, 0);
 	dma_disable(DMA1, DMA_CH5);
+
+	wifi_delay(200);
     
 	exchangeFlashMode(1);  //change spi flash to use dma mode
+
+	esp_port_begin(1);
+
+	wifi_delay(200);
 
 	W25QXX.init(SPI_QUARTER_SPEED);
 
 	#if ENABLED(TFT_LVGL_UI_SPI)
 		SPI_TFT.spi_init(SPI_FULL_SPEED);
 	#endif
-
-	wifi_delay(200);
-
-	esp_port_begin(1);
 
 	#if HAS_SERVOS
     	servo_init();
