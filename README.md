@@ -27,9 +27,16 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
 1. Build config:
      
-- `default_envs = mks_robin_nano35`     
-- `#define MOTHERBOARD BOARD_MKS_ROBIN_NANO`    
-- `#define TFT_LVGL_UI_FSMC`
+- platformio.ini: 
+     
+     default_envs = mks_robin_nano35    
+- Configuation.h: 
+     
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO   
+     
+     #define TFT_LVGL_UI_FSMC
+     
+     //#define TFT_LVGL_UI_SPI
 
 2. Update firmware:
    
@@ -40,9 +47,16 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
 1. Build config:
      
-- `default_envs = mks_robin_nano35`     
-- `#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2`    
-- `#define TFT_LVGL_UI_SPI`
+- platformio.ini: 
+     
+     default_envs = mks_robin_nano35    
+- Configuation.h: 
+     
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2   
+     
+     //#define TFT_LVGL_UI_FSMC
+     
+     #define TFT_LVGL_UI_SPI
 
 2. Update firmware:
    
