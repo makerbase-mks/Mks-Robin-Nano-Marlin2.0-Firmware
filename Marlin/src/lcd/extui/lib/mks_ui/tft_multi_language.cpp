@@ -1735,6 +1735,16 @@ void disp_language_init() {
             wifi_menu.reconnect = WIFI_RECONNECT_TEXT_RU;
 
 //Start Malderin translate
+            machine_menu.WifiConfTitle  = WIFI_SETTINGS_TITLE_RU;
+            machine_menu.wifiName       = WIFI_SETTINGS_NAME_RU;
+            machine_menu.wifiPassWord   = WIFI_SETTINGS_PASSWORD_RU;
+            machine_menu.wifiCloud      = WIFI_SETTINGS_CLOUD_RU;
+            machine_menu.wifiConfig     = WIFI_SETTINGS_CONFIG_RU;
+            machine_menu.wifiEdit       = WIFI_SETTINGS_EDIT_RU;
+            machine_menu.wifiConfigTips = WIFI_CONFIG_TIPS_RU;
+            machine_menu.WifiSettings   = WIFI_SETTINGS_RU;
+            machine_menu.wifiMode       = WIFI_SETTINGS_MODE_RU;
+
             machine_menu.next          = NEXT_RU;
             machine_menu.previous      = PREVIOUS_RU;
             machine_menu.enable        = ENABLE_RU;
