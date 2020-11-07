@@ -403,14 +403,14 @@
 #define WIFI_SETTINGS_EDIT_RU	          "Pед."
 #define WIFI_CONFIG_TIPS_RU			        "Cконфигурировать Wi-Fi?"
 
-//#define DIALOG_UPLOAD_ING_RU            "загрузка......"
-//#define DIALOG_UPLOAD_ERROR_RU          "Oшибка загрузки"
-//#define DIALOG_UPLOAD_FINISH_RU         "загрузка завершена"
-//#define DIALOG_UPLOAD_SIZE_RU           "Pазмер"
-//#define DIALOG_UPLOAD_TIME_RU           "Bремя"
-//#define DIALOG_UPLOAD_SPEED_RU          "Cкорость"
+#define DIALOG_UPLOAD_ING_RU            "загрузка......"
+#define DIALOG_UPLOAD_ERROR_RU          "ошибка загрузки"
+#define DIALOG_UPLOAD_FINISH_RU         "загрузка завершена"
+#define DIALOG_UPLOAD_SIZE_RU           "размер"
+#define DIALOG_UPLOAD_TIME_RU           "время"
+#define DIALOG_UPLOAD_SPEED_RU          "скорость"
 //#define DIALOG_UPDATE_WIFI_FIRMWARE_RU  "Updating wifi model firmware"
 //#define DIALOG_UPDATE_WIFI_WEB_RU       "Updating wifi model web data"
-//#define DIALOG_UPDATE_NO_DEVICE_RU 			"пожалуйста проверьте \nвставлена ли карта памяти!"
+#define DIALOG_UPDATE_NO_DEVICE_RU 			"пожалуйста проверьте \nвставлена ли карта памяти!"
 
 //end of Malderin translate

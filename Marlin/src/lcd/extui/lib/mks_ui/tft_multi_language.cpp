@@ -864,6 +864,15 @@ void disp_language_init() {
     tips_menu.joining      = TEXT_WIFI_JOINING_EN;
     tips_menu.failedJoin   = TEXT_WIFI_FAILED_JOIN_EN;
     tips_menu.wifiConected = TEXT_WIFI_WIFI_CONECTED_EN;
+//Malderin
+    machine_menu.wifiUploadIng      = DIALOG_UPLOAD_ING_EN;
+    machine_menu.wifiUploadErr      = DIALOG_UPLOAD_ERROR_EN;
+    machine_menu.wifiUploadFin      = DIALOG_UPLOAD_FINISH_EN;
+    machine_menu.wifiUploadSize     = DIALOG_UPLOAD_SIZE_EN;
+    machine_menu.wifiUploadTime     = DIALOG_UPLOAD_TIME_EN;
+    machine_menu.wifiUploadSpeed    = DIALOG_UPLOAD_SPEED_EN;
+    machine_menu.wifiDialogNoUpdate = DIALOG_UPDATE_NO_DEVICE_EN;
+
   #endif  //USE_WIFI_FUNCTION
   machine_setting_disp();
 
@@ -1744,6 +1753,14 @@ void disp_language_init() {
             machine_menu.wifiConfigTips = WIFI_CONFIG_TIPS_RU;
             machine_menu.WifiSettings   = WIFI_SETTINGS_RU;
             machine_menu.wifiMode       = WIFI_SETTINGS_MODE_RU;
+            machine_menu.wifiUploadIng     = DIALOG_UPLOAD_ING_RU;
+            machine_menu.wifiUploadErr     = DIALOG_UPLOAD_ERROR_RU;
+            machine_menu.wifiUploadFin     = DIALOG_UPLOAD_FINISH_RU;
+            machine_menu.wifiUploadSize     = DIALOG_UPLOAD_SIZE_RU;
+            machine_menu.wifiUploadTime     = DIALOG_UPLOAD_TIME_RU;
+            machine_menu.wifiUploadSpeed     = DIALOG_UPLOAD_SPEED_RU;
+            machine_menu.wifiDialogNoUpdate = DIALOG_UPDATE_NO_DEVICE_RU;
+
 
             machine_menu.next          = NEXT_RU;
             machine_menu.previous      = PREVIOUS_RU;
