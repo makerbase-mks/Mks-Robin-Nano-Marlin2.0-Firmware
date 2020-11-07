@@ -35,11 +35,6 @@ extern "C" { /* C-declarations for C++ */
 #define UART_RX_BUFFER_SIZE   		1024
 #define UART_FIFO_BUFFER_SIZE 		1024
 
-#define ESP_WIFI					0x02
-
-#define AP_MODEL					0x01
-#define STA_MODEL					0x02
-
 #define WIFI_DECODE_TYPE			1
 
 #define IP_DHCP_FLAG				1
@@ -67,7 +62,7 @@ typedef enum{
 	udisk_buf_full,	
 } UDISK_DATA_BUFFER_STATE;
 
-#define TRANS_RCV_FIFO_BLOCK_NUM	16
+#define TRANS_RCV_FIFO_BLOCK_NUM	14
 
 
 typedef struct {
@@ -203,6 +198,7 @@ extern int  package_to_wifi(WIFI_RET_TYPE type,char *buf, int len);
 extern void get_wifi_list_command_send();
 extern void get_wifi_commands();
 extern int  readWifiBuf(int8_t *buf, int32_t len);
+extern void mks_wifi_firmware_upddate();
 
 #ifdef __cplusplus
 } /* C-declarations for C++ */

@@ -70,8 +70,8 @@ uint8_t printing_rate_update_flag;
 
 extern uint8_t once_flag;
 extern uint8_t sel_id;
-extern uint8_t public_buf[512];
-uint8_t bmp_public_buf[17 * 1024];
+extern uint8_t public_buf[513];
+uint8_t bmp_public_buf[14 * 1024];
 
 extern void LCD_IO_WriteData(uint16_t RegValue);
 
@@ -137,7 +137,7 @@ void gCfgItems_init() {
   gCfgItems.levelingPos[4][0] = X_BED_SIZE / 2;
   gCfgItems.levelingPos[4][1] = Y_BED_SIZE / 2;
   gCfgItems.cloud_enable  = true;
-  #if USE_WIFI_FUNCTION
+  #if 1//USE_WIFI_FUNCTION
     gCfgItems.wifi_mode_sel = STA_MODEL;
     gCfgItems.fileSysType   = FILE_SYS_SD;
     gCfgItems.wifi_type     = ESP_WIFI;
@@ -534,9 +534,11 @@ char *getDispText(int index) {
     case MESHLEVELING_UI:
       strcpy(public_buf_l, leveling_menu.title);
       break;
-    case BIND_UI:
-      strcpy(public_buf_l, cloud_menu.title);
-      break;
+    #if USE_WIFI_FUNCTION
+      case BIND_UI:
+        strcpy(public_buf_l, cloud_menu.title);
+        break;
+    #endif
     case TOOL_UI:
       strcpy(public_buf_l, tool_menu.title);
       break;
@@ -1086,11 +1088,11 @@ void GUI_RefreshPage() {
         temperature_change_frequency = 0;
       }
         break;
+    
+      case BIND_UI:
+        refresh_bind_ui();
+        break;
     #endif  //USE_WIFI_FUNCTION
-    case BIND_UI:
-      refresh_bind_ui();
-      break;
-
     case FILAMENTCHANGE_UI:
       if (temperature_change_frequency) {
         temperature_change_frequency = 0;
@@ -1269,9 +1271,11 @@ void clear_cur_ui() {
     case LEVELING_UI:
       lv_clear_manualLevel();
       break;
-    case BIND_UI:
-      lv_clear_cloud_bind();
-      break;
+    #if USE_WIFI_FUNCTION
+      case BIND_UI:
+        lv_clear_cloud_bind();
+        break;
+    #endif  //USE_WIFI_FUNCTION
     #if HAS_BED_PROBE
       case NOZZLE_PROBE_OFFSET_UI:
         lv_clear_auto_level_offset_settings();
@@ -1498,9 +1502,11 @@ void draw_return_ui() {
       case LEVELING_UI:
         lv_draw_manualLevel();
         break;
-      case BIND_UI:
-        lv_draw_cloud_bind();
-        break;
+      #if USE_WIFI_FUNCTION
+        case BIND_UI:
+          lv_draw_cloud_bind();
+          break;
+      #endif
       #if HAS_BED_PROBE
         case NOZZLE_PROBE_OFFSET_UI:
           lv_draw_auto_level_offset_settings();

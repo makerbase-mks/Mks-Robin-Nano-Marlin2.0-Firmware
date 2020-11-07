@@ -36,7 +36,7 @@
 #include "../../../../MarlinCore.h"
 
 extern uint16_t DeviceCode;
-extern unsigned char bmp_public_buf[17 * 1024];
+extern unsigned char bmp_public_buf[14 * 1024];
 
 #if ENABLED(SDSUPPORT)
   extern char *createFilename(char * const buffer, const dir_t &p);
@@ -382,7 +382,7 @@ uint32_t Pic_Info_Write(uint8_t *P_name, uint32_t P_size) {
   return Pic_SaveAddr;
 }
 
-uint8_t public_buf[512];
+uint8_t public_buf[513];
 
 #if ENABLED(SDSUPPORT)
 

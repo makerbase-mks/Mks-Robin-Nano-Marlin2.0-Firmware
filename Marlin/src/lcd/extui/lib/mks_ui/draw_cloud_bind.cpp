@@ -21,7 +21,7 @@
  */
 #include "../../../../inc/MarlinConfigPre.h"
 
-#if HAS_TFT_LVGL_UI
+#if HAS_TFT_LVGL_UI && USE_WIFI_FUNCTION
 
 #include "lv_conf.h"
 #include "draw_ui.h"

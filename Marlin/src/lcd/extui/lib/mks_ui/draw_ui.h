@@ -82,6 +82,8 @@
 #include "draw_keyboard.h"
 #include "draw_encoder_settings.h"
 
+#include "../../inc/MarlinConfigPre.h"
+
 #if USE_WIFI_FUNCTION
   #include "wifiSerial.h"
   #include "wifi_module.h"
@@ -93,11 +95,14 @@
   #include "draw_cloud_bind.h"
 #endif  //USE_WIFI_FUNCTION
 
-#include "../../inc/MarlinConfigPre.h"
-#define FILE_SYS_USB	0
-#define FILE_SYS_SD	1
+#define ESP_WIFI					0x02
+#define AP_MODEL					0x01
+#define STA_MODEL					0x02
 
-#define TICK_CYCLE 1
+#define FILE_SYS_USB	    0
+#define FILE_SYS_SD	      1
+
+#define TICK_CYCLE         1
 
 #define PARA_SEL_ICON_TEXT_COLOR	LV_COLOR_MAKE(0x4a, 0x52, 0xff);
 
@@ -244,6 +249,7 @@ typedef struct {
   float desireSprayerTempBak;
   float current_x_position_bak;
   float current_y_position_bak;
+  float current_z_position_bak;
   float current_e_position_bak;
 } UI_CFG;
 
@@ -278,7 +284,9 @@ typedef enum {
   FILAMENTCHANGE_UI,
   LEVELING_UI,
   MESHLEVELING_UI,
-  BIND_UI,
+  #if USE_WIFI_FUNCTION
+    BIND_UI,
+  #endif
   #if HAS_BED_PROBE
     NOZZLE_PROBE_OFFSET_UI,
   #endif

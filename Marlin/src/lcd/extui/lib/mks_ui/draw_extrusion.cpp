@@ -33,6 +33,7 @@
 #include "../../../../MarlinCore.h"
 #include "../../../../module/temperature.h"
 #include "../../../../gcode/queue.h"
+#include "../../../../module/motion.h"
 
 static lv_obj_t * scr;
 extern lv_group_t*  g;
@@ -197,7 +198,7 @@ void lv_draw_extrusion(void) {
     lv_imgbtn_set_style(buttonDec, LV_BTN_STATE_REL, &tft_style_label_rel);
 	
 
-	lv_obj_set_event_cb_mks(buttoType, event_handler, ID_E_TYPE, NULL, 0);
+	  lv_obj_set_event_cb_mks(buttoType, event_handler, ID_E_TYPE, NULL, 0);
     lv_imgbtn_set_style(buttoType, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttoType, LV_BTN_STATE_REL, &tft_style_label_rel);
 	
@@ -207,7 +208,7 @@ void lv_draw_extrusion(void) {
     lv_imgbtn_set_style(buttonStep, LV_BTN_STATE_REL, &tft_style_label_rel);
 	
 
-	lv_obj_set_event_cb_mks(buttonSpeed, event_handler, ID_E_SPEED, NULL, 0);
+	  lv_obj_set_event_cb_mks(buttonSpeed, event_handler, ID_E_SPEED, NULL, 0);
     lv_imgbtn_set_style(buttonSpeed, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonSpeed, LV_BTN_STATE_REL, &tft_style_label_rel);
 	
@@ -264,6 +265,8 @@ void lv_draw_extrusion(void) {
 	}
   #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
+  uiCfg.curSprayerChoose = active_extruder;
+
   disp_ext_type();
   disp_ext_step();
   disp_ext_speed();
@@ -279,7 +282,7 @@ void lv_draw_extrusion(void) {
 
 void disp_ext_type() {
   if (uiCfg.curSprayerChoose == 1) {
-	lv_imgbtn_set_src(buttoType, LV_BTN_STATE_REL, "F:/bmp_extru2.bin");
+	  lv_imgbtn_set_src(buttoType, LV_BTN_STATE_REL, "F:/bmp_extru2.bin");
     lv_imgbtn_set_src(buttoType, LV_BTN_STATE_PR, "F:/bmp_extru2.bin");
     if (gCfgItems.multiple_language != 0) {
       lv_label_set_text(labelType, extrude_menu.ext2);
@@ -287,7 +290,7 @@ void disp_ext_type() {
     }
   }
   else {
-	lv_imgbtn_set_src(buttoType, LV_BTN_STATE_REL, "F:/bmp_extru1.bin");
+	  lv_imgbtn_set_src(buttoType, LV_BTN_STATE_REL, "F:/bmp_extru1.bin");
     lv_imgbtn_set_src(buttoType, LV_BTN_STATE_PR, "F:/bmp_extru1.bin");
     if (gCfgItems.multiple_language != 0) {
       lv_label_set_text(labelType, extrude_menu.ext1);
@@ -302,11 +305,11 @@ void disp_ext_speed() {
     lv_imgbtn_set_src(buttonSpeed, LV_BTN_STATE_PR, "F:/bmp_speed_high.bin");
   }
   else if (uiCfg.extruSpeed == 1) {
-	lv_imgbtn_set_src(buttonSpeed, LV_BTN_STATE_REL, "F:/bmp_speed_slow.bin");
+	  lv_imgbtn_set_src(buttonSpeed, LV_BTN_STATE_REL, "F:/bmp_speed_slow.bin");
     lv_imgbtn_set_src(buttonSpeed, LV_BTN_STATE_PR, "F:/bmp_speed_slow.bin");
   }
   else {
-	lv_imgbtn_set_src(buttonSpeed, LV_BTN_STATE_REL, "F:/bmp_speed_normal.bin");
+	  lv_imgbtn_set_src(buttonSpeed, LV_BTN_STATE_REL, "F:/bmp_speed_normal.bin");
     lv_imgbtn_set_src(buttonSpeed, LV_BTN_STATE_PR, "F:/bmp_speed_normal.bin");
   }
 
@@ -330,7 +333,11 @@ void disp_hotend_temp() {
   char buf[20] = {0};
   public_buf_l[0] = '\0';
   strcat(public_buf_l, extrude_menu.temper_text);
-  sprintf(buf, extrude_menu.temp_value, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
+  #if defined(SINGLENOZZLE)
+    sprintf(buf, extrude_menu.temp_value, (int)thermalManager.temp_hotend[0].celsius,  (int)thermalManager.temp_hotend[0].target);
+  #else
+    sprintf(buf, extrude_menu.temp_value, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
+  #endif
   strcat(public_buf_l, buf);
   lv_label_set_text(tempText, public_buf_l);
   lv_obj_align(tempText, NULL, LV_ALIGN_CENTER, 0, -50);

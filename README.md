@@ -27,9 +27,16 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
 1. Build config:
      
-- `default_envs = mks_robin_nano35`     
-- `#define MOTHERBOARD BOARD_MKS_ROBIN_NANO`    
-- `#define TFT_LVGL_UI_FSMC`
+- platformio.ini: 
+     
+     default_envs = mks_robin_nano35    
+- Configuation.h: 
+     
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO   
+     
+     #define TFT_LVGL_UI_FSMC
+     
+     //#define TFT_LVGL_UI_SPI
 
 2. Update firmware:
    
@@ -40,17 +47,26 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
 1. Build config:
      
-- `default_envs = mks_robin_nano35`     
-- `#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2`    
-- `#define TFT_LVGL_UI_SPI`
+- platformio.ini: 
+     
+     default_envs = mks_robin_nano35    
+- Configuation.h: 
+     
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2   
+     
+     //#define TFT_LVGL_UI_FSMC
+     
+     #define TFT_LVGL_UI_SPI
 
 2. Update firmware:
    
 - Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
 - SD card is connected to the motherboard, and you can see the update interface after powering on.   
 
-## Others functional configuration
+## More information about the Robin Nano V1.X
+Please refer to [MKS Robin Nano github](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X).
+
+##  More information about the Robin Nano V2.X
 Please refer to [MKS-Robin-Nano-V2 wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V2/wiki/Marlin_firmware).
 
-## More information about the Robin Nano
-Please refer to [MKS Robin Nano github](https://github.com/makerbase-mks/MKS-Robin-Nano).
+

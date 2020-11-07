@@ -417,7 +417,7 @@ void fsmc_tft_init() {
   }
 }
 
-extern unsigned char bmp_public_buf[17 * 1024];
+extern unsigned char bmp_public_buf[14 * 1024];
 extern void LCD_IO_WriteSequence(uint16_t *data, uint16_t length);
 
 void lcd_draw_logo() {
@@ -439,7 +439,7 @@ void lcd_draw_logo() {
 }
 #endif // !TFT_LVGL_UI_SPI
 
-extern uint8_t bmp_public_buf[17 * 1024];
+extern uint8_t bmp_public_buf[14 * 1024];
 
 void tft_lvgl_init() {
 
@@ -469,7 +469,7 @@ void tft_lvgl_init() {
 
   lv_init();
 
-  lv_disp_buf_init(&disp_buf, bmp_public_buf, NULL, LV_HOR_RES_MAX * 18); /*Initialize the display buffer*/
+  lv_disp_buf_init(&disp_buf, bmp_public_buf, NULL, LV_HOR_RES_MAX * 14); /*Initialize the display buffer*/
 
   lv_disp_drv_t disp_drv;     /*Descriptor of a display driver*/
   lv_disp_drv_init(&disp_drv);    /*Basic initialization*/
@@ -524,6 +524,10 @@ void tft_lvgl_init() {
   filament_pin_setup();
 
   lv_encoder_pin_init();
+
+  #if USE_WIFI_FUNCTION 
+    mks_wifi_firmware_upddate();
+  #endif
 
   #if ENABLED(POWER_LOSS_RECOVERY)
     recovery.load();
@@ -590,14 +594,14 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 }
 
 void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv_color_t bk_color) {
+  uint16_t width, height;
+  width = x2 - x1 + 1;
+  height = y2 - y1 + 1;
   #if ENABLED(TFT_LVGL_UI_SPI)
-    uint16_t width, height;
-    width = x2 - x1 + 1;
-    height = y2 - y1 + 1;
     const uint16 size = (uint16)width;
     uint16_t buf[size];
     for(uint16 j = 0; j < size; j++) {
-      buf[j] = bk_color.full;
+      buf[j] = bk_color.full; 
     }
     SPI_TFT.SetWindows((uint16_t)x1, (uint16_t)y1, width, height);
     for (uint16_t i = 0; i < height; i++) {
@@ -605,11 +609,16 @@ void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv
     }
     W25QXX.init(SPI_QUARTER_SPEED);
   #else
+    tft_set_cursor(0, 0);
     LCD_setWindowArea((uint16_t)x1, (uint16_t)y1, width, height);
     LCD_WriteRAM_Prepare();
-    for (uint16_t i = 0; i < width * height - 2; i++) {
+    #ifdef LCD_USE_DMA_FSMC
+      LCD_IO_WriteMultiple(bk_color.full, width * height);
+    #else
+      for (uint32_t i = 0; i < width * height; i++) {
         LCD_IO_WriteData(bk_color.full);
     }
+    #endif
   #endif
 }
 

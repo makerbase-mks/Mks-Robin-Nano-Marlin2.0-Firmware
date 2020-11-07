@@ -46,10 +46,14 @@
 
 extern lv_group_t * g;
 static lv_obj_t * scr;
-static lv_obj_t * labelExt1, * labelExt2, * labelFan, * labelZpos, * labelTime;
+static lv_obj_t * labelExt1, * labelFan, * labelZpos, * labelTime;
 static lv_obj_t * labelPause, * labelStop, * labelOperat;
 static lv_obj_t * bar1, *bar1ValueText;
 static lv_obj_t * buttonPause, *buttonOperat, *buttonStop;
+
+#if !defined(SINGLENOZZLE) && EXTRUDERS == 2
+  static lv_obj_t *labelExt2;
+#endif
 
 #if HAS_HEATED_BED
   static lv_obj_t* labelBed;
@@ -137,8 +141,12 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 }
 
 void lv_draw_printing(void) {
-  lv_obj_t *buttonExt1, *buttonExt2, *buttonFanstate, *buttonZpos, *buttonTime;
+  lv_obj_t *buttonExt1, *buttonFanstate, *buttonZpos, *buttonTime;
   TERN_(HAS_HEATED_BED, lv_obj_t * buttonBedstate);
+
+  #if !defined(SINGLENOZZLE) && EXTRUDERS == 2
+    lv_obj_t *buttonExt2;
+  #endif
 
   disp_state_stack._disp_index = 0;
   ZERO(disp_state_stack._disp_state);
@@ -163,8 +171,9 @@ void lv_draw_printing(void) {
 
   /*Create an Image button*/
   buttonExt1 = lv_img_create(scr, NULL);
-  if (EXTRUDERS == 2)
+  #if !defined(SINGLENOZZLE) && EXTRUDERS == 2
     buttonExt2 = lv_img_create(scr, NULL);
+  #endif
 
   #if HAS_HEATED_BED
     buttonBedstate = lv_img_create(scr, NULL);
@@ -179,9 +188,9 @@ void lv_draw_printing(void) {
 
   lv_img_set_src(buttonExt1, "F:/bmp_ext1_state.bin");
   #if 1
-    if (EXTRUDERS == 2) {
+    #if !defined(SINGLENOZZLE) && EXTRUDERS == 2
       lv_img_set_src(buttonExt2, "F:/bmp_ext2_state.bin");
-    }
+    #endif
     #if HAS_HEATED_BED
       lv_img_set_src(buttonBedstate, "F:/bmp_bed_state.bin");
     #endif
@@ -230,8 +239,9 @@ void lv_draw_printing(void) {
   #endif // BUTTONS_EXIST(EN1, EN2, ENC)
 
   lv_obj_set_pos(buttonExt1, 205, 136);
-  if (EXTRUDERS == 2)
+  #if !defined(SINGLENOZZLE) && EXTRUDERS == 2
     lv_obj_set_pos(buttonExt2, 350, 136);
+  #endif
 
   #if HAS_HEATED_BED
     lv_obj_set_pos(buttonBedstate, 205, 186);
@@ -264,11 +274,11 @@ void lv_draw_printing(void) {
   lv_obj_set_style(labelExt1, &tft_style_label_rel);
   lv_obj_set_pos(labelExt1, 250, 146);
 
-  if (EXTRUDERS == 2) {
+  #if !defined(SINGLENOZZLE) && EXTRUDERS == 2
     labelExt2 = lv_label_create(scr, NULL);
     lv_obj_set_style(labelExt2, &tft_style_label_rel);
     lv_obj_set_pos(labelExt2, 395, 146);
-  }
+  #endif
 
   #if HAS_HEATED_BED
     labelBed = lv_label_create(scr, NULL);
@@ -328,11 +338,11 @@ void disp_ext_temp() {
   sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
   lv_label_set_text(labelExt1, public_buf_l);
 
-  if (EXTRUDERS == 2) {
+  #if !defined(SINGLENOZZLE) && EXTRUDERS == 2
     ZERO(public_buf_l);
     sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[1].celsius, (int)thermalManager.temp_hotend[1].target);
     lv_label_set_text(labelExt2, public_buf_l);
-  }
+  #endif
 }
 
 void disp_bed_temp() {

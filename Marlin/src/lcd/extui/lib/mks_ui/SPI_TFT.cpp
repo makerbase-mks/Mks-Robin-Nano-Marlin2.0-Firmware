@@ -171,7 +171,7 @@ void TFT::LCD_clear(uint16_t color) {
   tftio.WriteMultiple(color, (uint32_t)(TFT_WIDTH) * (TFT_HEIGHT));
 }
 
-extern unsigned char bmp_public_buf[17 * 1024];
+extern unsigned char bmp_public_buf[14 * 1024];
 
 void TFT::LCD_Draw_Logo() {
   SetWindows(0, 0, TFT_WIDTH, TFT_HEIGHT);
