@@ -450,7 +450,7 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN PB0 //Malderin
+#define E0_AUTO_FAN_PIN -1
 #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
@@ -460,7 +460,7 @@
 #define E7_AUTO_FAN_PIN -1
 #define CHAMBER_AUTO_FAN_PIN -1
 
-#define EXTRUDER_AUTO_FAN_TEMPERATURE 100
+#define EXTRUDER_AUTO_FAN_TEMPERATURE 50
 #define EXTRUDER_AUTO_FAN_SPEED 255   // 255 == full speed
 #define CHAMBER_AUTO_FAN_TEMPERATURE 30
 #define CHAMBER_AUTO_FAN_SPEED 255
@@ -3208,9 +3208,9 @@
   #define USER_DESC_4 "Cool"
   #define USER_GCODE_4 "M108\nM106 255"
 
-   #define USER_CMD_5_ENABLE
-   #define USER_DESC_5 "оси X30 Y60"
-   #define USER_GCODE_5 "G28 X0 Y0\nG1 X30 Y60.1 F4000"
+  //#define USER_CMD_5_ENABLE
+  //#define USER_DESC_5 "More1"
+  //#define USER_GCODE_5 "G28"
 
   //#define USER_CMD_6_ENABLE
   //#define USER_DESC_6 "More2"
