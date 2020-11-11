@@ -114,7 +114,7 @@
 #define WIFI_CONNECTED_TEXT_RU          "подключен"
 #define WIFI_DISCONNECTED_TEXT_RU       "не подключен"
 #define WIFI_EXCEPTION_TEXT_RU          "исключение"
-#define WIFI_RECONNECT_TEXT_RU          "переподкл."
+#define WIFI_RECONNECT_TEXT_RU          "выбор сети"
 #define CLOUD_TEXT_RU                   "облако"
 #define CLOUD_BIND_RU                   "соединён"
 #define CLOUD_UNBIND_RU                 "отсоед."
