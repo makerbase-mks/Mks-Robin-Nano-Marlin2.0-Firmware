@@ -283,6 +283,14 @@ typedef struct machine_common_disp{
 	const char *wifiConfig;
 	const char *wifiEdit;
 	const char *wifiConfigTips;
+//Malderin
+  const char *wifiUploadIng;
+  const char *wifiUploadErr;
+  const char *wifiUploadFin;
+  const char *wifiUploadSize;
+  const char *wifiUploadTime;
+  const char *wifiUploadSpeed;
+  const char *wifiDialogNoUpdate;
 
   const char *OffsetConfTitle;
   const char *Xoffset;
