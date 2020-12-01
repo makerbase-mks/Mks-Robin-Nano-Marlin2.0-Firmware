@@ -350,6 +350,12 @@
     // MKS MINI12864 and MKS LCD12864B
     // If using MKS LCD12864A (Need to remove RPK2 resistor)
 
+    //#define ENABLE_SPI1
+
+    #define BTN_ENC                         PE13
+    #define BTN_EN1                         PE8
+    #define BTN_EN2                         PE11
+
     #define LCD_BACKLIGHT_PIN               -1
     #define LCD_RESET_PIN                   -1
     #define DOGLCD_A0                       PD11
@@ -362,6 +368,13 @@
     #undef SHOW_BOOTSCREEN
 
   #else                                           // !MKS_MINI_12864
+
+    #define BTN_ENC                           PE13
+    #define BTN_EN1                           PE8
+    #define BTN_EN2                           PE11
+
+    #define LCD_PINS_ENABLE                   PD13
+    #define LCD_PINS_RS                       PC6
 
     #define LCD_PINS_D4                     PE14
     #if ENABLED(ULTIPANEL)
