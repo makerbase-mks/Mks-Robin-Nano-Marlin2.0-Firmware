@@ -215,8 +215,8 @@
     #define MKS_TEST_PS_ON_PIN                PB2   // PW_OFF
   #endif
 #else
-  //#define POWER_LOSS_PIN                      PA2   // PW_DET
-  //#define PS_ON_PIN                           PB2   // PW_OFF
+  #define POWER_LOSS_PIN                      PA2   // PW_DET It's needed if you don't use TFT_LVGL_UI don't undefine it
+  #define PS_ON_PIN                           PB2   // PW_OFF It's needed if you don't use TFT_LVGL_UI don't undefine it
   #define FIL_RUNOUT_PIN                      PA4
   #define FIL_RUNOUT2_PIN                     PE6
 #endif
