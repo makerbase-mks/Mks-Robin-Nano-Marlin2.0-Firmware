@@ -119,14 +119,15 @@
 //
 // Misc. Functions
 //
+//#define MKSPWC
+#ifdef MKSPWC
+  #define SUICIDE_PIN                       PB2   // Enable MKSPWC SUICIDE PIN
+  #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE
+  #define KILL_PIN                          PA2   // Enable MKSPWC DET PIN
+  #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
+#endif
+
 #if HAS_TFT_LVGL_UI
-  //#define MKSPWC
-  #ifdef MKSPWC
-    #define SUICIDE_PIN                       PB2   // Enable MKSPWC SUICIDE PIN
-    #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE
-    #define KILL_PIN                          PA2   // Enable MKSPWC DET PIN
-    #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
-  #endif
 
   #define MT_DET_1_PIN                        PA4   // LVGL UI FILAMENT RUNOUT1 PIN
   #define MT_DET_2_PIN                        PE6   // LVGL UI FILAMENT RUNOUT2 PIN
