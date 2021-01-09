@@ -65,12 +65,18 @@ extern uint32_t upload_time;
 extern uint32_t upload_size;
 extern uint8_t temperature_change_frequency;
 
+#if HAS_CUTTER
+  static void btn_boader_event_cb(lv_obj_t * btn, lv_event_t event) {
+    if (event == LV_EVENT_RELEASED) uiCfg.calculateBoaderData = true;
+  }
+#endif
+
 static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event) {
   if (event == LV_EVENT_CLICKED) {
     // nothing to do
   }
   else if (event == LV_EVENT_RELEASED) {
-    if (uiCfg.dialogType == DIALOG_TYPE_PRINT_FILE) {
+    if (uiCfg.dialogType == DIALOG_TYPE_PRINT_OR_ENGRAVE_FILE) {
       #if HAS_GCODE_PREVIEW
         preview_gcode_prehandle(list_file.file_name[sel_id]);
       #endif
@@ -113,6 +119,8 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event) {
           }
         }
       #endif
+      uiCfg.alreadyGetBoaderData = false;
+      uiCfg.cutTimes = uiCfg.currentCutTimes = 1;
     }
     else if (uiCfg.dialogType == DIALOG_TYPE_STOP) {
       wait_for_heatup = false;
@@ -136,9 +144,10 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event) {
         //queue.enqueue_now_P(PSTR("G91\nG1 Z10\nG90\nG28 X0 Y0"));
         //queue.inject_P(PSTR("G91\nG1 Z10\nG90\nG28 X0 Y0\nM84\nM107"));
       #endif
+      uiCfg.cutTimes = uiCfg.currentCutTimes = 1;
     }
     else if (uiCfg.dialogType == DIALOG_TYPE_FINISH_PRINT) {
-      clear_cur_ui();
+      lv_clear_cur_ui();
       lv_draw_ready_print();
     }
     #if ENABLED(ADVANCED_PAUSE_FEATURE)
@@ -152,29 +161,29 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event) {
         pause_menu_response = PAUSE_RESPONSE_EXTRUDE_MORE;
       }
       else if (uiCfg.dialogType == DIALOG_PAUSE_MESSAGE_RESUME) {
-        clear_cur_ui();
-        draw_return_ui();
+        lv_clear_cur_ui();
+        lv_draw_return_ui();
       }
     #endif
     else if (uiCfg.dialogType == DIALOG_STORE_EEPROM_TIPS) {
       gcode.process_subcommands_now_P(PSTR("M500"));
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
     else if (uiCfg.dialogType == DIALOG_READ_EEPROM_TIPS) {
       gcode.process_subcommands_now_P(PSTR("M501"));
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
     else if (uiCfg.dialogType == DIALOG_REVERT_EEPROM_TIPS) {
       gcode.process_subcommands_now_P(PSTR("M502"));
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
     else if (uiCfg.dialogType == DIALOG_WIFI_CONFIG_TIPS) {
       uiCfg.configWifi = 1;
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
     else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED) {
       uiCfg.filament_heat_completed_load = 1;
@@ -182,22 +191,22 @@ static void btn_ok_event_cb(lv_obj_t * btn, lv_event_t event) {
     else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED) {
       uiCfg.filament_heat_completed_unload = 1;
     }
-    else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_LOAD_COMPLETED
+    else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_LOAD_COMPLETED 
           || uiCfg.dialogType == DIALOG_TYPE_FILAMENT_UNLOAD_COMPLETED
     ) {
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
     #if USE_WIFI_FUNCTION
       else if(uiCfg.dialogType == DIALOG_TYPE_UNBIND) {
         cloud_unbind();
-        clear_cur_ui();
-        draw_return_ui();
+        lv_clear_cur_ui();
+        lv_draw_return_ui();
       }
     #endif
     else {
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
   }
 }
@@ -218,8 +227,9 @@ static void btn_cancel_event_cb(lv_obj_t * btn, lv_event_t event) {
 					|| (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED)
     ) {
 		  thermalManager.temp_hotend[uiCfg.curSprayerChoose].target= uiCfg.desireSprayerTempBak;
-      clear_cur_ui();
-      draw_return_ui();
+      thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
 	  }
 	  else if ((uiCfg.dialogType   == DIALOG_TYPE_FILAMENT_LOADING)
 		   || (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_UNLOADING)
@@ -233,18 +243,20 @@ static void btn_cancel_event_cb(lv_obj_t * btn, lv_event_t event) {
 		  uiCfg.filament_unloading_time_flg  = 0;
 		  uiCfg.filament_unloading_time_cnt  = 0;
 		  thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
-      clear_cur_ui();
-      draw_return_ui();
+      thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
   	}
     else {
-      clear_cur_ui();
-      draw_return_ui();
+      if(uiCfg.dialogType == DIALOG_TYPE_PRINT_OR_ENGRAVE_FILE) uiCfg.alreadyGetBoaderData = false;
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
   }
 }
 
 void lv_draw_dialog(uint8_t type) {
-
+	
   lv_obj_t * btnOk = NULL;
   lv_obj_t * btnCancel = NULL;
   if (disp_state_stack._disp_state[disp_state_stack._disp_index] != DIALOG_UI) {
@@ -257,7 +269,6 @@ void lv_draw_dialog(uint8_t type) {
 
   scr = lv_obj_create(NULL, NULL);
 
-
   lv_obj_set_style(scr, &tft_style_scr);
   lv_scr_load(scr);
   lv_obj_clean(scr);
@@ -268,7 +279,7 @@ void lv_draw_dialog(uint8_t type) {
     lv_obj_set_pos(title, TITLE_XPOS, TITLE_YPOS);
     lv_label_set_text(title, creat_title_text());
   }
-
+  
   lv_refr_now(lv_refr_get_disp_refreshing());
 
 
@@ -330,46 +341,46 @@ void lv_draw_dialog(uint8_t type) {
     // nothing to do
   }
   else if (uiCfg.dialogType == WIFI_ENABLE_TIPS) {
-  	btnCancel = lv_btn_create(scr, NULL);
-    lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);
-    lv_obj_set_size(btnCancel, 100, 50);
-    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);
-    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);
+  	btnCancel = lv_btn_create(scr, NULL);     
+    lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);                           
+    lv_obj_set_size(btnCancel, 100, 50);                          
+    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb); 
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);    
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);      
+    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);          
     lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
   }
   else if (uiCfg.dialogType == DIALOG_TRANSFER_NO_DEVICE) {
-  	btnCancel = lv_btn_create(scr, NULL);
-  	lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);
-    lv_obj_set_size(btnCancel, 100, 50);
-    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);
-    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);
+  	btnCancel = lv_btn_create(scr, NULL);     
+  	lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);                           
+    lv_obj_set_size(btnCancel, 100, 50);                         
+    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb); 
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);   
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);      
+    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);          
     lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
   }
   #if USE_WIFI_FUNCTION
     else if (uiCfg.dialogType == DIALOG_TYPE_UPLOAD_FILE) {
       if (upload_result == 2) {
-        btnCancel = lv_btn_create(scr, NULL);
-        lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);
-        lv_obj_set_size(btnCancel, 100, 50);
-        lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb);
-        lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);
-        lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);
-        lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);
+        btnCancel = lv_btn_create(scr, NULL);    
+        lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);                         
+        lv_obj_set_size(btnCancel, 100, 50);                        
+        lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb); 
+        lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);   
+        lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);   
+        lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);      
         lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
       }
       else if (upload_result == 3) {
-        btnOk = lv_btn_create(scr, NULL);
-        lv_obj_set_pos(btnOk, BTN_OK_X+90, BTN_OK_Y);
-        lv_obj_set_size(btnOk, 100, 50);
-        lv_obj_set_event_cb(btnOk, btn_ok_event_cb);
-        lv_btn_set_style(btnOk, LV_BTN_STYLE_REL, &style_btn_rel);
-        lv_btn_set_style(btnOk, LV_BTN_STYLE_PR, &style_btn_pr);
-        lv_obj_t * labelOk = lv_label_create(btnOk, NULL);
-        lv_label_set_text(labelOk, print_file_dialog_menu.confirm);
+        btnOk = lv_btn_create(scr, NULL);     
+        lv_obj_set_pos(btnOk, BTN_OK_X+90, BTN_OK_Y);                           
+        lv_obj_set_size(btnOk, 100, 50);                        
+        lv_obj_set_event_cb(btnOk, btn_ok_event_cb); 
+        lv_btn_set_style(btnOk, LV_BTN_STYLE_REL, &style_btn_rel);   
+        lv_btn_set_style(btnOk, LV_BTN_STYLE_PR, &style_btn_pr);     
+        lv_obj_t * labelOk = lv_label_create(btnOk, NULL);          
+        lv_label_set_text(labelOk, print_file_dialog_menu.confirm); 					
       }
     }
     else if(uiCfg.dialogType == DIALOG_TYPE_UPDATE_ESP_FIRMARE) {
@@ -379,13 +390,13 @@ void lv_draw_dialog(uint8_t type) {
   else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_LOAD_HEAT
   	    || uiCfg.dialogType == DIALOG_TYPE_FILAMENT_UNLOAD_HEAT
   ) {
-  	btnCancel = lv_btn_create(scr, NULL);
-  	lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);
-    lv_obj_set_size(btnCancel, 100, 50);
-    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);
-    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);
+  	btnCancel = lv_btn_create(scr, NULL);     
+  	lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);                           
+    lv_obj_set_size(btnCancel, 100, 50);                         
+    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb); 
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);   
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);      
+    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);          
     lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
 
 	  tempText1 = lv_label_create(scr, NULL);
@@ -395,25 +406,25 @@ void lv_draw_dialog(uint8_t type) {
   else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_LOAD_COMPLETED
   	    || uiCfg.dialogType == DIALOG_TYPE_FILAMENT_UNLOAD_COMPLETED
   ) {
-  	btnOk = lv_btn_create(scr, NULL);
-    lv_obj_set_pos(btnOk, BTN_OK_X+90, BTN_OK_Y);
-    lv_obj_set_size(btnOk, 100, 50);
-    lv_obj_set_event_cb(btnOk, btn_ok_event_cb);
-    lv_btn_set_style(btnOk, LV_BTN_STYLE_REL, &style_btn_rel);
-    lv_btn_set_style(btnOk, LV_BTN_STYLE_PR, &style_btn_pr);
-    lv_obj_t * labelOk = lv_label_create(btnOk, NULL);
+  	btnOk = lv_btn_create(scr, NULL);     
+    lv_obj_set_pos(btnOk, BTN_OK_X+90, BTN_OK_Y);                           
+    lv_obj_set_size(btnOk, 100, 50);                        
+    lv_obj_set_event_cb(btnOk, btn_ok_event_cb); 
+    lv_btn_set_style(btnOk, LV_BTN_STYLE_REL, &style_btn_rel);   
+    lv_btn_set_style(btnOk, LV_BTN_STYLE_PR, &style_btn_pr);     
+    lv_obj_t * labelOk = lv_label_create(btnOk, NULL);          
     lv_label_set_text(labelOk, print_file_dialog_menu.confirm);
   }
   else if (uiCfg.dialogType == DIALOG_TYPE_FILAMENT_LOADING
   	    || uiCfg.dialogType == DIALOG_TYPE_FILAMENT_UNLOADING
   ) {
-  	btnCancel = lv_btn_create(scr, NULL);
-  	lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);
-    lv_obj_set_size(btnCancel, 100, 50);
-    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);
-    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);
-    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);
+  	btnCancel = lv_btn_create(scr, NULL);     
+  	lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);                           
+    lv_obj_set_size(btnCancel, 100, 50);                         
+    lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb); 
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);   
+    lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);      
+    lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);          
     lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
 
 	  filament_bar = lv_bar_create(scr, NULL);
@@ -422,6 +433,62 @@ void lv_draw_dialog(uint8_t type) {
 	  lv_bar_set_style(filament_bar, LV_BAR_STYLE_INDIC, &lv_bar_style_indic);
 	  lv_bar_set_anim_time(filament_bar, 1000);
 	  lv_bar_set_value(filament_bar, 0, LV_ANIM_ON);
+  }
+  #if HAS_CUTTER
+    else if (uiCfg.dialogType == DIALOG_TYPE_PRINT_OR_ENGRAVE_FILE && gCfgItems.uiStyle == LASER_STYLE) {
+      lv_obj_t * btnBoader = lv_btn_create(scr, NULL);
+      lv_obj_set_pos(btnBoader, (TFT_WIDTH - 100 * 3) / 4, BTN_OK_Y);
+      lv_obj_set_size(btnBoader, 100, 50);
+      lv_obj_set_event_cb(btnBoader, btn_boader_event_cb);
+      lv_btn_set_style(btnBoader, LV_BTN_STYLE_REL, &style_btn_rel);
+      lv_btn_set_style(btnBoader, LV_BTN_STYLE_PR, &style_btn_pr);
+      lv_obj_t * labelBoader = lv_label_create(btnBoader, NULL);
+      lv_label_set_text(labelBoader, print_file_dialog_menu.boader);
+
+      lv_obj_t * btnGraphics = lv_btn_create(scr, NULL);
+      lv_obj_set_pos(btnGraphics, (TFT_WIDTH - 100 * 3) / 4 * 2 + 100, BTN_OK_Y);
+      lv_obj_set_size(btnGraphics, 100, 50);
+      lv_obj_set_event_cb(btnGraphics, btn_ok_event_cb);
+      lv_btn_set_style(btnGraphics, LV_BTN_STYLE_REL, &style_btn_rel);
+      lv_btn_set_style(btnGraphics, LV_BTN_STYLE_PR, &style_btn_pr);
+      lv_obj_t * labelGraphics = lv_label_create(btnGraphics, NULL);
+      lv_label_set_text(labelGraphics, print_file_dialog_menu.graphics);
+
+      btnCancel = lv_btn_create(scr, NULL);
+      lv_obj_set_pos(btnCancel, (TFT_WIDTH - 100 * 3) / 4 * 3 + 100 * 2, BTN_CANCEL_Y);
+      lv_obj_set_size(btnCancel, 100, 50);
+      lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb);
+      lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);
+      lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);
+      lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);
+      lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
+
+      #if BUTTONS_EXIST(EN1, EN2, ENC)
+        if (gCfgItems.encoder_enable == true) {
+          lv_group_add_obj(g, btnBoader);
+          lv_group_add_obj(g, btnGraphics);
+        }
+      #endif // BUTTONS_EXIST(EN1, EN2, ENC)
+    }
+    else if (uiCfg.dialogType == DIALOG_TYPE_BOADER_CALCULATE_CLUES
+         || uiCfg.dialogType == DIALOG_TYPE_ENGRAVE_BOADER_TIPS)
+    {
+      //nothing to do
+    }
+    else if (uiCfg.dialogType == DIALOG_TYPE_NO_BOADER_DATA_TIPS) {
+      btnCancel = lv_btn_create(scr, NULL);     
+      lv_obj_set_pos(btnCancel, BTN_OK_X+90, BTN_OK_Y);                           
+      lv_obj_set_size(btnCancel, 100, 50);                         
+      lv_obj_set_event_cb(btnCancel, btn_cancel_event_cb); 
+      lv_btn_set_style(btnCancel, LV_BTN_STYLE_REL, &style_btn_rel);   
+      lv_btn_set_style(btnCancel, LV_BTN_STYLE_PR, &style_btn_pr);      
+      lv_obj_t * labelCancel = lv_label_create(btnCancel, NULL);          
+      lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
+    }
+    
+  #endif
+  else if(uiCfg.dialogType == DIALOG_TYPE_MACHINE_PAUSING_TIPS) {
+    //nothing to do
   }
   else {
     btnOk = lv_btn_create(scr, NULL);                   // Add a button the current screen
@@ -449,7 +516,7 @@ void lv_draw_dialog(uint8_t type) {
       lv_label_set_text(labelCancel, print_file_dialog_menu.cancle);
     }
   }
-  if (uiCfg.dialogType == DIALOG_TYPE_PRINT_FILE) {
+  if (uiCfg.dialogType == DIALOG_TYPE_PRINT_OR_ENGRAVE_FILE) {
     lv_label_set_text(labelDialog, print_file_dialog_menu.print_file);
     lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
 
@@ -532,51 +599,51 @@ void lv_draw_dialog(uint8_t type) {
 	  lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
   }
   else if (uiCfg.dialogType == DIALOG_TRANSFER_NO_DEVICE) {
-  	lv_label_set_text(labelDialog, machine_menu.wifiDialogNoUpdate);
+  	lv_label_set_text(labelDialog, DIALOG_UPDATE_NO_DEVICE_EN);
 	  lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
   }
   #if USE_WIFI_FUNCTION
     else if (uiCfg.dialogType == DIALOG_TYPE_UPLOAD_FILE) {
       if (upload_result == 1) {
-        lv_label_set_text(labelDialog, machine_menu.wifiUploadIng);
+        lv_label_set_text(labelDialog, DIALOG_UPLOAD_ING_EN);
         lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
       }
       else if (upload_result == 2) {
-        lv_label_set_text(labelDialog, machine_menu.wifiUploadErr);
+        lv_label_set_text(labelDialog, DIALOG_UPLOAD_ERROR_EN);
         lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
       }
       else if (upload_result == 3) {
         char buf[200];
         int _index = 0;
-
+        
         ZERO(buf);
-
-        strcpy(buf, machine_menu.wifiUploadFin);
+        
+        strcpy(buf, DIALOG_UPLOAD_FINISH_EN);
         _index = strlen(buf);
         buf[_index] = '\n';
         _index++;
-        strcat(buf, machine_menu.wifiUploadSize);
-
+        strcat(buf, DIALOG_UPLOAD_SIZE_EN);
+        
         _index = strlen(buf);
         buf[_index] = ':';
         _index++;
         sprintf(&buf[_index], " %d KBytes\n", (int)(upload_size / 1024));
 
-        strcat(buf, machine_menu.wifiUploadTime);
+        strcat(buf, DIALOG_UPLOAD_TIME_EN);
         _index = strlen(buf);
         buf[_index] = ':';
         _index++;
         sprintf(&buf[_index], " %d s\n", (int)upload_time);
-
-        strcat(buf, machine_menu.wifiUploadSpeed);
+        
+        strcat(buf, DIALOG_UPLOAD_SPEED_EN);
         _index = strlen(buf);
         buf[_index] = ':';
         _index++;
-        sprintf(&buf[_index], " %d KBytes/s\n", (int)(upload_size / upload_time / 1024));
+        sprintf(&buf[_index], " %d KBytes/s\n", (int)(upload_size / upload_time / 1024));	
 
         lv_label_set_text(labelDialog, buf);
         lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -20);
-
+        
       }
     }
     else if(uiCfg.dialogType == DIALOG_TYPE_UPDATE_ESP_FIRMARE) {
@@ -622,18 +689,36 @@ void lv_draw_dialog(uint8_t type) {
       lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -70);
     }
   #endif
+  #if HAS_CUTTER
+    else if(uiCfg.dialogType == DIALOG_TYPE_BOADER_CALCULATE_CLUES) {
+      lv_label_set_text(labelDialog, print_file_dialog_menu.calcurateBoaderTips);
+      lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, 0);
+    }
+    else if(uiCfg.dialogType == DIALOG_TYPE_ENGRAVE_BOADER_TIPS) {
+      lv_label_set_text(labelDialog, print_file_dialog_menu.engraveBoaderTips);
+      lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, 0);
+    }
+    else if(uiCfg.dialogType == DIALOG_TYPE_NO_BOADER_DATA_TIPS) {
+      lv_label_set_text(labelDialog, print_file_dialog_menu.noBoaderDataTips);
+      lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, 0);
+    }
+  #endif
+  else if(uiCfg.dialogType == DIALOG_TYPE_MACHINE_PAUSING_TIPS) {
+    lv_label_set_text(labelDialog, print_file_dialog_menu.machinePausingTips);
+    lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, 0);
+  }
   #if BUTTONS_EXIST(EN1, EN2, ENC)
-	if (gCfgItems.encoder_enable == true) {
-		if (btnOk) lv_group_add_obj(g, btnOk);
-  		if (btnCancel) lv_group_add_obj(g, btnCancel);
-	}
+    if (gCfgItems.encoder_enable == true) {
+      if (btnOk) lv_group_add_obj(g, btnOk);
+      if (btnCancel) lv_group_add_obj(g, btnCancel);
+    }
   #endif // BUTTONS_EXIST(EN1, EN2, ENC)
-
+  
 }
 
 void filament_sprayer_temp() {
   char buf[20] = {0};
-
+  
   public_buf_l[0] = '\0';
 
   if (uiCfg.curSprayerChoose < 1)
@@ -679,16 +764,16 @@ void filament_dialog_handle() {
 		sprintf_P(public_buf_m,PSTR("T%d\nG91\nG1 E-%d F%d\nG90"),uiCfg.curSprayerChoose,gCfgItems.filamentchange_unload_length,gCfgItems.filamentchange_unload_speed);
 		queue.inject_P(PSTR(public_buf_m));
 	}
-
+	
 	if (((abs((int)((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius - gCfgItems.filament_limit_temper)) <= 1)
 		|| ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius > gCfgItems.filament_limit_temper))
 		&& (uiCfg.filament_load_heat_flg == 1)
   ) {
 		uiCfg.filament_load_heat_flg = 0;
 		lv_clear_dialog();
-		lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
+		lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);				
 	}
-
+	
 	if (uiCfg.filament_loading_completed == 1) {
 		uiCfg.filament_rate = 0;
 		uiCfg.filament_loading_completed = 0;
@@ -701,9 +786,9 @@ void filament_dialog_handle() {
   ) {
 		uiCfg.filament_unload_heat_flg = 0;
 		lv_clear_dialog();
-		lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);
+		lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);				
 	}
-
+	
 	if (uiCfg.filament_unloading_completed == 1) {
 		uiCfg.filament_rate = 0;
 		uiCfg.filament_unloading_completed = 0;
@@ -721,13 +806,13 @@ void lv_filament_setbar() {
 	lv_bar_set_value(filament_bar, uiCfg.filament_rate, LV_ANIM_ON);
 }
 
-void lv_clear_dialog() {
+void lv_clear_dialog() { 
 	#if BUTTONS_EXIST(EN1, EN2, ENC)
 	if (gCfgItems.encoder_enable == true) {
 		lv_group_remove_all_objs(g);
 	}
   	#endif // BUTTONS_EXIST(EN1, EN2, ENC)
-	lv_obj_del(scr);
+	lv_obj_del(scr); 
 }
 
 #endif // HAS_TFT_LVGL_UI

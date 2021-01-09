@@ -229,7 +229,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
             else {
               sel_id = i;
               lv_clear_print_file();
-              lv_draw_dialog(DIALOG_TYPE_PRINT_FILE);
+              lv_draw_dialog(DIALOG_TYPE_PRINT_OR_ENGRAVE_FILE);
             }
             break;
           }
@@ -551,9 +551,7 @@ void lv_gcode_file_read(uint8_t *data_buf) {
 
 void lv_close_gcode_file() {TERN_(SDSUPPORT, card.closefile());}
 
-void lv_gcode_file_seek(uint32_t pos) {
-	card.setIndex(pos);
-}
+void lv_gcode_file_seek(uint32_t pos) {TERN_(SDSUPPORT, card.setIndex(pos));}
 
 void cutFileName(char *path, int len, int bytePerLine,  char *outStr) {
   #if _LFN_UNICODE
@@ -603,7 +601,8 @@ void cutFileName(char *path, int len, int bytePerLine,  char *outStr) {
       #else
         //strncpy(outStr, beginIndex, len - 3);
         strncpy(outStr, beginIndex, len - 4);
-        strcat_P(outStr, PSTR("~.g"));
+        if(strstr(beginIndex, ".n") || strstr(beginIndex, ".N")) strcat_P(outStr, PSTR("~.n"));
+        else strcat_P(outStr, PSTR("~.g"));
       #endif
     }
     else {
@@ -612,7 +611,8 @@ void cutFileName(char *path, int len, int bytePerLine,  char *outStr) {
         wcscat(outStr, (const WCHAR *)&gFileTail[3]);
       #else
         strncpy(outStr, beginIndex, strIndex2 - beginIndex + 1);
-        strcat_P(outStr, PSTR("g"));
+        if(strstr(beginIndex, ".n") || strstr(beginIndex, ".N")) strcat_P(outStr, PSTR("n"));
+        else strcat_P(outStr, PSTR("g"));
       #endif
     }
   }

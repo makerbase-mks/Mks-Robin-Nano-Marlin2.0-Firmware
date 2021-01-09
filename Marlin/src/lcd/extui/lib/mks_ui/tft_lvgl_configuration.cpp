@@ -52,6 +52,8 @@ XPT2046 touch;
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/powerloss.h"
 #endif
+#include "../../../../module/temperature.h"
+#include "../../../../module/planner.h"
 
 #include <SPI.h>
 
@@ -448,8 +450,18 @@ void tft_lvgl_init() {
   //test_id=W25QXX.W25QXX_ReadID();
 
   gCfgItems_init();
+  #if !HAS_CUTTER
+    gCfgItems.uiStyle = PRINT_STYLE;
+  #endif
   ui_cfg_init();
   disp_language_init();
+
+  #if ENABLED(SPINDLE_LASER_USES_SOFT_PWM)
+    if(gCfgItems.uiStyle == LASER_STYLE) {
+      spindleLaserSetupSoftPWM();
+      spindleLaserSoftPwmSetDuty(0);
+    }
+  #endif
 
   //init tft first!
   #if ENABLED(TFT_LVGL_UI_SPI)
@@ -457,6 +469,11 @@ void tft_lvgl_init() {
     SPI_TFT.LCD_init();
   #else
     fsmc_tft_init();
+  #endif
+
+  thermalManager.fan_speed[0] = 0;
+  #if !MB(MKS_ROBIN_E3P)
+    WRITE(HEATER_1_PIN, LOW); // HE1
   #endif
 
   //spi_flash_read_test();
@@ -531,7 +548,7 @@ void tft_lvgl_init() {
 
   #if ENABLED(POWER_LOSS_RECOVERY)
     recovery.load();
-    if (recovery.valid()) {
+    if (recovery.valid() && gCfgItems.uiStyle == PRINT_STYLE) {
       if (gCfgItems.from_flash_pic == 1)
         flash_preview_begin = 1;
       else
@@ -927,6 +944,64 @@ void lv_encoder_pin_init() {
   }
 
 #endif // HAS_ENCODER_ACTION
+
+#if ENABLED(SPINDLE_LASER_USES_SOFT_PWM)
+
+  #define SPINDLE_LASER_PRESCALER               8
+  #define SPINDLE_LASER_OVERFLOW                9000
+
+  #define SPINDLE_LASER_SOFT_PWM_TIMER_NUM      1
+  #define SPINDLE_LASER_SOFT_PWM_TIMER_IRQ_PRIO 4
+
+  void spindleLaserSoftPwmSetDuty(const uint16_t S_value) {
+    const uint16_t duty_cycle = S_value * SPINDLE_LASER_OVERFLOW / SPINDLE_LASER_MAX_SOFT_PWM;
+    timer_dev *tdev = get_timer_dev(SPINDLE_LASER_SOFT_PWM_TIMER_NUM);
+    timer_set_compare(tdev, 1, duty_cycle);
+    timer_generate_update(tdev);
+    if (duty_cycle) {
+      timer_enable_irq(tdev, 1);
+      timer_enable_irq(tdev, 2);
+    }
+    else {
+      timer_disable_irq(tdev, 1);
+      timer_disable_irq(tdev, 2);
+      OUT_WRITE(SPINDLE_LASER_SOFT_PWM_PIN, 0);
+    }
+  }
+
+  extern "C" void spindleLaser_IRQHandler() {
+    static timer_dev *tdev = get_timer_dev(SPINDLE_LASER_SOFT_PWM_TIMER_NUM);
+    uint16_t SR = timer_get_status(tdev);
+    if (SR & TIMER_SR_CC1IF) { // channel 1 off
+      OUT_WRITE(SPINDLE_LASER_SOFT_PWM_PIN, 0);
+      timer_reset_status_bit(tdev, TIMER_SR_CC1IF_BIT);
+    }
+    if (SR & TIMER_SR_CC2IF) { // channel 2 resume
+      OUT_WRITE(SPINDLE_LASER_SOFT_PWM_PIN, 1);
+      timer_reset_status_bit(tdev, TIMER_SR_CC2IF_BIT);
+    }
+  }
+  
+  void spindleLaserSetupSoftPWM() {
+    timer_dev *tdev = get_timer_dev(SPINDLE_LASER_SOFT_PWM_TIMER_NUM);
+    if (!tdev) return;
+    OUT_WRITE(SPINDLE_LASER_SOFT_PWM_PIN, 0);
+
+    timer_pause(tdev);
+    timer_set_mode(tdev, 1, TIMER_OUTPUT_COMPARE); // counter with isr
+    timer_oc_set_mode(tdev, 1, TIMER_OC_MODE_FROZEN, 0); // no pin output change
+    timer_oc_set_mode(tdev, 2, TIMER_OC_MODE_FROZEN, 0); // no pin output change
+    timer_set_prescaler(tdev, SPINDLE_LASER_PRESCALER - 1); // prescaler is 1-based
+    timer_set_reload(tdev, SPINDLE_LASER_OVERFLOW);
+    timer_set_compare(tdev, 1, SPINDLE_LASER_OVERFLOW);
+    timer_set_compare(tdev, 2, SPINDLE_LASER_OVERFLOW);
+    timer_attach_interrupt(tdev, 1, spindleLaser_IRQHandler);
+    timer_attach_interrupt(tdev, 2, spindleLaser_IRQHandler);
+    timer_set_interrupt_priority(SPINDLE_LASER_SOFT_PWM_TIMER_NUM, SPINDLE_LASER_SOFT_PWM_TIMER_IRQ_PRIO);
+    timer_generate_update(tdev);
+    timer_resume(tdev);
+  }
+#endif
 
 
 #endif // HAS_TFT_LVGL_UI

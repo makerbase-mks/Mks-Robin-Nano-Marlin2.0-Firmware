@@ -33,6 +33,7 @@
 #define AUTO_LEVELING_TEXT_RU           "aвтоуровень"
 #define SET_TEXT_RU                     "настройки"
 #define MORE_TEXT_RU                    "больше"
+#define LASER_ENGRAVING_RU              "резьба"
 
 #define ADD_TEXT_RU                     "добавить"
 #define DEC_TEXT_RU                     "уменьшить"
@@ -257,6 +258,7 @@
 #define DIALOG_PRINT_TIME_RU                "Время печати: "
 #define DIALOG_REPRINT_RU                   "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_RU          "The wifi module is being configured,\nplease wait a moment....."
+#define DIALOG_PAUSING_TIPS_RU              "Машина останавливается ..."
 
 #define MESSAGE_PAUSING_RU            "Стоянка..."
 #define MESSAGE_CHANGING_RU           "Подождите, пока начнется смена филамента"
@@ -279,6 +281,34 @@
 // #define EEPROM_STORE_TIPS_RU          "Сохранить настройки в EEPROM?"
 // #define EEPROM_READ_TIPS_RU           "Читать настройки из EEPROM?"
 // #define EEPROM_REVERT_TIPS_RU         "Revert settings to factory defaults?"
+
+#define TWO_IN_ONE_CHOOSE_RU          "UI switching"
+
+#define TWO_IN_ONE_TITLE_RU           "Two in one function selection"
+#define TWO_IN_ONE_PRINT_UI_RU        "3D printing"
+#define TWO_IN_ONE_LASER_UI_RU        "Engraving"
+
+#define SPINDLE_LASER_POSITION_RU     "позиция"
+#define SPINDLE_LASER_LIGHT_OPEN_RU   "включить свет"
+#define SPINDLE_LASER_LIGHT_CLOSE_RU  "выключить свет"
+#define SPINDLE_LASER_POWER_RU        "сила"
+
+#define POWER_UI_TITLE_RU             "Регулировка мощности"
+#define POWER_PERCENT_STATE_RU        "сила"
+
+#define SPINDLE_LASER_CUT_TIMES_RU    "Engrave times"
+#define DIALOG_ENGRAVING_RU           "Граница или графика?"
+#define DIALOG_CANCEL_ENGRAVING_RU    "Прекратить резать?"
+#define DIALOG_ENGRAVING_FINISH_RU    "Резьба завершена!"
+#define TITLE_ENGRAVING_RU            "Резьба"
+#define TITLE_READY_ENGRAVE_RU        "Готов вырезать"
+#define ENGRAVING_SPEED_RU            "Резьба"
+#define ENGRAVING_SPEED_STATE_RU      "Скорость гравировки"
+#define DIALOG_ENGRAVING_BOADER_RU    "Рамка"
+#define DIALOG_ENGRAVING_GRAPHICS_RU  "Графика"
+#define DIALOG_CALCULATE_BOADER_TIPS_RU "Расчет данных границы ..."
+#define DIALOG_ENGRAVE_BOADER_TIPS_RU   "Гравировка границы ..."
+#define DIALOG_NO_BOADER_DATA_TIPS_RU   "Не удается получить данные границы"
 
 #define MORE_CUSTOM1_TEXT_RU  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_RU  USER_DESC_2

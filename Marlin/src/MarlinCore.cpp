@@ -454,7 +454,12 @@ void startOrResumeJob() {
     wait_for_heatup = false;
     TERN_(POWER_LOSS_RECOVERY, recovery.purge());
     #ifdef EVENT_GCODE_SD_ABORT
-      queue.inject_P(PSTR(EVENT_GCODE_SD_ABORT));
+      #if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
+        if(gCfgItems.uiStyle == PRINT_STYLE) queue.inject_P(PSTR(EVENT_GCODE_SD_ABORT));
+        else queue.inject_P(PSTR(EVENT_NC_SD_ABORT));
+      #else
+        queue.inject_P(PSTR(EVENT_GCODE_SD_ABORT));
+      #endif
     #endif
 
     TERN_(PASSWORD_AFTER_SD_PRINT_ABORT, password.lock_machine());
@@ -906,6 +911,10 @@ void setup() {
     #else
       #error "DISABLE_(DEBUG|JTAG) is not supported for the selected MCU/Board."
     #endif
+  #endif
+
+  #if BOTH(HAS_CUTTER, SPINDLE_LASER_USES_SOFT_PWM)
+    OUT_WRITE(SPINDLE_LASER_SOFT_PWM_PIN, 0);
   #endif
 
   #if NUM_SERIAL > 0

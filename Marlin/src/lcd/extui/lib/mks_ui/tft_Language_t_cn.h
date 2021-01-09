@@ -264,6 +264,7 @@
 #define AUTO_LEVELING_TEXT_T_CN         "自動調平"
 #define SET_TEXT_T_CN                   "設置"
 #define MORE_TEXT_T_CN                  "更多"
+#define LASER_ENGRAVING_T_CN            "雕刻"
 
 #define ADD_TEXT_T_CN                   "增加"
 #define DEC_TEXT_T_CN                   "減少"
@@ -473,6 +474,7 @@
 #define DIALOG_PRINT_TIME_T_CN        "打印時間: "
 #define DIALOG_REPRINT_T_CN           "再打印壹次"
 #define DIALOG_WIFI_ENABLE_TIPS_T_CN  "wifi模塊正在配置中,請稍等......"
+#define DIALOG_PAUSING_TIPS_T_CN      "機器暫停中..."
 
 #define TEXT_VALUE_T_CN               "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_T_CN     ": %d℃"
@@ -500,6 +502,34 @@
 #define EEPROM_STORE_TIPS_T_CN        "是否保存參數到EEPROM?"
 #define EEPROM_READ_TIPS_T_CN         "是否使用EEPROM參數?"
 #define EEPROM_REVERT_TIPS_T_CN       "是否恢復默認參數?"
+
+#define TWO_IN_ONE_CHOOSE_T_CN        "界面切換"
+
+#define TWO_IN_ONE_TITLE_T_CN         "二合壹功能選擇"
+#define TWO_IN_ONE_PRINT_UI_T_CN      "3D打印功能"
+#define TWO_IN_ONE_LASER_UI_T_CN      "激光雕刻功能"
+
+#define SPINDLE_LASER_POSITION_T_CN     "定位"
+#define SPINDLE_LASER_LIGHT_OPEN_T_CN   "開弱光"
+#define SPINDLE_LASER_LIGHT_CLOSE_T_CN  "關弱光"
+#define SPINDLE_LASER_POWER_T_CN        "功率"
+
+#define POWER_PERCENT_STATE_T_CN        "功率"
+#define POWER_UI_TITLE_T_CN             "功率调节"
+
+#define SPINDLE_LASER_CUT_TIMES_T_CN    "雕刻次數"
+#define DIALOG_ENGRAVING_T_CN           "雕刻边框或图形?"
+#define DIALOG_CANCEL_ENGRAVING_T_CN    "停止雕刻?"
+#define DIALOG_ENGRAVING_FINISH_T_CN    "雕刻完成!"
+#define TITLE_ENGRAVING_T_CN            "正在雕刻"
+#define TITLE_READY_ENGRAVE_T_CN        "准备雕刻"
+#define ENGRAVING_SPEED_T_CN            "雕刻"
+#define ENGRAVING_SPEED_STATE_T_CN      "雕刻速度"
+#define DIALOG_ENGRAVING_BOADER_T_CN    "边框"
+#define DIALOG_ENGRAVING_GRAPHICS_T_CN  "图形"
+#define DIALOG_CALCULATE_BOADER_TIPS_T_CN "正在计算边框数据..."
+#define DIALOG_ENGRAVE_BOADER_TIPS_T_CN   "正在雕刻边框..."
+#define DIALOG_NO_BOADER_DATA_TIPS_T_CN   "获取不到边框数据"
 
 #define MORE_CUSTOM1_TEXT_T_CN  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_T_CN  USER_DESC_2

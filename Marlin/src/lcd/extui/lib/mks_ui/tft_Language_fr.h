@@ -33,6 +33,7 @@
 #define AUTO_LEVELING_TEXT_FR         "AutoLevel"
 #define SET_TEXT_FR                   "Config"
 #define MORE_TEXT_FR                  "Plus"
+#define LASER_ENGRAVING_FR            "Sculpture"
 
 #define ADD_TEXT_FR                   "Ajouter"
 #define DEC_TEXT_FR                   "Réduire"
@@ -246,7 +247,6 @@
 #define DIALOG_DISABLE_FR             "Disable"
 #define DIALOG_PRINT_MODEL_FR         "Imprimer le fichier?"
 #define DIALOG_CANCEL_PRINT_FR        "Arrêter?"
-
 #define DIALOG_STOP_FR                "Arrêter"
 #define DIALOG_REPRINT_FROM_BREAKPOINT_FR "Continuer?"
 //#define DIALOG_UNBIND_PRINTER_FR    "Non lié?"
@@ -259,6 +259,7 @@
 #define DIALOG_PRINT_TIME_FR          "Temps d'impression: "
 #define DIALOG_REPRINT_FR             "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_FR    "The wifi module is being configured,\nplease wait a moment....."
+#define DIALOG_PAUSING_TIPS_FR        "La machine fait une pause ..."
 
 #define MESSAGE_PAUSING_FR        "Parking..."
 #define MESSAGE_CHANGING_FR       "Attente filament pour démarrer"
@@ -278,9 +279,37 @@
 #define EEPROM_SETTINGS_READ_FR   "Lire les paramètres de l'EEPROM"
 #define EEPROM_SETTINGS_REVERT_FR "Rétablir les paramètres par défaut d'usine"
 
-#define EEPROM_STORE_TIPS_FR  "Stocker les paramètres dans l'EEPROM?"
-#define EEPROM_READ_TIPS_FR   "Lire les paramètres de l'EEPROM?"
-#define EEPROM_REVERT_TIPS_FR "Rétablir les paramètres par défaut d'usine?"
+#define EEPROM_STORE_TIPS_FR      "Stocker les paramètres dans l'EEPROM?"
+#define EEPROM_READ_TIPS_FR       "Lire les paramètres de l'EEPROM?"
+#define EEPROM_REVERT_TIPS_FR     "Rétablir les paramètres par défaut d'usine?"
+
+#define TWO_IN_ONE_CHOOSE_FR      "UI switching"
+
+#define TWO_IN_ONE_TITLE_FR       "Two in one function selection"
+#define TWO_IN_ONE_PRINT_UI_FR    "3D printing"
+#define TWO_IN_ONE_LASER_UI_FR    "Engraving"
+
+#define SPINDLE_LASER_POSITION_FR     "Positionnement"
+#define SPINDLE_LASER_LIGHT_OPEN_FR   "Lumière allumée"
+#define SPINDLE_LASER_LIGHT_CLOSE_FR  "Lumière éteinte"
+#define SPINDLE_LASER_POWER_FR        "Puissance"
+
+#define POWER_UI_TITLE_FR             "Régulation de puissance"
+#define POWER_PERCENT_STATE_FR        "Puissance"
+
+#define SPINDLE_LASER_CUT_TIMES_FR    "Engrave times"
+#define DIALOG_ENGRAVING_FR           "Gravure de bordures ou de graphiques?"
+#define DIALOG_CANCEL_ENGRAVING_FR    "Arrêtez de sculpter?"
+#define DIALOG_ENGRAVING_FINISH_FR    "La sculpture est terminée!"
+#define TITLE_ENGRAVING_FR            "Sculpture"
+#define TITLE_READY_ENGRAVE_FR        "Prêt à sculpter"
+#define ENGRAVING_SPEED_FR            "Sculpture"
+#define ENGRAVING_SPEED_STATE_FR      "Vitesse de gravure"
+#define DIALOG_ENGRAVING_BOADER_FR    "Cadre"
+#define DIALOG_ENGRAVING_GRAPHICS_FR  "Graphique"
+#define DIALOG_CALCULATE_BOADER_TIPS_FR "Calcul des données de bordure ..."
+#define DIALOG_ENGRAVE_BOADER_TIPS_FR   "Gravure de la bordure ..."
+#define DIALOG_NO_BOADER_DATA_TIPS_FR   "Impossible d'obtenir les données de bordure"
 
 #define MORE_CUSTOM1_TEXT_FR  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_FR  USER_DESC_2

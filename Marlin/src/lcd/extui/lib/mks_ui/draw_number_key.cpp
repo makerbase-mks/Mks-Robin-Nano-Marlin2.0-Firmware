@@ -288,6 +288,11 @@ static void disp_key_value() {
         sprintf_P(public_buf_m, PSTR("%d"), TERN(Z2_SENSORLESS, stepperZ2.homing_threshold(), 0));
       #endif
       break;
+    #if HAS_CUTTER
+      case cut_times:
+        sprintf_P(public_buf_m, PSTR("%d"), uiCfg.cutTimes);
+        break;
+    #endif
   }
   ZERO(key_value);
   strcpy(key_value, public_buf_m);
@@ -536,6 +541,11 @@ static void set_value_confirm() {
         stepperZ2.homing_threshold(atoi(key_value));
       #endif
       break;
+    #if HAS_CUTTER
+      case cut_times:
+        uiCfg.cutTimes = atoi(key_value);
+        break;
+    #endif
   }
   gcode.process_subcommands_now_P(PSTR("M500"));
 }
@@ -734,7 +744,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
         if (strlen(key_value) != 0)
           set_value_confirm();
         lv_clear_number_key();
-        draw_return_ui();
+        lv_draw_return_ui();
       }
       break;
   }

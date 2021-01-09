@@ -29,8 +29,11 @@
  */
 void GcodeSuite::G4() {
   millis_t dwell_ms = 0;
-
-  if (parser.seenval('P')) dwell_ms = parser.value_millis(); // milliseconds to wait
+  #if HAS_CUTTER
+    if (parser.seenval('P')) dwell_ms = parser.value_millis_from_seconds(); // laser grbl return seconds
+  #else
+    if (parser.seenval('P')) dwell_ms = parser.value_millis(); // milliseconds to wait
+  #endif
   if (parser.seenval('S')) dwell_ms = parser.value_millis_from_seconds(); // seconds to wait
 
   planner.synchronize();

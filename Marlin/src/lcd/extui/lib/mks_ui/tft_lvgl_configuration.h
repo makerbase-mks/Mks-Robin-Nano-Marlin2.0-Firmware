@@ -30,6 +30,8 @@
 extern "C" { /* C-declarations for C++ */
 #endif
 
+#include "../../../../inc/MarlinConfigPre.h"
+
 #include <lvgl.h>
 
 //#define GRAPHICAL_TFT_ROTATE_180
@@ -61,6 +63,11 @@ extern lv_fs_res_t sd_seek_cb(lv_fs_drv_t * drv, void * file_p, uint32_t pos);
 extern lv_fs_res_t sd_tell_cb(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p);
 
 extern void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv_color_t bk_color);
+
+#if ENABLED(SPINDLE_LASER_USES_SOFT_PWM)
+    extern void spindleLaserSoftPwmSetDuty(const uint16_t S_value);
+    extern void spindleLaserSetupSoftPWM();
+#endif
 
 #ifdef __cplusplus
 } /* C-declarations for C++ */

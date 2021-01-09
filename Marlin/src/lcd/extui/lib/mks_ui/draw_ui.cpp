@@ -148,7 +148,8 @@ void gCfgItems_init() {
   gCfgItems.filamentchange_unload_speed  = 1000;
   gCfgItems.filament_limit_temper        = 200;
 
-  gCfgItems.encoder_enable = true;
+  gCfgItems.encoder_enable               = true;
+  gCfgItems.uiStyle                      = PRINT_STYLE;
   
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)&gCfgItems.spi_flash_flag, VAR_INF_ADDR, sizeof(gCfgItems.spi_flash_flag));
   if (gCfgItems.spi_flash_flag == FLASH_INF_VALID_FLAG) {
@@ -165,6 +166,9 @@ void gCfgItems_init() {
     W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[3], OTHERS_COMMAND_ADDR_3, 100);
     W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[4], OTHERS_COMMAND_ADDR_4, 100);
   }
+  #if !HAS_CUTTER
+    gCfgItems.uiStyle = PRINT_STYLE;
+  #endif
 
   #if ENABLED(GRAPHICAL_TFT_ROTATE_180)
   	if(gCfgItems.disp_rotation_180 != 0xEE) {
@@ -239,6 +243,11 @@ void ui_cfg_init() {
 
   uiCfg.filament_loading_time = (uint32_t)((gCfgItems.filamentchange_load_length*60.0/gCfgItems.filamentchange_load_speed)+0.5);
   uiCfg.filament_unloading_time = (uint32_t)((gCfgItems.filamentchange_unload_length*60.0/gCfgItems.filamentchange_unload_speed)+0.5);
+
+  uiCfg.lightState = false;
+  uiCfg.cutTimes   = 0;
+  uiCfg.cutPower   = 0;
+  uiCfg.powerStep  = 10;
 }
 
 void update_spi_flash() {
@@ -455,33 +464,17 @@ char *getDispText(int index) {
       strcpy(public_buf_l, file_menu.title);
       break;
     case PRINTING_UI:
-      if (disp_state_stack._disp_state[disp_state_stack._disp_index] == PRINTING_UI
-        #ifndef TFT35
-          || disp_state_stack._disp_state[disp_state_stack._disp_index] == OPERATE_UI
-          || disp_state_stack._disp_state[disp_state_stack._disp_index] == PAUSE_UI
-        #endif
-      )    strcpy(public_buf_l, common_menu.print_special_title);
-      else strcpy(public_buf_l, printing_menu.title);
+      strcpy(public_buf_l, printing_menu.title);
       break;
     case MOVE_MOTOR_UI:
       strcpy(public_buf_l, move_menu.title);
       break;
     case OPERATE_UI:
-      if (disp_state_stack._disp_state[disp_state_stack._disp_index] == PRINTING_UI
-        #ifndef TFT35
-          || disp_state_stack._disp_state[disp_state_stack._disp_index] == OPERATE_UI
-          || disp_state_stack._disp_state[disp_state_stack._disp_index] == PAUSE_UI
-        #endif
-      )    strcpy(public_buf_l, common_menu.operate_special_title);
-      else strcpy(public_buf_l, operation_menu.title);
+      strcpy(public_buf_l, operation_menu.title);
       break;
 
     case PAUSE_UI:
-      if (disp_state_stack._disp_state[disp_state_stack._disp_index] == PRINTING_UI
-        || disp_state_stack._disp_state[disp_state_stack._disp_index] == OPERATE_UI
-        || disp_state_stack._disp_state[disp_state_stack._disp_index] == PAUSE_UI
-      )    strcpy(public_buf_l, common_menu.pause_special_title);
-      else strcpy(public_buf_l, pause_menu.title);
+      strcpy(public_buf_l, pause_menu.title);
       break;
 
     case EXTRUSION_UI:
@@ -556,6 +549,14 @@ char *getDispText(int index) {
     case EEPROM_SETTINGS_UI:
       strcpy(public_buf_l, eeprom_menu.title);
       break;
+    #if HAS_CUTTER
+      case TWO_IN_ON_FUNCTION_SET_UI:
+        strcpy(public_buf_l, twoInOneSet_menu.title);
+        break;
+      case SPINDLE_LASER_POWER_UI:
+        strcpy(public_buf_l, spindle_laser_menu.power_title);
+        break;
+    #endif
     default: break;
   }
 
@@ -994,6 +995,7 @@ void print_time_run() {
 void GUI_RefreshPage() {
   if ((systick_uptime_millis % 1000) == 0) temperature_change_frequency = 1;
   if ((systick_uptime_millis % 3000) == 0) printing_rate_update_flag = 1;
+  if (gCfgItems.uiStyle == LASER_STYLE) cut_times_handle();
 
   switch (disp_state) {
     case MAIN_UI:
@@ -1027,11 +1029,20 @@ void GUI_RefreshPage() {
     case PRINTING_UI:
       if (temperature_change_frequency) {
         temperature_change_frequency = 0;
-        disp_ext_temp();
-        disp_bed_temp();
-        disp_fan_speed();
+        if(gCfgItems.uiStyle == PRINT_STYLE) {
+          disp_ext_temp();
+          disp_bed_temp();
+          disp_fan_speed();
+          disp_fan_Zpos();
+        }
+        #if HAS_CUTTER
+          else {
+            disp_cut_speed();
+            disp_cut_power();
+            disp_cut_times();
+          }
+        #endif
         disp_print_time();
-        disp_fan_Zpos();
       }
       if (printing_rate_update_flag || marlin_state == MF_SD_COMPLETE) {
         printing_rate_update_flag = 0;
@@ -1186,7 +1197,7 @@ void GUI_RefreshPage() {
   print_time_run();
 }
 
-void clear_cur_ui() {
+void lv_clear_cur_ui() {
   last_disp_state = disp_state_stack._disp_state[disp_state_stack._disp_index];
 
   switch (disp_state_stack._disp_state[disp_state_stack._disp_index]) {
@@ -1410,16 +1421,24 @@ void clear_cur_ui() {
         break;
     #endif
     #if BUTTONS_EXIST(EN1, EN2, ENC)
-    case ENCODER_SETTINGS_UI:
-    lv_clear_encoder_settings();
-    break;
+      case ENCODER_SETTINGS_UI:
+        lv_clear_encoder_settings();
+        break;
+    #endif
+    #if HAS_CUTTER
+      case TWO_IN_ON_FUNCTION_SET_UI:
+        lv_clear_two_in_one_settings();
+        break;
+      case SPINDLE_LASER_POWER_UI:
+        lv_clear_spindle_laser_power();
+        break;
     #endif
     default: break;  
   }
   //GUI_Clear();
 }
 
-void draw_return_ui() {
+void lv_draw_return_ui() {
   if (disp_state_stack._disp_index > 0) {
     disp_state_stack._disp_index--;
 
@@ -1644,10 +1663,18 @@ void draw_return_ui() {
           break;
       #endif
       #if BUTTONS_EXIST(EN1, EN2, ENC)
-    case ENCODER_SETTINGS_UI:
-    lv_draw_encoder_settings();
-    break;
-    #endif
+        case ENCODER_SETTINGS_UI:
+          lv_draw_encoder_settings();
+          break;
+      #endif
+      #if HAS_CUTTER
+        case TWO_IN_ON_FUNCTION_SET_UI:
+          lv_draw_two_in_one_settings();
+          break;
+        case SPINDLE_LASER_POWER_UI:
+          lv_draw_spindle_laser_power();
+          break;
+      #endif
       default: break;
     }
   }

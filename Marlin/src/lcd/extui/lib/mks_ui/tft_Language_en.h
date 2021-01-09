@@ -280,6 +280,7 @@
 #define AUTO_LEVELING_TEXT_EN   "AutoLevel"
 #define SET_TEXT_EN             "Settings"
 #define MORE_TEXT_EN            "More"
+#define LASER_ENGRAVING_EN      "Engraving"
 
 #define ADD_TEXT_EN             "Add"
 #define DEC_TEXT_EN             "Dec"
@@ -501,10 +502,11 @@
 #define DIALOG_CLOSE_MACHINE_EN             "Closing machine......"
 #define DIALOG_UNBIND_PRINTER_EN            "Unbind the printer?"
 #define DIALOG_FILAMENT_NO_PRESS_EN         "Filament detection switch is not pressed"
-#define DIALOG_PRINT_FINISH_EN              "Done print!"
+#define DIALOG_PRINT_FINISH_EN              "Print done !"
 #define DIALOG_PRINT_TIME_EN                "Print time: "
 #define DIALOG_REPRINT_EN                   "Print again"
-#define DIALOG_WIFI_ENABLE_TIPS_EN "The wifi module is being configured\nplease wait a moment....."
+#define DIALOG_WIFI_ENABLE_TIPS_EN          "The wifi module is being configured\nplease wait a moment....."
+#define DIALOG_PAUSING_TIPS_EN              "The machine pauses..."
 
 #define HOTBED_ENABLE_EN        "Enable heatbed"
 #define MOTOR_EN_HIGH_LEVEL_EN  "High"
@@ -764,9 +766,37 @@
 #define EEPROM_SETTINGS_READ_EN   "Read settings from EEPROM"
 #define EEPROM_SETTINGS_REVERT_EN "Revert settings to factory defaults"
 
-#define EEPROM_STORE_TIPS_EN  "Store settings to EEPROM?"
-#define EEPROM_READ_TIPS_EN   "Read settings from EEPROM?"
-#define EEPROM_REVERT_TIPS_EN "Revert settings to factory defaults?"
+#define EEPROM_STORE_TIPS_EN      "Store settings to EEPROM?"
+#define EEPROM_READ_TIPS_EN       "Read settings from EEPROM?"
+#define EEPROM_REVERT_TIPS_EN     "Revert settings to factory defaults?"
+
+#define TWO_IN_ONE_CHOOSE_EN      "UI switching"
+
+#define TWO_IN_ONE_TITLE_EN       "Two in one function selection"
+#define TWO_IN_ONE_PRINT_UI_EN    "3D printing"
+#define TWO_IN_ONE_LASER_UI_EN    "Engraving"
+
+#define SPINDLE_LASER_POSITION_EN     "Positioning"
+#define SPINDLE_LASER_LIGHT_OPEN_EN   "Light on"
+#define SPINDLE_LASER_LIGHT_CLOSE_EN  "Light off"
+#define SPINDLE_LASER_POWER_EN        "Power"
+
+#define POWER_UI_TITLE_EN             "Power regulation"
+#define POWER_PERCENT_STATE_EN        "Power"
+
+#define SPINDLE_LASER_CUT_TIMES_EN    "Engrave times"
+#define DIALOG_ENGRAVING_EN           "Engraving boader or graphics?"
+#define DIALOG_CANCEL_ENGRAVING_EN    "Stop carving?"
+#define DIALOG_ENGRAVING_FINISH_EN    "The carving is complete!"
+#define TITLE_ENGRAVING_EN            "Engraving"
+#define TITLE_READY_ENGRAVE_EN        "Ready to engrave"
+#define ENGRAVING_SPEED_EN            "Engraving"
+#define ENGRAVING_SPEED_STATE_EN      "Engrave speed"
+#define DIALOG_ENGRAVING_BOADER_EN    "Boader"
+#define DIALOG_ENGRAVING_GRAPHICS_EN  "Graphics"
+#define DIALOG_CALCULATE_BOADER_TIPS_EN "Calculating border data..."
+#define DIALOG_ENGRAVE_BOADER_TIPS_EN   "Engraving the border..."
+#define DIALOG_NO_BOADER_DATA_TIPS_EN   "Cannot get border data"
 
 #define MORE_CUSTOM1_TEXT_EN  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_EN  USER_DESC_2

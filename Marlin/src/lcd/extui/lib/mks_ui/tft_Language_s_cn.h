@@ -264,6 +264,7 @@
 #define AUTO_LEVELING_TEXT_CN       "自动调平"
 #define SET_TEXT_CN                 "设置"
 #define MORE_TEXT_CN                "更多"
+#define LASER_ENGRAVING_CN          "雕刻"
 
 #define ADD_TEXT_CN                 "增加"
 #define DEC_TEXT_CN                 "减少"
@@ -470,6 +471,7 @@
 #define DIALOG_PRINT_TIME_CN        "打印时间: "
 #define DIALOG_REPRINT_CN           "再打印一次"
 #define DIALOG_WIFI_ENABLE_TIPS_CN  "wifi模块正在配置中,请稍等......"
+#define DIALOG_PAUSING_TIPS_CN      "机器暂停中..."
 
 #define TEXT_VALUE_CN               "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_CN     ": %d℃"
@@ -497,9 +499,37 @@
 #define EEPROM_SETTINGS_READ_CN   "读取EEPROM参数"
 #define EEPROM_SETTINGS_REVERT_CN "恢复默认参数"
 
-#define EEPROM_STORE_TIPS_CN  "是否保存参数到EEPROM?"
-#define EEPROM_READ_TIPS_CN   "是否使用EEPROM参数?"
-#define EEPROM_REVERT_TIPS_CN "是否恢复默认参数?"
+#define EEPROM_STORE_TIPS_CN      "是否保存参数到EEPROM?"
+#define EEPROM_READ_TIPS_CN       "是否使用EEPROM参数?"
+#define EEPROM_REVERT_TIPS_CN     "是否恢复默认参数?"
+
+#define TWO_IN_ONE_CHOOSE_CN       "界面切换"
+
+#define TWO_IN_ONE_TITLE_CN       "二合一功能选择"
+#define TWO_IN_ONE_PRINT_UI_CN    "3D打印功能"
+#define TWO_IN_ONE_LASER_UI_CN    "激光雕刻功能"
+
+#define SPINDLE_LASER_POSITION_CN     "定位"
+#define SPINDLE_LASER_LIGHT_OPEN_CN   "开弱光"
+#define SPINDLE_LASER_LIGHT_CLOSE_CN  "关弱光"
+#define SPINDLE_LASER_POWER_CN        "功率"
+
+#define POWER_UI_TITLE_CN             "功率调节"
+#define POWER_PERCENT_STATE_CN        "功率"
+
+#define SPINDLE_LASER_CUT_TIMES_CN    "雕刻次数"
+#define DIALOG_ENGRAVING_CN           "雕刻边框或图形?"
+#define DIALOG_CANCEL_ENGRAVING_CN    "停止雕刻?"
+#define DIALOG_ENGRAVING_FINISH_CN    "雕刻完成!"
+#define TITLE_ENGRAVING_CN            "正在雕刻"
+#define TITLE_READY_ENGRAVE_CN        "准备雕刻"
+#define ENGRAVING_SPEED_CN            "雕刻"
+#define ENGRAVING_SPEED_STATE_CN      "雕刻速度"
+#define DIALOG_ENGRAVING_BOADER_CN    "边框"
+#define DIALOG_ENGRAVING_GRAPHICS_CN   "图形"
+#define DIALOG_CALCULATE_BOADER_TIPS_CN "正在计算边框数据..."
+#define DIALOG_ENGRAVE_BOADER_TIPS_CN   "正在雕刻边框..."
+#define DIALOG_NO_BOADER_DATA_TIPS_CN   "获取不到边框数据"
 
 #define MORE_CUSTOM1_TEXT_CN  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_CN  USER_DESC_2

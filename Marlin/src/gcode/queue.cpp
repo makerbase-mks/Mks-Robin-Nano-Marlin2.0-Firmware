@@ -47,6 +47,10 @@ GCodeQueue queue;
   #include "../feature/powerloss.h"
 #endif
 
+#if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
+  #include "../../lcd/extui/lib/mks_ui/draw_ui.h"
+#endif
+
 /**
  * GCode line number handling. Hosts may opt to include line numbers when
  * sending commands to Marlin, and lines will be checked for sequentiality.
@@ -292,9 +296,12 @@ void GCodeQueue::ok_to_send() {
     SERIAL_ECHOPAIR_P(SP_P_STR, int(planner.moves_free()),
                       SP_B_STR, int(BUFSIZE - length));
   #endif
+  #if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
+    if(gCfgItems.uiStyle == LASER_STYLE) SERIAL_EOE();
+  #endif
   SERIAL_EOL();
 }
-
+ 
 /**
  * Send a "Resend: nnn" message to the host to
  * indicate that a command needs to be re-sent.
@@ -454,6 +461,23 @@ void GCodeQueue::get_serial_commands() {
 
       const char serial_char = c;
 
+      #if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
+        if(c == 0x18) { 
+          clear(); 
+          _enqueue("H0", true
+          #if HAS_MULTI_SERIAL
+            , i
+          #endif
+          ); 
+          return; 
+        }
+        if(c == '?') { 
+          char buf[60];
+          sprintf(buf,"<Idle|MPos:%.3f,%.3f,%.3f|FS:%.1f,%.1f>\r\n",current_position.x,current_position.y,current_position.z,feedrate_mm_s,feedrate_mm_s);
+          SERIAL_ECHOPGM(buf);
+          return; 
+        }
+      #endif
       if (ISEOL(serial_char)) {
 
         // Reset our state, continue if the line was empty

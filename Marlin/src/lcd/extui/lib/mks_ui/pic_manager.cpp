@@ -215,7 +215,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_baby_move0_05.bin",
   "bmp_baby_move0_1.bin",
 
- //presets screen
+  //presets screen
   //"bmp_preHeat.bin",
   //"bmp_preHeat.bin",
   //"bmp_Fan.bin",
@@ -228,6 +228,21 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_custom5.bin",
   "bmp_custom6.bin",
   "bmp_custom7.bin"
+  #if HAS_CUTTER
+  ,
+  "bmp_twoInOneSet.bin",
+  "bmp_engraving.bin",
+  "bmp_Print_ui.bin",
+  "bmp_Laser_ui.bin",
+  "bmp_Position.bin",
+  "bmp_Light_close.bin",
+  "bmp_Light_open.bin",
+  "bmp_Power.bin",
+  "bmp_Cut_times.bin",
+  "bmp_speed_state.bin",
+  "bmp_power_state.bin",
+  "bmp_times_state.bin"
+  #endif
 };
 
 #if HAS_SPI_FLASH_FONT

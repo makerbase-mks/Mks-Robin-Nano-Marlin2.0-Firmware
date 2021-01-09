@@ -137,7 +137,57 @@ void GCodeParser::parse(char *p) {
   command_ptr = p;
 
   // Get the command letter, which must be G, M, or T
-  const char letter = uppercase(*p++);
+  char letter = uppercase(*p++);
+
+  #if HAS_CUTTER
+    static char spec_buf[MAX_CMD_SIZE];
+    // '$'
+    if(letter == '$') {
+      command_letter = letter;
+      codenum = *p;
+    }
+    //F1000 G91 or F1000
+    else if(letter == 'F') {
+      if(strstr(command_ptr,"G91")) {
+        //ignore F1000
+        command_ptr = spec_buf;
+        *command_ptr++ = 'G';*command_ptr++ = '9';*command_ptr++ = '1';
+        *command_ptr = '\0';
+        p = spec_buf;
+        command_ptr = p;
+        letter = *p++;
+      }
+      else {
+        command_ptr = spec_buf;
+        *command_ptr++ = 'G';*command_ptr++ = '1';*command_ptr++ = ' ';*command_ptr++ = 'F';
+
+        for(uint8_t j = 0;j < 10 && *p >= '0' && *p <= '9'; j++) {
+          *command_ptr++ = *p++;
+        }
+        *command_ptr = '\0';
+        p = spec_buf;
+        command_ptr = p;
+        letter = *p++;
+      }
+    }
+    //X 33
+    else if(letter == 'X') {
+      spec_buf[0] = '\0';
+      strcat(spec_buf, "G1 X");
+      strcat(spec_buf, p);
+      p = spec_buf;
+      command_ptr = p;
+      letter = *p++;
+    }
+    else if(letter == 'Y') {
+      spec_buf[0] = '\0';
+      strcat(spec_buf, "G1 Y");
+      strcat(spec_buf, p);
+      p = spec_buf;
+      command_ptr = p;
+      letter = *p++;
+    }
+  #endif
 
   // Nullify asterisk and trailing whitespace
   char *starpos = strchr(p, '*');
@@ -162,6 +212,12 @@ void GCodeParser::parse(char *p) {
     case 'G': case 'M': case 'T':
     #if ENABLED(CANCEL_OBJECTS)
       case 'O':
+    #endif
+    #if HAS_CUTTER
+      case 'H':
+      #if ENABLED(SPINDLE_LASER_USES_SOFT_PWM)
+        case 'S':
+      #endif
     #endif
       // Skip spaces to get the numeric part
       while (*p == ' ') p++;

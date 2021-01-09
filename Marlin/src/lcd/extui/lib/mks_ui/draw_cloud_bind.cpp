@@ -57,8 +57,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
 		// lv_qrcode_delete(qr);
-        clear_cur_ui();
-        draw_return_ui();
+        lv_clear_cur_ui();
+        lv_draw_return_ui();
       }
       break;
 	case ID_CLOUD_RELEASE_BIND:
@@ -67,7 +67,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
 		if(cloud_para.state == 0x12) {			
-			clear_cur_ui();
+			lv_clear_cur_ui();
 			lv_draw_dialog(DIALOG_TYPE_UNBIND);
 		}
       }

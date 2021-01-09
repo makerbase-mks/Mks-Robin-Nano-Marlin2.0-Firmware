@@ -63,6 +63,14 @@ GcodeSuite gcode;
 
 #include "../MarlinCore.h" // for idle()
 
+#if HAS_LEVELING
+  #include "../feature/bedlevel/bedlevel.h"
+#endif
+
+#if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
+  #include "../../lcd/extui/lib/mks_ui/draw_ui.h"
+#endif
+
 // Inactivity shutdown
 millis_t GcodeSuite::previous_move_ms = 0,
          GcodeSuite::max_inactive_time = 0,
@@ -311,7 +319,11 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 27: G27(); break;                                    // G27: Nozzle Park
       #endif
 
-      case 28: G28(); break;                                      // G28: Home one or more axes
+      case 28: G28(); 
+        #if HAS_LEVELING
+          set_bed_leveling_enabled(true);
+        #endif
+      break;                                                      // G28: Home one or more axes
 
       #if HAS_LEVELING
         case 29:                                                  // G29: Bed leveling calibration
@@ -929,6 +941,13 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
     break;
 
     case 'T': T(parser.codenum); break;                           // Tn: Tool Change
+    #if HAS_CUTTER
+      case 'H': H(parser.codenum); break;
+      case '$': $(parser.codenum); break;
+      #if ENABLED(SPINDLE_LASER_USES_SOFT_PWM)
+        case 'S': S(parser.codenum); break;
+      #endif
+    #endif
 
     default:
       #if ENABLED(WIFI_CUSTOM_COMMAND)
@@ -1016,7 +1035,11 @@ void GcodeSuite::process_subcommands_now(char * gcode) {
       switch (busy_state) {
         case IN_HANDLER:
         case IN_PROCESS:
-          SERIAL_ECHO_MSG(STR_BUSY_PROCESSING);
+          #if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
+            if(gCfgItems.uiStyle == PRINT_STYLE) SERIAL_ECHO_MSG(STR_BUSY_PROCESSING);
+          #else
+            SERIAL_ECHO_MSG(STR_BUSY_PROCESSING);
+          #endif
           break;
         case PAUSED_FOR_USER:
           SERIAL_ECHO_MSG(STR_BUSY_PAUSED_FOR_USER);

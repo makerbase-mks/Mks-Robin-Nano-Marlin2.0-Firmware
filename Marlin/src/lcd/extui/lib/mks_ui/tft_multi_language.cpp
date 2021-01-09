@@ -58,6 +58,8 @@ tool_menu_def                tool_menu;
 MachinePara_menu_def         MachinePara_menu;
 pause_msg_def                pause_msg_menu;
 eeprom_def                   eeprom_menu;
+twoInOneSet_def              twoInOneSet_menu;
+spindle_laser_def            spindle_laser_menu;
 
 machine_common_def machine_menu;
 void machine_setting_disp() {
@@ -888,19 +890,21 @@ void disp_language_init() {
       common_menu.pause_special_title   = PRINTING_PAUSE_GBK;
       common_menu.operate_special_title = PRINTING_OPERATION_GBK;
       //
-      main_menu.title        = TITLE_READYPRINT_CN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_CN;
+      else main_menu.title   = TITLE_READY_ENGRAVE_CN;
       main_menu.preheat      = PREHEAT_TEXT_CN;
       main_menu.move         = MOVE_TEXT_CN;
       main_menu.home         = HOME_TEXT_CN;
       main_menu.print        = PRINT_TEXT_CN;
       main_menu.extrude      = EXTRUDE_TEXT_CN;
       main_menu.leveling     = LEVELING_TEXT_CN;
-      main_menu.mleveling     = MLEVELING_TEXT_CN;
+      main_menu.mleveling    = MLEVELING_TEXT_CN;
       main_menu.autoleveling = AUTO_LEVELING_TEXT_CN;
       main_menu.fan          = FAN_TEXT_CN;
       main_menu.set          = SET_TEXT_CN;
       main_menu.more         = MORE_TEXT_CN;
       main_menu.tool         = TOOL_TEXT_CN;
+      main_menu.engraving    = LASER_ENGRAVING_CN;
       // TOOL
       tool_menu.title        = TOOL_TEXT_CN;
       tool_menu.preheat      = TOOL_PREHEAT_CN;
@@ -1047,7 +1051,8 @@ void disp_language_init() {
       language_menu.up    = PAGE_UP_TEXT_CN;
 
       //
-      printing_menu.title  = TITLE_PRINTING_CN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_CN;
+      else printing_menu.title = TITLE_ENGRAVING_CN;
       printing_menu.option = PRINTING_OPERATION_CN;
       printing_menu.stop   = PRINTING_STOP_CN;
       printing_menu.pause  = PRINTING_PAUSE_CN;
@@ -1080,8 +1085,15 @@ void disp_language_init() {
       speed_menu.add           = ADD_TEXT_CN;
       speed_menu.dec           = DEC_TEXT_CN;
       speed_menu.move          = MOVE_SPEED_CN;
-      speed_menu.extrude       = EXTRUDER_SPEED_CN;
-      speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_CN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) {
+        speed_menu.extrude       = EXTRUDER_SPEED_CN;
+        speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_CN;
+      }
+      else {
+        speed_menu.extrude       = ENGRAVING_SPEED_CN;
+        speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_CN;
+      }
+      
       speed_menu.move_speed    = MOVE_SPEED_STATE_CN;
       //
       printing_more_menu.title      = TITLE_MORE_CN;
@@ -1094,8 +1106,19 @@ void disp_language_init() {
       // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_CN;
       print_file_dialog_menu.confirm               = DIALOG_CONFIRM_CN;
       print_file_dialog_menu.cancle                = DIALOG_CANCLE_CN;
-      print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_CN;
-      print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_CN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) {
+        print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_CN;
+        print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_CN;
+      }
+      else {
+        print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_CN;
+        print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_CN;
+        print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_CN;
+        print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_CN;
+        print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_CN;
+        print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_CN;
+        print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_CN;
+      }
       print_file_dialog_menu.retry                 = DIALOG_RETRY_CN;
       print_file_dialog_menu.stop                  = DIALOG_STOP_CN;
       print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_CN;
@@ -1104,10 +1127,14 @@ void disp_language_init() {
       print_file_dialog_menu.close_machine_error = DIALOG_ERROR_TIPS2_CN;
       print_file_dialog_menu.filament_no_press   = DIALOG_FILAMENT_NO_PRESS_CN;
 
-      print_file_dialog_menu.print_finish     = DIALOG_PRINT_FINISH_CN;
-      print_file_dialog_menu.print_time       = DIALOG_PRINT_TIME_CN;
-      print_file_dialog_menu.reprint          = DIALOG_REPRINT_CN;
-      print_file_dialog_menu.wifi_enable_tips = DIALOG_WIFI_ENABLE_TIPS_CN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) 
+        print_file_dialog_menu.print_finish     = DIALOG_PRINT_FINISH_CN;
+      else
+        print_file_dialog_menu.print_finish     = DIALOG_ENGRAVING_FINISH_CN;
+      print_file_dialog_menu.print_time         = DIALOG_PRINT_TIME_CN;
+      print_file_dialog_menu.reprint            = DIALOG_REPRINT_CN;
+      print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_CN;
+      print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_CN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_CN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_CN;
@@ -1127,8 +1154,26 @@ void disp_language_init() {
       eeprom_menu.read             = EEPROM_SETTINGS_READ_CN;
       eeprom_menu.revert           = EEPROM_SETTINGS_REVERT_CN;
       eeprom_menu.storeTips        = EEPROM_STORE_TIPS_CN;
-      eeprom_menu.readTips         =  EEPROM_READ_TIPS_CN;
-      eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_CN;
+      eeprom_menu.readTips         = EEPROM_READ_TIPS_CN;
+      eeprom_menu.revertTips       = EEPROM_REVERT_TIPS_CN;
+      
+      #if HAS_CUTTER
+        set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_CN;
+
+        twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_CN;
+        twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_CN;
+        twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_CN;
+
+        spindle_laser_menu.power_title         = POWER_UI_TITLE_CN;
+        spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_CN;
+
+        tool_menu.position                     = SPINDLE_LASER_POSITION_CN;
+        tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_CN;
+        tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_CN;
+        tool_menu.power                        = SPINDLE_LASER_POWER_CN;
+
+        spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_CN;
+      #endif
       break;
 
       #if 1
@@ -1143,7 +1188,8 @@ void disp_language_init() {
             common_menu.pause_special_title   = PRINTING_PAUSE_GBK;
             common_menu.operate_special_title = PRINTING_OPERATION_GBK;
             //
-            main_menu.title        = TITLE_READYPRINT_T_CN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_T_CN;
+            else main_menu.title   = TITLE_READY_ENGRAVE_T_CN;
             main_menu.preheat      = PREHEAT_TEXT_T_CN;
             main_menu.move         = MOVE_TEXT_T_CN;
             main_menu.home         = HOME_TEXT_T_CN;
@@ -1156,6 +1202,7 @@ void disp_language_init() {
             main_menu.set          = SET_TEXT_T_CN;
             main_menu.more         = MORE_TEXT_T_CN;
             main_menu.tool         = TOOL_TEXT_T_CN;
+            main_menu.engraving    = LASER_ENGRAVING_T_CN;
             // TOOL
             tool_menu.title        = TOOL_TEXT_T_CN;
             tool_menu.preheat      = TOOL_PREHEAT_T_CN;
@@ -1300,7 +1347,8 @@ void disp_language_init() {
             language_menu.up    = PAGE_UP_TEXT_T_CN;
 
             //
-            printing_menu.title  = TITLE_PRINTING_T_CN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_T_CN;
+            else printing_menu.title = TITLE_ENGRAVING_T_CN;
             printing_menu.option = PRINTING_OPERATION_T_CN;
             printing_menu.stop   = PRINTING_STOP_T_CN;
             printing_menu.pause  = PRINTING_PAUSE_T_CN;
@@ -1333,8 +1381,14 @@ void disp_language_init() {
             speed_menu.add           = ADD_TEXT_T_CN;
             speed_menu.dec           = DEC_TEXT_T_CN;
             speed_menu.move          = MOVE_SPEED_T_CN;
-            speed_menu.extrude       = EXTRUDER_SPEED_T_CN;
-            speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_T_CN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              speed_menu.extrude       = EXTRUDER_SPEED_T_CN;
+              speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_T_CN;
+            }
+            else {
+              speed_menu.extrude       = ENGRAVING_SPEED_T_CN;
+              speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_T_CN;
+            }
             speed_menu.move_speed    = MOVE_SPEED_STATE_T_CN;
             //
             printing_more_menu.title      = TITLE_MORE_T_CN;
@@ -1347,8 +1401,20 @@ void disp_language_init() {
             // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_CN;
             print_file_dialog_menu.confirm               = DIALOG_CONFIRM_T_CN;
             print_file_dialog_menu.cancle                = DIALOG_CANCLE_T_CN;
-            print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_T_CN;
-            print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_T_CN;
+            
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_T_CN;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_T_CN;
+            }
+            else {
+              print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_T_CN;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_T_CN;
+              print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_T_CN;
+              print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_T_CN;
+              print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_T_CN;
+              print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_T_CN;
+              print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_T_CN;
+            }
             print_file_dialog_menu.retry                 = DIALOG_RETRY_T_CN;
             print_file_dialog_menu.stop                  = DIALOG_STOP_T_CN;
             print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_T_CN;
@@ -1356,10 +1422,14 @@ void disp_language_init() {
 
             print_file_dialog_menu.close_machine_error = DIALOG_ERROR_TIPS2_T_CN;
             print_file_dialog_menu.filament_no_press   = DIALOG_FILAMENT_NO_PRESS_T_CN;
-            print_file_dialog_menu.print_finish        = DIALOG_PRINT_FINISH_T_CN;
-            print_file_dialog_menu.print_time          = DIALOG_PRINT_TIME_T_CN;
-            print_file_dialog_menu.reprint             = DIALOG_REPRINT_T_CN;
-            print_file_dialog_menu.wifi_enable_tips    = DIALOG_WIFI_ENABLE_TIPS_T_CN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) 
+              print_file_dialog_menu.print_finish     = DIALOG_PRINT_FINISH_T_CN;
+            else
+              print_file_dialog_menu.print_finish     = DIALOG_ENGRAVING_FINISH_T_CN;
+            print_file_dialog_menu.print_time         = DIALOG_PRINT_TIME_T_CN;
+            print_file_dialog_menu.reprint            = DIALOG_REPRINT_T_CN;
+            print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_T_CN;
+            print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_T_CN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_T_CN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_T_CN;
@@ -1381,6 +1451,24 @@ void disp_language_init() {
             eeprom_menu.storeTips        = EEPROM_STORE_TIPS_T_CN;
             eeprom_menu.readTips         =  EEPROM_READ_TIPS_T_CN;
             eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_T_CN;
+
+            #if HAS_CUTTER
+              set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_T_CN;
+
+              twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_T_CN;
+              twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_T_CN;
+              twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_T_CN;
+
+              spindle_laser_menu.power_title         = POWER_UI_TITLE_T_CN;
+              spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_T_CN;
+
+              tool_menu.position                     = SPINDLE_LASER_POSITION_T_CN;
+              tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_T_CN;
+              tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_T_CN;
+              tool_menu.power                        = SPINDLE_LASER_POWER_T_CN;
+
+              spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_T_CN;
+            #endif
             break;
           case LANG_ENGLISH:
             common_menu.dialog_confirm_title  = TITLE_DIALOG_CONFIRM_EN;
@@ -1391,7 +1479,8 @@ void disp_language_init() {
             common_menu.pause_special_title   = PRINTING_PAUSE_OTHER_LANGUGE;
             common_menu.operate_special_title = PRINTING_OPERATION_OTHER_LANGUGE;
             //
-            main_menu.title        = TITLE_READYPRINT_EN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_EN;
+            else main_menu.title   = TITLE_READY_ENGRAVE_EN;
             main_menu.preheat      = PREHEAT_TEXT_EN;
             main_menu.move         = MOVE_TEXT_EN;
             main_menu.home         = HOME_TEXT_EN;
@@ -1404,6 +1493,7 @@ void disp_language_init() {
             main_menu.set          = SET_TEXT_EN;
             main_menu.more         = MORE_TEXT_EN;
             main_menu.tool         = TOOL_TEXT_EN;
+            main_menu.engraving    = LASER_ENGRAVING_EN;
             // TOOL
             tool_menu.title        = TOOL_TEXT_EN;
             tool_menu.preheat      = TOOL_PREHEAT_EN;
@@ -1542,7 +1632,8 @@ void disp_language_init() {
             language_menu.next  = PAGE_DOWN_TEXT_EN;
             language_menu.up    = PAGE_UP_TEXT_EN;
             //
-            printing_menu.title  = TITLE_PRINTING_EN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_EN;
+            else printing_menu.title = TITLE_ENGRAVING_EN;
             printing_menu.option = PRINTING_OPERATION_EN;
             printing_menu.stop   = PRINTING_STOP_EN;
             printing_menu.pause  = PRINTING_PAUSE_EN;
@@ -1575,8 +1666,14 @@ void disp_language_init() {
             speed_menu.add           = ADD_TEXT_EN;
             speed_menu.dec           = DEC_TEXT_EN;
             speed_menu.move          = MOVE_SPEED_EN;
-            speed_menu.extrude       = EXTRUDER_SPEED_EN;
-            speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_EN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              speed_menu.extrude       = EXTRUDER_SPEED_EN;
+              speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_EN;
+            }
+            else {
+              speed_menu.extrude       = ENGRAVING_SPEED_EN;
+              speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_EN;
+            }
             speed_menu.move_speed    = MOVE_SPEED_STATE_EN;
             //
             printing_more_menu.title      = TITLE_MORE_EN;
@@ -1589,18 +1686,34 @@ void disp_language_init() {
             // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_EN;
             print_file_dialog_menu.confirm               = DIALOG_CONFIRM_EN;
             print_file_dialog_menu.cancle                = DIALOG_CANCLE_EN;
-            print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_EN;
-            print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_EN;
+            
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_EN;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_EN;
+            }
+            else {
+              print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_EN;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_EN;
+              print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_EN;
+              print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_EN;
+              print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_EN;
+              print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_EN;
+              print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_EN;
+            }
             print_file_dialog_menu.retry                 = DIALOG_RETRY_EN;
             print_file_dialog_menu.stop                  = DIALOG_STOP_EN;
             print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_EN;
             print_file_dialog_menu.print_from_breakpoint = DIALOG_REPRINT_FROM_BREAKPOINT_EN;
             print_file_dialog_menu.close_machine_error   = DIALOG_ERROR_TIPS2_EN;
             print_file_dialog_menu.filament_no_press     = DIALOG_FILAMENT_NO_PRESS_EN;
-            print_file_dialog_menu.print_finish          = DIALOG_PRINT_FINISH_EN;
-            print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_EN;
-            print_file_dialog_menu.reprint               = DIALOG_REPRINT_EN;
-            print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
+            if(gCfgItems.uiStyle == PRINT_STYLE) 
+              print_file_dialog_menu.print_finish     = DIALOG_PRINT_FINISH_EN;
+            else
+              print_file_dialog_menu.print_finish     = DIALOG_ENGRAVING_FINISH_EN;
+            print_file_dialog_menu.print_time         = DIALOG_PRINT_TIME_EN;
+            print_file_dialog_menu.reprint            = DIALOG_REPRINT_EN;
+            print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_EN;
+            print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_EN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_EN;
@@ -1622,6 +1735,24 @@ void disp_language_init() {
             eeprom_menu.storeTips        = EEPROM_STORE_TIPS_EN;
             eeprom_menu.readTips         =  EEPROM_READ_TIPS_EN;
             eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_EN;
+
+            #if HAS_CUTTER
+              set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_EN;
+
+              twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_EN;
+              twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_EN;
+              twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_EN;
+
+              spindle_laser_menu.power_title         = POWER_UI_TITLE_EN;
+              spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_EN;
+
+              tool_menu.position                     = SPINDLE_LASER_POSITION_EN;
+              tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_EN;
+              tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_EN;
+              tool_menu.power                        = SPINDLE_LASER_POWER_EN;
+
+              spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_EN;
+            #endif
             break;
           case LANG_RUSSIAN:
             common_menu.dialog_confirm_title  = TITLE_DIALOG_CONFIRM_RU;
@@ -1632,7 +1763,8 @@ void disp_language_init() {
             common_menu.pause_special_title   = PRINTING_PAUSE_OTHER_LANGUGE;
             common_menu.operate_special_title = PRINTING_OPERATION_OTHER_LANGUGE;
             //
-            main_menu.title        = TITLE_READYPRINT_RU;
+            if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_RU;
+            else main_menu.title   = TITLE_READY_ENGRAVE_RU;
             main_menu.preheat      = PREHEAT_TEXT_RU;
             main_menu.move         = MOVE_TEXT_RU;
             main_menu.home         = HOME_TEXT_RU;
@@ -1645,6 +1777,7 @@ void disp_language_init() {
             main_menu.set          = SET_TEXT_RU;
             main_menu.more         = MORE_TEXT_RU;
             main_menu.tool         = TOOL_TEXT_RU;
+            main_menu.engraving    = LASER_ENGRAVING_RU;
             // TOOL
             tool_menu.title        = TOOL_TEXT_RU;
             tool_menu.preheat      = TOOL_PREHEAT_RU;
@@ -1897,7 +2030,8 @@ void disp_language_init() {
             language_menu.next  = PAGE_DOWN_TEXT_RU;
             language_menu.up    = PAGE_UP_TEXT_RU;
             //
-            printing_menu.title  = TITLE_PRINTING_RU;
+            if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_RU;
+            else printing_menu.title = TITLE_ENGRAVING_RU;
             printing_menu.option = PRINTING_OPERATION_RU;
             printing_menu.stop   = PRINTING_STOP_RU;
             printing_menu.pause  = PRINTING_PAUSE_RU;
@@ -1930,8 +2064,14 @@ void disp_language_init() {
             speed_menu.add           = ADD_TEXT_RU;
             speed_menu.dec           = DEC_TEXT_RU;
             speed_menu.move          = MOVE_SPEED_RU;
-            speed_menu.extrude       = EXTRUDER_SPEED_RU;
-            speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_RU;
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              speed_menu.extrude       = EXTRUDER_SPEED_RU;
+              speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_RU;
+            }
+            else {
+              speed_menu.extrude       = ENGRAVING_SPEED_RU;
+              speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_RU;
+            }
             speed_menu.move_speed    = MOVE_SPEED_STATE_RU;
             //
             printing_more_menu.title      = TITLE_MORE_RU;
@@ -1943,18 +2083,34 @@ void disp_language_init() {
             // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_RU;
             print_file_dialog_menu.confirm               = DIALOG_CONFIRM_RU;
             print_file_dialog_menu.cancle                = DIALOG_CANCLE_RU;
-            print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_RU;
-            print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_RU;
+            
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_RU;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_RU;
+            }
+            else {
+              print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_RU;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_RU;
+              print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_RU;
+              print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_RU;
+              print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_RU;
+              print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_RU;
+              print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_RU;
+            }
             print_file_dialog_menu.retry                 = DIALOG_RETRY_RU;
             print_file_dialog_menu.stop                  = DIALOG_STOP_RU;
             print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_RU;
             print_file_dialog_menu.print_from_breakpoint = DIALOG_REPRINT_FROM_BREAKPOINT_RU;
             print_file_dialog_menu.close_machine_error   = DIALOG_ERROR_TIPS2_RU;
             print_file_dialog_menu.filament_no_press     = DIALOG_FILAMENT_NO_PRESS_RU;
-            print_file_dialog_menu.print_finish          = DIALOG_PRINT_FINISH_RU;
-            print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_RU;
-            print_file_dialog_menu.reprint               = DIALOG_REPRINT_RU;
-            print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_RU;
+            if(gCfgItems.uiStyle == PRINT_STYLE) 
+              print_file_dialog_menu.print_finish     = DIALOG_PRINT_FINISH_RU;
+            else
+              print_file_dialog_menu.print_finish     = DIALOG_ENGRAVING_FINISH_RU;
+            print_file_dialog_menu.print_time         = DIALOG_PRINT_TIME_RU;
+            print_file_dialog_menu.reprint            = DIALOG_REPRINT_RU;
+            print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_RU;
+            print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_RU;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_RU;
             pause_msg_menu.changing      = MESSAGE_CHANGING_RU;
@@ -1976,6 +2132,24 @@ void disp_language_init() {
             eeprom_menu.storeTips        = EEPROM_STORE_TIPS_RU;
             eeprom_menu.readTips         =  EEPROM_READ_TIPS_RU;
             eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_RU;
+
+            #if HAS_CUTTER
+              set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_RU;
+
+              twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_RU;
+              twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_RU;
+              twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_RU;
+
+              spindle_laser_menu.power_title         = POWER_UI_TITLE_RU;
+              spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_RU;
+
+              tool_menu.position                     = SPINDLE_LASER_POSITION_RU;
+              tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_RU;
+              tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_RU;
+              tool_menu.power                        = SPINDLE_LASER_POWER_RU;
+
+              spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_RU;
+            #endif
             break;
           case LANG_SPANISH:
             common_menu.dialog_confirm_title  = TITLE_DIALOG_CONFIRM_SP;
@@ -1986,7 +2160,8 @@ void disp_language_init() {
             common_menu.pause_special_title   = PRINTING_PAUSAR_SP;
             common_menu.operate_special_title = PRINTING_AJUSTES_SP;
             //
-            main_menu.title        = TITLE_READYPRINT_SP;
+            if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_SP;
+            else main_menu.title   = TITLE_READY_ENGRAVE_SP;
             main_menu.preheat      = PREHEAT_TEXT_SP;
             main_menu.move         = MOVE_TEXT_SP;
             main_menu.home         = HOME_TEXT_SP;
@@ -1999,6 +2174,7 @@ void disp_language_init() {
             main_menu.set          = SET_TEXT_SP;
             main_menu.more         = MORE_TEXT_SP;
             main_menu.tool         = TOOL_TEXT_SP;
+            main_menu.engraving    = LASER_ENGRAVING_SP;
             // TOOL
             tool_menu.title        = TOOL_TEXT_SP;
             tool_menu.preheat      = TOOL_PREHEAT_SP;
@@ -2141,7 +2317,8 @@ void disp_language_init() {
             language_menu.next  = PAGE_DOWN_TEXT_SP;
             language_menu.up    = PAGE_UP_TEXT_SP;
             //
-            printing_menu.title  = TITLE_PRINTING_SP;
+            if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_SP;
+            else printing_menu.title = TITLE_ENGRAVING_SP;
             printing_menu.option = PRINTING_OPERATION_SP;
             printing_menu.stop   = PRINTING_STOP_SP;
             printing_menu.pause  = PRINTING_PAUSE_SP;
@@ -2174,8 +2351,14 @@ void disp_language_init() {
             speed_menu.add           = ADD_TEXT_SP;
             speed_menu.dec           = DEC_TEXT_SP;
             speed_menu.move          = MOVE_SPEED_SP;
-            speed_menu.extrude       = EXTRUDER_SPEED_SP;
-            speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_SP;
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              speed_menu.extrude       = EXTRUDER_SPEED_SP;
+              speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_SP;
+            }
+            else {
+              speed_menu.extrude       = ENGRAVING_SPEED_SP;
+              speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_SP;
+            }
             speed_menu.move_speed    = MOVE_SPEED_STATE_SP;
             //
             printing_more_menu.title      = TITLE_MORE_SP;
@@ -2188,18 +2371,33 @@ void disp_language_init() {
             // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_SP;
             print_file_dialog_menu.confirm               = DIALOG_CONFIRM_SP;
             print_file_dialog_menu.cancle                = DIALOG_CANCLE_SP;
-            print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_SP;
-            print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_SP;
+            if(gCfgItems.uiStyle == PRINT_STYLE) {
+              print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_SP;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_SP;
+            }
+            else {
+              print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_SP;
+              print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_SP;
+              print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_SP;
+              print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_SP;
+              print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_SP;
+              print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_SP;
+              print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_SP;
+            }
             print_file_dialog_menu.retry                 = DIALOG_RETRY_SP;
             print_file_dialog_menu.stop                  = DIALOG_STOP_SP;
             print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_SP;
             print_file_dialog_menu.print_from_breakpoint = DIALOG_REPRINT_FROM_BREAKPOINT_SP;
             print_file_dialog_menu.close_machine_error   = DIALOG_ERROR_TIPS2_SP;
             print_file_dialog_menu.filament_no_press     = DIALOG_FILAMENT_NO_PRESS_SP;
-            print_file_dialog_menu.print_finish          = DIALOG_PRINT_FINISH_SP;
-            print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_SP;
-            print_file_dialog_menu.reprint               = DIALOG_REPRINT_SP;
-            print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_SP;
+            if(gCfgItems.uiStyle == PRINT_STYLE) 
+              print_file_dialog_menu.print_finish     = DIALOG_PRINT_FINISH_SP;
+            else
+              print_file_dialog_menu.print_finish     = DIALOG_ENGRAVING_FINISH_SP;
+            print_file_dialog_menu.print_time         = DIALOG_PRINT_TIME_SP;
+            print_file_dialog_menu.reprint            = DIALOG_REPRINT_SP;
+            print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_SP;
+            print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_SP;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_SP;
             pause_msg_menu.changing      = MESSAGE_CHANGING_SP;
@@ -2221,6 +2419,24 @@ void disp_language_init() {
             eeprom_menu.storeTips        = EEPROM_STORE_TIPS_SP;
             eeprom_menu.readTips         =  EEPROM_READ_TIPS_SP;
             eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_SP;
+            
+            #if HAS_CUTTER
+              set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_SP;
+
+              twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_SP;
+              twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_SP;
+              twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_SP;
+
+              spindle_laser_menu.power_title         = POWER_UI_TITLE_SP;
+              spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_SP;
+
+              tool_menu.position                     = SPINDLE_LASER_POSITION_SP;
+              tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_SP;
+              tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_SP;
+              tool_menu.power                        = SPINDLE_LASER_POWER_SP;
+
+              spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_SP;
+            #endif
             break;
 
         #endif // if 1
@@ -2235,7 +2451,8 @@ void disp_language_init() {
           common_menu.operate_special_title = PRINTING_OPERATION_OTHER_LANGUGE;
 
           //
-          main_menu.title        = TITLE_READYPRINT_FR;
+          if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_FR;
+            else main_menu.title   = TITLE_READY_ENGRAVE_FR;
           main_menu.preheat      = PREHEAT_TEXT_FR;
           main_menu.move         = MOVE_TEXT_FR;
           main_menu.home         = HOME_TEXT_FR;
@@ -2248,6 +2465,7 @@ void disp_language_init() {
           main_menu.set          = SET_TEXT_FR;
           main_menu.more         = MORE_TEXT_FR;
           main_menu.tool         = TOOL_TEXT_FR;
+          main_menu.engraving    = LASER_ENGRAVING_FR;
           // TOOL
           tool_menu.title        = TOOL_TEXT_FR;
           tool_menu.preheat      = TOOL_PREHEAT_FR;
@@ -2385,7 +2603,8 @@ void disp_language_init() {
           language_menu.title = LANGUAGE_TEXT_FR;
 
           //
-          printing_menu.title  = TITLE_PRINTING_FR;
+          if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_FR;
+          else printing_menu.title = TITLE_ENGRAVING_FR;
           printing_menu.option = PRINTING_OPERATION_FR;
           printing_menu.stop   = PRINTING_STOP_FR;
           printing_menu.pause  = PRINTING_PAUSE_FR;
@@ -2418,8 +2637,14 @@ void disp_language_init() {
           speed_menu.add           = ADD_TEXT_FR;
           speed_menu.dec           = DEC_TEXT_FR;
           speed_menu.move          = MOVE_SPEED_FR;
-          speed_menu.extrude       = EXTRUDER_SPEED_FR;
-          speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_FR;
+          if(gCfgItems.uiStyle == PRINT_STYLE) {
+            speed_menu.extrude       = EXTRUDER_SPEED_FR;
+            speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_FR;
+          }
+          else {
+            speed_menu.extrude       = ENGRAVING_SPEED_FR;
+            speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_FR;
+          }
           speed_menu.move_speed    = MOVE_SPEED_STATE_FR;
           //
           printing_more_menu.fan        = FAN_TEXT_FR;
@@ -2431,8 +2656,21 @@ void disp_language_init() {
           // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_SP;
           print_file_dialog_menu.confirm               = DIALOG_CONFIRM_FR;
           print_file_dialog_menu.cancle                = DIALOG_CANCLE_FR;
-          print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_FR;
-          print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_FR;
+          
+          if(gCfgItems.uiStyle == PRINT_STYLE) {
+            print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_FR;
+            print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_FR;
+          }
+          else {
+            print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_FR;
+            print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_FR;
+            print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_FR;
+            print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_FR;
+            print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_FR;
+            print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_FR;
+            print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_FR;
+          }
+            
           print_file_dialog_menu.retry                 = DIALOG_RETRY_FR;
           print_file_dialog_menu.stop                  = DIALOG_STOP_FR;
           print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_FR;
@@ -2443,6 +2681,7 @@ void disp_language_init() {
           print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_FR;
           print_file_dialog_menu.reprint               = DIALOG_REPRINT_FR;
           print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_FR;
+          print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_FR;
 
           pause_msg_menu.pausing       = MESSAGE_PAUSING_FR;
           pause_msg_menu.changing      = MESSAGE_CHANGING_FR;
@@ -2464,6 +2703,24 @@ void disp_language_init() {
           eeprom_menu.storeTips        = EEPROM_STORE_TIPS_FR;
           eeprom_menu.readTips         =  EEPROM_READ_TIPS_FR;
           eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_FR;
+
+          #if HAS_CUTTER
+            set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_FR;
+
+            twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_FR;
+            twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_FR;
+            twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_FR;
+
+            spindle_laser_menu.power_title         = POWER_UI_TITLE_FR;
+            spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_FR;
+
+            tool_menu.position                     = SPINDLE_LASER_POSITION_FR;
+            tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_FR;
+            tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_FR;
+            tool_menu.power                        = SPINDLE_LASER_POWER_FR;
+
+            spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_FR;
+          #endif
           break;
 
         case LANG_ITALY:
@@ -2476,7 +2733,8 @@ void disp_language_init() {
           common_menu.operate_special_title = PRINTING_OPERATION_OTHER_LANGUGE;
 
           //
-          main_menu.title        = TITLE_READYPRINT_IT;
+          if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_IT;
+          else main_menu.title   = TITLE_READY_ENGRAVE_IT;
           main_menu.preheat      = PREHEAT_TEXT_IT;
           main_menu.move         = MOVE_TEXT_IT;
           main_menu.home         = HOME_TEXT_IT;
@@ -2489,6 +2747,7 @@ void disp_language_init() {
           main_menu.set          = SET_TEXT_IT;
           main_menu.more         = MORE_TEXT_IT;
           main_menu.tool         = TOOL_TEXT_IT;
+          main_menu.engraving    = LASER_ENGRAVING_IT;
           // TOOL
           tool_menu.title        = TOOL_TEXT_IT;
           tool_menu.preheat      = TOOL_PREHEAT_IT;
@@ -2626,7 +2885,8 @@ void disp_language_init() {
           language_menu.title = LANGUAGE_TEXT_IT;
 
           //
-          printing_menu.title  = TITLE_PRINTING_IT;
+          if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_IT;
+          else printing_menu.title = TITLE_ENGRAVING_IT;
           printing_menu.option = PRINTING_OPERATION_IT;
           printing_menu.stop   = PRINTING_STOP_IT;
           printing_menu.pause  = PRINTING_PAUSE_IT;
@@ -2659,8 +2919,14 @@ void disp_language_init() {
           speed_menu.add           = ADD_TEXT_IT;
           speed_menu.dec           = DEC_TEXT_IT;
           speed_menu.move          = MOVE_SPEED_IT;
-          speed_menu.extrude       = EXTRUDER_SPEED_IT;
-          speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_IT;
+          if(gCfgItems.uiStyle == PRINT_STYLE) {
+            speed_menu.extrude       = EXTRUDER_SPEED_IT;
+            speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_IT;
+          }
+          else {
+            speed_menu.extrude       = ENGRAVING_SPEED_IT;
+            speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_IT;
+          }
           speed_menu.move_speed    = MOVE_SPEED_STATE_IT;
           //
           printing_more_menu.fan        = FAN_TEXT_IT;
@@ -2672,18 +2938,33 @@ void disp_language_init() {
           // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_SP;
           print_file_dialog_menu.confirm               = DIALOG_CONFIRM_IT;
           print_file_dialog_menu.cancle                = DIALOG_CANCLE_IT;
-          print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_IT;
-          print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_IT;
+          if(gCfgItems.uiStyle == PRINT_STYLE) {
+            print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_IT;
+            print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_IT;
+          }
+          else {
+            print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_IT;
+            print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_IT;
+            print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_IT;
+            print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_IT;
+            print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_IT;
+            print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_IT;
+            print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_IT;
+          }
           print_file_dialog_menu.retry                 = DIALOG_RETRY_IT;
           print_file_dialog_menu.stop                  = DIALOG_STOP_IT;
           print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_IT;
           print_file_dialog_menu.print_from_breakpoint = DIALOG_REPRINT_FROM_BREAKPOINT_IT;
           print_file_dialog_menu.close_machine_error   = DIALOG_ERROR_TIPS2_IT;
           print_file_dialog_menu.filament_no_press     = DIALOG_FILAMENT_NO_PRESS_IT;
-          print_file_dialog_menu.print_finish          = DIALOG_PRINT_FINISH_IT;
-          print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_IT;
-          print_file_dialog_menu.reprint               = DIALOG_REPRINT_IT;
-          print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_IT;
+          if(gCfgItems.uiStyle == PRINT_STYLE) 
+            print_file_dialog_menu.print_finish     = DIALOG_PRINT_FINISH_IT;
+          else
+            print_file_dialog_menu.print_finish     = DIALOG_ENGRAVING_FINISH_IT;
+          print_file_dialog_menu.print_time         = DIALOG_PRINT_TIME_IT;
+          print_file_dialog_menu.reprint            = DIALOG_REPRINT_IT;
+          print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_IT;
+          print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_IT;
 
           pause_msg_menu.pausing       = MESSAGE_PAUSING_IT;
           pause_msg_menu.changing      = MESSAGE_CHANGING_IT;
@@ -2705,6 +2986,24 @@ void disp_language_init() {
           eeprom_menu.storeTips        = EEPROM_STORE_TIPS_IT;
           eeprom_menu.readTips         =  EEPROM_READ_TIPS_IT;
           eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_IT;
+
+          #if HAS_CUTTER
+            set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_IT;
+
+            twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_IT;
+            twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_IT;
+            twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_IT;
+
+            spindle_laser_menu.power_title         = POWER_UI_TITLE_IT;
+            spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_IT;
+
+            tool_menu.position                     = SPINDLE_LASER_POSITION_IT;
+            tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_IT;
+            tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_IT;
+            tool_menu.power                        = SPINDLE_LASER_POWER_IT;
+
+            spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_IT;
+          #endif
           break;
 
       #endif // if 1
@@ -2718,7 +3017,8 @@ void disp_language_init() {
       common_menu.pause_special_title   = PRINTING_PAUSE_OTHER_LANGUGE;
       common_menu.operate_special_title = PRINTING_OPERATION_OTHER_LANGUGE;
       //
-      main_menu.title        = TITLE_READYPRINT_EN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) main_menu.title = TITLE_READYPRINT_EN;
+      else main_menu.title   = TITLE_READY_ENGRAVE_EN;
       main_menu.preheat      = PREHEAT_TEXT_EN;
       main_menu.move         = MOVE_TEXT_EN;
       main_menu.home         = HOME_TEXT_EN;
@@ -2731,6 +3031,7 @@ void disp_language_init() {
       main_menu.set          = SET_TEXT_EN;
       main_menu.more         = MORE_TEXT_EN;
       main_menu.tool         = TOOL_TEXT_EN;
+      main_menu.engraving    = LASER_ENGRAVING_EN;
       // TOOL
       tool_menu.title        = TOOL_TEXT_EN;
       tool_menu.preheat      = TOOL_PREHEAT_EN;
@@ -2868,7 +3169,8 @@ void disp_language_init() {
       language_menu.next  = PAGE_DOWN_TEXT_EN;
       language_menu.up    = PAGE_UP_TEXT_EN;
       //
-      printing_menu.title  = TITLE_PRINTING_EN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) printing_menu.title = TITLE_PRINTING_EN;
+      else printing_menu.title = TITLE_ENGRAVING_EN;
       printing_menu.option = PRINTING_OPERATION_EN;
       printing_menu.stop   = PRINTING_STOP_EN;
       printing_menu.pause  = PRINTING_PAUSE_EN;
@@ -2901,8 +3203,14 @@ void disp_language_init() {
       speed_menu.add           = ADD_TEXT_EN;
       speed_menu.dec           = DEC_TEXT_EN;
       speed_menu.move          = MOVE_SPEED_EN;
-      speed_menu.extrude       = EXTRUDER_SPEED_EN;
-      speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_EN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) {
+        speed_menu.extrude       = EXTRUDER_SPEED_EN;
+        speed_menu.extrude_speed = EXTRUDER_SPEED_STATE_EN;
+      }
+      else {
+        speed_menu.extrude       = ENGRAVING_SPEED_EN;
+        speed_menu.extrude_speed = ENGRAVING_SPEED_STATE_EN;
+      }
       speed_menu.move_speed    = MOVE_SPEED_STATE_EN;
       //
       printing_more_menu.title      = TITLE_MORE_EN;
@@ -2915,18 +3223,33 @@ void disp_language_init() {
       // print_file_dialog_menu.title = TITLE_DIALOG_CONFIRM_EN;
       print_file_dialog_menu.confirm               = DIALOG_CONFIRM_EN;
       print_file_dialog_menu.cancle                = DIALOG_CANCLE_EN;
-      print_file_dialog_menu.print_file            = DIALOG_PRINT_MODEL_EN;
-      print_file_dialog_menu.cancle_print          = DIALOG_CANCEL_PRINT_EN;
+      if(gCfgItems.uiStyle == PRINT_STYLE) {
+        print_file_dialog_menu.print_file          = DIALOG_PRINT_MODEL_EN;
+        print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_PRINT_EN;
+      }
+      else {
+        print_file_dialog_menu.print_file          = DIALOG_ENGRAVING_EN;
+        print_file_dialog_menu.cancle_print        = DIALOG_CANCEL_ENGRAVING_EN;
+        print_file_dialog_menu.boader              = DIALOG_ENGRAVING_BOADER_EN;
+        print_file_dialog_menu.graphics            = DIALOG_ENGRAVING_GRAPHICS_EN;
+        print_file_dialog_menu.calcurateBoaderTips = DIALOG_CALCULATE_BOADER_TIPS_EN;
+        print_file_dialog_menu.engraveBoaderTips   = DIALOG_ENGRAVE_BOADER_TIPS_EN;
+        print_file_dialog_menu.noBoaderDataTips    = DIALOG_NO_BOADER_DATA_TIPS_EN;
+      }
       print_file_dialog_menu.retry                 = DIALOG_RETRY_EN;
       print_file_dialog_menu.stop                  = DIALOG_STOP_EN;
       print_file_dialog_menu.no_file_print_tips    = DIALOG_ERROR_TIPS1_EN;
       print_file_dialog_menu.print_from_breakpoint = DIALOG_REPRINT_FROM_BREAKPOINT_EN;
       print_file_dialog_menu.close_machine_error   = DIALOG_ERROR_TIPS2_EN;
       print_file_dialog_menu.filament_no_press     = DIALOG_FILAMENT_NO_PRESS_EN;
-      print_file_dialog_menu.print_finish          = DIALOG_PRINT_FINISH_EN;
+      if(gCfgItems.uiStyle == PRINT_STYLE)
+        print_file_dialog_menu.print_finish        = DIALOG_PRINT_FINISH_EN;
+      else
+        print_file_dialog_menu.print_finish        = DIALOG_ENGRAVING_FINISH_EN;
       print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_EN;
       print_file_dialog_menu.reprint               = DIALOG_REPRINT_EN;
       print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
+      print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_EN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_EN;
@@ -2948,6 +3271,24 @@ void disp_language_init() {
       eeprom_menu.storeTips        = EEPROM_STORE_TIPS_EN;
       eeprom_menu.readTips         =  EEPROM_READ_TIPS_EN;
       eeprom_menu.revertTips       =  EEPROM_REVERT_TIPS_EN;
+
+      #if HAS_CUTTER
+        set_menu.twoInOne          = TWO_IN_ONE_CHOOSE_EN;
+
+        twoInOneSet_menu.title     = TWO_IN_ONE_TITLE_EN;
+        twoInOneSet_menu.print_ui  = TWO_IN_ONE_PRINT_UI_EN;
+        twoInOneSet_menu.laser_ui  = TWO_IN_ONE_LASER_UI_EN;
+
+        spindle_laser_menu.power_title         = POWER_UI_TITLE_EN;
+        spindle_laser_menu.power_percent_state = POWER_PERCENT_STATE_EN;
+
+        tool_menu.position                     = SPINDLE_LASER_POSITION_EN;
+        tool_menu.lightOpen                    = SPINDLE_LASER_LIGHT_OPEN_EN;
+        tool_menu.lightClose                   = SPINDLE_LASER_LIGHT_CLOSE_EN;
+        tool_menu.power                        = SPINDLE_LASER_POWER_EN;
+
+        spindle_laser_menu.cutTimes            = SPINDLE_LASER_CUT_TIMES_EN;
+      #endif
       break;
   }
 }

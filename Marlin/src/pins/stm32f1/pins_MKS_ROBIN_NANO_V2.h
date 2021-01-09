@@ -192,15 +192,16 @@
 //
 // Misc. Functions
 //
-#if HAS_TFT_LVGL_UI
-  //#define MKSPWC
-  #ifdef MKSPWC
-    #define SUICIDE_PIN                       PB2   // Enable MKSPWC SUICIDE PIN
-    #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE
-    #define KILL_PIN                          PA2   // Enable MKSPWC DET PIN
-    #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
-  #endif
 
+//#define MKSPWC
+#ifdef MKSPWC
+  #define SUICIDE_PIN                       PB2   // Enable MKSPWC SUICIDE PIN
+  #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE
+  #define KILL_PIN                          PA2   // Enable MKSPWC DET PIN
+  #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
+#endif
+
+#if HAS_TFT_LVGL_UI
   #define MT_DET_1_PIN                        PA4   // LVGL UI FILAMENT RUNOUT1 PIN
   #define MT_DET_2_PIN                        PE6   // LVGL UI FILAMENT RUNOUT2 PIN
   #define MT_DET_PIN_INVERTING                false // LVGL UI filament RUNOUT PIN STATE
@@ -228,13 +229,24 @@
 // SD Card
 //
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION                 ONBOARD
+  #define SDCARD_CONNECTION                   ONBOARD
 #endif
 
-#define SDIO_SUPPORT
-#define SDIO_CLOCK                          4500000  // 4.5 MHz
-#define SD_DETECT_PIN                       PD12
-#define ONBOARD_SD_CS_PIN                   PC11
+#if SD_CONNECTION_IS(LCD)
+  #define ENABLE_SPI1
+  #define SD_DETECT_PIN                       PE12
+  #define SCK_PIN                             PA5
+  #define MISO_PIN                            PA6
+  #define MOSI_PIN                            PA7
+  #define SS_PIN                              PE10
+#elif SD_CONNECTION_IS(ONBOARD)
+  #define SDIO_SUPPORT
+  #define SDIO_CLOCK                          4500000  // 4.5 MHz
+  #define SD_DETECT_PIN                       PD12
+  #define ONBOARD_SD_CS_PIN                   PC11
+#elif SD_CONNECTION_IS(CUSTOM_CABLE)
+  #error "No custom SD drive cable defined for this board."
+#endif
 
 //
 // LCD / Controller
@@ -270,7 +282,7 @@
   #define TFT_MOSI_PIN                      PA7
   #define TFT_DC_PIN                        PD10
   #define TFT_RST_PIN                       PC6
-  #define TFT_A0_PIN                  TFT_DC_PIN
+  #define TFT_A0_PIN                        TFT_DC_PIN
 
   #define TFT_RESET_PIN                     PC6
   #define TFT_BACKLIGHT_PIN                 PD13
@@ -405,6 +417,18 @@
   #define W25QXX_MISO_PIN                   PB14
   #define W25QXX_SCK_PIN                    PB13
 #endif
+
+#define SPINDLE_LASER_ENA_PIN               PE6  // Pullup or pulldown!
+#if ENABLED(SPINDLE_LASER_PWM)
+  #undef FAN_PIN
+  #define FAN_PIN                             PD15   // FAN
+  #define SPINDLE_LASER_PWM_PIN               PB1    // Hardware PWM
+#endif
+#if ENABLED(SPINDLE_LASER_USES_SOFT_PWM)
+  #define SPINDLE_LASER_SOFT_PWM_PIN          PA1  //Software PWM
+#endif
+
+
 
 #if ENABLED(SPEAKER) && BEEPER_PIN == PC5
   #error "MKS Robin nano default BEEPER_PIN is not a SPEAKER."

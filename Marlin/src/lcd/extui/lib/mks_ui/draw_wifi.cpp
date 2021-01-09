@@ -49,7 +49,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			clear_cur_ui();
+			lv_clear_cur_ui();
 	        lv_draw_set();
 	    }
 		break;
@@ -58,7 +58,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 			
 	    }
 	    else if(event == LV_EVENT_RELEASED) {
-			clear_cur_ui();
+			lv_clear_cur_ui();
 	        lv_draw_cloud_bind();
 	    }
 		break;
@@ -74,7 +74,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
             buf[4] = 0xFC;
             raw_send_to_wifi(buf, 5);
 			
-			clear_cur_ui();
+			lv_clear_cur_ui();
 	        lv_draw_wifi_list();
 	    }
 		break;

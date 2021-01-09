@@ -40,50 +40,52 @@
 #include "../../../../module/planner.h"
 
 extern uint32_t To_pre_view;
+extern uint8_t sel_id;
 extern uint8_t flash_preview_begin, default_preview_flg, gcode_preview_over;
 
 void printer_state_polling() {
   if (uiCfg.print_state == PAUSING) {
+    lv_clear_cur_ui();
+    lv_draw_dialog(DIALOG_TYPE_MACHINE_PAUSING_TIPS);
     #if ENABLED(SDSUPPORT)
-      if (!planner.has_blocks_queued() && card.getIndex() > MIN_FILE_PRINTED)
-        uiCfg.waitEndMoves++;
 
-      if (uiCfg.waitEndMoves > 20) {
-        uiCfg.waitEndMoves = 0;
-        planner.synchronize();
-
-        gcode.process_subcommands_now_P(PSTR("M25"));
-
-        //save the positon
-        uiCfg.current_x_position_bak = current_position.x;
-        uiCfg.current_y_position_bak = current_position.y;
-        uiCfg.current_z_position_bak = current_position.z;
-        
-        if (gCfgItems.pausePosZ != (float)-1) {
-          gcode.process_subcommands_now_P(PSTR("G91"));
-          ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 Z%.1f"), gCfgItems.pausePosZ);
-          gcode.process_subcommands_now(public_buf_l);
-          gcode.process_subcommands_now_P(PSTR("G90"));
-        }
-        if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
-          ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 X%.1f Y%.1f"), gCfgItems.pausePosX, gCfgItems.pausePosY);
-          gcode.process_subcommands_now(public_buf_l);
-        }
-        uiCfg.print_state = PAUSED;
-        uiCfg.current_e_position_bak = current_position.e;
-        
-        // #if ENABLED(POWER_LOSS_RECOVERY)
-        //  if (recovery.enabled) recovery.save(true);
-        // #endif
-        gCfgItems.pause_reprint = 1;
-        update_spi_flash();
+      while(queue.length) {
+        queue.advance();
       }
+      planner.synchronize();
+
+      gcode.process_subcommands_now_P(PSTR("M25"));
+
+      //save the positon
+      uiCfg.current_x_position_bak = current_position.x;
+      uiCfg.current_y_position_bak = current_position.y;
+      uiCfg.current_z_position_bak = current_position.z;
+      
+      if (gCfgItems.pausePosZ != (float)-1) {
+        gcode.process_subcommands_now_P(PSTR("G91"));
+        ZERO(public_buf_l);
+        sprintf_P(public_buf_l, PSTR("G1 Z%.1f"), gCfgItems.pausePosZ);
+        gcode.process_subcommands_now(public_buf_l);
+        gcode.process_subcommands_now_P(PSTR("G90"));
+      }
+      if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
+        ZERO(public_buf_l);
+        sprintf_P(public_buf_l, PSTR("G1 X%.1f Y%.1f"), gCfgItems.pausePosX, gCfgItems.pausePosY);
+        gcode.process_subcommands_now(public_buf_l);
+      }
+      uiCfg.print_state = PAUSED;
+      uiCfg.current_e_position_bak = current_position.e;
+      
+      // #if ENABLED(POWER_LOSS_RECOVERY)
+      //  if (recovery.enabled) recovery.save(true);
+      // #endif
+      gCfgItems.pause_reprint = 1;
+      update_spi_flash();
+
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     #endif
   }
-  else
-    uiCfg.waitEndMoves = 0;
 
   if (uiCfg.print_state == PAUSED) {
   }
@@ -129,29 +131,9 @@ void printer_state_polling() {
           }
         }
       #endif
-
       recovery.resume();
-      #if 0
-        // Move back to the saved XY
-        char str_1[16], str_2[16];
-        ZERO(public_buf_m);
-        sprintf_P(public_buf_m, PSTR("G1 X%s Y%s F2000"),
-          dtostrf(recovery.info.current_position.x, 1, 3, str_1),
-          dtostrf(recovery.info.current_position.y, 1, 3, str_2)
-        );
-        gcode.process_subcommands_now(public_buf_m);
-
-        if ((gCfgItems.pause_reprint) == 1 && (gCfgItems.pausePosZ != (float)-1)) {
-          gcode.process_subcommands_now_P(PSTR("G91"));
-          ZERO(public_buf_l);
-          sprintf_P(public_buf_l, PSTR("G1 Z-%.1f"), gCfgItems.pausePosZ);
-          gcode.process_subcommands_now(public_buf_l);
-          gcode.process_subcommands_now_P(PSTR("G90"));
-        }
-      #endif
       uiCfg.print_state = WORKING;
       start_print_time();
-
       gCfgItems.pause_reprint = 0;
       update_spi_flash();
     }
@@ -162,6 +144,11 @@ void printer_state_polling() {
 	
   #if USE_WIFI_FUNCTION
     wifi_looping();
+  #endif
+
+  #if HAS_CUTTER
+    if(uiCfg.calculateBoaderData) calculate_boader_data();
+    if(uiCfg.needEngraveBoader) carving_boader();
   #endif
 }
 
@@ -241,7 +228,7 @@ void filament_check() {
       || fil_det_count_3 >= FIL_DELAY
     #endif
   ) {
-    clear_cur_ui();
+    lv_clear_cur_ui();
     card.pauseSDPrint();
     stop_print_time();
     uiCfg.print_state = PAUSING;
@@ -253,6 +240,152 @@ void filament_check() {
 
     lv_draw_printing();
   }
+}
+
+static void set_boader_value(float xmin, float xmax, float ymin, float ymax) {
+	uiCfg.xmin = xmin;
+	uiCfg.xmax = xmax;
+	uiCfg.ymin = ymin;
+	uiCfg.ymax = ymax;
+}
+
+void calculate_boader_data() {
+  char buf[UDISKBUFLEN];
+  bool gcode_have_G91 = false;
+  char *p = &buf[0];
+  char x_y_value[10];
+  char *x_or_y = &x_y_value[0];
+  float x_coordinates = 0, y_coordinates = 0;
+	float xmin = 0, xmax = 0, ymin = 0, ymax = 0;
+  bool continueConverX = false;
+  bool continueConverY = false;
+  if(uiCfg.alreadyGetBoaderData == false) { //excute one times
+    char *cur_name;
+    cur_name = strrchr(list_file.file_name[sel_id], '/');
+    SdFile file, *curDir;
+    const char * const fname = card.diveToFile(true, curDir, cur_name);
+    if (!fname) return;
+    if (file.open(curDir, fname, O_READ)) {	
+      gCfgItems.curFilesize = file.fileSize();
+
+      lv_clear_cur_ui();
+      lv_draw_dialog(DIALOG_TYPE_BOADER_CALCULATE_CLUES); //tips
+      lv_task_handler();
+
+      filepos_t pos;
+      while(pos.position < gCfgItems.curFilesize) {
+        ZERO(buf);
+        file.read(buf, UDISKBUFLEN);
+        if(pos.position <= UDISKBUFLEN) {
+          if(strstr(buf, "G91")) gcode_have_G91 = true; //find G91
+          else {
+            xmin = 20000; 
+            ymin = 20000;
+          }
+        }
+        while(p - buf < UDISKBUFLEN) {
+          if(gcode_have_G91) {
+            if(*p == 'X' || continueConverX) {
+              if(!continueConverX) { p++; ZERO(x_y_value); x_or_y = &x_y_value[0];}
+              while(*p != '\0' && *p != ' ' && *p != '\r' && *p != '\n') *x_or_y++ = *p++;
+              if(p - buf == UDISKBUFLEN) continueConverX = true;
+              else {
+                continueConverX = false;
+                x_coordinates += atof(x_y_value);
+                xmax = x_coordinates > xmax ? x_coordinates : xmax;
+                xmin = (x_coordinates < xmin) && (x_coordinates != 0) ? x_coordinates : xmin;
+              }
+            }
+            if(*p == 'Y' || continueConverY) {
+              if(!continueConverY) { p++; ZERO(x_y_value); x_or_y = &x_y_value[0]; }
+              while(*p != '\0' && *p != ' ' && *p != '\r' && *p != '\n') *x_or_y++ = *p++;
+              if(p - buf == UDISKBUFLEN) continueConverY = true;
+              else {
+                continueConverY = false;	
+                y_coordinates += atof(x_y_value);
+                ymax = y_coordinates > ymax ? y_coordinates : ymax;
+                ymin = (y_coordinates < ymin) && (y_coordinates != 0) ? y_coordinates : ymin;
+              }					
+            }
+          }
+          else { //no G91
+            if(*p == 'X' || continueConverX) {
+              if(!continueConverX) { p++; ZERO(x_y_value); x_or_y = &x_y_value[0];}
+              while(*p != '\0' && *p != ' ' && *p != '\r' && *p != '\n') *x_or_y++ = *p++;
+              if(p - buf == UDISKBUFLEN) continueConverX = true;
+              else {
+                continueConverX = false;
+                x_coordinates = atof(x_y_value);
+                xmax = x_coordinates > xmax ? x_coordinates : xmax;
+                xmin = (x_coordinates < xmin) && (x_coordinates != 0) ? x_coordinates : xmin;
+              }
+            }
+            if(*p == 'Y' || continueConverY) {
+              if(!continueConverY) { p++; ZERO(x_y_value); x_or_y = &x_y_value[0]; }
+              while(*p != '\0' && *p != ' ' && *p != '\r' && *p != '\n') *x_or_y++ = *p++;
+              if(p - buf == UDISKBUFLEN) continueConverY = true;
+              else {
+                continueConverY = false;	
+                y_coordinates = atof(x_y_value);
+                ymax = y_coordinates > ymax ? y_coordinates : ymax;
+                ymin = (y_coordinates < ymin) && (y_coordinates != 0) ? y_coordinates : ymin;
+              }
+            }
+          }
+          p++;
+        }
+        p = &buf[0];
+        file.getpos(&pos);
+      }
+      set_boader_value(xmin, xmax, ymin, ymax);
+      file.close();
+    }
+    else {
+      lv_clear_cur_ui();
+      lv_draw_dialog(DIALOG_TYPE_NO_BOADER_DATA_TIPS);
+      uiCfg.calculateBoaderData = false;
+      return;
+    }
+  }
+  uiCfg.calculateBoaderData  = false;
+  uiCfg.alreadyGetBoaderData = true;
+  uiCfg.needEngraveBoader    = true;
+  lv_clear_cur_ui();
+  lv_draw_dialog(DIALOG_TYPE_ENGRAVE_BOADER_TIPS);
+}
+
+void carving_boader() {
+	char buf[30];
+
+  gcode.process_subcommands_now_P(PSTR("G1 F3000\nG90\nG0 X0 Y0"));
+	
+	ZERO(buf);
+	sprintf_P(buf, PSTR("G0 F3000 X%.3f Y%.3f"), uiCfg.xmin, uiCfg.ymin);
+	gcode.process_subcommands_now_P(PSTR(buf));
+
+  gcode.process_subcommands_now_P(PSTR("M3 S20"));
+
+	ZERO(buf);
+	sprintf(buf, PSTR("G1 F3000 X%.3f Y%.3f"), uiCfg.xmin, uiCfg.ymax);
+  gcode.process_subcommands_now_P(PSTR(buf));
+
+	ZERO(buf);
+	sprintf_P(buf, PSTR("G1 F3000 X%.3f Y%.3f"), uiCfg.xmax, uiCfg.ymax);
+	gcode.process_subcommands_now_P(PSTR(buf));
+
+	ZERO(buf);
+	sprintf_P(buf, PSTR("G1 F3000 X%.3f Y%.3f"), uiCfg.xmax, uiCfg.ymin);
+	gcode.process_subcommands_now_P(PSTR(buf));
+
+	ZERO(buf);
+	sprintf_P(buf, PSTR("G1 F3000 X%.3f Y%.3f"),uiCfg.xmin,uiCfg.ymin);
+	gcode.process_subcommands_now_P(PSTR(buf));
+
+	gcode.process_subcommands_now_P(PSTR("M5"));
+
+  uiCfg.needEngraveBoader = false;
+  lv_clear_cur_ui();
+	lv_draw_dialog(DIALOG_TYPE_PRINT_OR_ENGRAVE_FILE);
 }
 
 #endif // HAS_TFT_LVGL_UI

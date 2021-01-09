@@ -333,7 +333,8 @@ typedef struct main_menu_disp {
   const char *tool;
   const char *more;
   const char *machine_para;
-} main_menu_def;
+  const char *engraving;
+} main_menu_def; 
 
 extern main_menu_def main_menu;
 
@@ -453,6 +454,7 @@ typedef struct set_menu_disp {
   const char *language;
   const char *machine_para;
   const char *eepromSet;
+  const char *twoInOne;
   const char *back;
 } set_menu_def;
 
@@ -698,6 +700,12 @@ typedef struct print_file_dialog_disp {
   const char *print_time;
   const char *reprint;
   const char *wifi_enable_tips;
+  const char *boader;
+  const char *graphics;
+  const char *calcurateBoaderTips;
+  const char *engraveBoaderTips;
+  const char *noBoaderDataTips;
+  const char *machinePausingTips;
 } print_file_dialog_menu_def;
 
 extern print_file_dialog_menu_def print_file_dialog_menu;
@@ -714,6 +722,10 @@ typedef struct tool_menu_disp {
   const char *filament;
   const char *more;
   const char *back;
+  const char *position;
+  const char *lightOpen;
+  const char *lightClose;
+  const char *power;
 } tool_menu_def;
 
 extern tool_menu_def tool_menu;
@@ -757,6 +769,22 @@ typedef struct eeprom_disp{
 } eeprom_def;
 
 extern eeprom_def eeprom_menu;
+
+typedef struct twoInOneSet_disp {
+  const char *title;
+  const char *print_ui;
+  const char *laser_ui;
+} twoInOneSet_def;
+
+extern twoInOneSet_def twoInOneSet_menu;
+
+typedef struct spindle_laser_disp {
+  const char *power_title;
+  const char *power_percent_state;
+  const char *cutTimes;
+} spindle_laser_def;
+
+extern spindle_laser_def spindle_laser_menu;
 /*****************************************/
 //********************************************//
 //#if defined(TFT70)

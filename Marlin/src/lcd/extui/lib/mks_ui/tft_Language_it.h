@@ -33,6 +33,7 @@
 #define AUTO_LEVELING_TEXT_IT         "AutoLevel"
 #define SET_TEXT_IT                   "Imposta"
 #define MORE_TEXT_IT                  "Di più"
+#define LASER_ENGRAVING_IT            "Scultura"
 
 #define ADD_TEXT_IT                   "Aumentare"
 #define DEC_TEXT_IT                   "Ridurre"
@@ -254,6 +255,7 @@
 #define DIALOG_PRINT_TIME_IT              "Tempo di stampa: "
 #define DIALOG_REPRINT_IT                 "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_IT        "The wifi module is being configured,\nplease wait a moment....."
+#define DIALOG_PAUSING_TIPS_IT            "La macchina si ferma ..."
 
 #define MESSAGE_PAUSING_IT                "Parcheggiando..."
 #define MESSAGE_CHANGING_IT               "Attendere avvio del cambio di filamento"
@@ -276,6 +278,34 @@
 #define EEPROM_STORE_TIPS_IT              "Memorizzare le impostazioni su EEPROM?"
 #define EEPROM_READ_TIPS_IT               "Leggi le impostazioni dalla EEPROM?"
 #define EEPROM_REVERT_TIPS_IT             "Ripristinare le impostazioni predefinite?"
+
+#define TWO_IN_ONE_CHOOSE_IT              "UI switching"
+
+#define TWO_IN_ONE_TITLE_IT               "Two in one function selection"
+#define TWO_IN_ONE_PRINT_UI_IT            "3D printing"
+#define TWO_IN_ONE_LASER_UI_IT            "Engraving"
+
+#define SPINDLE_LASER_POSITION_IT         "Posizionamento"
+#define SPINDLE_LASER_LIGHT_OPEN_IT       "Accendi"
+#define SPINDLE_LASER_LIGHT_CLOSE_IT      "Luci spente"
+#define SPINDLE_LASER_POWER_IT            "Energia"
+
+#define POWER_UI_TITLE_IT                 "Regolazione della potenza"
+#define POWER_PERCENT_STATE_IT            "Energia"
+
+#define SPINDLE_LASER_CUT_TIMES_IT        "Engrave times"
+#define DIALOG_ENGRAVING_IT               "Incidere bordi o grafica?"
+#define DIALOG_CANCEL_ENGRAVING_IT        "Smetti di intagliare?"
+#define DIALOG_ENGRAVING_FINISH_IT        "L'intaglio è completo!"
+#define TITLE_ENGRAVING_IT                "Intaglio"
+#define TITLE_READY_ENGRAVE_IT            "Pronto a scolpire"
+#define ENGRAVING_SPEED_IT                "Scultura"
+#define ENGRAVING_SPEED_STATE_IT          "Velocità di incisione"
+#define DIALOG_ENGRAVING_BOADER_IT        "telaio"
+#define DIALOG_ENGRAVING_GRAPHICS_IT      "Grafica"
+#define DIALOG_CALCULATE_BOADER_TIPS_IT   "Calcolo dei dati sui bordi ..."
+#define DIALOG_ENGRAVE_BOADER_TIPS_IT     "Incisione del bordo ..."
+#define DIALOG_NO_BOADER_DATA_TIPS_IT     "Impossibile ottenere i dati sul confine"
 
 #define MORE_CUSTOM1_TEXT_IT  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_IT  USER_DESC_2

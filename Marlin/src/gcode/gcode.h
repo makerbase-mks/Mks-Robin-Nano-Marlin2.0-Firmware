@@ -883,6 +883,12 @@ private:
 
   static void T(const uint8_t tool_index);
 
+  TERN_(HAS_CUTTER, static void H(const uint8_t code));
+
+  TERN_(HAS_CUTTER, static void $(const uint8_t code));
+
+  TERN_(HAS_CUTTER, static void S(int code));
+
 };
 
 extern GcodeSuite gcode;

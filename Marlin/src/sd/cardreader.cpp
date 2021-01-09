@@ -173,7 +173,7 @@ bool CardReader::is_dir_or_gcode(const dir_t &p) {
 
   return (
     flag.filenameIsDir                                  // All Directories are ok
-    || (p.name[8] == 'G' && p.name[9] != '~')           // Non-backup *.G* files are accepted
+    || ((p.name[8] == 'G' || p.name[8] == 'N') && p.name[9] != '~')           // Non-backup *.G* files are accepted
   );
 }
 

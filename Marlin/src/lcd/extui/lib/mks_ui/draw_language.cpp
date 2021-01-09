@@ -62,9 +62,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         disp_language(gCfgItems.language, UNSELECTED);
-	 lv_imgbtn_set_src(buttonCN, LV_BTN_STATE_REL, "F:/bmp_simplified_cn_sel.bin");
-  	 lv_imgbtn_set_src(buttonCN, LV_BTN_STATE_PR, "F:/bmp_simplified_cn_sel.bin");
-	 lv_obj_refresh_ext_draw_pad(buttonCN);
+	      lv_imgbtn_set_src(buttonCN, LV_BTN_STATE_REL, "F:/bmp_simplified_cn_sel.bin");
+  	    lv_imgbtn_set_src(buttonCN, LV_BTN_STATE_PR, "F:/bmp_simplified_cn_sel.bin");
+	      lv_obj_refresh_ext_draw_pad(buttonCN);
         gCfgItems.language = LANG_SIMPLE_CHINESE;
         update_spi_flash();
         disp_language_init();
@@ -76,9 +76,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         disp_language(gCfgItems.language, UNSELECTED);
-	 lv_imgbtn_set_src(buttonT_CN, LV_BTN_STATE_REL, "F:/bmp_traditional_cn_sel.bin");
-  	 lv_imgbtn_set_src(buttonT_CN, LV_BTN_STATE_PR, "F:/bmp_traditional_cn_sel.bin");
-	 lv_obj_refresh_ext_draw_pad(buttonT_CN);
+	      lv_imgbtn_set_src(buttonT_CN, LV_BTN_STATE_REL, "F:/bmp_traditional_cn_sel.bin");
+  	    lv_imgbtn_set_src(buttonT_CN, LV_BTN_STATE_PR, "F:/bmp_traditional_cn_sel.bin");
+	      lv_obj_refresh_ext_draw_pad(buttonT_CN);
         gCfgItems.language = LANG_COMPLEX_CHINESE;
         update_spi_flash();
         disp_language_init();
@@ -90,9 +90,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         disp_language(gCfgItems.language, UNSELECTED);
-	 lv_imgbtn_set_src(buttonEN, LV_BTN_STATE_REL, "F:/bmp_english_sel.bin");
-  	 lv_imgbtn_set_src(buttonEN, LV_BTN_STATE_PR, "F:/bmp_english_sel.bin");
-	 lv_obj_refresh_ext_draw_pad(buttonEN);
+	      lv_imgbtn_set_src(buttonEN, LV_BTN_STATE_REL, "F:/bmp_english_sel.bin");
+  	    lv_imgbtn_set_src(buttonEN, LV_BTN_STATE_PR, "F:/bmp_english_sel.bin");
+	      lv_obj_refresh_ext_draw_pad(buttonEN);
         gCfgItems.language = LANG_ENGLISH;
         update_spi_flash();
         disp_language_init();
@@ -104,9 +104,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         disp_language(gCfgItems.language, UNSELECTED);
-	 lv_imgbtn_set_src(buttonRU, LV_BTN_STATE_REL, "F:/bmp_russian_sel.bin");
-  	 lv_imgbtn_set_src(buttonRU, LV_BTN_STATE_PR, "F:/bmp_russian_sel.bin");
-	 lv_obj_refresh_ext_draw_pad(buttonRU);
+	      lv_imgbtn_set_src(buttonRU, LV_BTN_STATE_REL, "F:/bmp_russian_sel.bin");
+  	    lv_imgbtn_set_src(buttonRU, LV_BTN_STATE_PR, "F:/bmp_russian_sel.bin");
+	      lv_obj_refresh_ext_draw_pad(buttonRU);
         gCfgItems.language = LANG_RUSSIAN;
         update_spi_flash();
         disp_language_init();
@@ -118,9 +118,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         disp_language(gCfgItems.language, UNSELECTED);
-	 lv_imgbtn_set_src(buttonES, LV_BTN_STATE_REL, "F:/bmp_spanish_sel.bin");
-  	 lv_imgbtn_set_src(buttonES, LV_BTN_STATE_PR, "F:/bmp_spanish_sel.bin");
-	 lv_obj_refresh_ext_draw_pad(buttonES);
+	      lv_imgbtn_set_src(buttonES, LV_BTN_STATE_REL, "F:/bmp_spanish_sel.bin");
+  	    lv_imgbtn_set_src(buttonES, LV_BTN_STATE_PR, "F:/bmp_spanish_sel.bin");
+	      lv_obj_refresh_ext_draw_pad(buttonES);
         gCfgItems.language = LANG_SPANISH;
         update_spi_flash();
         disp_language_init();
@@ -132,9 +132,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         disp_language(gCfgItems.language, UNSELECTED);
-	 lv_imgbtn_set_src(buttonFR, LV_BTN_STATE_REL, "F:/bmp_french_sel.bin");
-  	 lv_imgbtn_set_src(buttonFR, LV_BTN_STATE_PR, "F:/bmp_french_sel.bin");
-	 lv_obj_refresh_ext_draw_pad(buttonFR);
+	      lv_imgbtn_set_src(buttonFR, LV_BTN_STATE_REL, "F:/bmp_french_sel.bin");
+  	    lv_imgbtn_set_src(buttonFR, LV_BTN_STATE_PR, "F:/bmp_french_sel.bin");
+	      lv_obj_refresh_ext_draw_pad(buttonFR);
         gCfgItems.language = LANG_FRENCH;
         update_spi_flash();
         disp_language_init();
@@ -146,9 +146,9 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       }
       else if (event == LV_EVENT_RELEASED) {
         disp_language(gCfgItems.language, UNSELECTED);
-	 lv_imgbtn_set_src(buttonIT, LV_BTN_STATE_REL, "F:/bmp_italy_sel.bin");
-  	 lv_imgbtn_set_src(buttonIT, LV_BTN_STATE_PR, "F:/bmp_italy_sel.bin");
-	 lv_obj_refresh_ext_draw_pad(buttonIT);
+	      lv_imgbtn_set_src(buttonIT, LV_BTN_STATE_REL, "F:/bmp_italy_sel.bin");
+  	    lv_imgbtn_set_src(buttonIT, LV_BTN_STATE_PR, "F:/bmp_italy_sel.bin");
+	      lv_obj_refresh_ext_draw_pad(buttonIT);
         gCfgItems.language = LANG_ITALY;
         update_spi_flash();
         disp_language_init();

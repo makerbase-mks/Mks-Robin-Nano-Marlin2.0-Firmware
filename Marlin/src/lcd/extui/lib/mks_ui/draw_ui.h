@@ -81,7 +81,10 @@
 #include "draw_baby_stepping.h"
 #include "draw_keyboard.h"
 #include "draw_encoder_settings.h"
-
+#if HAS_CUTTER
+  #include "draw_two_in_one_settings.h"
+  #include "draw_spindle_laser_power.h"
+#endif
 #include "../../inc/MarlinConfigPre.h"
 
 #if USE_WIFI_FUNCTION
@@ -102,7 +105,10 @@
 #define FILE_SYS_USB	    0
 #define FILE_SYS_SD	      1
 
-#define TICK_CYCLE         1
+#define TICK_CYCLE        1
+
+#define PRINT_STYLE       0
+#define LASER_STYLE       1
 
 #define PARA_SEL_ICON_TEXT_COLOR	LV_COLOR_MAKE(0x4a, 0x52, 0xff);
 
@@ -195,6 +201,7 @@ typedef struct {
   uint8_t wifi_mode_sel;
   uint8_t fileSysType;
   uint8_t wifi_type;
+  uint8_t uiStyle;
   bool  cloud_enable;
   bool  encoder_enable;
   int   levelingPos[5][2];
@@ -233,13 +240,21 @@ typedef struct {
   uint8_t extruSpeed;
   uint8_t print_state;
   uint8_t stepPrintSpeed;
-  uint8_t waitEndMoves;
   uint8_t dialogType;
   uint8_t F[4];
   uint8_t filament_rate;
+  uint8_t powerStep;
+  uint8_t spindleLaserPowerPercent;
+  uint8_t cutTimes;
+  uint8_t currentCutTimes;
+  bool lightState;
+  bool calculateBoaderData;
+  bool alreadyGetBoaderData;
+  bool needEngraveBoader;
   uint16_t moveSpeed;
   uint16_t cloud_port;
   uint16_t moveSpeed_bak;
+  uint16_t cutPower;
   uint32_t totalSend;
   uint32_t filament_loading_time;
   uint32_t filament_unloading_time;
@@ -251,6 +266,10 @@ typedef struct {
   float current_y_position_bak;
   float current_z_position_bak;
   float current_e_position_bak;
+  float xmin;
+  float xmax;
+  float ymin;
+  float ymax;
 } UI_CFG;
 
 typedef enum {
@@ -329,6 +348,11 @@ typedef enum {
 	WIFI_SETTINGS_UI,
   HOMING_SENSITIVITY_UI,
   ENCODER_SETTINGS_UI
+  #if HAS_CUTTER
+    ,
+    TWO_IN_ON_FUNCTION_SET_UI,
+    SPINDLE_LASER_POWER_UI
+  #endif
 } DISP_STATE;
 
 typedef struct {
@@ -410,6 +434,10 @@ typedef enum {
   y_sensitivity,
   z_sensitivity,
   z2_sensitivity
+  #if HAS_CUTTER
+    ,
+    cut_times
+  #endif
 } num_key_value_state;
 extern num_key_value_state value;
 
@@ -455,8 +483,8 @@ extern void get_gcode_command(int addr,uint8_t *d);
   extern void disp_pre_gcode(int xpos_pixel, int ypos_pixel);
 #endif
 extern void GUI_RefreshPage();
-extern void clear_cur_ui();
-extern void draw_return_ui();
+extern void lv_clear_cur_ui();
+extern void lv_draw_return_ui();
 extern void sd_detection();
 extern void gCfg_to_spiFlah();
 extern void print_time_count();

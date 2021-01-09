@@ -33,6 +33,7 @@
 #define AUTO_LEVELING_TEXT_SP   "Autolevel"//"auto\nnivelación"
 #define SET_TEXT_SP             "Config"
 #define MORE_TEXT_SP            "Más"
+#define LASER_ENGRAVING_SP      "Escultura"
 
 #define ADD_TEXT_SP             "Más"
 #define DEC_TEXT_SP             "Menos"
@@ -258,6 +259,7 @@
 #define DIALOG_PRINT_TIME_SP          "Tiempo de impresión: "
 #define DIALOG_REPRINT_SP             "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_SP    "The wifi module is being configured,\nplease wait a moment....."
+#define DIALOG_PAUSING_TIPS_SP        "La máquina se detiene ..."
 
 #define PRINTING_SP               "Imprimiendo"
 #define PRINTING_AJUSTES_SP       "Ajustes"
@@ -281,9 +283,37 @@
 #define EEPROM_SETTINGS_READ_SP   "Leer la configuración de EEPROM"
 #define EEPROM_SETTINGS_REVERT_SP "Revert settings to factory defaults"
 
-#define EEPROM_STORE_TIPS_SP  "¿Guardar ajustes en EEPROM?"
-#define EEPROM_READ_TIPS_SP   "Leer la configuración de EEPROM?"
-#define EEPROM_REVERT_TIPS_SP "Revert settings to factory defaults?"
+#define EEPROM_STORE_TIPS_SP      "¿Guardar ajustes en EEPROM?"
+#define EEPROM_READ_TIPS_SP       "Leer la configuración de EEPROM?"
+#define EEPROM_REVERT_TIPS_SP     "Revert settings to factory defaults?"
+
+#define TWO_IN_ONE_CHOOSE_SP      "UI switching"
+
+#define TWO_IN_ONE_TITLE_SP       "Two in one function selection"
+#define TWO_IN_ONE_PRINT_UI_SP    "3D printing"
+#define TWO_IN_ONE_LASER_UI_SP    "Engraving"
+
+#define SPINDLE_LASER_POSITION_SP     "Posicionamiento"
+#define SPINDLE_LASER_LIGHT_OPEN_SP   "Luces encendidas"
+#define SPINDLE_LASER_LIGHT_CLOSE_SP  "Luz apagada"
+#define SPINDLE_LASER_POWER_SP        "Poder"
+
+#define POWER_UI_TITLE_SP             "Regulación de potencia"
+#define POWER_PERCENT_STATE_SP        "Poder"
+
+#define SPINDLE_LASER_CUT_TIMES_SP    "Engrave times"
+#define DIALOG_ENGRAVING_SP           "¿Grabar bordes o gráficos?"
+#define DIALOG_CANCEL_ENGRAVING_SP    "¿Dejar de tallar?"
+#define DIALOG_ENGRAVING_FINISH_SP    "¡El tallado está completo!"
+#define TITLE_ENGRAVING_SP            "Tallado"
+#define TITLE_READY_ENGRAVE_SP        "Listo para tallar"
+#define ENGRAVING_SPEED_SP            "Escultura"
+#define ENGRAVING_SPEED_STATE_SP      "Velocidad de grabado"
+#define DIALOG_ENGRAVING_BOADER_SP    "marco"
+#define DIALOG_ENGRAVING_GRAPHICS_SP  "Gráficos"
+#define DIALOG_CALCULATE_BOADER_TIPS_SP "Calculando datos de borde ..."
+#define DIALOG_ENGRAVE_BOADER_TIPS_SP   "Grabado del borde ..."
+#define DIALOG_NO_BOADER_DATA_TIPS_SP   "No se pueden obtener datos fronterizos"
 
 #define MORE_CUSTOM1_TEXT_SP  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_SP  USER_DESC_2

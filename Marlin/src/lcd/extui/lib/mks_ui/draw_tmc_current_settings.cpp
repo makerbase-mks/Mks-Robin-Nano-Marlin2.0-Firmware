@@ -58,7 +58,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       else if (event == LV_EVENT_RELEASED) {
         uiCfg.para_ui_page = 0;
         lv_clear_tmc_current_settings();
-        draw_return_ui();
+        lv_draw_return_ui();
       }
       break;
     #if AXIS_IS_TMC(X)

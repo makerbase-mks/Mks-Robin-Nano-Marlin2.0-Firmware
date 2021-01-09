@@ -26,7 +26,7 @@ extern "C" { /* C-declarations for C++ */
 #endif
 
 #define DIALOG_TYPE_STOP                             0
-#define DIALOG_TYPE_PRINT_FILE                       1
+#define DIALOG_TYPE_PRINT_OR_ENGRAVE_FILE            1
 #define DIALOG_TYPE_REPRINT_NO_FILE                  2
 
 #define DIALOG_TYPE_M80_FAIL                         3  //**
@@ -71,6 +71,13 @@ extern "C" { /* C-declarations for C++ */
 
 #define DIALOG_WIFI_CONFIG_TIPS						35
 #define DIALOG_TRANSFER_NO_DEVICE					36
+
+#define DIALOG_TYPE_BOADER_CALCULATE_CLUES			37
+#define DIALOG_TYPE_ENGRAVE_BOADER_TIPS             38
+#define DIALOG_TYPE_NO_BOADER_DATA_TIPS             39
+
+#define DIALOG_TYPE_MACHINE_PAUSING_TIPS            40
+
 #define BTN_OK_X      100
 #define BTN_OK_Y      180
 #define BTN_CANCEL_X  280

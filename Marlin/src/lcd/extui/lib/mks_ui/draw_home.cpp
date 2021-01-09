@@ -51,7 +51,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       if (event == LV_EVENT_CLICKED) {
       }
       else if (event == LV_EVENT_RELEASED) {
-        queue.inject_P(PSTR("G28"));
+        if(gCfgItems.uiStyle == PRINT_STYLE) queue.inject_P(PSTR("G28"));
+        else queue.inject_P(PSTR("G28 X Y"));
       }
       break;
     case ID_H_X:
@@ -102,9 +103,10 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 }
 
 void lv_draw_home(void) {
-  lv_obj_t *buttonHomeAll, *buttonHomeX, *buttonHomeY, *buttonHomeZ;
-  lv_obj_t *buttonBack;
-  lv_obj_t *buttonOffAll, *buttonOffXY;
+  lv_obj_t *buttonHomeAll = nullptr, *buttonHomeX = nullptr, *buttonHomeY = nullptr;
+  lv_obj_t *buttonOffAll = nullptr, *buttonOffXY = nullptr;
+  lv_obj_t * labelHomeZ = nullptr, *buttonHomeZ = nullptr;
+  lv_obj_t *buttonBack = nullptr;
 
   if (disp_state_stack._disp_state[disp_state_stack._disp_index] != ZERO_UI) {
     disp_state_stack._disp_index++;
@@ -134,7 +136,7 @@ void lv_draw_home(void) {
   buttonHomeX = lv_imgbtn_create(scr, NULL);
   //buttonContinue = lv_imgbtn_create(scr, NULL);
   buttonHomeY = lv_imgbtn_create(scr, NULL);
-  buttonHomeZ = lv_imgbtn_create(scr, NULL);
+  if(gCfgItems.uiStyle == PRINT_STYLE) buttonHomeZ = lv_imgbtn_create(scr, NULL);
   buttonOffAll = lv_imgbtn_create(scr, NULL);
   buttonOffXY = lv_imgbtn_create(scr, NULL);
   buttonBack = lv_imgbtn_create(scr, NULL);
@@ -160,13 +162,13 @@ void lv_draw_home(void) {
     lv_imgbtn_set_style(buttonHomeY, LV_BTN_STATE_PR, &tft_style_label_pre);
     lv_imgbtn_set_style(buttonHomeY, LV_BTN_STATE_REL, &tft_style_label_rel);
     
-
-    lv_obj_set_event_cb_mks(buttonHomeZ, event_handler, ID_H_Z, NULL, 0);
-    lv_imgbtn_set_src(buttonHomeZ, LV_BTN_STATE_REL, "F:/bmp_zeroZ.bin");
-    lv_imgbtn_set_src(buttonHomeZ, LV_BTN_STATE_PR, "F:/bmp_zeroZ.bin");
-    lv_imgbtn_set_style(buttonHomeZ, LV_BTN_STATE_PR, &tft_style_label_pre);
-    lv_imgbtn_set_style(buttonHomeZ, LV_BTN_STATE_REL, &tft_style_label_rel);
-    
+    if(gCfgItems.uiStyle == PRINT_STYLE) {
+      lv_obj_set_event_cb_mks(buttonHomeZ, event_handler, ID_H_Z, NULL, 0);
+      lv_imgbtn_set_src(buttonHomeZ, LV_BTN_STATE_REL, "F:/bmp_zeroZ.bin");
+      lv_imgbtn_set_src(buttonHomeZ, LV_BTN_STATE_PR, "F:/bmp_zeroZ.bin");
+      lv_imgbtn_set_style(buttonHomeZ, LV_BTN_STATE_PR, &tft_style_label_pre);
+      lv_imgbtn_set_style(buttonHomeZ, LV_BTN_STATE_REL, &tft_style_label_rel);
+    }
 
     lv_obj_set_event_cb_mks(buttonOffAll, event_handler,ID_H_OFF_ALL, NULL,0);
     lv_imgbtn_set_src(buttonOffAll, LV_BTN_STATE_REL, "F:/bmp_function1.bin");
@@ -194,9 +196,15 @@ void lv_draw_home(void) {
   lv_obj_set_pos(buttonHomeAll, INTERVAL_V, titleHeight);
   lv_obj_set_pos(buttonHomeX, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight);
   lv_obj_set_pos(buttonHomeY, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight);
-  lv_obj_set_pos(buttonHomeZ, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight);
-  lv_obj_set_pos(buttonOffAll, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
-  lv_obj_set_pos(buttonOffXY, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+  if(gCfgItems.uiStyle == PRINT_STYLE) {
+    lv_obj_set_pos(buttonHomeZ, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight);
+    lv_obj_set_pos(buttonOffAll, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+    lv_obj_set_pos(buttonOffXY, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+  }
+  else {
+    lv_obj_set_pos(buttonOffAll, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight);
+    lv_obj_set_pos(buttonOffXY, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
+  }
   lv_obj_set_pos(buttonBack, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight);
 
   /*Create a label on the Image button*/
@@ -204,7 +212,7 @@ void lv_draw_home(void) {
   lv_btn_set_layout(buttonHomeAll, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonHomeX, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonHomeY, LV_LAYOUT_OFF);
-  lv_btn_set_layout(buttonHomeZ, LV_LAYOUT_OFF);
+  if(gCfgItems.uiStyle == PRINT_STYLE) lv_btn_set_layout(buttonHomeZ, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonOffAll, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonOffXY, LV_LAYOUT_OFF);
   lv_btn_set_layout(buttonBack, LV_LAYOUT_OFF);
@@ -212,7 +220,7 @@ void lv_draw_home(void) {
   lv_obj_t * labelHomeAll = lv_label_create(buttonHomeAll, NULL);
   lv_obj_t * labelHomeX = lv_label_create(buttonHomeX, NULL);
   lv_obj_t * labelHomeY = lv_label_create(buttonHomeY, NULL);
-  lv_obj_t * labelHomeZ = lv_label_create(buttonHomeZ, NULL);
+  if(gCfgItems.uiStyle == PRINT_STYLE) labelHomeZ = lv_label_create(buttonHomeZ, NULL);
   lv_obj_t * labelOffAll = lv_label_create(buttonOffAll, NULL);
   lv_obj_t * labelOffXY = lv_label_create(buttonOffXY, NULL);
   lv_obj_t * label_Back = lv_label_create(buttonBack, NULL);
@@ -228,10 +236,10 @@ void lv_draw_home(void) {
 
     lv_label_set_text(labelHomeY, home_menu.home_y);
     lv_obj_align(labelHomeY, buttonHomeY, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
-
-    lv_label_set_text(labelHomeZ, home_menu.home_z);
-    lv_obj_align(labelHomeZ, buttonHomeZ, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
-
+    if(gCfgItems.uiStyle == PRINT_STYLE) {
+      lv_label_set_text(labelHomeZ, home_menu.home_z);
+      lv_obj_align(labelHomeZ, buttonHomeZ, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
+    }
     lv_label_set_text(labelOffAll, set_menu.motoroff);
     lv_obj_align(labelOffAll, buttonOffAll, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
 
@@ -246,7 +254,7 @@ void lv_draw_home(void) {
 		lv_group_add_obj(g, buttonHomeAll);
 		lv_group_add_obj(g, buttonHomeX);
 		lv_group_add_obj(g, buttonHomeY);
-		lv_group_add_obj(g, buttonHomeZ);
+		if(gCfgItems.uiStyle == PRINT_STYLE) lv_group_add_obj(g, buttonHomeZ);
 		lv_group_add_obj(g, buttonOffAll);
 		lv_group_add_obj(g, buttonOffXY);
 		lv_group_add_obj(g, buttonBack);

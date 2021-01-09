@@ -165,9 +165,18 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           planner.set_e_position_mm((destination.e = current_position.e = uiCfg.current_e_position_bak));
           //current_position.e = destination.e = uiCfg.current_e_position_bak;
         thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
+        thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
 
-        clear_cur_ui();
-        draw_return_ui();
+        //Reset filament flag
+        uiCfg.filament_heat_completed_load   = 0;
+        uiCfg.filament_heat_completed_unload = 0;
+        uiCfg.filament_load_heat_flg         = 0;
+        uiCfg.filament_unload_heat_flg       = 0;
+        uiCfg.filament_loading_completed     = 0;
+        uiCfg.filament_unloading_completed   = 0;
+
+        lv_clear_cur_ui();
+        lv_draw_return_ui();
       }
       break;
   }
