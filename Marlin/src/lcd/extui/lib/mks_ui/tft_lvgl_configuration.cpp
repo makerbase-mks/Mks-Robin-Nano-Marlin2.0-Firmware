@@ -559,9 +559,11 @@ void tft_lvgl_init() {
       ZERO(public_buf_m);
       strncpy(public_buf_m, recovery.info.sd_filename, sizeof(public_buf_m));
       card.printLongPath(public_buf_m);
-
-      strncpy(list_file.long_name[sel_id], card.longFilename, sizeof(list_file.long_name[sel_id]));
-
+      if(card.longFilename[0] != '\0')
+        strncpy(list_file.long_name[sel_id], card.longFilename, sizeof(list_file.long_name[sel_id]));
+      else
+        strncpy(list_file.long_name[sel_id], card.filename, sizeof(list_file.long_name[sel_id]));
+  
       lv_draw_printing();
     }
     else

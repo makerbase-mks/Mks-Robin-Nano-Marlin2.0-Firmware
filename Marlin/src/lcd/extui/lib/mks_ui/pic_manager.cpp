@@ -229,19 +229,19 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_custom6.bin",
   "bmp_custom7.bin"
   #if HAS_CUTTER
-  ,
-  "bmp_twoInOneSet.bin",
-  "bmp_engraving.bin",
-  "bmp_Print_ui.bin",
-  "bmp_Laser_ui.bin",
-  "bmp_Position.bin",
-  "bmp_Light_close.bin",
-  "bmp_Light_open.bin",
-  "bmp_Power.bin",
-  "bmp_Cut_times.bin",
-  "bmp_speed_state.bin",
-  "bmp_power_state.bin",
-  "bmp_times_state.bin"
+    ,
+    "bmp_twoInOneSet.bin",
+    "bmp_engraving.bin",
+    "bmp_Print_ui.bin",
+    "bmp_Laser_ui.bin",
+    "bmp_Position.bin",
+    "bmp_Light_close.bin",
+    "bmp_Light_open.bin",
+    "bmp_Power.bin",
+    "bmp_Cut_times.bin",
+    "bmp_speed_state.bin",
+    "bmp_power_state.bin",
+    "bmp_times_state.bin"
   #endif
 };
 
@@ -526,8 +526,8 @@ uint8_t public_buf[513];
         if (card.longFilename[0] == 0) continue;
         if (card.longFilename[0] == '.') continue;
 
-        int8_t a = arrayFindStr(assets, COUNT(assets), card.longFilename);
-        if (a >= 0 && a < (int8_t)COUNT(assets)) {
+        uint8_t a = arrayFindStr(assets, COUNT(assets), card.longFilename);
+        if (a >= 0 && a < (uint8_t)COUNT(assets)) {
           uint8_t assetType = ASSET_TYPE_ICON;
           if (strstr(assets[a], "_logo"))
             assetType = ASSET_TYPE_LOGO;

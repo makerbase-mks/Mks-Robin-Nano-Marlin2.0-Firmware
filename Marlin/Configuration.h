@@ -908,7 +908,7 @@
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
- //#define BLTOUCH
+//#define BLTOUCH
 
 /**
  * Pressure sensor with a BLTouch-like interface
@@ -1243,7 +1243,7 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
- //#define AUTO_BED_LEVELING_BILINEAR
+//#define AUTO_BED_LEVELING_BILINEAR
 //#define AUTO_BED_LEVELING_UBL
 //#define MESH_BED_LEVELING
 
@@ -2240,7 +2240,7 @@
 #define TFT_LVGL_UI_SPI   // Robin nano v2.0 uses SPI
 
 #if EITHER(TFT_LVGL_UI_FSMC, TFT_LVGL_UI_SPI)
-  #define USE_WIFI_FUNCTION   1
+  #define USE_WIFI_FUNCTION   true
 #endif
 
 //=============================================================================
