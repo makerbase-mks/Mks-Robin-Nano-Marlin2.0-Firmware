@@ -32,7 +32,18 @@
 #include "eeprom_if.h"
 #include <Wire.h>
 
-void eeprom_init() { Wire.begin(); }
+#ifdef __STM32F1__
+  void eeprom_init() { Wire.begin(); }
+#else
+  #ifndef I2C_SDA_PIN
+    #define I2C_SDA_PIN PB7
+  #endif
+  #ifndef I2C_SCL_PIN
+    #define I2C_SCL_PIN PB6
+  #endif
+  void eeprom_init() { Wire.begin((uint8_t)I2C_SDA_PIN, (uint8_t)I2C_SCL_PIN); }
+#endif
+
 
 #if ENABLED(USE_SHARED_EEPROM)
 

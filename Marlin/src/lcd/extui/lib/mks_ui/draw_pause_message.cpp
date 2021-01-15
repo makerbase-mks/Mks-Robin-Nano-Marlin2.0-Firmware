@@ -24,29 +24,25 @@
 #if BOTH(HAS_TFT_LVGL_UI, ADVANCED_PAUSE_FEATURE)
 
 #include "draw_ui.h"
-#include "lv_conf.h"
-//#include "../lvgl/src/lv_objx/lv_imgbtn.h"
-//#include "../lvgl/src/lv_objx/lv_img.h"
-//#include "../lvgl/src/lv_core/lv_disp.h"
-//#include "../lvgl/src/lv_core/lv_refr.h"
+#include <lv_conf.h>
 
-#include "../../../../MarlinCore.h"
 #include "../../../../feature/pause.h"
+#include "../../../../inc/MarlinConfig.h"
 
 void lv_draw_pause_message(const PauseMessage msg) {
   switch (msg) {
-    case PAUSE_MESSAGE_PAUSING:  lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_PAUSING); break;
-    case PAUSE_MESSAGE_CHANGING: lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_CHANGING); break;
-    case PAUSE_MESSAGE_UNLOAD:   lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_UNLOAD); break;
-    case PAUSE_MESSAGE_WAITING:  lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_WAITING); break;
-    case PAUSE_MESSAGE_INSERT:   lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_INSERT); break;
-    case PAUSE_MESSAGE_LOAD:     lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_LOAD); break;
-    case PAUSE_MESSAGE_PURGE:    lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_PURGE); break;
-    case PAUSE_MESSAGE_RESUME:   lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_RESUME); break;
-    case PAUSE_MESSAGE_HEAT:     lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_HEAT); break;
-    case PAUSE_MESSAGE_HEATING:  lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_HEATING); break;
+    case PAUSE_MESSAGE_PAUSING:  clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_PAUSING); break;
+    case PAUSE_MESSAGE_CHANGING: clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_CHANGING); break;
+    case PAUSE_MESSAGE_UNLOAD:   clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_UNLOAD); break;
+    case PAUSE_MESSAGE_WAITING:  clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_WAITING); break;
+    case PAUSE_MESSAGE_INSERT:   clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_INSERT); break;
+    case PAUSE_MESSAGE_LOAD:     clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_LOAD); break;
+    case PAUSE_MESSAGE_PURGE:    clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_PURGE); break;
+    case PAUSE_MESSAGE_RESUME:   clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_RESUME); break;
+    case PAUSE_MESSAGE_HEAT:     clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_HEAT); break;
+    case PAUSE_MESSAGE_HEATING:  clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_HEATING); break;
     case PAUSE_MESSAGE_OPTION:   pause_menu_response = PAUSE_RESPONSE_WAIT_FOR;
-      lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_OPTION); break;
+      clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_OPTION); break;
     case PAUSE_MESSAGE_STATUS:
     default: break;
   }

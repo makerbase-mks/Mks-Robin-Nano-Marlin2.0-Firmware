@@ -200,11 +200,11 @@
 #define E1_TMC_CURRENT_EN               "E1 current (mA)"
 
 #define TMC_MODE_CONF_TITLE_EN          "Machine Settings>TMC step mode settings"
-#define X_TMC_MODE_EN                   "Whether X-axis enables StealthChop mode"
-#define Y_TMC_MODE_EN                   "Whether Y-axis enables StealthChop mode"
-#define Z_TMC_MODE_EN                   "Whether Z-axis enables StealthChop mode"
-#define E0_TMC_MODE_EN                  "Whether E0 enables StealthChop mode"
-#define E1_TMC_MODE_EN                  "Whether E1 enables StealthChop mode"
+#define X_TMC_MODE_EN                   "Whether X-axis enables stealthChop mode"
+#define Y_TMC_MODE_EN                   "Whether Y-axis enables stealthChop mode"
+#define Z_TMC_MODE_EN                   "Whether Z-axis enables stealthChop mode"
+#define E0_TMC_MODE_EN                  "Whether E0 enables stealthChop mode"
+#define E1_TMC_MODE_EN                  "Whether E1 enables stealthChop mode"
 
 #define MOTORDIR_CONF_TITLE_EN          "Machine Settings>Motor direction"
 #define X_MOTORDIR_EN                   "X-axis motor direction invert"
@@ -226,7 +226,7 @@
 #define HAVE_UPS_EN                     "Has UPS power supply"
 #define Z2_AND_Z2ENDSTOP_CONF_EN        "Z2 Settings"
 #define ENABLE_PINS_CONF_EN             "Enable pins level settings"
-#define WIFI_SETTINGS_EN							  "Wi-Fi parameter settings"
+#define WIFI_SETTINGS_EN                "Wi-Fi parameter settings"
 #define HOMING_SENSITIVITY_CONF_EN      "Homing sensitivity settings"
 #define ENCODER_SETTINGS_EN             "Rotary encoder settings"
 
@@ -246,14 +246,14 @@
 #define PAUSE_POSITION_Y_EN  "Y-axis position (Absolute position,-1 invalid)"
 #define PAUSE_POSITION_Z_EN  "Z-axis position (Relative position,-1 invalid)"
 
-#define WIFI_SETTINGS_TITLE_EN		"Machine Settings>Wi-Fi Parameter"
-#define WIFI_SETTINGS_MODE_EN			"Wi-Fi Mode"
-#define WIFI_SETTINGS_NAME_EN			"Wi-Fi Name: "
-#define WIFI_SETTINGS_PASSWORD_EN	"Wi-Fi Password: "
-#define WIFI_SETTINGS_CLOUD_EN		"Do you use cloud services?"
-#define WIFI_SETTINGS_CONFIG_EN		"Config"
-#define WIFI_SETTINGS_EDIT_EN	    "Edit"
-#define WIFI_CONFIG_TIPS_EN			  "Wi-Fi configuration?"
+#define WIFI_SETTINGS_TITLE_EN    "Machine Settings>Wi-Fi Parameter"
+#define WIFI_SETTINGS_MODE_EN     "Wi-Fi Mode"
+#define WIFI_SETTINGS_NAME_EN     "Wi-Fi Name: "
+#define WIFI_SETTINGS_PASSWORD_EN "Wi-Fi Password: "
+#define WIFI_SETTINGS_CLOUD_EN    "Do you use cloud services?"
+#define WIFI_SETTINGS_CONFIG_EN   "Config"
+#define WIFI_SETTINGS_EDIT_EN     "Edit"
+#define WIFI_CONFIG_TIPS_EN       "Wi-Fi configuration?"
 
 #define OFFSET_TITLE_EN  "Machine Settings>Offset"
 #define OFFSET_X_EN      "X offset"
@@ -276,11 +276,9 @@
 #define PRINT_TEXT_EN           "Printing"
 #define EXTRUDE_TEXT_EN         "Extrusion"
 #define LEVELING_TEXT_EN        "Leveling"
-#define MLEVELING_TEXT_EN        "Leveling"
 #define AUTO_LEVELING_TEXT_EN   "AutoLevel"
 #define SET_TEXT_EN             "Settings"
 #define MORE_TEXT_EN            "More"
-#define LASER_ENGRAVING_EN      "Engraving"
 
 #define ADD_TEXT_EN             "Add"
 #define DEC_TEXT_EN             "Dec"
@@ -299,7 +297,6 @@
 #define TOOL_MOVE_EN            "Move"
 #define TOOL_HOME_EN            "Home"
 #define TOOL_LEVELING_EN        "Leveling"
-#define TOOL_MLEVELING_EN        "Leveling"
 #define TOOL_AUTO_LEVELING_EN   "AutoLevel"
 #define TOOL_FILAMENT_EN        "Filament"
 #define TOOL_MORE_EN            "More"
@@ -385,27 +382,11 @@
 #define FILAMENT_EXT1_TEXT_EN         "Extrusion2"
 #define FILAMENT_HEAT_TEXT_EN         "Preheat"
 #define FILAMENT_STOP_TEXT_EN         "Stop"
-//#define FILAMENT_CHANGE_TEXT_EN       "Filament replace"
 #define FILAMENT_TIPS2_TEXT_EN        "T:"
 #define FILAMENT_TIPS3_TEXT_EN        "Loading..."
 #define FILAMENT_TIPS4_TEXT_EN        "Unloading..."
 #define FILAMENT_TIPS5_TEXT_EN        "Temp is too low to go,please heat"
 #define FILAMENT_TIPS6_TEXT_EN        "Completed"
-
-#if 0
-  #define FILAMENT_REPLAYS_IDLE_TEXT_EN           "Please click <Load> or <unload> \nto replace filament!"
-  #define FILAMENT_CHANGE_TEXT_EN                 "Please click <Load> or <unload>,\nAfter pinter pause."
-  #define FILAMENT_DIALOG_LOAD_HEAT_TIPS_EN       "Heating up the nozzle,please wait..."
-  #define FILAMENT_DIALOG_UNLOAD_HEAT_TIPS_EN     "Heating up the nozzle,please wait..."
-  #define FILAMENT_DIALOG_LOAD_CONFIRM1_TIPS_EN   "Heat completed,please load filament to extruder,and click <confirm> for start loading."
-  #define FILAMENT_DIALOG_LOAD_CONFIRM2_TIPS_EN   "Please load filament to extruder,and click <confirm> for start loading."
-  #define FILAMENT_DIALOG_UNLOAD_CONFIRM_TIPS_EN  "Heat completed,please click <confirm> for start unloading.!"
-  #define FILAMENT_DIALOG_LOADING_TIPS_EN         "Is loading ,please wait!"
-  #define FILAMENT_DIALOG_UNLOADING_TIPS_EN       "Is unloading,please wait!"
-  #define FILAMENT_DIALOG_LOAD_COMPLETE_TIPS_EN   "Load filament completed,click <confirm> for return!"
-  #define FILAMENT_DIALOG_UNLOAD_COMPLETE_TIPS_EN "Unload filament completed,click <confirm> for return!"
-#endif
-
 
 #define FILAMENT_CHANGE_TEXT_EN                 "Please click <Load> \nor <unload>,After \npinter pause."
 #define FILAMENT_DIALOG_LOAD_HEAT_TIPS_EN       "Heating up the nozzle,\nplease wait..."
@@ -423,11 +404,7 @@
 #define PRE_HEAT_BED_TEXT_EN            "Bed"
 
 #define FILE_LOADING_EN                 "Loading......"
-#if 0
-  #define NO_FILE_AND_CHECK_EN          "No files found!Please insert SD card or U disk!"
-#else
-  #define NO_FILE_AND_CHECK_EN          "  No files found!\n            Check the file system configuration!"
-#endif
+#define NO_FILE_AND_CHECK_EN          "  No files found!\n            Check the file system configuration!"
 
 #define NO_FILE_EN                          "No files found!"
 
@@ -495,18 +472,16 @@
 #define DIALOG_RETRY_EN                     "Retry"
 #define DIALOG_STOP_EN                      "Stop"
 #define DIALOG_REPRINT_FROM_BREAKPOINT_EN   "Reprint from breakpoint?"
-//#define DIALOG_UNBIND_PRINTER_EN          "Unbind the printer?"
 #define DIALOG_ERROR_TIPS1_EN               "Error:no file,please check it again."
 #define DIALOG_ERROR_TIPS2_EN               "Error:transaction failed.please check display baudrate \nwhether as the same as mainboard!"
 #define DIALOG_ERROR_TIPS3_EN               "Error:file name or path is too long!"
 #define DIALOG_CLOSE_MACHINE_EN             "Closing machine......"
 #define DIALOG_UNBIND_PRINTER_EN            "Unbind the printer?"
 #define DIALOG_FILAMENT_NO_PRESS_EN         "Filament detection switch is not pressed"
-#define DIALOG_PRINT_FINISH_EN              "Print done !"
+#define DIALOG_PRINT_FINISH_EN              "Done print!"
 #define DIALOG_PRINT_TIME_EN                "Print time: "
 #define DIALOG_REPRINT_EN                   "Print again"
-#define DIALOG_WIFI_ENABLE_TIPS_EN          "The wifi module is being configured\nplease wait a moment....."
-#define DIALOG_PAUSING_TIPS_EN              "The machine pauses..."
+#define DIALOG_WIFI_ENABLE_TIPS_EN "The wifi module is being configured\nplease wait a moment....."
 
 #define HOTBED_ENABLE_EN        "Enable heatbed"
 #define MOTOR_EN_HIGH_LEVEL_EN  "High"
@@ -706,24 +681,6 @@
 #define MANUAL_TEXT_POINT_EN         "."
 #define MANUAL_TEXT_ENTER_EN        "enter"
 
-//Wifi name
-//#define TEXT_WIFI_MENU_TITLE_EN "WI-FI"
-//#define TEXT_WIFI_SAPCE_EN  "space"
-//#define TEXT_WIFI_LETTER_EN  "abc"
-//#define TEXT_WIFI_DIGITAL_EN  "123"
-//#define TEXT_WIFI_SYMBOL_EN  "#+="
-//#define TEXT_WIFI_PASSWORD_EN "Password"
-
-//#define TEXT_WIFI_POINT_BOLD_EN "`"
-
-//#define TEXT_WIFI_JOINING_EN  "Joining\nNetwork..."
-//#define TEXT_WIFI_FAILED_JOIN_EN  "Failed to\nJoin Wi-Fi"
-//#define TEXT_WIFI_WIFI_CONECTED_EN "Wi-Fi\nConnected"
-
-//#define TEXT_BUTTON_DISCONECTED_EN "Disconnect"
-//#define TEXT_WIFI_FORGET_EN "Forget Network"
-//#define TEXT_DISCONECTED_EN "Wi-Fi Connected"
-
 #define TEXT_FORGET_TIPS_TITLE_EN "Forget Network"
 #define TEXT_FORGET_NETWORK_TIPS1_EN "Are you sure you want to\nforget this network?"
 #define TEXT_FORGET_NETWORK_TIPS2_EN "This machine will no longer\njoin this Wi-Fi Network."
@@ -766,37 +723,9 @@
 #define EEPROM_SETTINGS_READ_EN   "Read settings from EEPROM"
 #define EEPROM_SETTINGS_REVERT_EN "Revert settings to factory defaults"
 
-#define EEPROM_STORE_TIPS_EN      "Store settings to EEPROM?"
-#define EEPROM_READ_TIPS_EN       "Read settings from EEPROM?"
-#define EEPROM_REVERT_TIPS_EN     "Revert settings to factory defaults?"
-
-#define TWO_IN_ONE_CHOOSE_EN      "UI switching"
-
-#define TWO_IN_ONE_TITLE_EN       "Two in one function selection"
-#define TWO_IN_ONE_PRINT_UI_EN    "3D printing"
-#define TWO_IN_ONE_LASER_UI_EN    "Engraving"
-
-#define SPINDLE_LASER_POSITION_EN     "Positioning"
-#define SPINDLE_LASER_LIGHT_OPEN_EN   "Light on"
-#define SPINDLE_LASER_LIGHT_CLOSE_EN  "Light off"
-#define SPINDLE_LASER_POWER_EN        "Power"
-
-#define POWER_UI_TITLE_EN             "Power regulation"
-#define POWER_PERCENT_STATE_EN        "Power"
-
-#define SPINDLE_LASER_CUT_TIMES_EN    "Engrave times"
-#define DIALOG_ENGRAVING_EN           "Engraving boader or graphics?"
-#define DIALOG_CANCEL_ENGRAVING_EN    "Stop carving?"
-#define DIALOG_ENGRAVING_FINISH_EN    "The carving is complete!"
-#define TITLE_ENGRAVING_EN            "Engraving"
-#define TITLE_READY_ENGRAVE_EN        "Ready to engrave"
-#define ENGRAVING_SPEED_EN            "Engraving"
-#define ENGRAVING_SPEED_STATE_EN      "Engrave speed"
-#define DIALOG_ENGRAVING_BOADER_EN    "Boader"
-#define DIALOG_ENGRAVING_GRAPHICS_EN  "Graphics"
-#define DIALOG_CALCULATE_BOADER_TIPS_EN "Calculating border data..."
-#define DIALOG_ENGRAVE_BOADER_TIPS_EN   "Engraving the border..."
-#define DIALOG_NO_BOADER_DATA_TIPS_EN   "Cannot get border data"
+#define EEPROM_STORE_TIPS_EN  "Store settings to EEPROM?"
+#define EEPROM_READ_TIPS_EN   "Read settings from EEPROM?"
+#define EEPROM_REVERT_TIPS_EN "Revert settings to factory defaults?"
 
 #define MORE_CUSTOM1_TEXT_EN  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_EN  USER_DESC_2

@@ -35,12 +35,6 @@
   #include "../../module/stepper.h"
 #endif
 
-#if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
-  #include "../../lcd/extui/lib/mks_ui/tft_lvgl_configuration.h"
-  #include "../../lcd/extui/lib/mks_ui/draw_ui.h"
-#endif
-#include "../../module/planner.h"
-
 extern xyze_pos_t destination;
 
 #if ENABLED(VARIABLE_G0_FEEDRATE)
@@ -50,15 +44,11 @@ extern xyze_pos_t destination;
 /**
  * G0, G1: Coordinated movement of X Y Z E axes
  */
-void GcodeSuite::G0_G1(
-  #if IS_SCARA || defined(G0_FEEDRATE)
-    const bool fast_move/*=false*/
-  #endif
-) {
+void GcodeSuite::G0_G1(TERN_(HAS_FAST_MOVES, const bool fast_move/*=false*/)) {
 
   if (IsRunning()
     #if ENABLED(NO_MOTION_BEFORE_HOMING)
-      && !axis_unhomed_error(
+      && !homing_needed_error(
           (parser.seen('X') ? _BV(X_AXIS) : 0)
         | (parser.seen('Y') ? _BV(Y_AXIS) : 0)
         | (parser.seen('Z') ? _BV(Z_AXIS) : 0) )
@@ -125,17 +115,6 @@ void GcodeSuite::G0_G1(
       if (_MOVE_SYNC) {
         planner.synchronize();
         SERIAL_ECHOLNPGM(STR_Z_MOVE_COMP);
-      }
-    #endif
-    #if BOTH(HAS_TFT_LVGL_UI, SPINDLE_LASER_USES_SOFT_PWM)
-      if(gCfgItems.uiStyle == LASER_STYLE) {
-        
-        if(parser.seen('S')) {
-          uint16_t s = parser.ushortval('S', 0);
-          NOMORE(s,SPINDLE_LASER_MAX_SOFT_PWM);
-          spindleLaserSoftPwmSetDuty(s);
-          planner.synchronize();
-        }
       }
     #endif
   }

@@ -28,10 +28,6 @@
 #include "../../feature/spindle_laser.h"
 #include "../../module/stepper.h"
 
-#if ENABLED(HAS_TFT_LVGL_UI)
-  #include "../../lcd/extui/lib/mks_ui/tft_lvgl_configuration.h"
-  #include "../../lcd/extui/lib/mks_ui/draw_ui.h"
-#endif
 /**
  * Laser:
  *  M3 - Laser ON/Power (Ramped power)
@@ -70,19 +66,21 @@
  *  PWM duty cycle goes from 0 (off) to 255 (always on).
  */
 void GcodeSuite::M3_M4(const bool is_M4) {
-  #if ENABLED(SPINDLE_LASER_PWM)
-    auto get_s_power = [] {
-      if (parser.seenval('S')) {
-        const float spwr = parser.value_float();
+  auto get_s_power = [] {
+    if (parser.seenval('S')) {
+      const float spwr = parser.value_float();
+      #if ENABLED(SPINDLE_SERVO)
+        cutter.unitPower = spwr;
+      #else
         cutter.unitPower = TERN(SPINDLE_LASER_PWM,
-                                cutter.power_to_range(cutter_power_t(round(spwr))),
-                                spwr > 0 ? 255 : 0);
-      }
-      else
-        cutter.unitPower = cutter.cpwr_to_upwr(SPEED_POWER_STARTUP);
-      return cutter.unitPower;
-    };
-  #endif
+                              cutter.power_to_range(cutter_power_t(round(spwr))),
+                              spwr > 0 ? 255 : 0);
+      #endif
+    }
+    else
+      cutter.unitPower = cutter.cpwr_to_upwr(SPEED_POWER_STARTUP);
+    return cutter.unitPower;
+  };
 
   #if ENABLED(LASER_POWER_INLINE)
     if (parser.seen('I') == DISABLED(LASER_POWER_INLINE_INVERT)) {
@@ -105,7 +103,7 @@ void GcodeSuite::M3_M4(const bool is_M4) {
   #endif
 
   planner.synchronize();   // Wait for previous movement commands (G0/G0/G2/G3) to complete before changing power
-  cutter.set_direction(is_M4);
+  cutter.set_reverse(is_M4);
 
   #if ENABLED(SPINDLE_LASER_PWM)
     if (parser.seenval('O')) {
@@ -114,19 +112,12 @@ void GcodeSuite::M3_M4(const bool is_M4) {
     }
     else
       cutter.set_power(cutter.upower_to_ocr(get_s_power()));
+  #elif ENABLED(SPINDLE_SERVO)
+    cutter.set_power(get_s_power());
   #else
     cutter.set_enabled(true);
   #endif
   cutter.menuPower = cutter.unitPower;
-  #if BOTH(HAS_TFT_LVGL_UI, SPINDLE_LASER_USES_SOFT_PWM)
-    float S_value = uiCfg.cutPower;
-    if (parser.seenval('S')) {
-      S_value = parser.value_float();
-      NOMORE(S_value,SPINDLE_LASER_MAX_SOFT_PWM);
-      uiCfg.cutPower = S_value;
-    }
-    spindleLaserSoftPwmSetDuty(S_value);
-  #endif  
 }
 
 /**
@@ -144,14 +135,6 @@ void GcodeSuite::M5() {
   planner.synchronize();
   cutter.set_enabled(false);
   cutter.menuPower = cutter.unitPower;
-  #if BOTH(HAS_TFT_LVGL_UI, SPINDLE_LASER_USES_SOFT_PWM)
-    spindleLaserSoftPwmSetDuty(0);
-    if (parser.seenval('S')) {
-      float S_value = parser.value_float();
-      NOMORE(S_value,SPINDLE_LASER_MAX_SOFT_PWM);
-      uiCfg.cutPower = S_value;
-    }
-  #endif  
 }
 
 #endif // HAS_CUTTER

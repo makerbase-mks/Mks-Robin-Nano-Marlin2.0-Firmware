@@ -22,7 +22,7 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" { /* C-declarations for C++ */
+  extern "C" { /* C-declarations for C++ */
 #endif
 
 #define MIN_FILE_PRINTED   100 //5000
@@ -30,9 +30,7 @@ extern "C" { /* C-declarations for C++ */
 extern void printer_state_polling();
 extern void filament_pin_setup();
 extern void filament_check();
-extern void carving_boader();
-extern void calculate_boader_data();
 
 #ifdef __cplusplus
-} /* C-declarations for C++ */
+  } /* C-declarations for C++ */
 #endif

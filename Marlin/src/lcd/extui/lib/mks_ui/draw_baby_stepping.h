@@ -22,7 +22,7 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" { /* C-declarations for C++ */
+  extern "C" { /* C-declarations for C++ */
 #endif
 
 extern void lv_draw_baby_stepping(void);
@@ -30,7 +30,6 @@ extern void lv_clear_baby_stepping();
 extern void disp_baby_step_dist();
 extern void disp_z_offset_value();
 
-//extern void disp_temp_ready_print();
 #ifdef __cplusplus
-} /* C-declarations for C++ */
+  } /* C-declarations for C++ */
 #endif

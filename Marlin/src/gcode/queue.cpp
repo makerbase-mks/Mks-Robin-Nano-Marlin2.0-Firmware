@@ -29,7 +29,7 @@ GCodeQueue queue;
 
 #include "gcode.h"
 
-#include "../lcd/ultralcd.h"
+#include "../lcd/marlinui.h"
 #include "../sd/cardreader.h"
 #include "../module/planner.h"
 #include "../module/temperature.h"
@@ -37,6 +37,10 @@ GCodeQueue queue;
 
 #if ENABLED(PRINTER_EVENT_LEDS)
   #include "../feature/leds/printer_event_leds.h"
+#endif
+
+#if HAS_ETHERNET
+  #include "../feature/ethernet.h"
 #endif
 
 #if ENABLED(BINARY_FILE_TRANSFER)
@@ -47,8 +51,8 @@ GCodeQueue queue;
   #include "../feature/powerloss.h"
 #endif
 
-#if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
-  #include "../../lcd/extui/lib/mks_ui/draw_ui.h"
+#if ENABLED(GCODE_REPEAT_MARKERS)
+  #include "../feature/repeat.h"
 #endif
 
 /**
@@ -154,8 +158,6 @@ bool GCodeQueue::_enqueue(const char* cmd, bool say_ok/*=false*/
   return true;
 }
 
-#define ISEOL(C) ((C) == '\n' || (C) == '\r')
-
 /**
  * Enqueue with Serial Echo
  * Return true if the command was consumed
@@ -180,7 +182,7 @@ bool GCodeQueue::enqueue_one(const char* cmd) {
  * Return 'true' if any commands were processed.
  */
 bool GCodeQueue::process_injected_command_P() {
-  if (injected_commands_P == nullptr) return false;
+  if (!injected_commands_P) return false;
 
   char c;
   size_t i = 0;
@@ -296,12 +298,9 @@ void GCodeQueue::ok_to_send() {
     SERIAL_ECHOPAIR_P(SP_P_STR, int(planner.moves_free()),
                       SP_B_STR, int(BUFSIZE - length));
   #endif
-  #if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
-    if(gCfgItems.uiStyle == LASER_STYLE) SERIAL_EOE();
-  #endif
   SERIAL_EOL();
 }
- 
+
 /**
  * Send a "Resend: nnn" message to the host to
  * indicate that a command needs to be re-sent.
@@ -319,15 +318,24 @@ void GCodeQueue::flush_and_request_resend() {
 }
 
 inline bool serial_data_available() {
-  return MYSERIAL0.available() || TERN0(HAS_MULTI_SERIAL, MYSERIAL1.available());
+  byte data_available = 0;
+  if (MYSERIAL0.available()) data_available++;
+  #ifdef SERIAL_PORT_2
+    const bool port2_open = TERN1(HAS_ETHERNET, ethernet.have_telnet_client);
+    if (port2_open && MYSERIAL1.available()) data_available++;
+  #endif
+  return data_available > 0;
 }
 
 inline int read_serial(const uint8_t index) {
   switch (index) {
     case 0: return MYSERIAL0.read();
-    #if HAS_MULTI_SERIAL
-      case 1: return MYSERIAL1.read();
-    #endif
+    case 1: {
+      #if HAS_MULTI_SERIAL
+        const bool port2_open = TERN1(HAS_ETHERNET, ethernet.have_telnet_client);
+        if (port2_open) return MYSERIAL1.read();
+      #endif
+    }
     default: return -1;
   }
 }
@@ -410,11 +418,14 @@ inline void process_stream_char(const char c, uint8_t &sis, char (&buff)[MAX_CMD
  * keep sensor readings going and watchdog alive.
  */
 inline bool process_line_done(uint8_t &sis, char (&buff)[MAX_CMD_SIZE], int &ind) {
-  sis = PS_NORMAL;
-  buff[ind] = 0;
-  if (ind) { ind = 0; return false; }
-  thermalManager.manage_heater();
-  return true;
+  sis = PS_NORMAL;                    // "Normal" Serial Input State
+  buff[ind] = '\0';                   // Of course, I'm a Terminator.
+  const bool is_empty = (ind == 0);   // An empty line?
+  if (is_empty)
+    thermalManager.manage_heater();   // Keep sensors satisfied
+  else
+    ind = 0;                          // Start a new line
+  return is_empty;                    // Inform the caller
 }
 
 /**
@@ -461,23 +472,6 @@ void GCodeQueue::get_serial_commands() {
 
       const char serial_char = c;
 
-      #if BOTH(HAS_TFT_LVGL_UI, HAS_CUTTER)
-        if(c == 0x18) { 
-          clear(); 
-          _enqueue("H0", true
-          #if HAS_MULTI_SERIAL
-            , i
-          #endif
-          ); 
-          return; 
-        }
-        if(c == '?') { 
-          char buf[60];
-          sprintf(buf,"<Idle|MPos:%.3f,%.3f,%.3f|FS:%.1f,%.1f>\r\n",current_position.x,current_position.y,current_position.z,feedrate_mm_s,feedrate_mm_s);
-          SERIAL_ECHOPGM(buf);
-          return; 
-        }
-      #endif
       if (ISEOL(serial_char)) {
 
         // Reset our state, continue if the line was empty
@@ -491,7 +485,7 @@ void GCodeQueue::get_serial_commands() {
 
         if (npos) {
 
-          bool M110 = strstr_P(command, PSTR("M110")) != nullptr;
+          const bool M110 = !!strstr_P(command, PSTR("M110"));
 
           if (M110) {
             char* n2pos = strchr(command + 4, 'N');
@@ -546,12 +540,11 @@ void GCodeQueue::get_serial_commands() {
 
         #if DISABLED(EMERGENCY_PARSER)
           // Process critical commands early
-          if (strcmp_P(command, PSTR("M108")) == 0) {
-            wait_for_heatup = false;
-            TERN_(HAS_LCD_MENU, wait_for_user = false);
+          if (command[0] == 'M') switch (command[3]) {
+            case '8': if (command[2] == '0' && command[1] == '1') { wait_for_heatup = false; TERN_(HAS_LCD_MENU, wait_for_user = false); } break;
+            case '2': if (command[2] == '1' && command[1] == '1') kill(M112_KILL_STR, nullptr, true); break;
+            case '0': if (command[1] == '4' && command[2] == '1') quickstop_stepper(); break;
           }
-          if (strcmp_P(command, PSTR("M112")) == 0) kill(M112_KILL_STR, nullptr, true);
-          if (strcmp_P(command, PSTR("M410")) == 0) quickstop_stepper();
         #endif
 
         #if defined(NO_TIMEOUTS) && NO_TIMEOUTS > 0
@@ -586,10 +579,9 @@ void GCodeQueue::get_serial_commands() {
     if (!IS_SD_PRINTING()) return;
 
     int sd_count = 0;
-    bool card_eof = card.eof();
-    while (length < BUFSIZE && !card_eof) {
+    while (length < BUFSIZE && !card.eof()) {
       const int16_t n = card.get();
-      card_eof = card.eof();
+      const bool card_eof = card.eof();
       if (n < 0 && !card_eof) { SERIAL_ERROR_MSG(STR_SD_ERR_READ); continue; }
 
       const char sd_char = (char)n;
@@ -599,17 +591,21 @@ void GCodeQueue::get_serial_commands() {
         // Reset stream state, terminate the buffer, and commit a non-empty command
         if (!is_eol && sd_count) ++sd_count;          // End of file with no newline
         if (!process_line_done(sd_input_state, command_buffer[index_w], sd_count)) {
+
+          // M808 S saves the sdpos of the next line. M808 loops to a new sdpos.
+          TERN_(GCODE_REPEAT_MARKERS, repeat.early_parse_M808(command_buffer[index_w]));
+
+          // Put the new command into the buffer (no "ok" sent)
           _commit_command(false);
-          #if ENABLED(POWER_LOSS_RECOVERY)
-            recovery.cmd_sdpos = card.getIndex();     // Prime for the NEXT _commit_command
-          #endif
+
+          // Prime Power-Loss Recovery for the NEXT _commit_command
+          TERN_(POWER_LOSS_RECOVERY, recovery.cmd_sdpos = card.getIndex());
         }
 
-        if (card_eof) card.fileHasFinished();         // Handle end of file reached
+        if (card.eof()) card.fileHasFinished();         // Handle end of file reached
       }
       else
         process_stream_char(sd_char, sd_input_state, command_buffer[index_w], sd_count);
-
     }
   }
 

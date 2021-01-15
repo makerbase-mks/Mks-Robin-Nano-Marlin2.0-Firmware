@@ -18,10 +18,10 @@
  */
 #pragma once
 
-#if !defined(STM32F4) && !defined(STM32F4xx)
+#if NOT_TARGET(STM32F4, STM32F4xx)
   #error "Oops! Select an STM32F4 board in 'Tools > Board.'"
 #elif HOTENDS > 1 || E_STEPPERS > 1
-  #error "LERDGE X supports only one hotend / E-steppers"
+  #error "LERDGE X only supports one hotend / E-stepper. Comment out this line to continue."
 #endif
 
 #define BOARD_INFO_NAME      "Lerdge X"
@@ -127,6 +127,7 @@
 //
 #define SDIO_SUPPORT
 #define SD_DETECT_PIN                       PA8
+#define SDIO_CLOCK                      4800000
 
 //
 // LCD / Controller

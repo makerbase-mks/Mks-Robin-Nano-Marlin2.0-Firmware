@@ -61,11 +61,7 @@
 #define _O3          __attribute__((optimize("O3")))
 
 #ifndef UNUSED
-  #if defined(ARDUINO_ARCH_STM32) && !defined(STM32GENERIC)
-    #define UNUSED(X) (void)X
-  #else
-    #define UNUSED(x) ((void)(x))
-  #endif
+  #define UNUSED(x) ((void)(x))
 #endif
 
 // Clock speed factors
@@ -155,7 +151,7 @@
 
 #endif
 
-// Macros to chain up to 12 conditions
+// Macros to chain up to 14 conditions
 #define _DO_1(W,C,A)       (_##W##_1(A))
 #define _DO_2(W,C,A,B)     (_##W##_1(A) C _##W##_1(B))
 #define _DO_3(W,C,A,V...)  (_##W##_1(A) C _DO_2(W,C,V))
@@ -168,9 +164,11 @@
 #define _DO_10(W,C,A,V...) (_##W##_1(A) C _DO_9(W,C,V))
 #define _DO_11(W,C,A,V...) (_##W##_1(A) C _DO_10(W,C,V))
 #define _DO_12(W,C,A,V...) (_##W##_1(A) C _DO_11(W,C,V))
+#define _DO_13(W,C,A,V...) (_##W##_1(A) C _DO_12(W,C,V))
+#define _DO_14(W,C,A,V...) (_##W##_1(A) C _DO_13(W,C,V))
 #define __DO_N(W,C,N,V...) _DO_##N(W,C,V)
 #define _DO_N(W,C,N,V...)  __DO_N(W,C,N,V)
-#define DO(W,C,V...)       _DO_N(W,C,NUM_ARGS(V),V)
+#define DO(W,C,V...)       (_DO_N(W,C,NUM_ARGS(V),V))
 
 // Macros to support option testing
 #define _CAT(a,V...) a##V
@@ -186,6 +184,7 @@
 #define _DIS_1(O)           NOT(_ENA_1(O))
 #define ENABLED(V...)       DO(ENA,&&,V)
 #define DISABLED(V...)      DO(DIS,&&,V)
+#define COUNT_ENABLED(V...) DO(ENA,+,V)
 
 #define TERN(O,A,B)         _TERN(_ENA_1(O),B,A)    // OPTION converted to '0' or '1'
 #define TERN0(O,A)          _TERN(_ENA_1(O),0,A)    // OPTION converted to A or '0'
@@ -195,11 +194,15 @@
 #define __TERN(T,V...)      ___TERN(_CAT(_NO,T),V)  // Prepend '_NO' to get '_NOT_0' or '_NOT_1'
 #define ___TERN(P,V...)     THIRD(P,V)              // If first argument has a comma, A. Else B.
 
+#define IF_ENABLED          TERN_
+#define IF_DISABLED(O,A)    TERN(O,,A)
+
 #define ANY(V...)          !DISABLED(V)
 #define NONE(V...)          DISABLED(V)
 #define ALL(V...)           ENABLED(V)
 #define BOTH(V1,V2)         ALL(V1,V2)
 #define EITHER(V1,V2)       ANY(V1,V2)
+#define MANY(V...)          (COUNT_ENABLED(V) > 1)
 
 // Macros to support pins/buttons exist testing
 #define PIN_EXISTS(PN)      (defined(PN##_PIN) && PN##_PIN >= 0)
@@ -213,8 +216,10 @@
 #define ANY_BUTTON(V...)    DO(BTNEX,||,V)
 
 #define WITHIN(N,L,H)       ((N) >= (L) && (N) <= (H))
+#define ISEOL(C)            ((C) == '\n' || (C) == '\r')
 #define NUMERIC(a)          WITHIN(a, '0', '9')
 #define DECIMAL(a)          (NUMERIC(a) || a == '.')
+#define HEXCHR(a)           (NUMERIC(a) ? (a) - '0' : WITHIN(a, 'a', 'f') ? ((a) - 'a' + 10)  : WITHIN(a, 'A', 'F') ? ((a) - 'A' + 10) : -1)
 #define NUMERIC_SIGNED(a)   (NUMERIC(a) || (a) == '-' || (a) == '+')
 #define DECIMAL_SIGNED(a)   (DECIMAL(a) || (a) == '-' || (a) == '+')
 #define COUNT(a)            (sizeof(a)/sizeof(*a))
@@ -282,6 +287,7 @@
 #define RSQRT(x)    (1.0f / sqrtf(x))
 #define CEIL(x)     ceilf(x)
 #define FLOOR(x)    floorf(x)
+#define TRUNC(x)    truncf(x)
 #define LROUND(x)   lroundf(x)
 #define FMOD(x, y)  fmodf(x, y)
 #define HYPOT(x,y)  SQRT(HYPOT2(x,y))
@@ -450,6 +456,12 @@
 
 #define HAS_ARGS(V...) _BOOL(FIRST(_END_OF_ARGUMENTS_ V)())
 #define _END_OF_ARGUMENTS_() 0
+
+
+// Simple Inline IF Macros, friendly to use in other macro definitions
+#define IF(O, A, B) ((O) ? (A) : (B))
+#define IF_0(O, A) IF(O, A, 0)
+#define IF_1(O, A) IF(O, A, 1)
 
 //
 // REPEAT core macros. Recurse N times with ascending I.

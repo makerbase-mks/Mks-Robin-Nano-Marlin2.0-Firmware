@@ -29,11 +29,9 @@
 #define PRINT_TEXT_IT                 "Stampa"
 #define EXTRUDE_TEXT_IT               "Estrude"
 #define LEVELING_TEXT_IT              "Leveling"
-#define MLEVELING_TEXT_IT              "Leveling"
 #define AUTO_LEVELING_TEXT_IT         "AutoLevel"
 #define SET_TEXT_IT                   "Imposta"
 #define MORE_TEXT_IT                  "Di più"
-#define LASER_ENGRAVING_IT            "Scultura"
 
 #define ADD_TEXT_IT                   "Aumentare"
 #define DEC_TEXT_IT                   "Ridurre"
@@ -52,7 +50,6 @@
 #define TOOL_MOVE_IT                  "Muovi"
 #define TOOL_HOME_IT                  "Home"
 #define TOOL_LEVELING_IT              "Leveling"
-#define TOOL_MLEVELING_IT              "Leveling"
 #define TOOL_AUTO_LEVELING_IT         "Autolevel"
 #define TOOL_FILAMENT_IT              "Filamento"
 #define TOOL_MORE_IT                  "Di più"
@@ -138,26 +135,12 @@
 #define FILAMENT_EXT1_TEXT_IT         "Estrude2"
 #define FILAMENT_HEAT_TEXT_IT         "Preriscaldamento"
 #define FILAMENT_STOP_TEXT_IT         "Stop"
-//#define FILAMENT_CHANGE_TEXT_IT     "Filamento"
 #define FILAMENT_TIPS2_TEXT_IT        "T:"
 #define FILAMENT_TIPS3_TEXT_IT        "Inserimento del filamento..."
 #define FILAMENT_TIPS4_TEXT_IT        "Estrazione del filamento..."
 #define FILAMENT_TIPS5_TEXT_IT        "Temp is too low to go,please heat"
 #define FILAMENT_TIPS6_TEXT_IT        "Completato"
 
-#if 0
-  #define FILAMENT_REPLAYS_IDLE_TEXT_IT           "Please click <Estru> or <Ritra> \nto replace filament!"
-  #define FILAMENT_CHANGE_TEXT_IT                 "Please click <Estru> or <Ritra>,\nAfter pinter pause."
-  #define FILAMENT_DIALOG_LOAD_HEAT_TIPS_IT       "Heating up the nozzle,please wait..."
-  #define FILAMENT_DIALOG_UNLOAD_HEAT_TIPS_IT     "Heating up the nozzle,please wait..."
-  #define FILAMENT_DIALOG_LOAD_CONFIRM1_TIPS_IT   "Heat completed,please load filament to extruder,and click <Conferma> for start loading."
-  #define FILAMENT_DIALOG_LOAD_CONFIRM2_TIPS_IT   "Please load filament to extruder,and click <Conferma> for start loading."
-  #define FILAMENT_DIALOG_UNLOAD_CONFIRM_TIPS_IT  "Heat completed,please click <Conferma> for start unloading.!"
-  #define FILAMENT_DIALOG_LOADING_TIPS_IT         "Is loading ,please wait!"
-  #define FILAMENT_DIALOG_UNLOADING_TIPS_IT       "Is unloading,please wait!"
-  #define FILAMENT_DIALOG_LOAD_COMPLETE_TIPS_IT   "Load filament completed,click <Conferma> for return!"
-  #define FILAMENT_DIALOG_UNLOAD_COMPLETE_TIPS_IT "Unload filament completed,click <Conferma> for return!"
-#endif
 #define FILAMENT_CHANGE_TEXT_IT                 "Please click <Load> \nor <unload>,After \npinter pause."
 #define FILAMENT_DIALOG_LOAD_HEAT_TIPS_IT       "Heating up the nozzle,please wait..."
 #define FILAMENT_DIALOG_UNLOAD_HEAT_TIPS_IT     "Heating up the nozzle,please wait..."
@@ -169,16 +152,11 @@
 #define FILAMENT_DIALOG_LOAD_COMPLETE_TIPS_IT   "Load filament completed,\nclick <confirm> for return!"
 #define FILAMENT_DIALOG_UNLOAD_COMPLETE_TIPS_IT "Unload filament completed,\nclick <confirm> for return!"
 
-
 #define PRE_HEAT_EXT_TEXT_IT              "E"
 #define PRE_HEAT_BED_TEXT_IT              "Piano"
 
 #define FILE_LOADING_IT                   "Caricamento......"
-#if 0
-  #define NO_FILE_AND_CHECK_IT              "Nessun file trovato! Inserisci la scheda SD o il disco U!"
-#endif
 #define NO_FILE_AND_CHECK_IT              "Nessun file,\n          per favore controllare di nuovo!"
-
 #define NO_FILE_IT                        "Nessun file!"
 
 #define EXTRUDER_TEMP_TEXT_IT             "Temper"
@@ -244,7 +222,6 @@
 #define DIALOG_CANCEL_PRINT_IT            "Stop stampa?"
 #define DIALOG_STOP_IT                    "Stop"
 #define DIALOG_REPRINT_FROM_BREAKPOINT_IT "Continua a stampare dal \npunto di interruzione?"
-//#define DIALOG_UNBIND_PRINTER_IT        "Libero?"
 #define DIALOG_ERROR_TIPS1_IT             "Errore: nessun file, \nper favore controllare di nuovo."
 #define DIALOG_ERROR_TIPS2_IT             "Errore: operazione non riuscita, \nsi prega di controllare se il baudrate del \ndisplay è lo stesso scheda madre"
 #define DIALOG_ERROR_TIPS3_IT             "Errore: il nome del file o il \npercorso è troppo lungo!"
@@ -255,7 +232,6 @@
 #define DIALOG_PRINT_TIME_IT              "Tempo di stampa: "
 #define DIALOG_REPRINT_IT                 "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_IT        "The wifi module is being configured,\nplease wait a moment....."
-#define DIALOG_PAUSING_TIPS_IT            "La macchina si ferma ..."
 
 #define MESSAGE_PAUSING_IT                "Parcheggiando..."
 #define MESSAGE_CHANGING_IT               "Attendere avvio del cambio di filamento"
@@ -278,34 +254,6 @@
 #define EEPROM_STORE_TIPS_IT              "Memorizzare le impostazioni su EEPROM?"
 #define EEPROM_READ_TIPS_IT               "Leggi le impostazioni dalla EEPROM?"
 #define EEPROM_REVERT_TIPS_IT             "Ripristinare le impostazioni predefinite?"
-
-#define TWO_IN_ONE_CHOOSE_IT              "UI switching"
-
-#define TWO_IN_ONE_TITLE_IT               "Two in one function selection"
-#define TWO_IN_ONE_PRINT_UI_IT            "3D printing"
-#define TWO_IN_ONE_LASER_UI_IT            "Engraving"
-
-#define SPINDLE_LASER_POSITION_IT         "Posizionamento"
-#define SPINDLE_LASER_LIGHT_OPEN_IT       "Accendi"
-#define SPINDLE_LASER_LIGHT_CLOSE_IT      "Luci spente"
-#define SPINDLE_LASER_POWER_IT            "Energia"
-
-#define POWER_UI_TITLE_IT                 "Regolazione della potenza"
-#define POWER_PERCENT_STATE_IT            "Energia"
-
-#define SPINDLE_LASER_CUT_TIMES_IT        "Engrave times"
-#define DIALOG_ENGRAVING_IT               "Incidere bordi o grafica?"
-#define DIALOG_CANCEL_ENGRAVING_IT        "Smetti di intagliare?"
-#define DIALOG_ENGRAVING_FINISH_IT        "L'intaglio è completo!"
-#define TITLE_ENGRAVING_IT                "Intaglio"
-#define TITLE_READY_ENGRAVE_IT            "Pronto a scolpire"
-#define ENGRAVING_SPEED_IT                "Scultura"
-#define ENGRAVING_SPEED_STATE_IT          "Velocità di incisione"
-#define DIALOG_ENGRAVING_BOADER_IT        "telaio"
-#define DIALOG_ENGRAVING_GRAPHICS_IT      "Grafica"
-#define DIALOG_CALCULATE_BOADER_TIPS_IT   "Calcolo dei dati sui bordi ..."
-#define DIALOG_ENGRAVE_BOADER_TIPS_IT     "Incisione del bordo ..."
-#define DIALOG_NO_BOADER_DATA_TIPS_IT     "Impossibile ottenere i dati sul confine"
 
 #define MORE_CUSTOM1_TEXT_IT  USER_DESC_1
 #define MORE_CUSTOM2_TEXT_IT  USER_DESC_2

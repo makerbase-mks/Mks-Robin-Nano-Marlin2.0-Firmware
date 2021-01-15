@@ -22,18 +22,15 @@
 
 #include "../gcode.h"
 #include "../../module/stepper.h"
-#include "../../lcd/ultralcd.h"
+#include "../../lcd/marlinui.h"
 
 /**
  * G4: Dwell S<seconds> or P<milliseconds>
  */
 void GcodeSuite::G4() {
   millis_t dwell_ms = 0;
-  #if HAS_CUTTER
-    if (parser.seenval('P')) dwell_ms = parser.value_millis_from_seconds(); // laser grbl return seconds
-  #else
-    if (parser.seenval('P')) dwell_ms = parser.value_millis(); // milliseconds to wait
-  #endif
+
+  if (parser.seenval('P')) dwell_ms = parser.value_millis(); // milliseconds to wait
   if (parser.seenval('S')) dwell_ms = parser.value_millis_from_seconds(); // seconds to wait
 
   planner.synchronize();
