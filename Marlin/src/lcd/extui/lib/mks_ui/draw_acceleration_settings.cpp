@@ -28,6 +28,7 @@
 
 #include "../../../../module/planner.h"
 #include "../../../../inc/MarlinConfig.h"
+#include "../../../../MarlinCore.h"
 
 extern lv_group_t *g;
 static lv_obj_t *scr;
