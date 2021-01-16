@@ -175,11 +175,17 @@
 //#define MAX6675_SS_PIN            HEATER_0_PIN  // TC1 - CS1
 //#define MAX6675_SS_PIN            HEATER_1_PIN  // TC2 - CS2
 
+#if ENABLED(MKS_TEST)
+  #define MKS_TEST_POWER_LOSS_PIN         PA2   // PW_DET
+  #define MKS_TEST_PS_ON_PIN              PB2   // PW_OFF
+#endif
+
 //
 // Misc. Functions
 //
 #define MT_DET_1                            PA4
 #define MT_DET_2                            PE6
+#define MT_DET_PIN_INVERTING                false // LVGL UI filament RUNOUT PIN STATE
 #define PW_DET                              PA13
 #define PW_OFF                              PB2
 
@@ -190,15 +196,16 @@
   #define FIL_RUNOUT2_PIN               MT_DET_2
 #endif
 
-#define POWER_LOSS_PIN                    PW_DET
-#define PS_ON_PIN                         PW_OFF
+//#define MKSPWC
+#ifdef MKSPWC
+  #define SUICIDE_PIN                       PW_OFF   // Enable MKSPWC SUICIDE PIN
+  #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE
+  #define KILL_PIN                          PW_DET   // Enable MKSPWC DET PIN
+  #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
+#endif
 
-//
-// Enable MKSPWC support
-//
-//#define SUICIDE_PIN                       PB2
-//#define KILL_PIN                          PA2
-//#define KILL_PIN_INVERTING                true
+//#define POWER_LOSS_PIN                    PW_DET
+//#define PS_ON_PIN                         PW_OFF
 
 //#define LED_PIN                           PB2
 

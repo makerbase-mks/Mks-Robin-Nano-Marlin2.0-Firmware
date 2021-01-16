@@ -194,22 +194,23 @@
 //
 // Misc. Functions
 //
+
+//#define MKSPWC
+#ifdef MKSPWC
+  #define SUICIDE_PIN                       PB2   // Enable MKSPWC SUICIDE PIN
+  #define SUICIDE_PIN_INVERTING             false // Enable MKSPWC PIN STATE
+  #define KILL_PIN                          PA2   // Enable MKSPWC DET PIN
+  #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
+#endif
+
 #if HAS_TFT_LVGL_UI
-  //#define MKSPWC
-  #ifdef MKSPWC
-    #define SUICIDE_PIN                     PB2   // Enable MKSPWC SUICIDE PIN
-    #define SUICIDE_PIN_INVERTING          false  // Enable MKSPWC PIN STATE
-    #define KILL_PIN                        PA2   // Enable MKSPWC DET PIN
-    #define KILL_PIN_STATE                  true  // Enable MKSPWC PIN STATE
-  #endif
-
-  #define MT_DET_1_PIN                      PA4   // LVGL UI FILAMENT RUNOUT1 PIN
-  #define MT_DET_2_PIN                      PE6   // LVGL UI FILAMENT RUNOUT2 PIN
-  #define MT_DET_PIN_INVERTING             false  // LVGL UI filament RUNOUT PIN STATE
-
-  #define WIFI_IO0_PIN                      PC13  // MKS ESP WIFI IO0 PIN
-  #define WIFI_IO1_PIN                      PC7   // MKS ESP WIFI IO1 PIN
-  #define WIFI_RESET_PIN                    PE9   // MKS ESP WIFI RESET PIN
+  #define MT_DET_1_PIN                        PA4   // LVGL UI FILAMENT RUNOUT1 PIN
+  #define MT_DET_2_PIN                        PE6   // LVGL UI FILAMENT RUNOUT2 PIN
+  #define MT_DET_PIN_INVERTING                false // LVGL UI filament RUNOUT PIN STATE
+ 
+  #define WIFI_IO0_PIN                        PC13  // MKS ESP WIFI IO0 PIN
+  #define WIFI_IO1_PIN       			            PC7   // MKS ESP WIFI IO1 PIN
+  #define WIFI_RESET_PIN				              PE9   // MKS ESP WIFI RESET PIN
 
   #if ENABLED(MKS_TEST)
     #define MKS_TEST_POWER_LOSS_PIN         PA2   // PW_DET
@@ -231,14 +232,28 @@
   #define SDCARD_CONNECTION              ONBOARD
 #endif
 
-#define SDIO_SUPPORT
-#define SDIO_CLOCK                       4500000  // 4.5 MHz
-#define SD_DETECT_PIN                       PD12
-#define ONBOARD_SD_CS_PIN                   PC11
+#if SD_CONNECTION_IS(LCD)
+  #define ENABLE_SPI1
+  #define SD_DETECT_PIN                       PE12
+  #define SCK_PIN                             PA5
+  #define MISO_PIN                            PA6
+  #define MOSI_PIN                            PA7
+  #define SS_PIN                              PE10
+#elif SD_CONNECTION_IS(ONBOARD)
+  #define SDIO_SUPPORT
+  #define SDIO_CLOCK                          4500000  // 4.5 MHz
+  #define SD_DETECT_PIN                       PD12
+  #define ONBOARD_SD_CS_PIN                   PC11
+#elif SD_CONNECTION_IS(CUSTOM_CABLE)
+  #error "No custom SD drive cable defined for this board."
+#endif
 
 //
 // LCD / Controller
 //
+#ifndef BEEPER_PIN
+  #define BEEPER_PIN                        PC5
+#endif
 
 /**
  * Note: MKS Robin TFT screens use various TFT controllers.
@@ -299,6 +314,9 @@
     // MKS MINI12864 and MKS LCD12864B
     // If using MKS LCD12864A (Need to remove RPK2 resistor)
 
+    #define BTN_ENC                         PE13
+    #define BTN_EN1                         PE8
+    #define BTN_EN2                         PE11
     #define LCD_BACKLIGHT_PIN               -1
     #define LCD_RESET_PIN                   -1
     #define DOGLCD_A0                       PD11
@@ -321,6 +339,12 @@
 
   #else                                           // !MKS_MINI_12864
 
+    #define BTN_ENC                           PE13
+    #define BTN_EN1                           PE8
+    #define BTN_EN2                           PE11
+
+    #define LCD_PINS_ENABLE                   PD13
+    #define LCD_PINS_RS                       PC6
     #define LCD_PINS_D4                     PE14
     #if IS_ULTIPANEL
       #define LCD_PINS_D5                   PE15
