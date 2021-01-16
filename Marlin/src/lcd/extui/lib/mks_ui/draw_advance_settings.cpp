@@ -83,7 +83,7 @@ void lv_draw_advance_settings(void) {
     index++;
   #endif
 
-  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACL_POS_X + 10, PARA_UI_BACL_POS_Y, event_handler, ID_ADVANCE_RETURN, true);
+  lv_screen_menu_item_return(scr, event_handler, ID_ADVANCE_RETURN);
 }
 
 void lv_clear_advance_settings() {

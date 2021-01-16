@@ -139,7 +139,9 @@
   #define PARA_UI_SIZE_X            450
   #define PARA_UI_SIZE_Y            40
 
-  #define PARA_UI_ARROW_V          12
+  #define PARA_UI_ARROW_V           12
+  #define PARA_UI_ITEM_TEXT_V       10
+  #define PARA_UI_ITEM_TEXT_H       10
 
   #define PARA_UI_BACL_POS_X        400
   #define PARA_UI_BACL_POS_Y        270
@@ -160,6 +162,9 @@
 
   #define PARA_UI_VALUE_BTN_X_SIZE  70
   #define PARA_UI_VALUE_BTN_Y_SIZE  28
+
+  #define PARA_UI_TURN_BTN_X_SIZE   70
+  #define PARA_UI_TURN_BTN_Y_SIZE   40
 
   #define PARA_UI_BACK_BTN_X_SIZE   70
   #define PARA_UI_BACK_BTN_Y_SIZE   40
@@ -528,10 +533,14 @@ lv_obj_t* lv_big_button_create(lv_obj_t *par, const char *img, const char *text,
 
 // Create a menu item, follow the LVGL UI standard.
 lv_obj_t* lv_screen_menu_item(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, bool drawArrow = true);
-lv_obj_t* lv_screen_menu_item_1_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue);
-lv_obj_t* lv_screen_menu_item_2_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue, const int idEdit2, const char *editValue2);
-lv_obj_t* lv_screen_menu_item_onoff(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const bool curValue);
+
+lv_obj_t*  lv_screen_menu_item_onoff(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const bool curValue);
+
+void lv_screen_menu_item_1_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue);
+void lv_screen_menu_item_2_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue, const int idEdit2, const char *editValue2);
 void lv_screen_menu_item_onoff_update(lv_obj_t *btn, const bool curValue);
+void lv_screen_menu_item_turn_page(lv_obj_t *par, const char *text, lv_event_cb_t cb, const int id);
+void lv_screen_menu_item_return(lv_obj_t *par, lv_event_cb_t cb, const int id);
 
 #define _DIA_1(T)       (uiCfg.dialogType == DIALOG_##T)
 #define DIALOG_IS(V...) DO(DIA,||,V)

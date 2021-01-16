@@ -31,11 +31,12 @@
 #include "draw_ui.h"
 
 extern lv_group_t *g;
-static lv_obj_t *scr, *labelModelValue = nullptr, *buttonModelValue = nullptr, *labelCloudValue = nullptr;
+static lv_obj_t *scr, *labelModelAP = nullptr, *buttonModelAP = nullptr, *labelModelSTA = nullptr, *buttonModelSTA = nullptr, *btnCloudState = nullptr;
 
 enum {
   ID_WIFI_RETURN = 1,
-  ID_WIFI_MODEL,
+  ID_WIFI_AP,
+  ID_WIFI_STA,
   ID_WIFI_NAME,
   ID_WIFI_PASSWORD,
   ID_WIFI_CLOUD,
@@ -49,19 +50,19 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_clear_wifi_settings();
       draw_return_ui();
       break;
-    case ID_WIFI_MODEL:
-      if (gCfgItems.wifi_mode_sel == AP_MODEL) {
-        gCfgItems.wifi_mode_sel = STA_MODEL;
-        lv_label_set_text(labelModelValue, WIFI_STA_TEXT);
-        lv_obj_align(labelModelValue, buttonModelValue, LV_ALIGN_CENTER, 0, 0);
-        update_spi_flash();
-      }
-      else {
-        gCfgItems.wifi_mode_sel = AP_MODEL;
-        lv_label_set_text(labelModelValue, WIFI_AP_TEXT);
-        lv_obj_align(labelModelValue, buttonModelValue, LV_ALIGN_CENTER, 0, 0);
-        update_spi_flash();
-      }
+    case ID_WIFI_AP:
+      if (gCfgItems.wifi_mode_sel == AP_MODEL) return;
+      gCfgItems.wifi_mode_sel = AP_MODEL;
+      lv_btn_set_style_both(buttonModelAP, &style_para_back);
+      lv_btn_set_style_both(buttonModelSTA, &style_para_value);
+      update_spi_flash();
+      break;
+    case ID_WIFI_STA:
+      if (gCfgItems.wifi_mode_sel == STA_MODEL) return;
+      gCfgItems.wifi_mode_sel = STA_MODEL;
+      lv_btn_set_style_both(buttonModelSTA, &style_para_back);
+      lv_btn_set_style_both(buttonModelAP, &style_para_value);
+      update_spi_flash();
       break;
     case ID_WIFI_NAME:
       keyboard_value = wifiName;
@@ -74,16 +75,8 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_draw_keyboard();
       break;
     case ID_WIFI_CLOUD:
-      if (gCfgItems.cloud_enable) {
-        gCfgItems.cloud_enable = false;
-        lv_obj_set_event_cb_mks(obj, event_handler, ID_WIFI_CLOUD, "bmp_disable.bin", 0);
-        lv_label_set_text(labelCloudValue, machine_menu.disable);
-      }
-      else {
-        gCfgItems.cloud_enable = true;
-        lv_obj_set_event_cb_mks(obj, event_handler, ID_WIFI_CLOUD, "bmp_enable.bin", 0);
-        lv_label_set_text(labelCloudValue, machine_menu.enable);
-      }
+      gCfgItems.cloud_enable ^= true;
+      lv_screen_menu_item_onoff_update(btnCloudState, gCfgItems.cloud_enable);
       update_spi_flash();
       break;
     case ID_WIFI_CONFIG:
@@ -96,85 +89,45 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 void lv_draw_wifi_settings(void) {
   scr = lv_screen_create(WIFI_SETTINGS_UI, machine_menu.WifiConfTitle);
 
-  lv_label_create(scr, PARA_UI_POS_X, PARA_UI_POS_Y + 10, machine_menu.wifiMode);
+  lv_label_create(scr, PARA_UI_POS_X + PARA_UI_ITEM_TEXT_H, PARA_UI_POS_Y + 10, machine_menu.wifiMode);
+  buttonModelAP = lv_btn_create(scr, nullptr);
+  lv_obj_set_pos(buttonModelAP, PARA_UI_VALUE_POS_X_2, PARA_UI_POS_Y + PARA_UI_VALUE_V_2);
+  lv_obj_set_size(buttonModelAP, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);
+  lv_obj_set_event_cb_mks(buttonModelAP, event_handler, ID_WIFI_AP, "", 0);
+  lv_btn_use_label_style(buttonModelAP);
+  lv_btn_set_layout(buttonModelAP, LV_LAYOUT_OFF);
+  lv_btn_set_style_both(buttonModelAP, gCfgItems.wifi_mode_sel == AP_MODEL ? &style_para_back : &style_para_value);
+  labelModelAP = lv_label_create_empty(buttonModelAP);
+  lv_label_set_text(labelModelAP, WIFI_AP_TEXT);
+  lv_obj_align(labelModelAP, buttonModelAP, LV_ALIGN_CENTER, 0, 0);
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, buttonModelAP);
 
-  lv_obj_t *buttonModelValue = lv_imgbtn_create(scr, "F:/bmp_blank_sel.bin", PARA_UI_VALUE_POS_X, PARA_UI_POS_Y + PARA_UI_VALUE_V, event_handler, ID_WIFI_MODEL);
-  lv_btn_set_style_both(buttonModelValue, &style_para_value_pre);
-  labelModelValue = lv_label_create_empty(buttonModelValue);
+  buttonModelSTA = lv_btn_create(scr, nullptr);
+  lv_obj_set_pos(buttonModelSTA, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y + PARA_UI_VALUE_V);
+  lv_obj_set_size(buttonModelSTA, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE);
+  lv_obj_set_event_cb_mks(buttonModelSTA, event_handler, ID_WIFI_STA, "", 0);
+  lv_btn_use_label_style(buttonModelSTA);
+  lv_btn_set_layout(buttonModelSTA, LV_LAYOUT_OFF);
+  labelModelSTA = lv_label_create_empty(buttonModelSTA);
+  lv_btn_set_style_both(buttonModelSTA, gCfgItems.wifi_mode_sel == STA_MODEL ? &style_para_back : &style_para_value);
+  lv_label_set_text(labelModelSTA, WIFI_STA_TEXT);
+  lv_obj_align(labelModelSTA, buttonModelSTA, LV_ALIGN_CENTER, 0, 0);
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, buttonModelSTA);
 
   lv_obj_t *line1 = lv_line_create(scr, nullptr);
   lv_ex_line(line1, line_points[0]);
 
-  lv_obj_t *labelNameText = lv_label_create(scr, PARA_UI_POS_X, PARA_UI_POS_Y * 2 + 10, nullptr);
-  lv_obj_t *buttonNameValue = lv_btn_create(scr, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 2 + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, event_handler, ID_WIFI_NAME);
-  lv_obj_t *labelNameValue = lv_label_create_empty(buttonNameValue);
+  strcpy_P(public_buf_m, PSTR(machine_menu.wifiName));
+  strcat_P(public_buf_m, PSTR((const char *)uiCfg.wifi_name));
+  lv_screen_menu_item_1_edit(scr, public_buf_m, PARA_UI_POS_X, PARA_UI_POS_Y * 2, event_handler, ID_WIFI_NAME, 1, machine_menu.wifiEdit);
 
-  lv_obj_t *line2 = lv_line_create(scr, nullptr);
-  lv_ex_line(line2, line_points[1]);
+  strcpy_P(public_buf_m, PSTR(machine_menu.wifiPassWord));
+  strcat_P(public_buf_m, PSTR((const char *)uiCfg.wifi_key));
+  lv_screen_menu_item_1_edit(scr, public_buf_m, PARA_UI_POS_X, PARA_UI_POS_Y * 3, event_handler, ID_WIFI_PASSWORD, 2, machine_menu.wifiEdit);
 
-  lv_obj_t *labelPassWordText = lv_label_create(scr, PARA_UI_POS_X, PARA_UI_POS_Y * 3 + 10, nullptr);
-  lv_obj_t *buttonPassWordValue = lv_btn_create(scr, PARA_UI_VALUE_POS_X, PARA_UI_POS_Y * 3 + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, event_handler, ID_WIFI_PASSWORD);
-  lv_obj_t *labelPassWordValue = lv_label_create_empty(buttonPassWordValue);
-
-  lv_obj_t *line3 = lv_line_create(scr, nullptr);
-  lv_ex_line(line3, line_points[2]);
-
-  lv_label_create(scr, PARA_UI_POS_X, PARA_UI_POS_Y * 4 + 10, machine_menu.wifiCloud);
-  lv_obj_t *buttonCloudValue = lv_imgbtn_create(scr, gCfgItems.cloud_enable ? "F:/bmp_enable.bin" : "F:/bmp_disable.bin", PARA_UI_STATE_POS_X, PARA_UI_POS_Y * 4 + PARA_UI_STATE_V, event_handler, ID_WIFI_CLOUD);
-  labelCloudValue = lv_label_create_empty(buttonCloudValue);
-
-  lv_obj_t *line4 = lv_line_create(scr, nullptr);
-  lv_ex_line(line4, line_points[3]);
-
-  lv_obj_t *buttonConfig = lv_imgbtn_create(scr, "F:/bmp_back70x40.bin", PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, event_handler, ID_WIFI_CONFIG);
-  lv_obj_t *labelConfig = lv_label_create_empty(buttonConfig);
-
-  lv_obj_t *buttonBack = lv_imgbtn_create(scr, "F:/bmp_back70x40.bin", PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y, event_handler, ID_WIFI_RETURN);
-  lv_obj_t *label_Back = lv_label_create_empty(buttonBack);
-
-  if (gCfgItems.multiple_language) {
-    if (gCfgItems.wifi_mode_sel == AP_MODEL) {
-      lv_label_set_text(labelModelValue, WIFI_AP_TEXT);
-      lv_obj_align(labelModelValue, buttonModelValue, LV_ALIGN_CENTER, 0, 0);
-    }
-    else {
-      lv_label_set_text(labelModelValue, WIFI_STA_TEXT);
-      lv_obj_align(labelModelValue, buttonModelValue, LV_ALIGN_CENTER, 0, 0);
-    }
-    strcpy(public_buf_m, machine_menu.wifiName);
-    strcat(public_buf_m, (const char *)uiCfg.wifi_name);
-    lv_label_set_text(labelNameText, public_buf_m);
-
-    lv_label_set_text(labelNameValue, machine_menu.wifiEdit);
-    lv_obj_align(labelNameValue, buttonNameValue, LV_ALIGN_CENTER, 0, 0);
-
-    strcpy(public_buf_m, machine_menu.wifiPassWord);
-    strcat(public_buf_m, (const char *)uiCfg.wifi_key);
-    lv_label_set_text(labelPassWordText, public_buf_m);
-
-    lv_label_set_text(labelPassWordValue, machine_menu.wifiEdit);
-    lv_obj_align(labelPassWordValue, buttonPassWordValue, LV_ALIGN_CENTER, 0, 0);
-
-    lv_label_set_text(labelCloudValue, gCfgItems.cloud_enable ? machine_menu.enable : machine_menu.disable);
-    lv_obj_align(labelCloudValue, buttonCloudValue, LV_ALIGN_CENTER, 0, 0);
-
-    lv_label_set_text(labelConfig, machine_menu.wifiConfig);
-    lv_obj_align(labelConfig, buttonConfig, LV_ALIGN_CENTER, 0, 0);
-
-    lv_label_set_text(label_Back, common_menu.text_back);
-    lv_obj_align(label_Back, buttonBack, LV_ALIGN_CENTER, 0, 0);
-  }
-
-  #if HAS_ROTARY_ENCODER
-    if (gCfgItems.encoder_enable) {
-      lv_group_add_obj(g, buttonModelValue);
-      lv_group_add_obj(g, buttonNameValue);
-      lv_group_add_obj(g, buttonPassWordValue);
-      lv_group_add_obj(g, buttonCloudValue);
-      lv_group_add_obj(g, buttonConfig);
-      lv_group_add_obj(g, buttonBack);
-    }
-  #endif
+  btnCloudState = lv_screen_menu_item_onoff(scr, machine_menu.wifiCloud, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_WIFI_CLOUD, 3, gCfgItems.cloud_enable);
+  lv_screen_menu_item_turn_page(scr, machine_menu.wifiConfig, event_handler, ID_WIFI_CONFIG);
+  lv_screen_menu_item_return(scr, event_handler, ID_WIFI_RETURN);
 }
 
 void lv_clear_wifi_settings() {

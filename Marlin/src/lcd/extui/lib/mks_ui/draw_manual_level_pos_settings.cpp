@@ -123,17 +123,17 @@ void lv_draw_manual_level_pos_settings(void) {
     sprintf_P(buf2, PSTR("%d"), gCfgItems.levelingPos[3][1]);
     lv_screen_menu_item_2_edit(scr, leveling_menu.position4, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_MANUAL_POS_Y4, 3, buf2, ID_MANUAL_POS_X4, public_buf_l);
 
-    lv_big_button_create(scr, "F:/bmp_back70x40.bin", machine_menu.next, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, event_handler, ID_MANUAL_POS_DOWN, true);
+    lv_screen_menu_item_turn_page(scr, machine_menu.next, event_handler, ID_MANUAL_POS_DOWN);
   }
   else {
     sprintf_P(public_buf_l, PSTR("%d"), gCfgItems.levelingPos[4][0]);
     sprintf_P(buf2, PSTR("%d"), gCfgItems.levelingPos[4][1]);
     lv_screen_menu_item_2_edit(scr, leveling_menu.position4, PARA_UI_POS_X, PARA_UI_POS_Y, event_handler, ID_MANUAL_POS_Y5, 0, buf2, ID_MANUAL_POS_X5, public_buf_l);
 
-    lv_big_button_create(scr, "F:/bmp_back70x40.bin", machine_menu.previous, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, event_handler, ID_MANUAL_POS_UP, true);
+    lv_screen_menu_item_turn_page(scr, machine_menu.previous, event_handler, ID_MANUAL_POS_UP);
   }
 
-  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACL_POS_X + 10, PARA_UI_BACL_POS_Y, event_handler, ID_MANUAL_POS_RETURN, true);
+  lv_screen_menu_item_return(scr, event_handler, ID_MANUAL_POS_RETURN);
 }
 
 void lv_clear_manual_level_pos_settings() {

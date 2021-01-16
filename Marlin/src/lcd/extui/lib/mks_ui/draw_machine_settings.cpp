@@ -69,7 +69,7 @@ void lv_draw_machine_settings(void) {
   #if HAS_CLASSIC_JERK
     lv_screen_menu_item(scr, machine_menu.JerkConf, PARA_UI_POS_X, PARA_UI_POS_Y * 3, event_handler, ID_MACHINE_JERK, 2);
   #endif
-  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACL_POS_X + 10, PARA_UI_BACL_POS_Y, event_handler, ID_MACHINE_RETURN, true);
+  lv_screen_menu_item_return(scr, event_handler, ID_MACHINE_RETURN);
 }
 
 void lv_clear_machine_settings() {

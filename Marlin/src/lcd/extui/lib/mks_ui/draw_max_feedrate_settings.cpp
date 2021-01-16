@@ -97,16 +97,16 @@ void lv_draw_max_feedrate_settings(void) {
     sprintf_P(public_buf_l, PSTR("%s"), dtostrf(planner.settings.max_feedrate_mm_s[E_AXIS], 1, 1, str_1));
     lv_screen_menu_item_1_edit(scr, machine_menu.E0MaxFeedRate, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_FEED_E0, 3, public_buf_l);
 
-    lv_big_button_create(scr, "F:/bmp_back70x40.bin", machine_menu.next, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, event_handler, ID_FEED_DOWN, true);
+    lv_screen_menu_item_turn_page(scr, machine_menu.next, event_handler, ID_FEED_DOWN);
   }
   else {
     sprintf_P(public_buf_l, PSTR("%s"), dtostrf(planner.settings.max_feedrate_mm_s[E_AXIS_N(1)], 1, 1, str_1));
     lv_screen_menu_item_1_edit(scr, machine_menu.E1MaxFeedRate, PARA_UI_POS_X, PARA_UI_POS_Y, event_handler, ID_FEED_E1, 0, public_buf_l);
 
-    lv_big_button_create(scr, "F:/bmp_back70x40.bin", machine_menu.previous, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, event_handler, ID_FEED_UP, true);
+    lv_screen_menu_item_turn_page(scr, machine_menu.previous, event_handler, ID_FEED_UP);
   }
 
-  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y, event_handler, ID_FEED_RETURN, true);
+  lv_screen_menu_item_return(scr, event_handler, ID_FEED_RETURN);
 }
 
 void lv_clear_max_feedrate_settings() {

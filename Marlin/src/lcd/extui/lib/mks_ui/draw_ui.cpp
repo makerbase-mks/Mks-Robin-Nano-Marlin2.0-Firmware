@@ -1333,7 +1333,7 @@ lv_obj_t* lv_screen_menu_item(lv_obj_t *par, const char *text, lv_coord_t x, lv_
   lv_obj_t *label = lv_label_create_empty(btn);        /*Add a label to the button*/
   if (gCfgItems.multiple_language) {
     lv_label_set_text(label, text);
-    lv_obj_align(label, btn, LV_ALIGN_IN_LEFT_MID, 0, 0);
+    lv_obj_align(label, btn, LV_ALIGN_IN_LEFT_MID, PARA_UI_ITEM_TEXT_H, 0);
   }
   if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable))
     lv_group_add_obj(g, btn);
@@ -1346,38 +1346,49 @@ lv_obj_t* lv_screen_menu_item(lv_obj_t *par, const char *text, lv_coord_t x, lv_
   return btn;
 }
 
-lv_obj_t* lv_screen_menu_item_1_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue) {
-  lv_obj_t* btn = lv_screen_menu_item(par, text, x, y, cb, -1, index, false);
+lv_obj_t*  lv_screen_menu_item_onoff(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const bool curValue) {
+  lv_label_create(par, x + PARA_UI_ITEM_TEXT_H, y + PARA_UI_ITEM_TEXT_V, text);
+
+  lv_obj_t* btnValue = lv_imgbtn_create(par, curValue ? "F:/bmp_enable.bin" : "F:/bmp_disable.bin", PARA_UI_STATE_POS_X, y + PARA_UI_STATE_V, cb, id);
+  lv_obj_t* labelValue = lv_label_create_empty(btnValue);
+  lv_label_set_text(labelValue, curValue ? machine_menu.enable : machine_menu.disable);
+  lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, btnValue);
+  lv_obj_t *line1 = lv_line_create(par, nullptr);
+  lv_ex_line(line1, line_points[index]);
+  return btnValue;
+}
+
+void lv_screen_menu_item_1_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue) {
+  lv_label_create(par, x + PARA_UI_ITEM_TEXT_H, y + PARA_UI_ITEM_TEXT_V, text);
+
   lv_obj_t* btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
   lv_obj_t* labelValue = lv_label_create_empty(btnValue);
   lv_label_set_text(labelValue, editValue);
   lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
-  return btn;
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, btnValue);
+
+  lv_obj_t *line1 = lv_line_create(par, nullptr);
+  lv_ex_line(line1, line_points[index]);
 }
 
-lv_obj_t* lv_screen_menu_item_2_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue, const int idEdit2, const char *editValue2) {
-  lv_obj_t* btn = lv_screen_menu_item(par, text, x, y, cb, -1, index, false);
+void lv_screen_menu_item_2_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue, const int idEdit2, const char *editValue2) {
+  lv_label_create(par, x + PARA_UI_ITEM_TEXT_H, y + PARA_UI_ITEM_TEXT_V, text);
 
   lv_obj_t* btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X_2, y + PARA_UI_VALUE_V_2, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, idEdit2);
   lv_obj_t* labelValue = lv_label_create_empty(btnValue);
   lv_label_set_text(labelValue, editValue2);
   lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, btnValue);
 
   btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
   labelValue = lv_label_create_empty(btnValue);
   lv_label_set_text(labelValue, editValue);
   lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, btnValue);
 
-  return btn;
-}
-
-lv_obj_t* lv_screen_menu_item_onoff(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const bool curValue) {
-  lv_screen_menu_item(par, text, x, y, cb, -1, index, false);
-  lv_obj_t* btnValue = lv_imgbtn_create(par, curValue ? "F:/bmp_enable.bin" : "F:/bmp_disable.bin", PARA_UI_STATE_POS_X, y + PARA_UI_STATE_V, cb, id);
-  lv_obj_t* labelValue = lv_label_create_empty(btnValue);
-  lv_label_set_text(labelValue, curValue ? machine_menu.enable : machine_menu.disable);
-  lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
-  return btnValue;
+  lv_obj_t *line1 = lv_line_create(par, nullptr);
+  lv_ex_line(line1, line_points[index]);
 }
 
 void lv_screen_menu_item_onoff_update(lv_obj_t *btn, const bool curValue) {
@@ -1385,6 +1396,25 @@ void lv_screen_menu_item_onoff_update(lv_obj_t *btn, const bool curValue) {
   lv_label_set_text((lv_obj_t*)btn->child_ll.head, curValue ? machine_menu.enable : machine_menu.disable);
 }
 
+void lv_screen_menu_item_turn_page(lv_obj_t *par, const char *text, lv_event_cb_t cb, const int id) {
+  lv_obj_t* btnTurnPage = lv_btn_create(par, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, PARA_UI_TURN_BTN_X_SIZE, PARA_UI_TURN_BTN_Y_SIZE, cb, id);
+  lv_obj_t* labelTurnPage = lv_label_create_empty(btnTurnPage);
+  lv_btn_set_style_both(btnTurnPage, &style_para_back);
+  lv_label_set_text(labelTurnPage, text);
+  lv_obj_align(labelTurnPage, btnTurnPage, LV_ALIGN_CENTER, 0, 0);
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable))
+    lv_group_add_obj(g, btnTurnPage);
+}
+
+void lv_screen_menu_item_return(lv_obj_t *par, lv_event_cb_t cb, const int id) {
+  lv_obj_t* btnReturn = lv_btn_create(par, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y, PARA_UI_BACK_BTN_X_SIZE, PARA_UI_BACK_BTN_Y_SIZE, cb, id);
+  lv_obj_t* labelReturn = lv_label_create_empty(btnReturn);
+  lv_btn_set_style_both(btnReturn, &style_para_back);
+  lv_label_set_text(labelReturn, common_menu.text_back);
+  lv_obj_align(labelReturn, btnReturn, LV_ALIGN_CENTER, 0, 0);
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable))
+    lv_group_add_obj(g, btnReturn);
+}
 
 #if ENABLED(SDSUPPORT)
 
