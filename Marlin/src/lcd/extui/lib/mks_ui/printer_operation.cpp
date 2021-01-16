@@ -43,6 +43,7 @@ extern uint32_t To_pre_view;
 extern bool flash_preview_begin, default_preview_flg, gcode_preview_over;
 void esp_port_begin(uint8_t interrupt);
 void printer_state_polling() {
+  char str_1[16], str_2[16];
   if (uiCfg.print_state == PAUSING) {
     #if ENABLED(SDSUPPORT)
       if (!planner.has_blocks_queued() && card.getIndex() > MIN_FILE_PRINTED)
@@ -61,12 +62,12 @@ void printer_state_polling() {
 
         if (gCfgItems.pausePosZ != (float)-1) {
           gcode.process_subcommands_now_P(PSTR("G91"));
-          sprintf_P(public_buf_l, PSTR("G1 Z%.1f"), gCfgItems.pausePosZ);
+          sprintf_P(public_buf_l, PSTR("%s"), dtostrf(gCfgItems.pausePosZ, 1, 1, str_1));
           gcode.process_subcommands_now(public_buf_l);
           gcode.process_subcommands_now_P(PSTR("G90"));
         }
         if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
-          sprintf_P(public_buf_l, PSTR("G1 X%.1f Y%.1f"), gCfgItems.pausePosX, gCfgItems.pausePosY);
+          sprintf_P(public_buf_l, PSTR("G1 X%s Y%s"), dtostrf(gCfgItems.pausePosX, 1, 1, str_1), dtostrf(gCfgItems.pausePosY, 1, 1, str_2));
           gcode.process_subcommands_now(public_buf_l);
         }
         uiCfg.print_state = PAUSED;
@@ -86,12 +87,12 @@ void printer_state_polling() {
   if (uiCfg.print_state == RESUMING) {
     if (IS_SD_PAUSED()) {
       if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
-        sprintf_P(public_buf_m, PSTR("G1 X%.1f Y%.1f"), uiCfg.current_x_position_bak, uiCfg.current_y_position_bak);
+        sprintf_P(public_buf_m, PSTR("G1 X%s Y%s"), dtostrf(uiCfg.current_x_position_bak, 1, 1, str_1), dtostrf(uiCfg.current_y_position_bak, 1, 1, str_2));
         gcode.process_subcommands_now(public_buf_m);
       }
       if (gCfgItems.pausePosZ != (float)-1) {
         ZERO(public_buf_m);
-        sprintf_P(public_buf_m, PSTR("G1 Z%.1f"), uiCfg.current_z_position_bak);
+        sprintf_P(public_buf_m, PSTR("G1 Z%s"), dtostrf(uiCfg.current_z_position_bak, 1, 1, str_1));
         gcode.process_subcommands_now(public_buf_m);
       }
       gcode.process_subcommands_now_P(M24_STR);

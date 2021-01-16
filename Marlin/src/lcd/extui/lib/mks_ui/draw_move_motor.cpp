@@ -58,15 +58,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_M_X_P:
       if (queue.length <= (BUFSIZE - 3)) {
         queue.enqueue_one_P(PSTR("G91"));
-        //sprintf_P(public_buf_l, PSTR("G1 X%3.1f F%d"), uiCfg.move_dist, uiCfg.moveSpeed);
         sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
-        sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 2, 3, str_1), uiCfg.moveSpeed);
-        sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 3, 3, str_1), uiCfg.moveSpeed);
-        sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 4, 3, str_1), uiCfg.moveSpeed);
-        sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 4, 1, str_1), uiCfg.moveSpeed);
-        sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 4, 2, str_1), uiCfg.moveSpeed);
-        sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 4, 3, str_1), uiCfg.moveSpeed);
-        sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 4, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
         queue.enqueue_one_P(PSTR("G90"));
         cur_label = 'X';
@@ -75,7 +67,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_M_X_N:
       if (queue.length <= (BUFSIZE - 3)) {
         queue.enqueue_now_P(PSTR("G91"));
-        sprintf_P(public_buf_l, PSTR("G1 X-%3.1f F%d"), uiCfg.move_dist, uiCfg.moveSpeed);
+        sprintf_P(public_buf_l, PSTR("G1 X-%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
         queue.enqueue_now_P(PSTR("G90"));
         cur_label = 'X';
@@ -84,7 +76,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_M_Y_P:
       if (queue.length <= (BUFSIZE - 3)) {
         queue.enqueue_now_P(PSTR("G91"));
-        sprintf_P(public_buf_l, PSTR("G1 Y%3.1f F%d"), uiCfg.move_dist, uiCfg.moveSpeed);
+        sprintf_P(public_buf_l, PSTR("G1 Y%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
         queue.enqueue_now_P(PSTR("G90"));
         cur_label = 'Y';
@@ -93,7 +85,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_M_Y_N:
       if (queue.length <= (BUFSIZE - 3)) {
         queue.enqueue_now_P(PSTR("G91"));
-        sprintf_P(public_buf_l, PSTR("G1 Y-%3.1f F%d"), uiCfg.move_dist, uiCfg.moveSpeed);
+        sprintf_P(public_buf_l, PSTR("G1 Y-%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
         queue.enqueue_now_P(PSTR("G90"));
         cur_label = 'Y';
@@ -102,7 +94,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_M_Z_P:
       if (queue.length <= (BUFSIZE - 3)) {
         queue.enqueue_now_P(PSTR("G91"));
-        sprintf_P(public_buf_l, PSTR("G1 Z%3.1f F%d"), uiCfg.move_dist, uiCfg.moveSpeed);
+        sprintf_P(public_buf_l, PSTR("G1 Z%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
         queue.enqueue_now_P(PSTR("G90"));
         cur_label = 'Z';
@@ -111,7 +103,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_M_Z_N:
       if (queue.length <= (BUFSIZE - 3)) {
         queue.enqueue_now_P(PSTR("G91"));
-        sprintf_P(public_buf_l, PSTR("G1 Z-%3.1f F%d"), uiCfg.move_dist, uiCfg.moveSpeed);
+        sprintf_P(public_buf_l, PSTR("G1 Z-%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
         queue.enqueue_now_P(PSTR("G90"));
         cur_label = 'Z';
