@@ -102,8 +102,8 @@ uint8_t sel_id = 0;
 
 bool have_pre_pic(char *path) {
   #if ENABLED(SDSUPPORT)
-    char *ps1, *ps2, *cur_name = strrchr(path, '/');
-    card.openFileRead(cur_name);
+    char *ps1, *ps2;//, *cur_name = strrchr(path, '/');
+    card.openFileRead(path);
     card.read(public_buf, 512);
     ps1 = strstr((char *)public_buf, ";simage:");
     card.read(public_buf, 512);
@@ -243,7 +243,7 @@ void lv_draw_print_file(void) {
   }
   */
 }
-static char test_public_buf_l[40];
+static char test_public_buf_l[(SHORT_NAME_LEN + 1) * MAX_DIR_LEVEL + strlen("S:/") + 1];
 void disp_gcode_icon(uint8_t file_num) {
   uint8_t i;
 
@@ -359,11 +359,11 @@ uint32_t lv_open_gcode_file(char *path) {
   #if ENABLED(SDSUPPORT)
     uint32_t *ps4;
     uint32_t pre_sread_cnt = UINT32_MAX;
-    char *cur_name;
+    //char *cur_name;
 
-    cur_name = strrchr(path, '/');
+    //cur_name = strrchr(path, '/');
 
-    card.openFileRead(cur_name);
+    card.openFileRead(path);
     card.read(public_buf, 512);
     ps4 = (uint32_t *)strstr((char *)public_buf, ";simage:");
     // Ignore the beginning message of gcode file

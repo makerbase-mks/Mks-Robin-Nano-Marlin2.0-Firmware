@@ -80,20 +80,22 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
 
     #if ENABLED(SDSUPPORT)
       if (!gcode_preview_over) {
-        char *cur_name;
-        cur_name = strrchr(list_file.file_name[sel_id], '/');
+        //char *cur_name;
+        //cur_name = strrchr(list_file.file_name[sel_id], '/');
 
-        SdFile file, *curDir;
+        //SdFile file, *curDir;
         card.endFilePrint();
-        const char * const fname = card.diveToFile(true, curDir, cur_name);
-        if (!fname) return;
-        if (file.open(curDir, fname, O_READ)) {
-          gCfgItems.curFilesize = file.fileSize();
-          file.close();
-          update_spi_flash();
-        }
-        card.openFileRead(cur_name);
+        //const char * const fname = card.diveToFile(true, curDir, cur_name);
+        //if (!fname) return;
+        //if (file.open(curDir, fname, O_READ)) {
+          //gCfgItems.curFilesize = file.fileSize();
+          //file.close();
+          //update_spi_flash();
+        //}
+        card.openFileRead(list_file.file_name[sel_id]);
         if (card.isFileOpen()) {
+          gCfgItems.curFilesize = card.getFileSize();
+          update_spi_flash();
           feedrate_percentage = 100;
           planner.flow_percentage[0] = 100;
           planner.e_factor[0]        = planner.flow_percentage[0] * 0.01f;
