@@ -160,7 +160,7 @@ typedef enum {
 typedef struct {
   uint32_t uart_read_point;
   uint32_t uart_write_point;
-  uint8_t uartTxBuffer[UART_FIFO_BUFFER_SIZE];
+  //uint8_t uartTxBuffer[UART_FIFO_BUFFER_SIZE];
 } SZ_USART_FIFO;
 
 #define WIFI_GCODE_BUFFER_LEAST_SIZE    96
