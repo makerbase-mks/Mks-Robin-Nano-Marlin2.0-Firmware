@@ -589,8 +589,9 @@ static bool longName2DosName(const char *longName, uint8_t *dosName) {
     if (len > UDISKBUFLEN) return 0;
 
     if (wifiDmaRcvFifo.state[tmpW] == udisk_buf_empty) {
+      const int timeOut = 2000; //millisecond
       dmaTransmitBegin();
-      if(HAL_DMA_PollForTransferCustomize(&wifiUsartDMArx, HAL_DMA_FULL_TRANSFER, HAL_MAX_DELAY) == HAL_OK) {
+      if(HAL_DMA_PollForTransferCustomize(&wifiUsartDMArx, HAL_DMA_FULL_TRANSFER, timeOut) == HAL_OK) {
         memcpy((unsigned char *) wifiDmaRcvFifo.bufferAddr[tmpW], (uint8_t *)bufToCpy, len);
         wifiDmaRcvFifo.state[tmpW] = udisk_buf_full;
         wifiDmaRcvFifo.write_cur = (tmpW + 1) % TRANS_RCV_FIFO_BLOCK_NUM;
