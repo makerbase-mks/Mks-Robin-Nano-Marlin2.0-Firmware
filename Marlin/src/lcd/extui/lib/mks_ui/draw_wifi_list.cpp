@@ -52,7 +52,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
 
   if (obj->mks_obj_id == ID_WL_RETURN) {
-    clear_cur_ui();
+    lv_clear_cur_ui();
     lv_draw_set();
   }
   else if (obj->mks_obj_id == ID_WL_DOWN) {

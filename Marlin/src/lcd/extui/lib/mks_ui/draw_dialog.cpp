@@ -124,7 +124,7 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
     #endif
   }
   else if (DIALOG_IS(TYPE_FINISH_PRINT)) {
-    clear_cur_ui();
+    lv_clear_cur_ui();
     lv_draw_ready_print();
   }
   #if ENABLED(ADVANCED_PAUSE_FEATURE)
@@ -133,23 +133,23 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
     else if (DIALOG_IS(PAUSE_MESSAGE_OPTION))
       pause_menu_response = PAUSE_RESPONSE_EXTRUDE_MORE;
     else if (DIALOG_IS(PAUSE_MESSAGE_RESUME)) {
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
   #endif
   else if (DIALOG_IS(STORE_EEPROM_TIPS)) {
     TERN_(EEPROM_SETTINGS, (void)settings.save());
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
   else if (DIALOG_IS(READ_EEPROM_TIPS)) {
     TERN_(EEPROM_SETTINGS, (void)settings.load());
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
   else if (DIALOG_IS(REVERT_EEPROM_TIPS)) {
     TERN_(EEPROM_SETTINGS, (void)settings.reset());
-    clear_cur_ui();
+    lv_clear_cur_ui();
     #if ENABLED(TOUCH_SCREEN_CALIBRATION)
       const bool do_draw_cal = touch_calibration.need_calibration();
       if (do_draw_cal) {
@@ -159,31 +159,31 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
     #else
       constexpr bool do_draw_cal = false;
     #endif
-    if (!do_draw_cal) draw_return_ui();
+    if (!do_draw_cal) lv_draw_return_ui();
   }
   else if (DIALOG_IS(WIFI_CONFIG_TIPS)) {
     uiCfg.configWifi = 1;
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
   else if (DIALOG_IS(TYPE_FILAMENT_HEAT_LOAD_COMPLETED))
     uiCfg.filament_heat_completed_load = 1;
   else if (DIALOG_IS(TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED))
     uiCfg.filament_heat_completed_unload = 1;
   else if (DIALOG_IS(TYPE_FILAMENT_LOAD_COMPLETED, TYPE_FILAMENT_UNLOAD_COMPLETED)) {
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
   #if ENABLED(MKS_WIFI_MODULE)
     else if (DIALOG_IS(TYPE_UNBIND)) {
       cloud_unbind();
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     }
   #endif
   else {
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
 }
 
@@ -195,8 +195,8 @@ static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
   else if (DIALOG_IS(TYPE_FILAMENT_LOAD_HEAT, TYPE_FILAMENT_UNLOAD_HEAT, TYPE_FILAMENT_HEAT_LOAD_COMPLETED, TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED)) {
     thermalManager.temp_hotend[uiCfg.curSprayerChoose].target= uiCfg.desireSprayerTempBak;
     thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
   else if (DIALOG_IS(TYPE_FILAMENT_LOADING, TYPE_FILAMENT_UNLOADING)) {
     queue.enqueue_one_P(PSTR("M410"));
@@ -209,12 +209,12 @@ static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
     uiCfg.filament_unloading_time_cnt  = 0;
     thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
     thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
   else {
-    clear_cur_ui();
-    draw_return_ui();
+    lv_clear_cur_ui();
+    lv_draw_return_ui();
   }
 }
 

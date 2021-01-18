@@ -44,7 +44,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   switch (obj->mks_obj_id) {
     case ID_PARA_RETURN:
       lv_clear_machine_para();
-      draw_return_ui();
+      lv_draw_return_ui();
       break;
     case ID_PARA_MACHINE:
       lv_clear_machine_para();

@@ -65,7 +65,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_TMC_MODE_RETURN:
       uiCfg.para_ui_page = 0;
       lv_clear_tmc_step_mode_settings();
-      draw_return_ui();
+      lv_draw_return_ui();
       break;
 
     #if AXIS_HAS_STEALTHCHOP(X)

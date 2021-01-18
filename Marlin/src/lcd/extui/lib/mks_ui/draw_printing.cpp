@@ -275,27 +275,6 @@ void setProBarRate() {
     sprintf_P(public_buf_l, "%d%%", rate);
     lv_label_set_text(bar1ValueText,public_buf_l);
     lv_obj_align(bar1ValueText, bar1, LV_ALIGN_CENTER, 0, 0);
-
-    if (marlin_state == MF_SD_COMPLETE) {
-      if (once_flag == 0) {
-        stop_print_time();
-
-        flash_preview_begin = false;
-        default_preview_flg = false;
-        lv_clear_printing();
-        lv_draw_dialog(DIALOG_TYPE_FINISH_PRINT);
-
-        once_flag = true;
-
-        #if HAS_SUICIDE
-          if (gCfgItems.finish_power_off) {
-            gcode.process_subcommands_now_P(PSTR("M1001"));
-            queue.inject_P(PSTR("M81"));
-            marlin_state = MF_RUNNING;
-          }
-        #endif
-      }
-    }
   }
 }
 

@@ -103,7 +103,7 @@ static void lv_kb_event_cb(lv_obj_t *kb, lv_event_t event) {
   else if (strcmp(txt, LV_SYMBOL_CLOSE) == 0) {
     if (kb->event_cb != lv_kb_def_event_cb) {
       lv_clear_keyboard();
-      draw_return_ui();
+      lv_draw_return_ui();
     }
     else {
       lv_kb_set_ta(kb, nullptr); // De-assign the text area  to hide it cursor if needed
@@ -120,12 +120,12 @@ static void lv_kb_event_cb(lv_obj_t *kb, lv_event_t event) {
           case wifiName:
             memcpy(uiCfg.wifi_name,ret_ta_txt,sizeof(uiCfg.wifi_name));
             lv_clear_keyboard();
-            draw_return_ui();
+            lv_draw_return_ui();
             break;
           case wifiPassWord:
             memcpy(uiCfg.wifi_key,ret_ta_txt,sizeof(uiCfg.wifi_name));
             lv_clear_keyboard();
-            draw_return_ui();
+            lv_draw_return_ui();
             break;
           case wifiConfig:
             ZERO(uiCfg.wifi_name);
@@ -158,7 +158,7 @@ static void lv_kb_event_cb(lv_obj_t *kb, lv_event_t event) {
           strncpy((char *)buf,ret_ta_txt,sizeof(buf));
           update_gcode_command(AUTO_LEVELING_COMMAND_ADDR,buf);
           lv_clear_keyboard();
-          draw_return_ui();
+          lv_draw_return_ui();
           break;
         default: break;
       }

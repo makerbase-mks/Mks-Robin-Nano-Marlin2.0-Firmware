@@ -54,7 +54,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_MANUAL_POS_RETURN:
       uiCfg.para_ui_page = 0;
       lv_clear_manual_level_pos_settings();
-      draw_return_ui();
+      lv_draw_return_ui();
       return;
     case ID_MANUAL_POS_X1:
       value = level_pos_x1;

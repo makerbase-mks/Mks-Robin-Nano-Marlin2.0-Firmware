@@ -66,8 +66,8 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       gcode.process_subcommands_now_P(PSTR("M107"));
       return;
     case ID_F_RETURN:
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
       return;
   }
   sprintf_P(public_buf_l, PSTR("M106 S%d"), fanSpeed);

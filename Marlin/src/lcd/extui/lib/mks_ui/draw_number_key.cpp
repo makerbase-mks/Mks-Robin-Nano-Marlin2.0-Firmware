@@ -652,7 +652,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       last_disp_state = NUMBER_KEY_UI;
       if (strlen(key_value) != 0) set_value_confirm();
       lv_clear_number_key();
-      draw_return_ui();
+      lv_draw_return_ui();
       break;
   }
 }

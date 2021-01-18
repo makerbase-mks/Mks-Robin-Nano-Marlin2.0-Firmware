@@ -41,7 +41,7 @@ enum {
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
-  clear_cur_ui();
+  lv_clear_cur_ui();
   switch (obj->mks_obj_id) {
     case ID_W_RETURN:
       lv_draw_set();

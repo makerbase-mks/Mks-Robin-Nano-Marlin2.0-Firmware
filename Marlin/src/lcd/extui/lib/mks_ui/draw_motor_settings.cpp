@@ -44,7 +44,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   lv_clear_motor_settings();
   switch (obj->mks_obj_id) {
     case ID_MOTOR_RETURN:
-      draw_return_ui();
+      lv_draw_return_ui();
       break;
     case ID_MOTOR_STEPS:
       lv_draw_step_settings();

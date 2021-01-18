@@ -44,7 +44,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   switch (obj->mks_obj_id) {
     case ID_ADVANCE_RETURN:
       lv_clear_advance_settings();
-      draw_return_ui();
+      lv_draw_return_ui();
       break;
     case ID_PAUSE_POS:
       lv_clear_advance_settings();

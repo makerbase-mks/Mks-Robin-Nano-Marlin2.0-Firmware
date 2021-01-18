@@ -458,8 +458,8 @@ extern void get_gcode_command(int addr,uint8_t *d);
   extern void disp_pre_gcode(int xpos_pixel, int ypos_pixel);
 #endif
 extern void GUI_RefreshPage();
-extern void clear_cur_ui();
-extern void draw_return_ui();
+extern void lv_clear_cur_ui();
+extern void lv_draw_return_ui();
 extern void sd_detection();
 extern void gCfg_to_spiFlah();
 extern void print_time_count();

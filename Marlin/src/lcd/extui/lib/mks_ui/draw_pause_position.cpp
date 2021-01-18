@@ -44,7 +44,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   lv_clear_pause_position();
   switch (obj->mks_obj_id) {
     case ID_PAUSE_RETURN:
-      draw_return_ui();
+      lv_draw_return_ui();
       return;
     case ID_PAUSE_X:
       value = pause_pos_x;

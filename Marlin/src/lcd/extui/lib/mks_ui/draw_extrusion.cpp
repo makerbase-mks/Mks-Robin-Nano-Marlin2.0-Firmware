@@ -115,8 +115,8 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       feedrate_mm_s = (float)uiCfg.moveSpeed_bak;
       if(uiCfg.print_state == PAUSED)
         planner.set_e_position_mm((destination.e = current_position.e = uiCfg.current_e_position_bak));
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
       break;
   }
 }

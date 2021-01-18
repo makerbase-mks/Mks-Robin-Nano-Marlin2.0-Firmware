@@ -45,7 +45,7 @@ void esp_port_begin(uint8_t interrupt);
 void printer_state_polling() {
   char str_1[16];
   if (uiCfg.print_state == PAUSING) {
-    clear_cur_ui();
+    lv_clear_cur_ui();
     lv_draw_dialog(DIALOG_TYPE_MACHINE_PAUSING_TIPS);
     #if ENABLED(SDSUPPORT)
       while(queue.length) {
@@ -77,8 +77,8 @@ void printer_state_polling() {
 
       gCfgItems.pause_reprint = true;
       update_spi_flash();
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
     #endif
   }
 
@@ -233,7 +233,7 @@ void filament_check() {
       || fil_det_count_3 >= FIL_DELAY
     #endif
   ) {
-    clear_cur_ui();
+    lv_clear_cur_ui();
     card.pauseSDPrint();
     stop_print_time();
     uiCfg.print_state = PAUSING;

@@ -48,12 +48,12 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
     case ID_CLOUD_BIND_RETURN:
-      clear_cur_ui();
-      draw_return_ui();
+      lv_clear_cur_ui();
+      lv_draw_return_ui();
       break;
     case ID_CLOUD_RELEASE_BIND:
       if (cloud_para.state == 0x12) {
-        clear_cur_ui();
+        lv_clear_cur_ui();
         lv_draw_dialog(DIALOG_TYPE_UNBIND);
       }
       break;
