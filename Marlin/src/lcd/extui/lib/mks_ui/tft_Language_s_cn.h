@@ -462,6 +462,7 @@
 #define DIALOG_PRINT_TIME_CN        "打印时间: "
 #define DIALOG_REPRINT_CN           "再打印一次"
 #define DIALOG_WIFI_ENABLE_TIPS_CN  "wifi模块正在配置中,请稍等......"
+#define DIALOG_PAUSING_TIPS_CN      "机器暂停中..."
 
 #define TEXT_VALUE_CN               "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_CN     ": %d℃"

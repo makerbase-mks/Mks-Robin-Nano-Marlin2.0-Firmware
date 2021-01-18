@@ -660,7 +660,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 void lv_draw_number_key(void) {
   scr = lv_screen_create(NUMBER_KEY_UI, "");
 
-  buttonValue = lv_btn_create(scr, 92, 40, 296, 40, event_handler, ID_NUM_KEY1, &style_num_text);
+  buttonValue = lv_btn_create(scr, 92, 40, 296, 40, event_handler, 0, &style_num_text);
   labelValue = lv_label_create_empty(buttonValue);
 
   lv_obj_t *NumberKey_1 = lv_btn_create(scr, 92, 90, 68, 40, event_handler, ID_NUM_KEY1, &style_num_key_pre);

@@ -237,6 +237,7 @@
 #define DIALOG_PRINT_TIME_SP          "Tiempo de impresión: "
 #define DIALOG_REPRINT_SP             "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_SP    "The wifi module is being configured,\nplease wait a moment....."
+#define DIALOG_PAUSING_TIPS_SP        "La máquina se detiene ..."
 
 #define PRINTING_SP               "Imprimiendo"
 #define PRINTING_AJUSTES_SP       "Ajustes"

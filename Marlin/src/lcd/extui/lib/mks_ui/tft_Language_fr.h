@@ -235,6 +235,7 @@
 #define DIALOG_PRINT_TIME_FR          "Temps d'impression: "
 #define DIALOG_REPRINT_FR             "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_FR    "The wifi module is being configured,\nplease wait a moment....."
+#define DIALOG_PAUSING_TIPS_FR        "La machine fait une pause ..."
 
 #define MESSAGE_PAUSING_FR        "Parking..."
 #define MESSAGE_CHANGING_FR       "Attente filament pour démarrer"

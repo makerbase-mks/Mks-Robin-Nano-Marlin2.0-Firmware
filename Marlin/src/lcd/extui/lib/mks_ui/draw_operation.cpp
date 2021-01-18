@@ -57,6 +57,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_draw_preHeat();
       break;
     case ID_O_EXTRUCT:
+      uiCfg.moveSpeed_bak = (uint16_t)feedrate_mm_s;
       lv_clear_operation();
       lv_draw_extrusion();
       break;

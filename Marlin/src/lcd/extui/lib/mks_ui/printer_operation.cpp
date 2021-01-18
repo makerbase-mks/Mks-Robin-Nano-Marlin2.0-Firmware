@@ -43,51 +43,56 @@ extern uint32_t To_pre_view;
 extern bool flash_preview_begin, default_preview_flg, gcode_preview_over;
 void esp_port_begin(uint8_t interrupt);
 void printer_state_polling() {
-  char str_1[16], str_2[16];
+  char str_1[16];
   if (uiCfg.print_state == PAUSING) {
+    clear_cur_ui();
+    lv_draw_dialog(DIALOG_TYPE_MACHINE_PAUSING_TIPS);
     #if ENABLED(SDSUPPORT)
-      if (!planner.has_blocks_queued() && card.getIndex() > MIN_FILE_PRINTED)
-        uiCfg.waitEndMoves++;
-
-      if (uiCfg.waitEndMoves > 20) {
-        uiCfg.waitEndMoves = 0;
-        planner.synchronize();
-
-        gcode.process_subcommands_now_P(PSTR("M25"));
-
-        //save the positon
-        uiCfg.current_x_position_bak = current_position.x;
-        uiCfg.current_y_position_bak = current_position.y;
-        uiCfg.current_z_position_bak = current_position.z;
-
-        if (gCfgItems.pausePosZ != (float)-1) {
-          gcode.process_subcommands_now_P(PSTR("G91"));
-          sprintf_P(public_buf_l, PSTR("%s"), dtostrf(gCfgItems.pausePosZ, 1, 1, str_1));
-          gcode.process_subcommands_now(public_buf_l);
-          gcode.process_subcommands_now_P(PSTR("G90"));
-        }
-        if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
-          sprintf_P(public_buf_l, PSTR("G1 X%s Y%s"), dtostrf(gCfgItems.pausePosX, 1, 1, str_1), dtostrf(gCfgItems.pausePosY, 1, 1, str_2));
-          gcode.process_subcommands_now(public_buf_l);
-        }
-        uiCfg.print_state = PAUSED;
-        uiCfg.current_e_position_bak = current_position.e;
-
-        gCfgItems.pause_reprint = true;
-        update_spi_flash();
+      while(queue.length) {
+        queue.advance();
       }
+      planner.synchronize();
+      gcode.process_subcommands_now_P(PSTR("M25"));
+      //save the positon
+      uiCfg.current_x_position_bak = current_position.x;
+      uiCfg.current_y_position_bak = current_position.y;
+      uiCfg.current_z_position_bak = current_position.z;
+
+      if (gCfgItems.pausePosZ != (float)-1) {
+        gcode.process_subcommands_now_P(PSTR("G91"));
+        sprintf_P(public_buf_l, PSTR("G1 Z%s"), dtostrf(gCfgItems.pausePosZ, 1, 1, str_1));
+        gcode.process_subcommands_now(public_buf_l);
+        gcode.process_subcommands_now_P(PSTR("G90"));
+      }
+      if (gCfgItems.pausePosX != (float)-1) {
+        sprintf_P(public_buf_l, PSTR("G1 X%s"), dtostrf(gCfgItems.pausePosX, 1, 1, str_1));
+        gcode.process_subcommands_now(public_buf_l);
+      }
+      if (gCfgItems.pausePosY != (float)-1) {
+        sprintf_P(public_buf_l, PSTR("G1 Y%s"), dtostrf(gCfgItems.pausePosY, 1, 1, str_1));
+        gcode.process_subcommands_now(public_buf_l);
+      }
+      uiCfg.print_state = PAUSED;
+      uiCfg.current_e_position_bak = current_position.e;
+
+      gCfgItems.pause_reprint = true;
+      update_spi_flash();
+      clear_cur_ui();
+      draw_return_ui();
     #endif
   }
-  else
-    uiCfg.waitEndMoves = 0;
 
   if (uiCfg.print_state == PAUSED) {
   }
 
   if (uiCfg.print_state == RESUMING) {
     if (IS_SD_PAUSED()) {
-      if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
-        sprintf_P(public_buf_m, PSTR("G1 X%s Y%s"), dtostrf(uiCfg.current_x_position_bak, 1, 1, str_1), dtostrf(uiCfg.current_y_position_bak, 1, 1, str_2));
+      if (gCfgItems.pausePosX != (float)-1) {
+        sprintf_P(public_buf_m, PSTR("G1 X%s"), dtostrf(uiCfg.current_x_position_bak, 1, 1, str_1));
+        gcode.process_subcommands_now(public_buf_m);
+      }
+      if (gCfgItems.pausePosY != (float)-1) {
+        sprintf_P(public_buf_m, PSTR("G1 Y%s"), dtostrf(uiCfg.current_y_position_bak, 1, 1, str_1));
         gcode.process_subcommands_now(public_buf_m);
       }
       if (gCfgItems.pausePosZ != (float)-1) {

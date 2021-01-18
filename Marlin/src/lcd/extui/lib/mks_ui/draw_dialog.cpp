@@ -194,6 +194,7 @@ static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
   }
   else if (DIALOG_IS(TYPE_FILAMENT_LOAD_HEAT, TYPE_FILAMENT_UNLOAD_HEAT, TYPE_FILAMENT_HEAT_LOAD_COMPLETED, TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED)) {
     thermalManager.temp_hotend[uiCfg.curSprayerChoose].target= uiCfg.desireSprayerTempBak;
+    thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
     clear_cur_ui();
     draw_return_ui();
   }
@@ -207,6 +208,7 @@ static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
     uiCfg.filament_unloading_time_flg  = 0;
     uiCfg.filament_unloading_time_cnt  = 0;
     thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
+    thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
     clear_cur_ui();
     draw_return_ui();
   }
@@ -287,6 +289,9 @@ void lv_draw_dialog(uint8_t type) {
     lv_bar_set_style(filament_bar, LV_BAR_STYLE_INDIC, &lv_bar_style_indic);
     lv_bar_set_anim_time(filament_bar, 1000);
     lv_bar_set_value(filament_bar, 0, LV_ANIM_ON);
+  }
+  else if(DIALOG_IS(TYPE_MACHINE_PAUSING_TIPS)) {
+    //nothing to do
   }
   else {
     btnOk = lv_button_btn_create(scr, BTN_OK_X, BTN_OK_Y, 100, 50, btn_ok_event_cb);
@@ -471,6 +476,10 @@ void lv_draw_dialog(uint8_t type) {
       lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, -70);
     }
   #endif
+  else if(DIALOG_IS(TYPE_MACHINE_PAUSING_TIPS)) {
+    lv_label_set_text(labelDialog, print_file_dialog_menu.machinePausingTips);
+    lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, 0);
+  }
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) {
       if (btnOk) lv_group_add_obj(g, btnOk);
