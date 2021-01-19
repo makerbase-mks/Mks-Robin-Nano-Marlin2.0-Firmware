@@ -305,7 +305,7 @@ EspUploadResult readPacket(uint8_t op, uint32_t *valp, size_t *bodyLen, uint32_t
     switch (state) {
       case begin: // expecting frame start
         c = uploadPort_read();
-        if (c == (uint8_t)0xC0) break;
+        if (c != (uint8_t)0xC0) break;
         state = header;
         needBytes = 2;
         break;
