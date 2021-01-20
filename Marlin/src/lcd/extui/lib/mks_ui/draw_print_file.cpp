@@ -102,14 +102,14 @@ uint8_t sel_id = 0;
 
 bool have_pre_pic(char *path) {
   #if ENABLED(SDSUPPORT)
-    char *ps1, *ps2;//, *cur_name = strrchr(path, '/');
+    char *ps1;//, *ps2;//, *cur_name = strrchr(path, '/');
     card.openFileRead(path);
-    card.read(public_buf, 512);
+    card.read(public_buf, 256);
     ps1 = strstr((char *)public_buf, ";simage:");
-    card.read(public_buf, 512);
-    ps2 = strstr((char *)public_buf, ";simage:");
+    //card.read(public_buf, 512);
+    //ps2 = strstr((char *)public_buf, ";simage:");
     card.closefile();
-    if (ps1 || ps2) return true;
+    if (ps1) return true;
   #endif
 
   return false;
@@ -364,7 +364,7 @@ uint32_t lv_open_gcode_file(char *path) {
     //cur_name = strrchr(path, '/');
 
     card.openFileRead(path);
-    card.read(public_buf, 512);
+    card.read(public_buf, 256);
     ps4 = (uint32_t *)strstr((char *)public_buf, ";simage:");
     // Ignore the beginning message of gcode file
     if (ps4) {

@@ -36,27 +36,27 @@
 #include "../../../../module/temperature.h"
 #include "../../../../sd/cardreader.h"
 
-uint8_t pw_det_sta, pw_off_sta, mt_det_sta, mt_det3_sta;
+bool pw_det_sta, pw_off_sta, mt_det_sta, mt_det3_sta;
 #if PIN_EXISTS(MT_DET_2)
-  uint8_t mt_det2_sta;
+  bool mt_det2_sta;
 #endif
-uint8_t endstopx1_sta, endstopx2_sta, endstopy1_sta, endstopy2_sta, endstopz1_sta, endstopz2_sta;
+bool endstopx1_sta, endstopx2_sta, endstopy1_sta, endstopy2_sta, endstopz1_sta, endstopz2_sta;
 void test_gpio_readlevel_L() {
   #if ENABLED(MKS_TEST)
     volatile uint32_t itest;
     WRITE(WIFI_IO0_PIN, HIGH);
     itest = 10000;
     while (itest--);
-    pw_det_sta = (READ(MKS_TEST_POWER_LOSS_PIN) == 0);
-    pw_off_sta = (READ(MKS_TEST_PS_ON_PIN) == 0);
-    mt_det_sta = (READ(MT_DET_1_PIN) == 0);
+    pw_det_sta = !READ(MKS_TEST_POWER_LOSS_PIN);
+    pw_off_sta = !READ(MKS_TEST_PS_ON_PIN);
+    mt_det_sta = !READ(MT_DET_1_PIN);
     #if PIN_EXISTS(MT_DET_2)
-      mt_det2_sta = (READ(MT_DET_2_PIN) == 0);
+      mt_det2_sta = !READ(MT_DET_2_PIN);
     #endif
-    endstopx1_sta = (READ(X_MIN_PIN) == 0);
-    endstopy1_sta = (READ(Y_MIN_PIN) == 0);
-    endstopz1_sta = (READ(Z_MIN_PIN) == 0);
-    endstopz2_sta = (READ(Z_MAX_PIN) == 0);
+    endstopx1_sta = !READ(X_MIN_PIN);
+    endstopy1_sta = !READ(Y_MIN_PIN);
+    endstopz1_sta = !READ(Z_MIN_PIN);
+    endstopz2_sta = !READ(Z_MAX_PIN);
   #endif
 }
 
@@ -66,16 +66,16 @@ void test_gpio_readlevel_H() {
     WRITE(WIFI_IO0_PIN, LOW);
     itest = 10000;
     while (itest--);
-    pw_det_sta = (READ(MKS_TEST_POWER_LOSS_PIN) == 1);
-    pw_off_sta = (READ(MKS_TEST_PS_ON_PIN) == 1);
-    mt_det_sta = (READ(MT_DET_1_PIN) == 1);
+    pw_det_sta = READ(MKS_TEST_POWER_LOSS_PIN);
+    pw_off_sta = READ(MKS_TEST_PS_ON_PIN);
+    mt_det_sta = READ(MT_DET_1_PIN);
     #if PIN_EXISTS(MT_DET_2)
-      mt_det2_sta = (READ(MT_DET_2_PIN) == 1);
+      mt_det2_sta = READ(MT_DET_2_PIN);
     #endif
-    endstopx1_sta = (READ(X_MIN_PIN) == 1);
-    endstopy1_sta = (READ(Y_MIN_PIN) == 1);
-    endstopz1_sta = (READ(Z_MIN_PIN) == 1);
-    endstopz2_sta = (READ(Z_MAX_PIN) == 1);
+    endstopx1_sta = READ(X_MIN_PIN);
+    endstopy1_sta = READ(Y_MIN_PIN);
+    endstopz1_sta = READ(Z_MIN_PIN);
+    endstopz2_sta = READ(Z_MAX_PIN);
   #endif
 }
 
@@ -142,30 +142,30 @@ void mks_gpio_test() {
     test_gpio_readlevel_L();
     test_gpio_readlevel_H();
     test_gpio_readlevel_L();
-    if ((pw_det_sta == 1)
-        && (pw_off_sta == 1)
-        && (mt_det_sta == 1)
+    if ((pw_det_sta == true)
+        && (pw_off_sta == true)
+        && (mt_det_sta == true)
       #if PIN_EXISTS(MT_DET_2)
-        && (mt_det2_sta == 1)
+        && (mt_det2_sta == true)
       #endif
       #if MB(MKS_ROBIN_E3P)
-        && (READ(PA1) == 0)
-        && (READ(PA3) == 0)
-        && (READ(PC2) == 0)
-        && (READ(PD8) == 0)
-        && (READ(PE5) == 0)
-        && (READ(PE6) == 0)
-        && (READ(PE7) == 0)
+        && (READ(PA1) == false)
+        && (READ(PA3) == false)
+        && (READ(PC2) == false)
+        && (READ(PD8) == false)
+        && (READ(PE5) == false)
+        && (READ(PE6) == false)
+        && (READ(PE7) == false)
       #endif
     ) 
       disp_det_ok();
     else
       disp_det_error();
 
-    if ( (endstopx1_sta == 1)
-      && (endstopy1_sta == 1)
-      && (endstopz1_sta == 1)
-      && (endstopz2_sta == 1)
+    if ( (endstopx1_sta == true)
+      && (endstopy1_sta == true)
+      && (endstopz1_sta == true)
+      && (endstopz2_sta == true)
     )
       disp_Limit_ok();
     else
@@ -184,6 +184,9 @@ void mks_hardware_test() {
         WRITE(E1_DIR_PIN, LOW);
       #endif
       thermalManager.fan_speed[0] = 255;
+      #if PIN_EXISTS(FAN1)
+        thermalManager.fan_speed[1] = 255;
+      #endif
       #if !MB(MKS_ROBIN_E3P)
         WRITE(HEATER_1_PIN, HIGH); // HE1
       #endif
@@ -199,6 +202,9 @@ void mks_hardware_test() {
         WRITE(E1_DIR_PIN, HIGH);
       #endif
       thermalManager.fan_speed[0] = 0;
+      #if PIN_EXISTS(FAN1)
+        thermalManager.fan_speed[1] = 0;
+      #endif
       #if !MB(MKS_ROBIN_E3P)
         WRITE(HEATER_1_PIN, LOW); // HE1
       #endif

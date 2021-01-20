@@ -91,7 +91,7 @@
 
 #else
   //pic
-  //Robin_pro pic addr
+  // pic addr
   #define PIC_NAME_ADDR                 0x003000      // Pic information addr
   #define PIC_SIZE_ADDR                 0x007000      // Pic size information addr
   #define PIC_COUNTER_ADDR              0x008000      // Pic total number

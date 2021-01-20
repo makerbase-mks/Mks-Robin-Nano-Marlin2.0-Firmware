@@ -45,6 +45,14 @@ XPT2046 touch;
   #include "../../../../feature/powerloss.h"
 #endif
 
+#if HAS_SERVOS
+  #include "../../../../module/servo.h"
+#endif
+
+#if EITHER(PROBE_TARE, HAS_Z_SERVO_PROBE)
+  #include "../../../../module/probe.h"
+#endif
+
 #if ENABLED(TOUCH_SCREEN_CALIBRATION)
   #include "../../../tft_io/touch_calibration.h"
   #include "draw_touch_calibration.h"
@@ -394,7 +402,11 @@ lv_fs_res_t spi_flash_tell_cb(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p
 //sd
 char *cur_namefff;
 uint32_t sd_read_base_addr = 0, sd_read_addr_offset = 0, small_image_size = 409;
+char last_path[(SHORT_NAME_LEN + 1) * MAX_DIR_LEVEL + strlen("S:/") + 1];
 lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_fs_mode_t mode) {
+  if (path != nullptr && card.isFileOpen() && strcmp((const char*)path, (const char*)last_path) == 0) return LV_FS_RES_OK;
+  strcpy(last_path, path);
+  lv_close_gcode_file();
   char name_buf[100];
   *name_buf = '/';
   strcpy(name_buf + 1, path);
@@ -413,7 +425,7 @@ lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_
 
 lv_fs_res_t sd_close_cb (lv_fs_drv_t * drv, void * file_p) {
   /* Add your code here*/
-  lv_close_gcode_file();
+  //lv_close_gcode_file();
   return LV_FS_RES_OK;
 }
 
