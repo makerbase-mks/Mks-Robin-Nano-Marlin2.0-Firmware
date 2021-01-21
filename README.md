@@ -1,6 +1,6 @@
 # Mks-Robin-Nano-Marlin2.0-Firmware
 ## Features
-The firmware of Mks Robin Nano, based on [Marlin2.0.x](https://github.com/MarlinFirmware/Marlin), added the [LittlevGL](https://github.com/littlevgl/lvgl), supporting colourful GUI and touch screen. It is developed on PlatformIO, we hope more and more developers will participate the development of this repository.
+The firmware of MKS Robin Nano, based on [Marlin2.0.x](https://github.com/MarlinFirmware/Marlin), added the [LittlevGL](https://github.com/littlevgl/lvgl), supporting colourful GUI and touch screen. It is developed on PlatformIO, we hope more and more developers will participate the development of this repository.
 
 ![](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/blob/master/Images/MKS_Robin_Nano_printing.png)
 
@@ -22,7 +22,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - Copy the assets folder to the SD card.
 - SD card is connected to the motherboard, and you can see the update interface after powering on.
 
-## Firmware Can be run on Robin Nano V1.x and V2.x boards
+## Firmware Can be run on Robin Nano V1.x / V2.x boards and V3.x boards
 ## MKS Robin Nano V1.x build and update firmware
 
 1. Build config:
@@ -30,18 +30,17 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - platformio.ini: 
      
      default_envs = mks_robin_nano35    
-- Configuation.h: 
-     
-     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO   
-     
-     #define TFT_LVGL_UI_FSMC
-     
-     //#define TFT_LVGL_UI_SPI
+- Configuation.h:  
+     #define SERIAL_PORT 3  
+     #define MKS_ROBIN_TFT35  
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO  
+     #define TFT_LVGL_UI  
+     #define TOUCH_SCREEN  
 
 2. Update firmware:
    
 - Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
-- SD card is connected to the motherboard, and you can see the update interface after powering on.   
+- Insert SD card to the motherboard, and you can see the update interface after power on.   
 
 ## MKS Robin Nano V2.x build and update firmware
 
@@ -50,23 +49,50 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - platformio.ini: 
      
      default_envs = mks_robin_nano35    
-- Configuation.h: 
-     
-     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2   
-     
-     //#define TFT_LVGL_UI_FSMC
-     
-     #define TFT_LVGL_UI_SPI
+- Configuation.h:   
+     #define SERIAL_PORT 3  
+     #define MKS_TS35_V2_0  
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2     
+     #define TFT_LVGL_UI  
+     #define TOUCH_SCREEN  
 
 2. Update firmware:
    
 - Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
-- SD card is connected to the motherboard, and you can see the update interface after powering on.   
+- Insert SD card is to the motherboard, and you can see the update interface after power on.   
+
+## MKS Robin Nano V3.x build and update firmware
+
+1. Build config:
+     
+- platformio.ini: 
+     
+     default_envs = mks_robin_nano_v3_usb_flash_drive
+- Configuation.h:   
+     #define SERIAL_PORT -1  
+     #define MKS_TS35_V2_0  
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V3     
+     #define TFT_LVGL_UI  
+     #define TOUCH_SCREEN
+
+- Configuation_adv.h:    
+     No you can either use the TF card or USB disk, use TF card:   
+    // #define USB_FLASH_DRIVE_SUPPORT  
+    Use USB disk:  
+     #define USB_FLASH_DRIVE_SUPPORT  
+
+2. Update firmware:
+   
+- Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card or usb disk
+- Insert sdcard or usb disk to the motherboard, and you can see the update interface after power on.  
 
 ## More information about the Robin Nano V1.X
 Please refer to [MKS Robin Nano github](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X).
 
 ##  More information about the Robin Nano V2.X
-Please refer to [MKS-Robin-Nano-V2 wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V2/wiki/Marlin_firmware).
+Please refer to [MKS Robin Nano V2 github](https://github.com/makerbase-mks/MKS-Robin-Nano-V2).
+
+##  More information about the Robin Nano V3.X
+Please refer to [MKS Robin Nano V3 github](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X).
 
 
