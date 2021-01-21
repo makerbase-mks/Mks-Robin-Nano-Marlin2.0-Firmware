@@ -63,9 +63,6 @@ void TFT::LCD_init() {
   #if PIN_EXISTS(TFT_BACKLIGHT)
     OUT_WRITE(TFT_BACKLIGHT_PIN, HIGH);
   #endif
-  #if HAS_LOGO_IN_FLASH
-    delay(2000);
-  #endif
 }
 
 void TFT::LCD_clear(uint16_t color) {

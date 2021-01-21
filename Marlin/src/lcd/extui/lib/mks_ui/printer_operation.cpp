@@ -234,7 +234,7 @@ void filament_check() {
     #endif
   ) {
     lv_clear_cur_ui();
-    card.pauseSDPrint();
+    TERN_(SDSUPPORT, card.pauseSDPrint());
     stop_print_time();
     uiCfg.print_state = PAUSING;
 

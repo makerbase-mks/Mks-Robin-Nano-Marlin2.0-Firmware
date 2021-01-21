@@ -1315,6 +1315,7 @@ void setup() {
   #endif
 
   #if HAS_TFT_LVGL_UI
+    // TERN_(USB_FLASH_DRIVE_SUPPORT, Sd2Card::idle());
     #if ENABLED(SDSUPPORT)
       if (!card.isMounted()) SETUP_RUN(card.mount()); // Mount SD to load graphics and fonts
     #endif

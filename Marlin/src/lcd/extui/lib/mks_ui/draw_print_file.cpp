@@ -457,7 +457,7 @@ void lv_gcode_file_read(uint8_t *data_buf) {
 void lv_close_gcode_file() {TERN_(SDSUPPORT, card.closefile());}
 
 void lv_gcode_file_seek(uint32_t pos) {
-  card.setIndex(pos);
+  TERN_(SDSUPPORT, card.setIndex(pos));
 }
 
 void cutFileName(char *path, int len, int bytePerLine, char *outStr) {
