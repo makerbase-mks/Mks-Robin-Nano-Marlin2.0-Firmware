@@ -172,7 +172,7 @@ void lv_draw_move_motor(void) {
 
 void disp_cur_pos() {
   char str_1[16];
-  sprintf_P(public_buf_l, PSTR("%c:%s"), cur_label, dtostrf(cur_pos, 1, 1, str_1));
+  sprintf_P(public_buf_l, PSTR("%c:%s mm"), cur_label, dtostrf(cur_pos, 1, 1, str_1));
   if (labelP) lv_label_set_text(labelP, public_buf_l);
 }
 

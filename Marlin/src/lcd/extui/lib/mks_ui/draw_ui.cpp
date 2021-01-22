@@ -354,15 +354,14 @@ void tft_style_init() {
     style_num_key_pre.text.font = LV_FONT_DEFAULT;
     style_num_key_rel.text.font = LV_FONT_DEFAULT;
   #endif
-
   style_num_key_pre.line.width        = 0;
   style_num_key_rel.line.width        = 0;
   style_num_key_pre.text.letter_space = 0;
   style_num_key_rel.text.letter_space = 0;
-  style_num_key_pre.text.line_space   = -5;
-  style_num_key_rel.text.line_space   = -5;
-  lv_style_copy(&style_num_text, &lv_style_scr);
+  style_num_key_pre.text.line_space   = 0;
+  style_num_key_rel.text.line_space   = 0;
 
+  lv_style_copy(&style_num_text, &lv_style_scr);
   style_num_text.body.main_color   = LV_COLOR_WHITE;
   style_num_text.body.grad_color   = LV_COLOR_WHITE;
   style_num_text.text.color        = LV_COLOR_BLACK;
