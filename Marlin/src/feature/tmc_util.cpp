@@ -44,6 +44,10 @@
   #include "../module/stepper.h"
 #endif
 
+#if HAS_TFT_LVGL_UI
+  #include "../lcd/extui/lib/mks_ui/draw_ui.h"
+#endif
+
 /**
  * Check for over temperature or short to ground error flags.
  * Report and log warning of overtemperature condition.
@@ -1278,6 +1282,7 @@ void test_tmc_connection(const bool test_x, const bool test_y, const bool test_z
   }
 
   if (axis_connection) LCD_MESSAGEPGM(MSG_ERROR_TMC);
+  TERN_(HAS_TFT_LVGL_UI, uiCfg.tmc_connect_state = !axis_connection);
 }
 
 #endif // HAS_TRINAMIC_CONFIG

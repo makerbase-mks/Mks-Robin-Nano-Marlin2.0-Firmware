@@ -171,6 +171,9 @@ void mks_gpio_test() {
     else
       disp_Limit_error();
     #endif
+
+    if (uiCfg.tmc_connect_state) disp_tmc_ok();
+    else disp_tmc_error();
 }
 
 void mks_hardware_test() {
@@ -221,9 +224,8 @@ void mks_hardware_test() {
     else {
     }
 
-    if (disp_state == PRINT_READY_UI)
-      mks_disp_test();
-
+    if (disp_state == PRINT_READY_UI) mks_disp_test();
+    
   #endif
 }
 

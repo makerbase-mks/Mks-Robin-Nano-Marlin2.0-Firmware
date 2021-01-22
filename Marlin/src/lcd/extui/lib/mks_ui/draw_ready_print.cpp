@@ -71,7 +71,8 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 }
 
 lv_obj_t *limit_info, *det_info;
-lv_style_t limit_style, det_style;
+lv_obj_t *tmc_state_info;
+lv_style_t limit_style, det_style, tmc_state_style;
 void disp_Limit_ok() {
   limit_style.text.color.full = 0xFFFF;
   lv_obj_set_style(limit_info, &limit_style);
@@ -92,6 +93,17 @@ void disp_det_error() {
   det_style.text.color.full = 0xF800;
   lv_obj_set_style(det_info, &det_style);
   lv_label_set_text(det_info, "det:error");
+}
+
+void disp_tmc_ok() {
+  tmc_state_style.text.color.full = 0xFFFF;
+  lv_obj_set_style(tmc_state_info, &tmc_state_style);
+  lv_label_set_text(tmc_state_info, "TMC CONNECTION OK");
+}
+void disp_tmc_error() {
+  tmc_state_style.text.color.full = 0xF800;
+  lv_obj_set_style(tmc_state_info, &tmc_state_style);
+  lv_label_set_text(tmc_state_info, "TMC CONNECTION ERROR");
 }
 
 lv_obj_t *e1, *e2, *e3, *bed;
@@ -169,6 +181,17 @@ void lv_draw_ready_print(void) {
 
       lv_obj_set_pos(det_info, 20, 145);
       lv_label_set_text(det_info, " ");
+
+      tmc_state_info = lv_label_create_empty(scr);
+
+      lv_style_copy(&tmc_state_style, &lv_style_scr);
+      tmc_state_style.body.main_color.full = 0X0000;
+      tmc_state_style.body.grad_color.full = 0X0000;
+      tmc_state_style.text.color.full      = 0Xffff;
+      lv_obj_set_style(tmc_state_info, &tmc_state_style);
+
+      lv_obj_set_pos(tmc_state_info, 20, 170);
+      lv_label_set_text(tmc_state_info, " ");
     #endif // if 1
 
   }

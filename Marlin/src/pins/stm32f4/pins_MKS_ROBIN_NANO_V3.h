@@ -199,7 +199,7 @@
   #define KILL_PIN_STATE                    true  // Enable MKSPWC PIN STATE
 #endif
 
-//#define MKS_TEST
+#define MKS_TEST
 
 #if ENABLED(MKS_TEST)
   #define MKS_TEST_POWER_LOSS_PIN         PW_DET   // PW_DET

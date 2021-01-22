@@ -230,6 +230,7 @@ typedef struct {
           filament_loading_time_flg:1,
           filament_unloading_time_flg:1,
           curSprayerChoose_bak:4;
+  uint8_t tmc_connect_state:1;
   uint8_t wifi_name[32];
   uint8_t wifi_key[64];
   uint8_t cloud_hostUrl[96];

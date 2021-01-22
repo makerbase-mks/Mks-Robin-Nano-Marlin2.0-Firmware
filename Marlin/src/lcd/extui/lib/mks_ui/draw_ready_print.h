@@ -31,6 +31,8 @@ extern void disp_Limit_ok();
 extern void disp_Limit_error();
 extern void disp_det_error();
 extern void disp_det_ok();
+extern void disp_tmc_ok();
+extern void disp_tmc_error();
 extern void lv_clear_ready_print();
 
 #ifdef __cplusplus
