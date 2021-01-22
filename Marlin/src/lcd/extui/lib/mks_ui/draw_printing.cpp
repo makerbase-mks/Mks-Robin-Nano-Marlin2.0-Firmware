@@ -49,7 +49,9 @@ static lv_obj_t *labelPause, *labelStop, *labelOperat;
 static lv_obj_t *bar1, *bar1ValueText;
 static lv_obj_t *buttonPause, *buttonOperat, *buttonStop;
 
-TERN_(HAS_MULTI_EXTRUDER, static lv_obj_t *labelExt2);
+#if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
+  static lv_obj_t *labelExt2;
+#endif
 
 #if HAS_HEATED_BED
   static lv_obj_t* labelBed;
@@ -120,7 +122,7 @@ void lv_draw_printing(void) {
   lv_img_set_src(buttonExt1, "F:/bmp_ext1_state.bin");
   lv_obj_set_pos(buttonExt1, 205, 136);
 
-  #if HAS_MULTI_EXTRUDER
+  #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
     lv_obj_t *buttonExt2 = lv_img_create(scr, nullptr);
     lv_img_set_src(buttonExt2, "F:/bmp_ext2_state.bin");
     lv_obj_set_pos(buttonExt2, 350, 136);
@@ -158,7 +160,7 @@ void lv_draw_printing(void) {
 
   labelExt1 = lv_label_create(scr, 250, 146, nullptr);
 
-  #if HAS_MULTI_EXTRUDER
+  #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
     labelExt2 = lv_label_create(scr, 395, 146, nullptr);
   #endif
 
@@ -206,7 +208,7 @@ void disp_ext_temp() {
   sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
   lv_label_set_text(labelExt1, public_buf_l);
 
-  #if HAS_MULTI_EXTRUDER
+  #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
     sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[1].celsius, (int)thermalManager.temp_hotend[1].target);
     lv_label_set_text(labelExt2, public_buf_l);
   #endif
