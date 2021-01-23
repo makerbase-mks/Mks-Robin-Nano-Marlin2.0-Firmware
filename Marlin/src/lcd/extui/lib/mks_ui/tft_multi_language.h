@@ -106,6 +106,12 @@ typedef struct machine_common_disp{
   const char *LevelingManuPosConf;
   const char *LevelingAutoCommandConf;
   const char *LevelingAutoZoffsetConf;
+  const char *LevelingTouchmiConf;
+  const char *TouchmiInit;
+  const char *TouchmiOffsetpos;
+  const char *TouchmiOffsetneg;
+  const char *TouchmiSave;
+  const char *TouchmiTest;
 
   const char *LevelingSubConfTitle;
   const char *AutoLevelEnable;
@@ -375,6 +381,17 @@ typedef struct home_menu_disp {
 } home_menu_def;
 
 extern home_menu_def home_menu;
+
+typedef struct touchmi_menu_disp {
+  const char *title;
+  const char *init;
+  const char *zoffsetpos;
+  const char *zoffsetneg;
+  const char *test;
+  const char *save;
+} touchmi_menu_def;
+
+extern touchmi_menu_def touchmi_menu;
 
 typedef struct file_menu_disp {
   const char *title;
@@ -798,6 +815,13 @@ extern eeprom_def eeprom_menu;
 #define HOME_Z_TEXT         "Z"
 #define HOME_ALL_TEXT       "All"
 
+#define TM_INIT             "Init"
+#define TM_ZOFFSETPOS       "Offset +"
+#define TM_ZOFFSETNEG       "Offset -"
+#define TM_SAVE             "Save"
+#define TM_TEST             "Test"
+
+//#if defined(MKS_ROBIN_NANO)
 #define ABOUT_TYPE_TEXT     "MKS Robin Pro"
 
 #define ABOUT_VERSION_TEXT  "1.0.0"
