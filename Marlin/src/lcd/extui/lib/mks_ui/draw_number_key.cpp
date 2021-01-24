@@ -530,6 +530,7 @@ static void set_value_confirm() {
       #endif
       break;
   }
+  watchdog_refresh();
   gcode.process_subcommands_now_P(PSTR("M500"));
 }
 
