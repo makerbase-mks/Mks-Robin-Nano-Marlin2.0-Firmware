@@ -932,6 +932,13 @@ void GUI_RefreshPage() {
         disp_z_offset_value();
       }
       break;
+
+    case TOUCHMI_UI:
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        disp_z_offset_value_TM();
+      }
+      break;
     default: break;
   }
 
