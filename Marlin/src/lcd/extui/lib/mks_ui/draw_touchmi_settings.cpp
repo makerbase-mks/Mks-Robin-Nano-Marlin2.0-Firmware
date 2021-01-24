@@ -39,8 +39,7 @@ enum {
   ID_TM_SAVE,
   ID_TM_TEST,
   ID_H_RETURN
-  //#define ID_H_OFF_XY   7
-};
+ };
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
@@ -76,13 +75,18 @@ void lv_draw_touchmi_settings(void) {
   lv_big_button_create(scr, "F:/bmp_set.bin", machine_menu.TouchmiSave, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_TM_SAVE);
   lv_big_button_create(scr, "F:/bmp_in.bin", machine_menu.TouchmiTest, BTN_X_PIXEL * 3 + INTERVAL_V * 4,titleHeight, event_handler, ID_TM_TEST);
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_RETURN);
+
+  
+  zOffsetText = lv_label_create(scr, 290, TITLE_YPOS, nullptr);
+  disp_z_offset_value_TM();
 }
 
 void disp_z_offset_value_TM() {
-	char buf[20];
-
-	ZERO(buf);
-	sprintf_P(buf, PSTR("offset Z: %.3f"), (double)TERN(HAS_BED_PROBE, probe.offset.z, 0));
+  char buf[20];
+  #if HAS_BED_PROBE
+   char str_1[16];
+  #endif
+  sprintf_P(buf, PSTR("offset Z: %s mm"), TERN(HAS_BED_PROBE, dtostrf(probe.offset.z, 1, 3, str_1), "0"));
   lv_label_set_text(zOffsetText, buf);
 }
 
