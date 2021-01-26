@@ -77,6 +77,7 @@
 #include "draw_keyboard.h"
 #include "draw_encoder_settings.h"
 #include "draw_touchmi_settings.h"
+#include "draw_bltouch_settings.h"
 
 #include "../../../../inc/MarlinConfigPre.h"
 
@@ -275,6 +276,7 @@ typedef enum {
   SET_UI,
   ZERO_UI,
   TOUCHMI_UI,
+  BLTOUCH_UI,
   SPRAYER_UI,
   MACHINE_UI,
   LANGUAGE_UI,
