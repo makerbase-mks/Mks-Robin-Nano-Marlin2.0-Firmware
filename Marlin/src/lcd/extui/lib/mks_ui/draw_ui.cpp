@@ -1063,6 +1063,7 @@ void lv_clear_cur_ui() {
     #if ENABLED(TOUCH_SCREEN_CALIBRATION)
       case TOUCH_CALIBRATION_UI:      lv_clear_touch_calibration_screen(); break;
     #endif
+    case TOUCHMI_UI:                  lv_clear_touchmi_settings(); break;
     default: break;
   }
 }
@@ -1167,6 +1168,7 @@ void lv_draw_return_ui() {
       #if HAS_ROTARY_ENCODER
         case ENCODER_SETTINGS_UI:       lv_draw_encoder_settings(); break;
       #endif
+      case TOUCHMI_UI:                  lv_draw_touchmi_settings(); break;
       default: break;
     }
   }
