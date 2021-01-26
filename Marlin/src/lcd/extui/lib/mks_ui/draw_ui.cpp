@@ -93,7 +93,7 @@ lv_point_t line_points[4][2] = {
 };
 void gCfgItems_init() {
   gCfgItems.multiple_language = MULTI_LANGUAGE_ENABLE;
-  #if 1 // LCD_LANGUAGE == en
+  #if  LCD_LANGUAGE == en
     gCfgItems.language = LANG_ENGLISH;
   #elif LCD_LANGUAGE == zh_CN
     gCfgItems.language = LANG_SIMPLE_CHINESE;
@@ -808,7 +808,14 @@ void GUI_RefreshPage() {
         disp_desire_temp();
       }
       break;
+
     case PRINT_READY_UI:
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        disp_ext_temp_ready();
+        disp_bed_temp_ready();
+        disp_fan_speed_ready();
+      }
       break;
 
     case PRINT_FILE_UI: break;
@@ -933,12 +940,22 @@ void GUI_RefreshPage() {
       }
       break;
 
+    #ifdef BLTOUCH
+    case BLTOUCH_UI:
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        disp_bltouch_z_offset_value();
+      }
+      break;
+    #endif
+    #if TOUCH_MI_PROBE
     case TOUCHMI_UI:
       if (temps_update_flag) {
         temps_update_flag = false;
         disp_z_offset_value_TM();
       }
       break;
+    #endif
     default: break;
   }
 
@@ -1020,6 +1037,12 @@ void lv_clear_cur_ui() {
     case ENABLE_INVERT_UI:            break;
     case NUMBER_KEY_UI:               lv_clear_number_key(); break;
     case BABY_STEP_UI:                lv_clear_baby_stepping(); break;
+    #ifdef BLTOUCH
+    case BLTOUCH_UI:                  lv_clear_bltouch_settings(); break;
+    #endif
+    #if TOUCH_MI_PROBE
+    case TOUCHUI_UI:                  lv_clear_touchmi_settings(); break;
+    #endif
     case PAUSE_POS_UI:                lv_clear_pause_position(); break;
       #if HAS_TRINAMIC_CONFIG
         case TMC_CURRENT_UI:          lv_clear_tmc_current_settings(); break;

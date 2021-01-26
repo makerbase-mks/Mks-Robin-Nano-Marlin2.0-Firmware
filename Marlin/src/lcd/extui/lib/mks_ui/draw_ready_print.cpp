@@ -204,15 +204,15 @@ void lv_draw_ready_print(void) {
   else {
     lv_obj_t *buttonExt1      = lv_img_create(scr, nullptr);
     lv_img_set_src(buttonExt1    , "F:/bmp_ext1_state.bin");
-    lv_obj_set_pos(buttonExt1    , 38, 83);
+    lv_obj_set_pos(buttonExt1    , 58, 83);
 
     lv_obj_t *buttonExt2      = lv_img_create(scr, nullptr);
     lv_img_set_src(buttonExt2    , "F:/bmp_ext2_state.bin");
-    lv_obj_set_pos(buttonExt2    , 157, 83);
+    lv_obj_set_pos(buttonExt2    , 177, 83);
 
     lv_obj_t *buttonBedstate = lv_img_create(scr, nullptr);
     lv_img_set_src(buttonBedstate, "F:/bmp_bed_state.bin");
-    lv_obj_set_pos(buttonBedstate, 276, 83);
+    lv_obj_set_pos(buttonBedstate, 286, 83);
 
     lv_obj_t *buttonFanstate = lv_img_create(scr, nullptr);
     lv_img_set_src(buttonFanstate, "F:/bmp_fan_state.bin");
@@ -227,8 +227,6 @@ void lv_draw_ready_print(void) {
     lv_obj_align(labelExt2, buttonExt2    , LV_ALIGN_IN_BOTTOM_MID, 2, 20);
     lv_obj_align(labelBed , buttonBedstate, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
     lv_obj_align(labelFan , buttonFanstate, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
-
-    thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
 
     lv_big_button_create(scr, "F:/bmp_tool.bin"    , main_menu.tool ,  20, 178, event_handler, ID_TOOL);
     lv_big_button_create(scr, "F:/bmp_set.bin"     , main_menu.set  , 180, 178, event_handler, ID_SET);

@@ -107,7 +107,6 @@ void lv_draw_tool(void) {
   #if ENABLED(CUSTOM_USER_MENUS)
     lv_big_button_create(scr, "F:/bmp_more.bin", tool_menu.more            , BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_T_MORE);
   #endif
-
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back     , BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_T_RETURN);
 }
 

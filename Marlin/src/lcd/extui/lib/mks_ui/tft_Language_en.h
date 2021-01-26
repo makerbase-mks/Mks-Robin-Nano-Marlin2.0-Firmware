@@ -102,13 +102,20 @@
 #define LEVELING_MANUAL_POS_EN          "Manual leveling coordinate settings"
 #define LEVELING_AUTO_COMMAND_EN        "AutoLeveling command settings"
 #define LEVELING_AUTO_ZOFFSET_EN        "Nozzle-to-probe offsets settings"
-#define LEVELING_TOUCHMI_EN             "Settings-TouchMi-Probe"
+
+#define LEVELING_TOUCHMI_EN             "Settings-TouchMi/BL-Touch-Probe"
 #define TM_INIT_EN                         "Init"
 #define TM_ZOFFSETPOS_EN                   "Zoffset+"
 #define TM_ZOFFSETNEG_EN                   "Zoffset-"
 #define TM_SAVE_EN                         "Save"
 #define TM_TEST_EN                         "Test"
 
+#define BLTOUCH_LEVELING_EN             "Settings BL-Touch Probe"
+#define BLTOUCH_INIT_EN                 "Init"
+#define BLTOUCH_ZOFFSETPOS_EN           "Zoffset+"
+#define BLTOUCH_ZOFFSETNEG_EN           "Zoffset-"
+#define BLTOUCH_SAVE_EN                 "Save"
+#define BLTOUCH_TEST_EN                 "Test"
 
 #define LEVELING_PARA_CONF_TITLE_EN     "leveling setting"
 #define AUTO_LEVELING_ENABLE_EN         "Enable auto leveling"
