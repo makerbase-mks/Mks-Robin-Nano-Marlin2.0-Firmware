@@ -297,6 +297,14 @@
 #define TM_ZOFFSETNEG_RU                   "Zoffset-"
 #define TM_SAVE_RU                         "Save"
 #define TM_TEST_RU                         "Test"
+
+#define BLTOUCH_LEVELING_RU             "Settings BL-Touch Probe"
+#define BLTOUCH_INIT_RU                 "Init"
+#define BLTOUCH_ZOFFSETPOS_RU           "Zoffset+"
+#define BLTOUCH_ZOFFSETNEG_RU           "Zoffset-"
+#define BLTOUCH_SAVE_RU                 "Save"
+#define BLTOUCH_TEST_RU                 "Test"
+
 #define MACHINE_CONFIG_TITLE_RU         "Hастройки принтера>настройки притера"
 #define MAXFEEDRATE_CONF_RU             "настройки максимальной скорости"
 #define ACCELERATION_CONF_RU            "настройки ускорений"

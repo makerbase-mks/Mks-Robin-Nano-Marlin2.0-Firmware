@@ -51,7 +51,7 @@ void lv_draw_about(void) {
   fw_type = lv_label_create(scr, "Firmware: Marlin " SHORT_BUILD_VERSION);
   lv_obj_align(fw_type, nullptr, LV_ALIGN_CENTER, 0, -20);
 
-  board = lv_label_create(scr, "Board: " BOARD_INFO_NAME);
+  board = lv_label_create(scr, "Printer: " MACHINE_NAME);
   lv_obj_align(board, nullptr, LV_ALIGN_CENTER, 0, -60);
 }
 

@@ -44,6 +44,11 @@
 
 extern lv_group_t*  g;
 static lv_obj_t *scr;
+static lv_obj_t *labelExt1;
+static lv_obj_t *labelExt2;
+static lv_obj_t *labelBed;
+static lv_obj_t *labelFan;
+
 #if ENABLED(MKS_TEST)
   uint8_t curent_disp_ui = 0;
 #endif
@@ -73,6 +78,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 lv_obj_t *limit_info, *det_info;
 lv_obj_t *tmc_state_info;
 lv_style_t limit_style, det_style, tmc_state_style;
+
 void disp_Limit_ok() {
   limit_style.text.color.full = 0xFFFF;
   lv_obj_set_style(limit_info, &limit_style);
@@ -196,9 +202,35 @@ void lv_draw_ready_print(void) {
 
   }
   else {
-    lv_big_button_create(scr, "F:/bmp_tool.bin", main_menu.tool, 20, 90, event_handler, ID_TOOL);
-    lv_big_button_create(scr, "F:/bmp_set.bin", main_menu.set, 180, 90, event_handler, ID_SET);
-    lv_big_button_create(scr, "F:/bmp_printing.bin", main_menu.print, 340, 90, event_handler, ID_PRINT);
+    lv_obj_t *buttonExt1      = lv_img_create(scr, nullptr);
+    lv_img_set_src(buttonExt1    , "F:/bmp_ext1_state.bin");
+    lv_obj_set_pos(buttonExt1    , 58, 83);
+
+    lv_obj_t *buttonExt2      = lv_img_create(scr, nullptr);
+    lv_img_set_src(buttonExt2    , "F:/bmp_ext2_state.bin");
+    lv_obj_set_pos(buttonExt2    , 177, 83);
+
+    lv_obj_t *buttonBedstate = lv_img_create(scr, nullptr);
+    lv_img_set_src(buttonBedstate, "F:/bmp_bed_state.bin");
+    lv_obj_set_pos(buttonBedstate, 286, 83);
+
+    lv_obj_t *buttonFanstate = lv_img_create(scr, nullptr);
+    lv_img_set_src(buttonFanstate, "F:/bmp_fan_state.bin");
+    lv_obj_set_pos(buttonFanstate, 395, 83);
+
+    labelExt1      = lv_label_create(scr,   2, 130, nullptr);
+    labelExt2      = lv_label_create(scr, 121, 130, nullptr);
+    labelBed       = lv_label_create(scr, 240, 130, nullptr);
+    labelFan       = lv_label_create(scr, 361, 130, nullptr);
+
+    lv_obj_align(labelExt1, buttonExt1    , LV_ALIGN_IN_BOTTOM_MID, 2, 20);
+    lv_obj_align(labelExt2, buttonExt2    , LV_ALIGN_IN_BOTTOM_MID, 2, 20);
+    lv_obj_align(labelBed , buttonBedstate, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
+    lv_obj_align(labelFan , buttonFanstate, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
+
+    lv_big_button_create(scr, "F:/bmp_tool.bin"    , main_menu.tool ,  20, 178, event_handler, ID_TOOL);
+    lv_big_button_create(scr, "F:/bmp_set.bin"     , main_menu.set  , 180, 178, event_handler, ID_SET);
+    lv_big_button_create(scr, "F:/bmp_printing.bin", main_menu.print, 340, 178, event_handler, ID_PRINT);
   }
 
   #if ENABLED(TOUCH_SCREEN_CALIBRATION)
@@ -208,6 +240,31 @@ void lv_draw_ready_print(void) {
       lv_draw_touch_calibration_screen();
     }
   #endif
+
+  disp_ext_temp_ready();
+  disp_bed_temp_ready();
+  disp_fan_speed_ready();
+
+}
+
+void disp_ext_temp_ready() {
+  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+  lv_label_set_text(labelExt1, public_buf_l);
+
+  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+  lv_label_set_text(labelExt2, public_buf_l);
+}
+
+void disp_bed_temp_ready() {
+  #if HAS_HEATED_BED
+    sprintf(public_buf_l, printing_menu.bed_temp, (int)thermalManager.temp_bed.celsius, (int)thermalManager.temp_bed.target);
+    lv_label_set_text(labelBed, public_buf_l);
+  #endif
+}
+
+void disp_fan_speed_ready() {
+  sprintf_P(public_buf_l, PSTR("%3d"), thermalManager.fan_speed[0]);
+  lv_label_set_text(labelFan, public_buf_l);
 }
 
 void lv_clear_ready_print() {

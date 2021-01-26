@@ -93,7 +93,7 @@ lv_point_t line_points[4][2] = {
 };
 void gCfgItems_init() {
   gCfgItems.multiple_language = MULTI_LANGUAGE_ENABLE;
-  #if 1 // LCD_LANGUAGE == en
+  #if  LCD_LANGUAGE == en
     gCfgItems.language = LANG_ENGLISH;
   #elif LCD_LANGUAGE == zh_CN
     gCfgItems.language = LANG_SIMPLE_CHINESE;
@@ -130,22 +130,22 @@ void gCfgItems_init() {
   gCfgItems.pausePosZ         = 5;
   gCfgItems.levelingPos[0][0] = X_MIN_POS + 30;
   gCfgItems.levelingPos[0][1] = Y_MIN_POS + 30;
-  gCfgItems.levelingPos[1][0] = X_MAX_POS - 30;
-  gCfgItems.levelingPos[1][1] = Y_MIN_POS + 30;
+  gCfgItems.levelingPos[1][0] = X_MIN_POS + 30;
+  gCfgItems.levelingPos[1][1] = Y_MAX_POS - 30;
   gCfgItems.levelingPos[2][0] = X_MAX_POS - 30;
   gCfgItems.levelingPos[2][1] = Y_MAX_POS - 30;
-  gCfgItems.levelingPos[3][0] = X_MIN_POS + 30;
-  gCfgItems.levelingPos[3][1] = Y_MAX_POS - 30;
+  gCfgItems.levelingPos[3][0] = X_MAX_POS - 30;
+  gCfgItems.levelingPos[3][1] = Y_MIN_POS + 30;
   gCfgItems.levelingPos[4][0] = X_BED_SIZE / 2;
   gCfgItems.levelingPos[4][1] = Y_BED_SIZE / 2;
   gCfgItems.cloud_enable      = false;
   gCfgItems.wifi_mode_sel = STA_MODEL;
   gCfgItems.fileSysType   = FILE_SYS_SD;
   gCfgItems.wifi_type     = ESP_WIFI;
-  gCfgItems.filamentchange_load_length   = 200;
-  gCfgItems.filamentchange_load_speed    = 1000;
-  gCfgItems.filamentchange_unload_length = 200;
-  gCfgItems.filamentchange_unload_speed  = 1000;
+  gCfgItems.filamentchange_load_length   = 100;
+  gCfgItems.filamentchange_load_speed    = 800;
+  gCfgItems.filamentchange_unload_length = 100;
+  gCfgItems.filamentchange_unload_speed  = 800;
   gCfgItems.filament_limit_temper        = 200;
 
   gCfgItems.encoder_enable = true;
@@ -808,7 +808,14 @@ void GUI_RefreshPage() {
         disp_desire_temp();
       }
       break;
+
     case PRINT_READY_UI:
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        disp_ext_temp_ready();
+        disp_bed_temp_ready();
+        disp_fan_speed_ready();
+      }
       break;
 
     case PRINT_FILE_UI: break;
@@ -933,12 +940,22 @@ void GUI_RefreshPage() {
       }
       break;
 
+    #ifdef BLTOUCH
+    case BLTOUCH_UI:
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        disp_bltouch_z_offset_value();
+      }
+      break;
+    #endif
+    #if TOUCH_MI_PROBE
     case TOUCHMI_UI:
       if (temps_update_flag) {
         temps_update_flag = false;
         disp_z_offset_value_TM();
       }
       break;
+    #endif
     default: break;
   }
 
@@ -1020,6 +1037,12 @@ void lv_clear_cur_ui() {
     case ENABLE_INVERT_UI:            break;
     case NUMBER_KEY_UI:               lv_clear_number_key(); break;
     case BABY_STEP_UI:                lv_clear_baby_stepping(); break;
+    #ifdef BLTOUCH
+    case BLTOUCH_UI:                  lv_clear_bltouch_settings(); break;
+    #endif
+    #if TOUCH_MI_PROBE
+    case TOUCHUI_UI:                  lv_clear_touchmi_settings(); break;
+    #endif
     case PAUSE_POS_UI:                lv_clear_pause_position(); break;
       #if HAS_TRINAMIC_CONFIG
         case TMC_CURRENT_UI:          lv_clear_tmc_current_settings(); break;

@@ -36,7 +36,8 @@ enum {
   ID_LEVEL_POSITION,
   ID_LEVEL_COMMAND,
   ID_LEVEL_ZOFFSET,
-  ID_LEVEL_TOUCHMI         
+  ID_LEVEL_TOUCHMI,
+  ID_LEVEL_BLTOUCH         
 };
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
@@ -61,6 +62,13 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         lv_draw_auto_level_offset_settings();
         break;
     #endif
+    #ifdef BLTOUCH
+      case ID_LEVEL_BLTOUCH:
+        lv_clear_level_settings();
+        bltouch_do_init();
+        lv_draw_bltouch_settings();
+        break;
+    #endif
     #if ENABLED(TOUCH_MI_PROBE)
       case ID_LEVEL_TOUCHMI:
         lv_clear_level_settings();
@@ -77,10 +85,13 @@ void lv_draw_level_settings(void) {
   lv_screen_menu_item(scr, machine_menu.LevelingAutoCommandConf, PARA_UI_POS_X, PARA_UI_POS_Y * 2, event_handler, ID_LEVEL_COMMAND, 1);
   #if HAS_BED_PROBE
     lv_screen_menu_item(scr, machine_menu.LevelingAutoZoffsetConf, PARA_UI_POS_X, PARA_UI_POS_Y * 3, event_handler, ID_LEVEL_ZOFFSET, 2);
-   #endif
+  #endif
+  #ifdef BLTOUCH
+    lv_screen_menu_item(scr, machine_menu.BLTouchLevelingConf, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_LEVEL_BLTOUCH, 3);
+  #endif
   #if ENABLED(TOUCH_MI_PROBE)
     lv_screen_menu_item(scr, machine_menu.LevelingTouchmiConf, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_LEVEL_TOUCHMI, 3);
-   #endif
+  #endif
   lv_screen_menu_item_return(scr, event_handler, ID_LEVEL_RETURN);
 }
 
