@@ -87,6 +87,12 @@
 #define LEVELING_MANUAL_POS_T_CN        "手動調平坐標設置"
 #define LEVELING_AUTO_COMMAND_T_CN      "自動調平指令設置"
 #define LEVELING_AUTO_ZOFFSET_T_CN      "擠出頭與調平開關偏移設置"
+#define LEVELING_TOUCHMI_T_CN           "Settings-TouchMi-Probe"
+#define TM_INIT_T_CN                       "Init"
+#define TM_ZOFFSETPOS_T_CN                 "Zoffset+"
+#define TM_ZOFFSETNEG_T_CN                 "Zoffset-"
+#define TM_SAVE_T_CN                       "Save"
+#define TM_TEST_T_CN                       "Test"
 
 #define LEVELING_PARA_CONF_TITLE_T_CN   "調平參數"
 #define AUTO_LEVELING_ENABLE_T_CN       "自動調平"
