@@ -69,7 +69,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         lv_draw_bltouch_settings();
         break;
     #endif
-    #if TOUCH_MI_PROBE
+    #if ENABLED(TOUCH_MI_PROBE)
       case ID_LEVEL_TOUCHMI:
         lv_clear_level_settings();
         lv_draw_touchmi_settings();
@@ -89,7 +89,7 @@ void lv_draw_level_settings(void) {
   #ifdef BLTOUCH
     lv_screen_menu_item(scr, machine_menu.BLTouchLevelingConf, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_LEVEL_BLTOUCH, 3);
   #endif
-  #if TOUCH_MI_PROBE
+  #if ENABLED(TOUCH_MI_PROBE)
     lv_screen_menu_item(scr, machine_menu.LevelingTouchmiConf, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_LEVEL_TOUCHMI, 3);
   #endif
   lv_screen_menu_item_return(scr, event_handler, ID_LEVEL_RETURN);

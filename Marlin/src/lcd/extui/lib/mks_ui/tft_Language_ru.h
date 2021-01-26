@@ -291,7 +291,6 @@
 #define LEVELING_MANUAL_POS_RU          "настройки координат для уровня"
 #define LEVELING_AUTO_COMMAND_RU        "настройки комманд увтоуровня"
 #define LEVELING_AUTO_ZOFFSET_RU        "координаты смещения сопла"
-
 #define LEVELING_TOUCHMI_RU             "Settings-TouchMi-Probe"
 #define TM_INIT_RU                         "Init"
 #define TM_ZOFFSETPOS_RU                   "Zoffset+"
