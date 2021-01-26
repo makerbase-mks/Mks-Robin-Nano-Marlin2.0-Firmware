@@ -24,10 +24,10 @@
 #if HAS_TFT_LVGL_UI
 
 #include "../../../../MarlinCore.h"
-#include "draw_ui.h"
 #include "../../../../gcode/queue.h"
 #include "../../../../module/probe.h"
 
+#include "draw_ui.h"
 
 extern lv_group_t * g;
 static lv_obj_t * scr, * zOffsetText;
@@ -38,7 +38,7 @@ enum {
   ID_TM_ZOFFSETNEG,
   ID_TM_SAVE,
   ID_TM_TEST,
-  ID_H_RETURN
+  ID_TM_RETURN
  };
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
@@ -59,7 +59,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
     case ID_TM_TEST:
       queue.inject_P(PSTR("G28\nG1 Z0"));
       break;
-    case ID_H_RETURN:
+    case ID_TM_RETURN:
       lv_clear_touchmi_settings();
       lv_draw_return_ui();
       break;
@@ -68,13 +68,13 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 }
 
 void lv_draw_touchmi_settings(void) {
-  scr = lv_screen_create(TOUCHMI_UI);
+  scr = lv_screen_create(TOUCHMI_UI, machine_menu.LevelingTouchmiConf);
   lv_big_button_create(scr, "F:/bmp_speed0.bin", machine_menu.TouchmiInit, INTERVAL_V, titleHeight, event_handler, ID_TM_INIT);
   lv_big_button_create(scr, "F:/bmp_zAdd.bin", machine_menu.TouchmiOffsetpos, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_TM_ZOFFSETPOS);
   lv_big_button_create(scr, "F:/bmp_zDec.bin", machine_menu.TouchmiOffsetneg, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_TM_ZOFFSETNEG);
   lv_big_button_create(scr, "F:/bmp_set.bin", machine_menu.TouchmiSave, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_TM_SAVE);
   lv_big_button_create(scr, "F:/bmp_in.bin", machine_menu.TouchmiTest, BTN_X_PIXEL * 3 + INTERVAL_V * 4,titleHeight, event_handler, ID_TM_TEST);
-  lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_RETURN);
+  lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_TM_RETURN);
 
   
   zOffsetText = lv_label_create(scr, 290, TITLE_YPOS, nullptr);
