@@ -933,6 +933,13 @@ void GUI_RefreshPage() {
       }
       break;
 
+    case BLTOUCH_UI:
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        disp_bltouch_z_offset_value();
+      }
+      break;
+
     case TOUCHMI_UI:
       if (temps_update_flag) {
         temps_update_flag = false;
@@ -1020,6 +1027,9 @@ void lv_clear_cur_ui() {
     case ENABLE_INVERT_UI:            break;
     case NUMBER_KEY_UI:               lv_clear_number_key(); break;
     case BABY_STEP_UI:                lv_clear_baby_stepping(); break;
+    #ifdef BLTOUCH
+    case BLTOUCH_UI:                  lv_clear_bltouch_settings(); break;
+    #endif
     case PAUSE_POS_UI:                lv_clear_pause_position(); break;
       #if HAS_TRINAMIC_CONFIG
         case TMC_CURRENT_UI:          lv_clear_tmc_current_settings(); break;
@@ -1040,6 +1050,7 @@ void lv_clear_cur_ui() {
     #if ENABLED(TOUCH_SCREEN_CALIBRATION)
       case TOUCH_CALIBRATION_UI:      lv_clear_touch_calibration_screen(); break;
     #endif
+    case TOUCHMI_UI:                  lv_clear_touchmi_settings(); break;
     default: break;
   }
 }
@@ -1144,6 +1155,7 @@ void lv_draw_return_ui() {
       #if HAS_ROTARY_ENCODER
         case ENCODER_SETTINGS_UI:       lv_draw_encoder_settings(); break;
       #endif
+      case TOUCHMI_UI:                  lv_draw_touchmi_settings(); break;
       default: break;
     }
   }
