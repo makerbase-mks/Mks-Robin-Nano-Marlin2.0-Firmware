@@ -113,6 +113,13 @@ typedef struct machine_common_disp{
   const char *TouchmiSave;
   const char *TouchmiTest;
 
+  const char *BLTouchLevelingConf;
+  const char *BLTouchInit;
+  const char *BLTouchOffsetpos;
+  const char *BLTouchOffsetneg;
+  const char *BLTouchSave;
+  const char *BLTouchTest;
+
   const char *LevelingSubConfTitle;
   const char *AutoLevelEnable;
   const char *BLtouchEnable;
