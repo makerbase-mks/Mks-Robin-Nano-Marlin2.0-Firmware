@@ -155,7 +155,7 @@ void disp_step_dist() {
 void disp_bltouch_z_offset_value() {
   char buf[20];
   char str_1[16];
-  sprintf_P(buf, PSTR("offset Z: %s mm"), dtostrf(probe.offset.z, 1, 2, str_1) );
+  sprintf_P(buf, PSTR("Z Offset: %s mm"), dtostrf(probe.offset.z, 1, 2, str_1) );
   lv_label_set_text(zOffsetText, buf);
 
   sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);

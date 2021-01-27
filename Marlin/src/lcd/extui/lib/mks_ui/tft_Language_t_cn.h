@@ -94,13 +94,6 @@
 #define TM_SAVE_T_CN                    "保存"
 #define TM_TEST_T_CN                    "測試"
 
-#define LEVELING_TOUCHMI_T_CN           "Settings-TouchMi-Probe"
-#define TM_INIT_T_CN                       "Init"
-#define TM_ZOFFSETPOS_T_CN                 "Zoffset+"
-#define TM_ZOFFSETNEG_T_CN                 "Zoffset-"
-#define TM_SAVE_T_CN                       "Save"
-#define TM_TEST_T_CN                       "Test"
-
 #define BLTOUCH_LEVELING_T_CN           "Settings BL-Touch Probe"
 #define BLTOUCH_INIT_T_CN               "Init"
 #define BLTOUCH_ZOFFSETPOS_T_CN         "Zoffset+"
