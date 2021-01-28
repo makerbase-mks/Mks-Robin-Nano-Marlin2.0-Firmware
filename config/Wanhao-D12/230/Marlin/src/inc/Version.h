@@ -25,7 +25,7 @@
  * Release version. Leave the Marlin version or apply a custom scheme.
  */
 #ifndef SHORT_BUILD_VERSION
-  #define SHORT_BUILD_VERSION "Wanhao D12 2.0.2 BL Z+"
+  #define SHORT_BUILD_VERSION "Wanhao D12 2.0.2"
 #endif
 
 /**
