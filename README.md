@@ -86,6 +86,11 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card or usb disk
 - Insert sdcard or usb disk to the motherboard, and you can see the update interface after power on.  
 
+## For more function configuration, please refer to Robin nano series Wiki
+- [MKS Robin Nano V1.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X/wiki). 
+- [MKS Robin Nano V2.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V2.X/wiki). 
+- [MKS Robin Nano V3.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X/wiki).
+
 ## More information about the Robin Nano V1.X
 Please refer to [MKS Robin Nano github](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X).
 

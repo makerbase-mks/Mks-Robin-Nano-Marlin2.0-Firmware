@@ -99,6 +99,24 @@
 #define TEMP_1_PIN                          PC2   // TH2
 #define TEMP_BED_PIN                        PC0   // TB1
 
+#if HAS_TMC_UART
+
+  #define X_SERIAL_TX_PIN                   PA10
+  #define X_SERIAL_RX_PIN                   PA10
+
+  #define Y_SERIAL_TX_PIN                   PA9
+  #define Y_SERIAL_RX_PIN                   PA9
+
+  #define Z_SERIAL_TX_PIN                   PC7
+  #define Z_SERIAL_RX_PIN                   PC7
+
+  #define E0_SERIAL_TX_PIN                  PC13
+  #define E0_SERIAL_RX_PIN                  PC13
+
+  // Reduce baud rate to improve software serial reliability
+  #define TMC_BAUD_RATE                    19200
+#endif // HAS_TMC_UART
+
 //
 // Heaters / Fans
 //
