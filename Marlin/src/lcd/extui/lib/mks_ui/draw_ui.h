@@ -275,6 +275,7 @@ typedef enum {
   TEMP_UI,
   SET_UI,
   ZERO_UI,
+  BLTOUCH_UI,
   TOUCHMI_UI,
   BLTOUCH_UI,
   SPRAYER_UI,
