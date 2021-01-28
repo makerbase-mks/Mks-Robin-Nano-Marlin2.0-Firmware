@@ -88,12 +88,12 @@
 #define LEVELING_AUTO_COMMAND_CN      "自动调平指令设置"
 #define LEVELING_AUTO_ZOFFSET_CN      "挤出头与调平开关偏移设置"
 
-#define BLTOUCH_LEVELING_CN           "Settings BL-Touch Probe"
-#define BLTOUCH_INIT_CN               "Init"
+#define BLTOUCH_LEVELING_CN           "机器参数>BL-Touch Probe"
+#define BLTOUCH_INIT_CN               "初始化"
 #define BLTOUCH_ZOFFSETPOS_CN         "Zoffset+"
 #define BLTOUCH_ZOFFSETNEG_CN         "Zoffset-"
-#define BLTOUCH_SAVE_CN               "Save"
-#define BLTOUCH_TEST_CN               "Test"
+#define BLTOUCH_SAVE_CN               "保存"
+#define BLTOUCH_TEST_CN               "测试"
 
 #define LEVELING_TOUCHMI_CN           "机器参数>TouchMi-Probe"
 #define TM_INIT_CN                    "初始化"
