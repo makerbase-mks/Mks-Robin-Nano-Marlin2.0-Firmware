@@ -91,7 +91,7 @@ void lv_draw_level_settings(void) {
   #endif
   #if ENABLED(TOUCH_MI_PROBE)
     lv_screen_menu_item(scr, machine_menu.LevelingTouchmiConf, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_LEVEL_TOUCHMI, 3);
-   #endif
+  #endif
   lv_screen_menu_item_return(scr, event_handler, ID_LEVEL_RETURN);
 }
 
