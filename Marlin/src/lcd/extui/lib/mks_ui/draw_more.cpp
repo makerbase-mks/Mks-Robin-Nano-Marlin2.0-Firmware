@@ -231,7 +231,6 @@ void lv_clear_more() {
   #if BUTTONS_EXIST(EN1, EN2, ENC)
     if (gCfgItems.encoder_enable) lv_group_remove_all_objs(g);
   #endif
-  delay (2000);
   lv_obj_del(scr);
 }
 
