@@ -236,9 +236,13 @@ void tft_lvgl_init() {
 
       uiCfg.print_state = REPRINTING;
 
-      strncpy(public_buf_m, recovery.info.sd_filename, sizeof(public_buf_m));
-      card.printLongPath(public_buf_m);
-      strncpy(list_file.long_name[sel_id], card.longFilename, sizeof(list_file.long_name[sel_id]));
+      #if ENABLED(LONG_FILENAME_HOST_SUPPORT)
+        strncpy(public_buf_m, recovery.info.sd_filename, sizeof(public_buf_m));
+        card.printLongPath(public_buf_m);
+        strncpy(list_file.long_name[sel_id], card.longFilename, sizeof(list_file.long_name[sel_id]));
+      #else
+        strncpy(list_file.long_name[sel_id], recovery.info.sd_filename, sizeof(list_file.long_name[sel_id]));
+      #endif
       lv_draw_printing();
     }
   #endif
