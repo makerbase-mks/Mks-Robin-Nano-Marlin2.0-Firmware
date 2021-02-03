@@ -33,7 +33,8 @@ static lv_obj_t *scr;
 
 #define LV_KB_CTRL_BTN_FLAGS (LV_BTNM_CTRL_NO_REPEAT | LV_BTNM_CTRL_CLICK_TRIG)
 
-#ifdef FRENCH_KEYBOARD
+#if LCD_LANGUAGE == fr
+//#ifdef FRENCH_KEYBOARD
 static const char * kb_map_lc[] = {"1#", "a", "z", "e", "r", "t", "y", "u", "i", "o", "p", LV_SYMBOL_BACKSPACE, "\n",
                                    "ABC", "q", "s", "d", "f", "g", "h", "j", "k", "l", "m", LV_SYMBOL_NEW_LINE, "\n",
                                    "_", "-", "w", "x", "c", "v", "b", "n", ",", ";", ":", "!", "\n",
