@@ -76,7 +76,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
      #define TOUCH_SCREEN
 
 - Configuation_adv.h:    
-     No you can either use the TF card or USB disk, use TF card:   
+     Now you can either use the TF card or USB disk, use TF card:   
     // #define USB_FLASH_DRIVE_SUPPORT  
     Use USB disk:  
      #define USB_FLASH_DRIVE_SUPPORT  
