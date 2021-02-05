@@ -33,6 +33,30 @@ static lv_obj_t *scr;
 
 #define LV_KB_CTRL_BTN_FLAGS (LV_BTNM_CTRL_NO_REPEAT | LV_BTNM_CTRL_CLICK_TRIG)
 
+#ifdef FRENCH_KEYBOARD
+static const char * kb_map_lc[] = {"1#", "a", "z", "e", "r", "t", "y", "u", "i", "o", "p", LV_SYMBOL_BACKSPACE, "\n",
+                                   "ABC", "q", "s", "d", "f", "g", "h", "j", "k", "l", "m", LV_SYMBOL_NEW_LINE, "\n",
+                                   "_", "-", "w", "x", "c", "v", "b", "n", ",", ";", ":", "!", "\n",
+                                   LV_SYMBOL_CLOSE, LV_SYMBOL_LEFT, " ", LV_SYMBOL_RIGHT, LV_SYMBOL_OK, ""};
+
+static const lv_btnm_ctrl_t kb_ctrl_lc_map[] = {
+    LV_KB_CTRL_BTN_FLAGS | 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 7,
+    LV_KB_CTRL_BTN_FLAGS | 5, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5,
+                           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    LV_KB_CTRL_BTN_FLAGS | 2, 2, 6, 2, LV_KB_CTRL_BTN_FLAGS | 2};
+
+static const char * kb_map_uc[] = {"1#", "A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P", LV_SYMBOL_BACKSPACE, "\n",
+                                   "abc", "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M", LV_SYMBOL_NEW_LINE, "\n",
+                                   "_", "-", "W", "X", "C", "V", "B", "N", "?", ".", "/", "§", "\n",
+                                   LV_SYMBOL_CLOSE, LV_SYMBOL_LEFT, " ", LV_SYMBOL_RIGHT, LV_SYMBOL_OK, ""};
+
+static const lv_btnm_ctrl_t kb_ctrl_uc_map[] = {
+    LV_KB_CTRL_BTN_FLAGS | 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 7,
+    LV_KB_CTRL_BTN_FLAGS | 5, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5,
+                           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    LV_KB_CTRL_BTN_FLAGS | 2, 2, 6, 2, LV_KB_CTRL_BTN_FLAGS | 2};
+
+#else
 static const char * kb_map_lc[] = {"1#", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", LV_SYMBOL_BACKSPACE, "\n",
                                    "ABC", "a", "s", "d", "f", "g", "h", "j", "k", "l", LV_SYMBOL_NEW_LINE, "\n",
                                    "_", "-", "z", "x", "c", "v", "b", "n", "m", ".", ",", ":", "\n",
@@ -54,6 +78,8 @@ static const lv_btnm_ctrl_t kb_ctrl_uc_map[] = {
     LV_KB_CTRL_BTN_FLAGS | 6, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7,
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     LV_KB_CTRL_BTN_FLAGS | 2, 2, 6, 2, LV_KB_CTRL_BTN_FLAGS | 2};
+
+#endif
 
 static const char * kb_map_spec[] = {"0", "1", "2", "3", "4" ,"5", "6", "7", "8", "9", ".", LV_SYMBOL_BACKSPACE, "\n",
                                      "abc", "+", "-", "/", "*", "=", "%", "!", "?", "#", "<", ">", "\n",
@@ -225,6 +251,10 @@ void lv_draw_keyboard() {
 
   // Create a keyboard and apply the styles
   lv_obj_t *kb = lv_kb_create(scr, nullptr);
+  lv_btnm_set_map(kb, kb_map_lc);
+  lv_btnm_set_ctrl_map(kb, kb_ctrl_lc_map);
+  lv_obj_set_base_dir(kb, LV_BIDI_DIR_LTR);
+
   lv_obj_set_event_cb(kb, lv_kb_event_cb);
   lv_kb_set_cursor_manage(kb, true);
   lv_kb_set_style(kb, LV_KB_STYLE_BG, &lv_style_transp_tight);
