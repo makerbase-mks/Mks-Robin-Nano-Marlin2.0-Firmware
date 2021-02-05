@@ -941,20 +941,21 @@ void GUI_RefreshPage() {
       break;
 
     #if ENABLED(BLTOUCH)
-    case BLTOUCH_UI:
-      if (temps_update_flag) {
-        temps_update_flag = false;
-        disp_bltouch_z_offset_value();
-      }
-      break;
+      case BLTOUCH_UI:
+        if (temps_update_flag) {
+          temps_update_flag = false;
+          disp_bltouch_z_offset_value();
+        }
+        break;
     #endif
+
     #if ENABLED(TOUCH_MI_PROBE)
-    case TOUCHMI_UI:
-      if (temps_update_flag) {
-        temps_update_flag = false;
-        disp_z_offset_value_TM();
-      }
-      break;
+      case TOUCHMI_UI:
+        if (temps_update_flag) {
+          temps_update_flag = false;
+          disp_z_offset_value_TM();
+        }
+        break;
     #endif
     default: break;
   }
@@ -1038,7 +1039,10 @@ void lv_clear_cur_ui() {
     case NUMBER_KEY_UI:               lv_clear_number_key(); break;
     case BABY_STEP_UI:                lv_clear_baby_stepping(); break;
     #if ENABLED(BLTOUCH)
-    case BLTOUCH_UI:                  lv_clear_bltouch_settings(); break;
+      case BLTOUCH_UI:                lv_clear_bltouch_settings(); break;
+    #endif
+    #if ENABLED(TOUCH_MI_PROBE)
+      case TOUCHMI_UI:                lv_clear_touchmi_settings(); break;
     #endif
     #if ENABLED(TOUCH_MI_PROBE)
     case TOUCHUI_UI:                  lv_clear_touchmi_settings(); break;

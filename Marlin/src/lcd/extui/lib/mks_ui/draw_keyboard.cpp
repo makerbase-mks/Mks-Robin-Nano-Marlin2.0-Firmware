@@ -253,6 +253,7 @@ void lv_draw_keyboard() {
   lv_obj_t *kb = lv_kb_create(scr, nullptr);
   lv_btnm_set_map(kb, kb_map_lc);
   lv_btnm_set_ctrl_map(kb, kb_ctrl_lc_map);
+  lv_obj_set_base_dir(kb, LV_BIDI_DIR_LTR);
 
   lv_obj_set_event_cb(kb, lv_kb_event_cb);
   lv_kb_set_cursor_manage(kb, true);
