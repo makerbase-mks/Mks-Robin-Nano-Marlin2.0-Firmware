@@ -33,8 +33,7 @@ static lv_obj_t *scr;
 
 #define LV_KB_CTRL_BTN_FLAGS (LV_BTNM_CTRL_NO_REPEAT | LV_BTNM_CTRL_CLICK_TRIG)
 
-#if LCD_LANGUAGE == fr
-//#ifdef FRENCH_KEYBOARD
+#ifdef FRENCH_KEYBOARD
 static const char * kb_map_lc[] = {"1#", "a", "z", "e", "r", "t", "y", "u", "i", "o", "p", LV_SYMBOL_BACKSPACE, "\n",
                                    "ABC", "q", "s", "d", "f", "g", "h", "j", "k", "l", "m", LV_SYMBOL_NEW_LINE, "\n",
                                    "_", "-", "w", "x", "c", "v", "b", "n", ",", ";", ":", "!", "\n",
@@ -252,6 +251,10 @@ void lv_draw_keyboard() {
 
   // Create a keyboard and apply the styles
   lv_obj_t *kb = lv_kb_create(scr, nullptr);
+  lv_btnm_set_map(kb, kb_map_lc);
+  lv_btnm_set_ctrl_map(kb, kb_ctrl_lc_map);
+  lv_obj_set_base_dir(kb, LV_BIDI_DIR_LTR);
+
   lv_obj_set_event_cb(kb, lv_kb_event_cb);
   lv_kb_set_cursor_manage(kb, true);
   lv_kb_set_style(kb, LV_KB_STYLE_BG, &lv_style_transp_tight);
