@@ -298,7 +298,8 @@
 #define TM_SAVE_RU                      "Save"
 #define TM_TEST_RU                      "Test"
 
-#define BLTOUCH_LEVELING_RU             "Settings BL-Touch Probe"
+#define BLTOUCH_LEVELING_TITTLE_RU      "Settings>BL-Touch Probe"
+#define BLTOUCH_LEVELING_RU             "BL-Touch Probe"
 #define BLTOUCH_INIT_RU                 "Init"
 #define BLTOUCH_ZOFFSETPOS_RU           "Zoffset+"
 #define BLTOUCH_ZOFFSETNEG_RU           "Zoffset-"
