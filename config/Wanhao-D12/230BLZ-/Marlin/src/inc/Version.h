@@ -25,7 +25,7 @@
  * Release version. Leave the Marlin version or apply a custom scheme.
  */
 #ifndef SHORT_BUILD_VERSION
-  #define SHORT_BUILD_VERSION "Wanhao D12 2.0.2 BL Z+"
+  #define SHORT_BUILD_VERSION "Wanhao D12 2.0.2 BL Z-"
 #endif
 
 /**
@@ -42,7 +42,7 @@
  * version was tagged.
  */
 #ifndef STRING_DISTRIBUTION_DATE
-  #define STRING_DISTRIBUTION_DATE "2021-02-01"
+  #define STRING_DISTRIBUTION_DATE "2021-01-24"
 #endif
 
 /**
