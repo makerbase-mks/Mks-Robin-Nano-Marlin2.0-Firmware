@@ -1815,8 +1815,6 @@
  */
 #define LCD_LANGUAGE fr
 
-
-#define FRENCH_KEYBOARD
 /**
  * LCD Character Set
  *
@@ -2437,7 +2435,7 @@
    *  if defined  azerty layout
    *  if npt      qwerty layout
    */
-  //#define FRENCH_KEYBOARD
+  #define FRENCH_KEYBOARD
 #endif
 
 /**
