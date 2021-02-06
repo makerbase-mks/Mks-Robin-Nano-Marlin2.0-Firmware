@@ -288,12 +288,13 @@ void machine_setting_disp() {
     machine_menu.TouchmiSave         = TM_SAVE_CN;
     machine_menu.TouchmiTest         = TM_TEST_CN;
     
-    machine_menu.BLTouchLevelingConf = BLTOUCH_LEVELING_CN;
-    machine_menu.BLTouchInit         = BLTOUCH_INIT_CN;
-    machine_menu.BLTouchOffsetpos    = BLTOUCH_ZOFFSETPOS_CN;
-    machine_menu.BLTouchOffsetneg    = BLTOUCH_ZOFFSETNEG_CN;
-    machine_menu.BLTouchSave         = BLTOUCH_SAVE_CN;
-    machine_menu.BLTouchTest         = BLTOUCH_TEST_CN;
+    machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_CN;
+    machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_CN;
+    machine_menu.BLTouchInit              = BLTOUCH_INIT_CN;
+    machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_CN;
+    machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_CN;
+    machine_menu.BLTouchSave              = BLTOUCH_SAVE_CN;
+    machine_menu.BLTouchTest              = BLTOUCH_TEST_CN;
 
     machine_menu.HomingSensitivityConfTitle = HOMING_SENSITIVITY_CONF_TITLE_CN;
     machine_menu.X_Sensitivity              = X_SENSITIVITY_CN;
@@ -531,12 +532,13 @@ void machine_setting_disp() {
     machine_menu.TouchmiSave         = TM_SAVE_T_CN;
     machine_menu.TouchmiTest         = TM_TEST_T_CN;
 
-    machine_menu.BLTouchLevelingConf = BLTOUCH_LEVELING_T_CN;
-    machine_menu.BLTouchInit         = BLTOUCH_INIT_T_CN;
-    machine_menu.BLTouchOffsetpos    = BLTOUCH_ZOFFSETPOS_T_CN;
-    machine_menu.BLTouchOffsetneg    = BLTOUCH_ZOFFSETNEG_T_CN;
-    machine_menu.BLTouchSave         = BLTOUCH_SAVE_T_CN;
-    machine_menu.BLTouchTest         = BLTOUCH_TEST_T_CN;
+    machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_T_CN;
+    machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_T_CN;
+    machine_menu.BLTouchInit              = BLTOUCH_INIT_T_CN;
+    machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_T_CN;
+    machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_T_CN;
+    machine_menu.BLTouchSave              = BLTOUCH_SAVE_T_CN;
+    machine_menu.BLTouchTest              = BLTOUCH_TEST_T_CN;
 
     machine_menu.HomingSensitivityConfTitle = HOMING_SENSITIVITY_CONF_TITLE_T_CN;
     machine_menu.X_Sensitivity              = X_SENSITIVITY_T_CN;
@@ -777,12 +779,13 @@ void machine_setting_disp() {
     machine_menu.TouchmiSave         = TM_SAVE_EN;
     machine_menu.TouchmiTest         = TM_TEST_EN;
 
-    machine_menu.BLTouchLevelingConf = BLTOUCH_LEVELING_EN;
-    machine_menu.BLTouchInit         = BLTOUCH_INIT_EN;
-    machine_menu.BLTouchOffsetpos    = BLTOUCH_ZOFFSETPOS_EN;
-    machine_menu.BLTouchOffsetneg    = BLTOUCH_ZOFFSETNEG_EN;
-    machine_menu.BLTouchSave         = BLTOUCH_SAVE_EN;
-    machine_menu.BLTouchTest         = BLTOUCH_TEST_EN;
+    machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_EN;
+    machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_EN;
+    machine_menu.BLTouchInit              = BLTOUCH_INIT_EN;
+    machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_EN;
+    machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_EN;
+    machine_menu.BLTouchSave              = BLTOUCH_SAVE_EN;
+    machine_menu.BLTouchTest              = BLTOUCH_TEST_EN;
 
     machine_menu.HomingSensitivityConfTitle = HOMING_SENSITIVITY_CONF_TITLE_EN;
     machine_menu.X_Sensitivity              = X_SENSITIVITY_EN;
@@ -1825,12 +1828,13 @@ void disp_language_init() {
             machine_menu.TouchmiSave         = TM_SAVE_RU;
             machine_menu.TouchmiTest         = TM_TEST_RU;
 
-            machine_menu.BLTouchLevelingConf = BLTOUCH_LEVELING_RU;
-            machine_menu.BLTouchInit         = BLTOUCH_INIT_RU;
-            machine_menu.BLTouchOffsetpos    = BLTOUCH_ZOFFSETPOS_RU;
-            machine_menu.BLTouchOffsetneg    = BLTOUCH_ZOFFSETNEG_RU;
-            machine_menu.BLTouchSave         = BLTOUCH_SAVE_RU;
-            machine_menu.BLTouchTest         = BLTOUCH_TEST_RU;
+            machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_RU;
+            machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_RU;
+            machine_menu.BLTouchInit              = BLTOUCH_INIT_RU;
+            machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_RU;
+            machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_RU;
+            machine_menu.BLTouchSave              = BLTOUCH_SAVE_RU;
+            machine_menu.BLTouchTest              = BLTOUCH_TEST_RU;
 
             machine_menu.FilamentConfTitle   = FILAMENT_CONF_TITLE_RU;
             machine_menu.InLength            = FILAMENT_IN_LENGTH_RU;

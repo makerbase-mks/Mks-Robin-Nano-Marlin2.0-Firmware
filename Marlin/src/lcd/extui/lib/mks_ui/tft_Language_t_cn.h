@@ -94,7 +94,8 @@
 #define TM_SAVE_T_CN                    "保存"
 #define TM_TEST_T_CN                    "測試"
 
-#define BLTOUCH_LEVELING_T_CN           "機器參數>BL-Touch Probe"
+#define BLTOUCH_LEVELING_TITTLE_T_CN    "機器參數>BL-Touch Probe"
+#define BLTOUCH_LEVELING_T_CN           "BL-Touch Probe"
 #define BLTOUCH_INIT_T_CN               "初始化"
 #define BLTOUCH_ZOFFSETPOS_T_CN         "Zoffset+"
 #define BLTOUCH_ZOFFSETNEG_T_CN         "Zoffset-"

@@ -1818,15 +1818,6 @@
 
 #define FRENCH_KEYBOARD
 /**
- * FRENCH KEYBOARD
- * 
- * Select the french keyboard layoud in MKS_UI
- *  if defined  azerty layout
- *  if npt      qwerty layout
- */
-#define FRENCH_KEYBOARD
-
-/**
  * LCD Character Set
  *
  * Note: This option is NOT applicable to Graphical Displays.
@@ -2439,6 +2430,14 @@
 
 #if ENABLED(TFT_LVGL_UI)
   #define MKS_WIFI_MODULE  // MKS WiFi module
+  /**
+   * FRENCH KEYBOARD
+   * 
+   * Select the french keyboard layoud in MKS_UI
+   *  if defined  azerty layout
+   *  if npt      qwerty layout
+   */
+  //#define FRENCH_KEYBOARD
 #endif
 
 /**

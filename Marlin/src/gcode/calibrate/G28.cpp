@@ -489,4 +489,5 @@ void GcodeSuite::G28() {
       L64xxManager.set_param((L64XX_axis_t)cv, L6470_ABS_POS, stepper.position(L64XX_axis_xref[cv]));
     }
   #endif
+  TERN_(HAS_LEVELING, set_bed_leveling_enabled(true));
 }
