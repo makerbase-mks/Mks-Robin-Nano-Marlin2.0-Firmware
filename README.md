@@ -83,8 +83,20 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
 2. Update firmware:
    
-- Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card or usb disk
+- Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano_v3.bin` to the sd card or usb disk
 - Insert sdcard or usb disk to the motherboard, and you can see the update interface after power on.  
+
+3. Example build config:
+
+- [Open the example configuration file](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/tree/master/config/MKS%20Robin%20nano%20v3.0).
+- Modify the parameters, replace configuration.h and configuration_adv.h in the Marlin path of the source code.
+- Compile the firmware.
+
+4. Corresponding model firmware
+
+- [Find the corresponding firmware](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X/tree/main/firmware/Marlin-bugfix2.0.x-MKS-2.1.2). 
+- Copy the `assets` folder and `Robin_nano_v3.bin` to the sd card or usb disk
+- Insert sdcard or usb disk to the motherboard, and you can see the update interface after power on.
 
 ## For more function configuration, please refer to Robin nano series Wiki
 - [MKS Robin Nano V1.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X/wiki). 
@@ -99,5 +111,4 @@ Please refer to [MKS Robin Nano V2 github](https://github.com/makerbase-mks/MKS-
 
 ##  More information about the Robin Nano V3.X
 Please refer to [MKS Robin Nano V3 github](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X).
-
 
