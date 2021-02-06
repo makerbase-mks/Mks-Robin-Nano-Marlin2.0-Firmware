@@ -109,7 +109,8 @@
 #define TM_SAVE_EN                      "Save"
 #define TM_TEST_EN                      "Test"
 
-#define BLTOUCH_LEVELING_EN             "Settings BL-Touch Probe"
+#define BLTOUCH_LEVELING_TITTLE_EN      "Machine Settings>BL-Touch Probe"
+#define BLTOUCH_LEVELING_EN             "BL-Touch Probe"
 #define BLTOUCH_INIT_EN                 "Init"
 #define BLTOUCH_ZOFFSETPOS_EN           "Zoffset+"
 #define BLTOUCH_ZOFFSETNEG_EN           "Zoffset-"
