@@ -206,9 +206,11 @@ void lv_draw_ready_print(void) {
     lv_img_set_src(buttonExt1    , "F:/bmp_ext1_state.bin");
     lv_obj_set_pos(buttonExt1    , 58, 83);
 
-    lv_obj_t *buttonExt2      = lv_img_create(scr, nullptr);
-    lv_img_set_src(buttonExt2    , "F:/bmp_ext2_state.bin");
-    lv_obj_set_pos(buttonExt2    , 177, 83);
+    #if HAS_MULTI_EXTRUDER
+      lv_obj_t *buttonExt2      = lv_img_create(scr, nullptr);
+      lv_img_set_src(buttonExt2    , "F:/bmp_ext2_state.bin");
+      lv_obj_set_pos(buttonExt2    , 177, 83);
+    #endif
 
     lv_obj_t *buttonBedstate = lv_img_create(scr, nullptr);
     lv_img_set_src(buttonBedstate, "F:/bmp_bed_state.bin");
@@ -219,12 +221,16 @@ void lv_draw_ready_print(void) {
     lv_obj_set_pos(buttonFanstate, 395, 83);
 
     labelExt1      = lv_label_create(scr,   2, 130, nullptr);
-    labelExt2      = lv_label_create(scr, 121, 130, nullptr);
+    #if HAS_MULTI_EXTRUDER
+      labelExt2      = lv_label_create(scr, 121, 130, nullptr);
+    #endif
     labelBed       = lv_label_create(scr, 240, 130, nullptr);
     labelFan       = lv_label_create(scr, 361, 130, nullptr);
 
     lv_obj_align(labelExt1, buttonExt1    , LV_ALIGN_IN_BOTTOM_MID, 2, 20);
-    lv_obj_align(labelExt2, buttonExt2    , LV_ALIGN_IN_BOTTOM_MID, 2, 20);
+    #if HAS_MULTI_EXTRUDER
+      lv_obj_align(labelExt2, buttonExt2    , LV_ALIGN_IN_BOTTOM_MID, 2, 20);
+    #endif
     lv_obj_align(labelBed , buttonBedstate, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
     lv_obj_align(labelFan , buttonFanstate, LV_ALIGN_IN_BOTTOM_MID, 2, 20);
 
@@ -250,9 +256,14 @@ void lv_draw_ready_print(void) {
 void disp_ext_temp_ready() {
   sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
   lv_label_set_text(labelExt1, public_buf_l);
-
-  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
-  lv_label_set_text(labelExt2, public_buf_l);
+  #if HAS_MULTI_EXTRUDER
+    #if ENABLED(SINGLENOZZLE)
+      sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+    #else
+      sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[1].celsius, (int)thermalManager.temp_hotend[1].target);
+    #endif
+    lv_label_set_text(labelExt2, public_buf_l);
+  #endif
 }
 
 void disp_bed_temp_ready() {
