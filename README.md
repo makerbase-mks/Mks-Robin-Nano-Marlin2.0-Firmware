@@ -92,11 +92,10 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - Modify the parameters, replace configuration.h and configuration_adv.h in the Marlin path of the source code.
 - Compile the firmware.
 
-4. Corresponding model firmware
+4. Prebuilt *.bin firmware for update
 
-- [Find the corresponding firmware](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X/tree/main/firmware/Marlin-bugfix2.0.x-MKS-2.1.2). 
-- Copy the `assets` folder and `Robin_nano_v3.bin` to the sd card or usb disk
-- Insert sdcard or usb disk to the motherboard, and you can see the update interface after power on.
+- We have prebuilt the robin nano v3 [firmware](https://github.com/makerbase-mks/MKS-Robin-Nano-V3.X/tree/main/firmware/Marlin-bugfix2.0.x-MKS-2.1.2) for some type of printers and some extended usage. 
+
 
 ## For more function configuration, please refer to Robin nano series Wiki
 - [MKS Robin Nano V1.x Wiki](https://github.com/makerbase-mks/MKS-Robin-Nano-V1.X/wiki). 
