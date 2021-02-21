@@ -149,6 +149,23 @@
 // Misc. Functions
 //
 #if HAS_TFT_LVGL_UI
+  // LVGL
+  #ifndef TOUCH_CALIBRATION_X
+    #define TOUCH_CALIBRATION_X             17880
+  #endif
+  #ifndef TOUCH_CALIBRATION_Y
+    #define TOUCH_CALIBRATION_Y            -12234
+  #endif
+  #ifndef TOUCH_OFFSET_X
+    #define TOUCH_OFFSET_X                    -45
+  #endif
+  #ifndef TOUCH_OFFSET_Y
+    #define TOUCH_OFFSET_Y                    349
+  #endif
+  #ifndef TOUCH_ORIENTATION
+    #define TOUCH_ORIENTATION    TOUCH_LANDSCAPE
+  #endif
+
   //#define MKSPWC
   #ifdef MKSPWC
     #define SUICIDE_PIN                     PB2   // Enable MKSPWC SUICIDE PIN
