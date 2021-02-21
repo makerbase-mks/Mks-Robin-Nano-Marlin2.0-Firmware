@@ -31,7 +31,7 @@
 
 void lv_draw_pause_message(const PauseMessage msg) {
   switch (msg) {
-    case PAUSE_MESSAGE_PAUSING:  lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_PAUSING); break;
+    case PAUSE_MESSAGE_PARKING:  lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_PAUSING); break;
     case PAUSE_MESSAGE_CHANGING: lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_CHANGING); break;
     case PAUSE_MESSAGE_UNLOAD:   lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_UNLOAD); break;
     case PAUSE_MESSAGE_WAITING:  lv_clear_cur_ui(); lv_draw_dialog(DIALOG_PAUSE_MESSAGE_WAITING); break;
