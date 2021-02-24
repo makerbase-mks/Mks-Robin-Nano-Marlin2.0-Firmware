@@ -232,7 +232,9 @@ typedef struct {
           filament_loading_time_flg:1,
           filament_unloading_time_flg:1,
           curSprayerChoose_bak:4;
-  uint8_t tmc_connect_state:1;
+  uint8_t tmc_connect_state:1,
+          autoLeveling:1,
+          adjustZoffset:1;
   uint8_t wifi_name[32];
   uint8_t wifi_key[64];
   uint8_t cloud_hostUrl[96];
@@ -258,6 +260,7 @@ typedef struct {
   float current_y_position_bak;
   float current_z_position_bak;
   float current_e_position_bak;
+  float babyStepZoffsetDiff;
 } UI_CFG;
 
 typedef enum {

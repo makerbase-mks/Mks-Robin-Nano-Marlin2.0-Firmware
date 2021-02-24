@@ -1120,6 +1120,7 @@ void disp_language_init() {
       print_file_dialog_menu.reprint            = DIALOG_REPRINT_CN;
       print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_CN;
       print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_CN;
+      print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_CN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_CN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_CN;
@@ -1366,6 +1367,7 @@ void disp_language_init() {
             print_file_dialog_menu.reprint             = DIALOG_REPRINT_T_CN;
             print_file_dialog_menu.wifi_enable_tips    = DIALOG_WIFI_ENABLE_TIPS_T_CN;
             print_file_dialog_menu.machinePausingTips  = DIALOG_PAUSING_TIPS_T_CN;
+            print_file_dialog_menu.autolevelingTips    = DIALOG_AUTO_LEVELING_TIPS_T_CN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_T_CN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_T_CN;
@@ -1601,6 +1603,7 @@ void disp_language_init() {
             print_file_dialog_menu.reprint               = DIALOG_REPRINT_EN;
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
             print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_EN;
+            print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_EN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_EN;
@@ -1944,6 +1947,7 @@ void disp_language_init() {
             print_file_dialog_menu.reprint               = DIALOG_REPRINT_RU;
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_RU;
             print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_RU;
+            print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_RU;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_RU;
             pause_msg_menu.changing      = MESSAGE_CHANGING_RU;
@@ -2183,6 +2187,7 @@ void disp_language_init() {
             print_file_dialog_menu.reprint               = DIALOG_REPRINT_SP;
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_SP;
             print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_SP;
+            print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_SP;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_SP;
             pause_msg_menu.changing      = MESSAGE_CHANGING_SP;
@@ -2419,6 +2424,7 @@ void disp_language_init() {
           print_file_dialog_menu.reprint               = DIALOG_REPRINT_FR;
           print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_FR;
           print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_FR;
+          print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_FR;
 
           pause_msg_menu.pausing       = MESSAGE_PAUSING_FR;
           pause_msg_menu.changing      = MESSAGE_CHANGING_FR;
@@ -2654,6 +2660,7 @@ void disp_language_init() {
           print_file_dialog_menu.reprint               = DIALOG_REPRINT_IT;
           print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_IT;
           print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_IT;
+          print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_IT;
 
           pause_msg_menu.pausing       = MESSAGE_PAUSING_IT;
           pause_msg_menu.changing      = MESSAGE_CHANGING_IT;
@@ -2892,6 +2899,7 @@ void disp_language_init() {
       print_file_dialog_menu.reprint               = DIALOG_REPRINT_EN;
       print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
       print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_EN;
+      print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_EN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_EN;

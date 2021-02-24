@@ -235,6 +235,7 @@
 #define DIALOG_REPRINT_RU                   "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_RU          "The wifi module is being configured,\nplease wait a moment....."
 #define DIALOG_PAUSING_TIPS_RU              "Машина останавливается ..."
+#define DIALOG_AUTO_LEVELING_TIPS_RU        "Автоматическое выравнивание, подождите ..."
 
 #define MESSAGE_PAUSING_RU            "Стоянка..."
 #define MESSAGE_CHANGING_RU           "Подождите, пока начнется смена филамента"

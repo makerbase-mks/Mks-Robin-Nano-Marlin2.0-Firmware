@@ -711,6 +711,7 @@ typedef struct print_file_dialog_disp {
   const char *reprint;
   const char *wifi_enable_tips;
   const char *machinePausingTips;
+  const char *autolevelingTips;
 } print_file_dialog_menu_def;
 
 extern print_file_dialog_menu_def print_file_dialog_menu;

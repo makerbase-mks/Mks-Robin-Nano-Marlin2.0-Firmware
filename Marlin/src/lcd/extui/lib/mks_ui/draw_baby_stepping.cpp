@@ -29,13 +29,18 @@
 #include "../../../../gcode/queue.h"
 #include "../../../../gcode/gcode.h"
 #include "../../../../inc/MarlinConfig.h"
-
 #if ENABLED(EEPROM_SETTINGS)
   #include "../../../../module/settings.h"
 #endif
-
 #if HAS_BED_PROBE
   #include "../../../../module/probe.h"
+#endif
+#if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+  #include "../../../../feature/bedlevel/bedlevel.h"
+#endif
+
+#if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+  extern bed_mesh_t z_values;
 #endif
 
 extern lv_group_t *g;
@@ -54,8 +59,8 @@ enum {
   ID_BABY_STEP_RETURN
 };
 
-static float babystep_dist=0.01;
-static uint8_t has_adjust_z = 0;
+static float babystep_dist  = 0.01;
+static bool has_adjust_z = false;
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
@@ -65,32 +70,30 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_BABY_STEP_X_P:
       sprintf_P(baby_buf, PSTR("M290 X%s"), dtostrf(babystep_dist, 1, 3, str_1));
       gcode.process_subcommands_now_P(PSTR(baby_buf));
-      has_adjust_z = 1;
       break;
     case ID_BABY_STEP_X_N:
       sprintf_P(baby_buf, PSTR("M290 X%s"), dtostrf(-babystep_dist, 1, 3, str_1));
       gcode.process_subcommands_now_P(PSTR(baby_buf));
-      has_adjust_z = 1;
       break;
     case ID_BABY_STEP_Y_P:
       sprintf_P(baby_buf, PSTR("M290 Y%s"), dtostrf(babystep_dist, 1, 3, str_1));
       gcode.process_subcommands_now_P(PSTR(baby_buf));
-      has_adjust_z = 1;
       break;
     case ID_BABY_STEP_Y_N:
       sprintf_P(baby_buf, PSTR("M290 Y%s"), dtostrf(-babystep_dist, 1, 3, str_1));
       gcode.process_subcommands_now_P(PSTR(baby_buf));
-      has_adjust_z = 1;
       break;
     case ID_BABY_STEP_Z_P:
       sprintf_P(baby_buf, PSTR("M290 Z%s"), dtostrf(babystep_dist, 1, 3, str_1));
       gcode.process_subcommands_now_P(PSTR(baby_buf));
-      has_adjust_z = 1;
+      has_adjust_z  = true;
+      uiCfg.babyStepZoffsetDiff += babystep_dist;
       break;
     case ID_BABY_STEP_Z_N:
       sprintf_P(baby_buf, PSTR("M290 Z%s"), dtostrf(-babystep_dist, 1, 3, str_1));
       gcode.process_subcommands_now_P(PSTR(baby_buf));
-      has_adjust_z = 1;
+      has_adjust_z  = true;
+      uiCfg.babyStepZoffsetDiff -= babystep_dist;
       break;
     case ID_BABY_STEP_DIST:
       if (abs((int)(100 * babystep_dist)) == 1)
@@ -102,9 +105,9 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       disp_baby_step_dist();
       break;
     case ID_BABY_STEP_RETURN:
-      if (has_adjust_z == 1) {
-        TERN_(EEPROM_SETTINGS, (void)settings.save());
-        has_adjust_z = 0;
+      if (has_adjust_z) {
+        uiCfg.adjustZoffset = 1;
+        has_adjust_z = false;
       }
       lv_clear_cur_ui();
       lv_draw_return_ui();
