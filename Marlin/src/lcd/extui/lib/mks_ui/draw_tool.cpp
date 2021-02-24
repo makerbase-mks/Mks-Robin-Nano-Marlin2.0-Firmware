@@ -50,12 +50,7 @@ enum {
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
-  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-    bool clear = (obj->mks_obj_id != ID_T_LEVELING);
-  #else
-    constexpr bool clear = true;
-  #endif
-  if (clear) lv_clear_tool();
+  lv_clear_tool();
   switch (obj->mks_obj_id) {
     case ID_T_PRE_HEAT:
       lv_draw_preHeat();
@@ -71,9 +66,8 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_T_LEVELING:
       #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-        get_gcode_command(AUTO_LEVELING_COMMAND_ADDR,(uint8_t *)public_buf_m);
-        public_buf_m[sizeof(public_buf_m)-1] = 0;
-        queue.inject_P(PSTR(public_buf_m));
+        lv_draw_dialog(DIALOG_TYPE_AUTO_LEVELING_TIPS);
+        uiCfg.autoLeveling = 1;
       #else
         uiCfg.leveling_first_time = 1;
         lv_draw_manualLevel();

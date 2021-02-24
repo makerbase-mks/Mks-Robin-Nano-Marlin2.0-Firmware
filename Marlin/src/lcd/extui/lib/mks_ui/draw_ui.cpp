@@ -229,6 +229,9 @@ void ui_cfg_init() {
     uiCfg.cloud_port = 10086;
   #endif
 
+  uiCfg.babyStepZoffsetDiff = 0;
+  uiCfg.adjustZoffset       = 0;
+
   uiCfg.filament_loading_time = (uint32_t)((gCfgItems.filamentchange_load_length * 60.0 / gCfgItems.filamentchange_load_speed) + 0.5);
   uiCfg.filament_unloading_time = (uint32_t)((gCfgItems.filamentchange_unload_length * 60.0 / gCfgItems.filamentchange_unload_speed) + 0.5);
 }

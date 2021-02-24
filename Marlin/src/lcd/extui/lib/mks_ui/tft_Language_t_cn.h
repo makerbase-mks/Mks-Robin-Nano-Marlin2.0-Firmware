@@ -478,6 +478,7 @@
 #define DIALOG_REPRINT_T_CN           "再打印壹次"
 #define DIALOG_WIFI_ENABLE_TIPS_T_CN  "wifi模塊正在配置中,請稍等......"
 #define DIALOG_PAUSING_TIPS_T_CN      "機器暫停中..."
+#define DIALOG_AUTO_LEVELING_TIPS_T_CN  "正在自動調平,請稍等..."
 
 #define TEXT_VALUE_T_CN               "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_T_CN     ": %d℃"
