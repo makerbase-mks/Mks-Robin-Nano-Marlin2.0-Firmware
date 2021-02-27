@@ -47,31 +47,38 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
     #if ENABLED(USER_CMD_1_ENABLE)
-      case ID_CUSTOM_1: queue.inject_P(PSTR(USER_GCODE_1)); break;
+      case ID_CUSTOM_1: queue.inject_P(PSTR(USER_GCODE_1)); lv_return_to_ready(); break;
     #endif
     #if ENABLED(USER_CMD_2_ENABLE)
-      case ID_CUSTOM_2: queue.inject_P(PSTR(USER_GCODE_2)); break;
+      case ID_CUSTOM_2: queue.inject_P(PSTR(USER_GCODE_2)); lv_return_to_ready(); break;
     #endif
     #if ENABLED(USER_CMD_3_ENABLE)
-      case ID_CUSTOM_3: queue.inject_P(PSTR(USER_GCODE_3)); break;
+      case ID_CUSTOM_3: queue.inject_P(PSTR(USER_GCODE_3)); lv_return_to_ready(); break;
     #endif
     #if ENABLED(USER_CMD_4_ENABLE)
-      case ID_CUSTOM_4: queue.inject_P(PSTR(USER_GCODE_4)); break;
+      case ID_CUSTOM_4: queue.inject_P(PSTR(USER_GCODE_4)); lv_return_to_ready(); break;
     #endif
     #if ENABLED(USER_CMD_5_ENABLE)
-      case ID_CUSTOM_5: queue.inject_P(PSTR(USER_GCODE_5)); break;
+      case ID_CUSTOM_5: queue.inject_P(PSTR(USER_GCODE_5)); lv_return_to_ready(); break;
     #endif
     #if ENABLED(USER_CMD_6_ENABLE)
-      case ID_CUSTOM_6: queue.inject_P(PSTR(USER_GCODE_6)); break;
+      case ID_CUSTOM_6: queue.inject_P(PSTR(USER_GCODE_6)); lv_return_to_ready(); break;
     #endif
     #if ENABLED(USER_CMD_7_ENABLE)
-      case ID_CUSTOM_7: queue.inject_P(PSTR(USER_GCODE_7)); break;
+      case ID_CUSTOM_7: queue.inject_P(PSTR(USER_GCODE_7)); lv_return_to_ready(); break;
     #endif
     case ID_M_RETURN:
       lv_clear_more();
       lv_draw_tool();
       break;
   }
+}
+
+void lv_return_to_ready (void) {
+  #ifdef CUSTOM_RETURN_READY_PRINT
+    lv_clear_more();
+    lv_draw_ready_print();
+  #endif
 }
 
 void lv_draw_more(void) {
