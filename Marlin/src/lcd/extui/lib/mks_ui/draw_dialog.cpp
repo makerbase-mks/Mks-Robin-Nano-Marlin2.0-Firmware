@@ -133,9 +133,11 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
 
     #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
       if (uiCfg.adjustZoffset) {
-        for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
-          for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
-            z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
+        #if DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
+          for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
+            for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
+              z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
+        #endif
         TERN_(EEPROM_SETTINGS, (void)settings.save());
         uiCfg.babyStepZoffsetDiff = 0;
         uiCfg.adjustZoffset       = 0;
@@ -147,9 +149,11 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
     lv_draw_ready_print();
     #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
       if (uiCfg.adjustZoffset) {
-        for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
-          for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
-            z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
+        #if DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
+          for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
+            for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
+              z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
+        #endif
         TERN_(EEPROM_SETTINGS, (void)settings.save());
         uiCfg.babyStepZoffsetDiff = 0;
         uiCfg.adjustZoffset       = 0;
