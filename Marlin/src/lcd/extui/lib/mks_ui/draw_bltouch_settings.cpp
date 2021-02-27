@@ -78,19 +78,21 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       break;
     case ID_BLTOUCH_SAVE:
       if (queue.length <= (BUFSIZE - 2)) {
-        #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+        #if ENABLED(AUTO_BED_LEVELING_BILINEAR) && DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
           for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
             for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
               z_values[x][y] = z_values[x][y] + zoffset_diff;
         #endif
-        TERN_(EEPROM_SETTINGS, (void)settings.save());
-        queue.enqueue_now_P(PSTR("G28 X Y"));
+        queue.enqueue_now_P(PSTR("M500\nG28 X Y"));
         zoffset_diff = 0;
       }
       break;
     case ID_BLTOUCH_TEST:
       sprintf_P(str_1, PSTR("G28\nG1 Z10 F2400\nG1 X%d Y%d\nG0 Z0.3"), X_MAX_POS / 2, Y_MAX_POS / 2);
-      if (!queue.length) queue.enqueue_now_P(PSTR(str_1));
+      if (!queue.length) {
+        queue.enqueue_now_P(PSTR(str_1));
+        zoffset_diff = 0;
+      }
       break;
     case ID_BLTOUCH_STEPS:
       if (abs((int)(100 * step_dist)) == 1)
