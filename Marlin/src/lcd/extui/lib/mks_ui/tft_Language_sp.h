@@ -25,6 +25,7 @@
 #define TOOL_TEXT_SP            "Ajustes"
 #define PREHEAT_TEXT_SP         "Precalentar"
 #define MOVE_TEXT_SP            "Mover"
+#define TEXT_ZOFFSET_SP         "Z offset"
 #define HOME_TEXT_SP            "Origen"
 #define PRINT_TEXT_SP           "Imprimir"
 #define EXTRUDE_TEXT_SP         "Extrusor"

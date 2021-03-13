@@ -25,6 +25,7 @@
 #define TOOL_TEXT_IT                  "Strumento"
 #define PREHEAT_TEXT_IT               "Prerisc"
 #define MOVE_TEXT_IT                  "Muovi"
+#define TEXT_ZOFFSET_IT               "Z offset"
 #define HOME_TEXT_IT                  "Home"
 #define PRINT_TEXT_IT                 "Stampa"
 #define EXTRUDE_TEXT_IT               "Estrude"
