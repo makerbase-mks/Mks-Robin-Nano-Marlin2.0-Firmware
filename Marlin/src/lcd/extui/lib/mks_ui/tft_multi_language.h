@@ -373,6 +373,7 @@ typedef struct move_menu_disp {
   const char *step_01mm;
   const char *step_1mm;
   const char *step_10mm;
+  const char *zoffset;
   const char *back;
 } move_menu_def;
 
@@ -797,6 +798,7 @@ extern eeprom_def eeprom_menu;
 #define TEXT_01MM           "0.1 mm"
 #define TEXT_1MM            "1 mm"
 #define TEXT_10MM           "10 mm"
+#define TEXT_ZOFFSET        "Z offset"
 
 #define EXTRUDE_1MM_TEXT    "1 mm"
 #define EXTRUDE_5MM_TEXT    "5 mm"

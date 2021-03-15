@@ -271,6 +271,7 @@
 #define TOOL_TEXT_CN                "工具"
 #define PREHEAT_TEXT_CN             "预热"
 #define MOVE_TEXT_CN                "移动"
+#define TEXT_ZOFFSET_CN             "Z offset"
 #define HOME_TEXT_CN                "回零"
 #define PRINT_TEXT_CN               "打印"
 #define EXTRUDE_TEXT_CN             "挤出"

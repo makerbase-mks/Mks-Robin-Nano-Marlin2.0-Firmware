@@ -28,7 +28,7 @@ extern "C" { /* C-declarations for C++ */
 extern void lv_draw_bltouch_settings(void);
 extern void lv_clear_bltouch_settings();
 extern void disp_step_dist();
-extern void bltouch_do_init();
+extern void bltouch_do_init(bool resetZoffset);
 extern void disp_bltouch_z_offset_value();
 
 //extern void disp_temp_ready_print();
