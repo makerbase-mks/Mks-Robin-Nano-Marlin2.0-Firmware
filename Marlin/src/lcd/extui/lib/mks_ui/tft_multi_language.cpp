@@ -816,6 +816,7 @@ void disp_language_init() {
   move_menu.step_01mm  = TEXT_01MM;
   move_menu.step_1mm   = TEXT_1MM;
   move_menu.step_10mm  = TEXT_10MM;
+  move_menu.zoffset    = TEXT_ZOFFSET;
 
   home_menu.home_x   = HOME_X_TEXT;
   home_menu.home_y   = HOME_Y_TEXT;
@@ -937,12 +938,14 @@ void disp_language_init() {
       preheat_menu.hotbed       = HEATBED_TEXT_CN;
       preheat_menu.off          = CLOSE_TEXT_CN;
 
-      preheat_menu.value_state = TEXT_VALUE_CN;
-      preheat_menu.step_1c     = TEXT_1C_CN;
-      preheat_menu.step_5c     = TEXT_5C_CN;
-      preheat_menu.step_10c    = TEXT_10C_CN;
+      preheat_menu.value_state  = TEXT_VALUE_CN;
+      preheat_menu.step_1c      = TEXT_1C_CN;
+      preheat_menu.step_5c      = TEXT_5C_CN;
+      preheat_menu.step_10c     = TEXT_10C_CN;
       //
-      move_menu.title = MOVE_TEXT_CN;
+      move_menu.title           = MOVE_TEXT_CN;
+      move_menu.zoffset         = TEXT_ZOFFSET_CN;
+
       //
       home_menu.title    = TITLE_HOME_CN;
       home_menu.stopmove = HOME_STOPMOVE_CN;
@@ -1193,6 +1196,7 @@ void disp_language_init() {
             preheat_menu.step_10c     = TEXT_10C_T_CN;
             //
             move_menu.title   = MOVE_TEXT_T_CN;
+            move_menu.zoffset = TEXT_ZOFFSET_T_CN;
             //
             home_menu.title    = TITLE_HOME_T_CN;
             home_menu.stopmove = HOME_STOPMOVE_T_CN;
@@ -1432,6 +1436,7 @@ void disp_language_init() {
             preheat_menu.off          = CLOSE_TEXT_EN;
             //
             move_menu.title = TITLE_MOVE_EN;
+            move_menu.zoffset = TEXT_ZOFFSET_EN;
             //
             home_menu.title    = TITLE_HOME_EN;
             home_menu.stopmove = HOME_STOPMOVE_EN;
@@ -1668,6 +1673,7 @@ void disp_language_init() {
             preheat_menu.off          = CLOSE_TEXT_RU;
             //
             move_menu.title = MOVE_TEXT_RU;
+            move_menu.zoffset = TEXT_ZOFFSET_RU;
             //
             home_menu.title    = TITLE_HOME_RU;
             home_menu.stopmove = HOME_STOPMOVE_RU;
@@ -2012,6 +2018,7 @@ void disp_language_init() {
             preheat_menu.off          = CLOSE_TEXT_SP;
             //
             move_menu.title = MOVE_TEXT_SP;
+            move_menu.zoffset = TEXT_ZOFFSET_SP;
             //
             home_menu.title    = TITLE_HOME_SP;
             home_menu.home_x   = HOME_X_TEXT_SP;
@@ -2256,6 +2263,7 @@ void disp_language_init() {
           preheat_menu.off          = CLOSE_TEXT_FR;
           //
           move_menu.title = MOVE_TEXT_FR;
+          move_menu.zoffset = TEXT_ZOFFSET_FR;
           //
           home_menu.title    = TITLE_HOME_FR;
           home_menu.stopmove = HOME_STOPMOVE_FR;
@@ -2491,6 +2499,7 @@ void disp_language_init() {
           preheat_menu.off          = CLOSE_TEXT_IT;
           //
           move_menu.title = MOVE_TEXT_IT;
+          move_menu.zoffset = TEXT_ZOFFSET_IT;
           //
           home_menu.title    = TITLE_HOME_IT;
           home_menu.stopmove = HOME_STOPMOVE_IT;
@@ -2727,7 +2736,8 @@ void disp_language_init() {
       preheat_menu.hotbed       = HEATBED_TEXT_EN;
       preheat_menu.off          = CLOSE_TEXT_EN;
       //
-      move_menu.title = TITLE_MOVE_EN;
+      move_menu.title           = TITLE_MOVE_EN;
+      move_menu.zoffset         = TEXT_ZOFFSET_EN;
       //
       home_menu.title    = TITLE_HOME_EN;
       home_menu.stopmove = HOME_STOPMOVE_EN;

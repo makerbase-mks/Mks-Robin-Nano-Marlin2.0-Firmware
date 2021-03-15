@@ -25,6 +25,7 @@
 #define TOOL_TEXT_RU                    "инструмент"
 #define PREHEAT_TEXT_RU                 " нагрев"
 #define MOVE_TEXT_RU                    "движение"
+#define TEXT_ZOFFSET_RU                 "Z offset"
 #define HOME_TEXT_RU                    "домой"
 #define PRINT_TEXT_RU                   " печать"
 #define EXTRUDE_TEXT_RU                 "экструзия"

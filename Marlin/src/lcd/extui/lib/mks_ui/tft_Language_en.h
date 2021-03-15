@@ -286,6 +286,7 @@
 #define TOOL_TEXT_EN            "Tool"
 #define PREHEAT_TEXT_EN         "Preheat"
 #define MOVE_TEXT_EN            "Move"
+#define TEXT_ZOFFSET_EN         "Z offset"
 #define HOME_TEXT_EN            "Home"
 #define PRINT_TEXT_EN           "Printing"
 #define EXTRUDE_TEXT_EN         "Extrusion"
