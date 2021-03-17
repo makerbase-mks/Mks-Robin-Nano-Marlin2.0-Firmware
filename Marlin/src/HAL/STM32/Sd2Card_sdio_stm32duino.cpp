@@ -315,6 +315,7 @@
     uint8_t retryCnt = SDIO_READ_RETRIES;
     bool status;
     for (;;) {
+      TERN_(USE_WATCHDOG, HAL_watchdog_refresh());
       status = (bool) HAL_SD_WriteBlocks(&hsd, (uint8_t*)src, block, 1, 500);  // write one 512 byte block with 500mS timeout
       status |= (bool) HAL_SD_GetCardState(&hsd);     // make sure all is OK
       if (!status) break;       // return passing status
