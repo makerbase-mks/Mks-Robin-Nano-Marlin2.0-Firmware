@@ -286,7 +286,8 @@
 #define ADVANCE_CONFIG_RU              "Pасширенные настройки"
 #define MACHINE_FILAMENT_CONFIG_RU     "Hастройки филамента"
 #define ENCODER_SETTINGS_RU            "Hастройки энкодера"
-
+#define X_MODE_SETTINGS_RU             "X-mode"
+#define EXTRUDE_OFFSET_SETTINGS_RU     "T-offset"
 
 #define LEVELING_CONF_TITLE_RU          "Hастройки принтера>Hастройки уровня"
 #define LEVELING_PARA_CONF_RU           "настройки уровня"
@@ -382,5 +383,16 @@
 
 #define ENCODER_CONF_TITLE_RU           "Hастройки принтера>Hастройки энкодера"
 #define ENCODER_CONF_TEXT_RU            "энкодер используется?"
+
+#define DUAL_X_MODE_CONF_TITLE_RU       "Machine Settings>Dual x mode"
+#define FULL_CONTROL_MODE_RU	        "Full control mode"
+#define AUTO_PARK_MODE_RU		        "Auto park mode"
+#define DUPLICATION_MODE_RU	            "Duplication mode"
+#define MIRROR_MODE_RU		            "Mirrored mode"
+
+#define HOTEND_OFFSET_SETTINGS_RU       "Machine Settings>Hotend offset"
+#define HOTEND_OFFSET_X_RU              "Hotend X2 offset"
+#define HOTEND_OFFSET_Y_RU              "Hotend Y2 offset"
+#define HOTEND_OFFSET_Z_RU              "Hotend Z2 offset"
 
 //end of Malderin translate

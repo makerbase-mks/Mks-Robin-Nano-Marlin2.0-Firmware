@@ -229,6 +229,8 @@
 #define ENABLE_PINS_CONF_CN           "电机使能脚电平设置"
 #define WIFI_SETTINGS_CN              "Wi-Fi参数设置"
 #define ENCODER_SETTINGS_CN           "旋钮设置"
+#define X_MODE_SETTINGS_CN            "打印模式"
+#define HOTEND_OFFSET_SETTINGS_CN     "挤出头偏移"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_CN  "双z双限位设置"
 #define Z2_ENABLE_CN                    "启用Z2轴"
@@ -267,6 +269,17 @@
 
 #define ENCODER_CONF_TITLE_CN                 "机器参数>旋钮设置"
 #define ENCODER_CONF_TEXT_CN                  "是否使用旋钮功能?"
+
+#define DUAL_X_MODE_CONF_TITLE_CN             "机器参数>打印模式"
+#define FULL_CONTROL_MODE_CN	              "单头模式"
+#define AUTO_PARK_MODE_CN		              "双头模式"
+#define DUPLICATION_MODE_CN	                  "复制模式"
+#define MIRROR_MODE_CN		                  "镜像模式"
+
+#define HOTEND_OFFSET_CONF_TITLE_CN           "机器参数>挤出头偏移"
+#define HOTEND_OFFSET_X_CN                    "挤出头2 X轴方向偏移"
+#define HOTEND_OFFSET_Y_CN                    "挤出头2 Y轴方向偏移"
+#define HOTEND_OFFSET_Z_CN                    "挤出头2 Z轴方向偏移"
 
 #define TOOL_TEXT_CN                "工具"
 #define PREHEAT_TEXT_CN             "预热"
