@@ -243,6 +243,8 @@
 #define WIFI_SETTINGS_EN                "Wi-Fi parameter settings"
 #define HOMING_SENSITIVITY_CONF_EN      "Homing sensitivity settings"
 #define ENCODER_SETTINGS_EN             "Rotary encoder settings"
+#define X_MODE_SETTINGS_EN              "X-mode"
+#define HOTEND_OFFSET_SETTINGS_EN       "Hotend-offset"
 
 #define Z2_AND_Z2ENDSTOP_CONF_TITLE_EN  "Z2 Settings"
 #define Z2_ENABLE_EN                    "Z2 Enable"
@@ -282,6 +284,17 @@
 
 #define ENCODER_CONF_TITLE_EN                 "Machine Settings>Rotary encoder settings"
 #define ENCODER_CONF_TEXT_EN                  "Is the encoder function used?"
+
+#define DUAL_X_MODE_CONF_TITLE_EN             "Machine Settings>Dual x mode"
+#define FULL_CONTROL_MODE_EN	              "Full control mode"
+#define AUTO_PARK_MODE_EN		              "Auto park mode"
+#define DUPLICATION_MODE_EN	                  "Duplication mode"
+#define MIRROR_MODE_EN		                  "Mirrored mode"
+
+#define HOTEND_OFFSET_CONF_TITLE_EN           "Machine Settings>Hotend offset"
+#define HOTEND_OFFSET_X_EN                    "Hotend X2 offset"
+#define HOTEND_OFFSET_Y_EN                    "Hotend Y2 offset"
+#define HOTEND_OFFSET_Z_EN                    "Hotend Z2 offset"
 
 #define TOOL_TEXT_EN            "Tool"
 #define PREHEAT_TEXT_EN         "Preheat"

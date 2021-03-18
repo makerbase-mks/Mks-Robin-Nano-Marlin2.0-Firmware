@@ -78,7 +78,10 @@
 #include "draw_encoder_settings.h"
 #include "draw_touchmi_settings.h"
 #include "draw_bltouch_settings.h"
-
+#if ENABLED(DUAL_X_CARRIAGE)
+  #include "draw_dual_x_carriage_mode.h"
+  #include "draw_hotend_offset_settings.h"
+#endif
 #include "../../../../inc/MarlinConfigPre.h"
 
 #if ENABLED(MKS_WIFI_MODULE)
@@ -99,7 +102,7 @@
 #define FILE_SYS_USB      0
 #define FILE_SYS_SD       1
 
-#define TICK_CYCLE 1
+#define TICK_CYCLE        1
 
 #define PARA_SEL_ICON_TEXT_COLOR  LV_COLOR_MAKE(0x4A, 0x52, 0xFF);
 
@@ -340,6 +343,11 @@ typedef enum {
   HOMING_SENSITIVITY_UI,
   ENCODER_SETTINGS_UI,
   TOUCH_CALIBRATION_UI
+  #if ENABLED(DUAL_X_CARRIAGE)
+    ,
+    DUAL_X_CARRIAGE_MODE_UI,
+    HOTEND_OFFSET_UI
+  #endif
 } DISP_STATE;
 
 typedef struct {
@@ -419,6 +427,13 @@ typedef enum {
   y_sensitivity,
   z_sensitivity,
   z2_sensitivity
+
+  #if ENABLED(DUAL_X_CARRIAGE)
+    ,
+    x_hotend_offset,
+    y_hotend_offset,
+    z_hotend_offset
+  #endif
 } num_key_value_state;
 extern num_key_value_state value;
 
@@ -451,6 +466,8 @@ extern lv_style_t style_para_back;
 extern lv_style_t lv_bar_style_indic;
 extern lv_style_t style_btn_pr;
 extern lv_style_t style_btn_rel;
+extern lv_style_t style_check_box_selected;
+extern lv_style_t style_check_box_unselected;
 
 extern lv_point_t line_points[4][2];
 
