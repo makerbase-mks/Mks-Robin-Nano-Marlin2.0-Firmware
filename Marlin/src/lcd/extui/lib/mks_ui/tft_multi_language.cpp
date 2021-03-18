@@ -182,7 +182,9 @@ void machine_setting_disp() {
     machine_menu.PausePosition         = PAUSE_POSITION_CN;
     machine_menu.WifiSettings          = WIFI_SETTINGS_CN;
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_CN;
-    machine_menu.EncoderSettings         = ENCODER_SETTINGS_CN;
+    machine_menu.EncoderSettings       = ENCODER_SETTINGS_CN;
+    machine_menu.xModeSettings         = X_MODE_SETTINGS_CN;
+    machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_CN;               
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_CN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_CN;
@@ -302,8 +304,19 @@ void machine_setting_disp() {
     machine_menu.Z_Sensitivity              = Z_SENSITIVITY_CN;
     machine_menu.Z2_Sensitivity             = Z2_SENSITIVITY_CN;
 
-    machine_menu.EncoderConfTitle = ENCODER_CONF_TITLE_CN;
-    machine_menu.EncoderConfText              = ENCODER_CONF_TEXT_CN;
+    machine_menu.EncoderConfTitle           = ENCODER_CONF_TITLE_CN;
+    machine_menu.EncoderConfText            = ENCODER_CONF_TEXT_CN;
+
+    machine_menu.XmodeConfigTitle           = DUAL_X_MODE_CONF_TITLE_CN;
+    machine_menu.fullControl                = FULL_CONTROL_MODE_CN;
+    machine_menu.autoPark                   = AUTO_PARK_MODE_CN;
+    machine_menu.duplication                = DUPLICATION_MODE_CN;
+    machine_menu.mirror                     = MIRROR_MODE_CN;
+
+    machine_menu.hotendOffsetConfigTitle    = HOTEND_OFFSET_CONF_TITLE_CN;
+    machine_menu.hotendXoffset              = HOTEND_OFFSET_X_CN;
+    machine_menu.hotendYoffset              = HOTEND_OFFSET_Y_CN;
+    machine_menu.hotendZoffset              = HOTEND_OFFSET_Z_CN;
   }
   else if (gCfgItems.language == LANG_COMPLEX_CHINESE) {
     MachinePara_menu.title              = MACHINE_PARA_TITLE_T_CN;
@@ -425,7 +438,9 @@ void machine_setting_disp() {
     machine_menu.PausePosition         = PAUSE_POSITION_T_CN;
     machine_menu.WifiSettings          = WIFI_SETTINGS_T_CN;
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_T_CN;
-    machine_menu.EncoderSettings         = ENCODER_SETTINGS_T_CN;
+    machine_menu.EncoderSettings       = ENCODER_SETTINGS_T_CN;
+    machine_menu.xModeSettings         = X_MODE_SETTINGS_T_CN;
+    machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_T_CN;  
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_T_CN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_T_CN;
@@ -546,8 +561,19 @@ void machine_setting_disp() {
     machine_menu.Z_Sensitivity              = Z_SENSITIVITY_T_CN;
     machine_menu.Z2_Sensitivity             = Z2_SENSITIVITY_T_CN;
 
-    machine_menu.EncoderConfTitle = ENCODER_CONF_TITLE_T_CN;
-    machine_menu.EncoderConfText              = ENCODER_CONF_TEXT_T_CN;
+    machine_menu.EncoderConfTitle           = ENCODER_CONF_TITLE_T_CN;
+    machine_menu.EncoderConfText            = ENCODER_CONF_TEXT_T_CN;
+
+    machine_menu.XmodeConfigTitle           = DUAL_X_MODE_CONF_TITLE_T_CN;
+    machine_menu.fullControl                = FULL_CONTROL_MODE_T_CN;
+    machine_menu.autoPark                   = AUTO_PARK_MODE_T_CN;
+    machine_menu.duplication                = DUPLICATION_MODE_T_CN;
+    machine_menu.mirror                     = MIRROR_MODE_T_CN;
+
+    machine_menu.hotendOffsetConfigTitle    = HOTEND_OFFSET_CONF_TITLE_T_CN;
+    machine_menu.hotendXoffset              = HOTEND_OFFSET_X_T_CN;
+    machine_menu.hotendYoffset              = HOTEND_OFFSET_Y_T_CN;
+    machine_menu.hotendZoffset              = HOTEND_OFFSET_Z_T_CN;
   }
   else {
     MachinePara_menu.title              = MACHINE_PARA_TITLE_EN;
@@ -670,7 +696,9 @@ void machine_setting_disp() {
     machine_menu.PausePosition         = PAUSE_POSITION_EN;
     machine_menu.WifiSettings          = WIFI_SETTINGS_EN;
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_EN;
-    machine_menu.EncoderSettings         = ENCODER_SETTINGS_EN;
+    machine_menu.EncoderSettings       = ENCODER_SETTINGS_EN;
+    machine_menu.xModeSettings         = X_MODE_SETTINGS_EN;
+    machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_EN;
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_EN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_EN;
@@ -793,8 +821,19 @@ void machine_setting_disp() {
     machine_menu.Z_Sensitivity              = Z_SENSITIVITY_EN;
     machine_menu.Z2_Sensitivity             = Z2_SENSITIVITY_EN;
 
-    machine_menu.EncoderConfTitle = ENCODER_CONF_TITLE_EN;
-    machine_menu.EncoderConfText              = ENCODER_CONF_TEXT_EN;
+    machine_menu.EncoderConfTitle           = ENCODER_CONF_TITLE_EN;
+    machine_menu.EncoderConfText            = ENCODER_CONF_TEXT_EN;
+
+    machine_menu.XmodeConfigTitle           = DUAL_X_MODE_CONF_TITLE_EN;
+    machine_menu.fullControl                = FULL_CONTROL_MODE_EN;
+    machine_menu.autoPark                   = AUTO_PARK_MODE_EN;
+    machine_menu.duplication                = DUPLICATION_MODE_EN;
+    machine_menu.mirror                     = MIRROR_MODE_EN;
+
+    machine_menu.hotendOffsetConfigTitle    = HOTEND_OFFSET_CONF_TITLE_EN;
+    machine_menu.hotendXoffset              = HOTEND_OFFSET_X_EN;
+    machine_menu.hotendYoffset              = HOTEND_OFFSET_Y_EN;
+    machine_menu.hotendZoffset              = HOTEND_OFFSET_Z_EN;
   }
 }
 
@@ -1742,7 +1781,7 @@ void disp_language_init() {
             filesys_menu.sd_sys  = SD_CARD_TEXT_RU;
             filesys_menu.usb_sys = U_DISK_TEXT_RU;
             // WIFI
-            wifi_menu.title = WIFI_TEXT;
+            wifi_menu.title     = WIFI_TEXT;
             wifi_menu.cloud     = CLOUD_TEXT_RU;
             wifi_menu.reconnect = WIFI_RECONNECT_TEXT_RU;
 
@@ -1769,6 +1808,8 @@ void disp_language_init() {
             machine_menu.FilamentConf          = MACHINE_FILAMENT_CONFIG_RU;
             machine_menu.EncoderSettings       = ENCODER_SETTINGS_RU;
             machine_menu.AdvancedConfTitle     = ADVANCED_CONF_TITLE_RU;
+            machine_menu.xModeSettings         = X_MODE_SETTINGS_RU;
+            machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_RU;
 
             machine_menu.LevelingParaConfTitle   = LEVELING_CONF_TITLE_RU;
             machine_menu.LevelingParaConf        = LEVELING_PARA_CONF_RU;
@@ -1855,6 +1896,16 @@ void disp_language_init() {
             machine_menu.EncoderConfTitle    = ENCODER_CONF_TITLE_RU;
             machine_menu.EncoderConfText     = ENCODER_CONF_TEXT_RU;
 
+            machine_menu.XmodeConfigTitle    = DUAL_X_MODE_CONF_TITLE_RU;
+            machine_menu.fullControl         = FULL_CONTROL_MODE_RU;
+            machine_menu.autoPark            = AUTO_PARK_MODE_RU;
+            machine_menu.duplication         = DUPLICATION_MODE_RU;
+            machine_menu.mirror              = MIRROR_MODE_RU;
+
+            machine_menu.hotendOffsetConfigTitle = HOTEND_OFFSET_SETTINGS_RU;
+            machine_menu.hotendXoffset           = HOTEND_OFFSET_X_RU;
+            machine_menu.hotendYoffset           = HOTEND_OFFSET_Y_RU;
+            machine_menu.hotendZoffset           = HOTEND_OFFSET_Z_RU;
             
             cloud_menu.title        = TITLE_CLOUD_TEXT_RU;
             cloud_menu.bind         = CLOUD_BINDED_RU;

@@ -250,7 +250,9 @@ typedef struct machine_common_disp{
   const char *PausePosition;
   const char *WifiSettings;
   const char *EncoderSettings;
-
+  const char *xModeSettings;
+  const char *hotendOffsetSettings;
+  
   const char *Z2ConfTitle;
   const char *Z2Enable;
   const char *Z2EndstopEnable;
@@ -301,6 +303,17 @@ typedef struct machine_common_disp{
 
   const char *EncoderConfTitle;
   const char *EncoderConfText;
+
+  const char *XmodeConfigTitle;
+  const char *fullControl;
+  const char *autoPark;
+  const char *duplication;
+  const char *mirror;
+
+  const char *hotendOffsetConfigTitle;
+  const char *hotendXoffset;
+  const char *hotendYoffset;
+  const char *hotendZoffset;
 
 } machine_common_def;
 

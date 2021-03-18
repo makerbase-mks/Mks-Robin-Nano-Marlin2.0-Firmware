@@ -284,6 +284,17 @@ static void disp_key_value() {
         sprintf_P(public_buf_m, PSTR("%d"), TERN(Z2_SENSORLESS, stepperZ2.homing_threshold(), 0));
       #endif
       break;
+    #if ENABLED(DUAL_X_CARRIAGE)
+      case x_hotend_offset:
+        sprintf_P(public_buf_m, PSTR("%s"), dtostrf(hotend_offset[1].x, 1, 1, str_1));
+        break;
+      case y_hotend_offset:
+        sprintf_P(public_buf_m, PSTR("%s"), dtostrf(hotend_offset[1].y, 1, 1, str_1));
+        break;
+      case z_hotend_offset:
+        sprintf_P(public_buf_m, PSTR("%s"), dtostrf(hotend_offset[1].z, 1, 1, str_1));
+        break;
+    #endif
   }
 
   strcpy(key_value, public_buf_m);
@@ -529,6 +540,17 @@ static void set_value_confirm() {
         stepperZ2.homing_threshold(atoi(key_value));
       #endif
       break;
+    #if ENABLED(DUAL_X_CARRIAGE)
+      case x_hotend_offset:
+        hotend_offset[1].x = atof(key_value);
+        break;
+      case y_hotend_offset:
+        hotend_offset[1].y = atof(key_value);
+        break;
+      case z_hotend_offset:
+        hotend_offset[1].z = atof(key_value);
+        break;
+    #endif
   }
   watchdog_refresh();
   gcode.process_subcommands_now_P(PSTR("M500"));
