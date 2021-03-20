@@ -512,6 +512,9 @@ char *getDispText(int index) {
     case EXTRUSION_UI:
       strcpy(public_buf_l, extrude_menu.title);
       break;
+    case EXTRUSION_UI_M:
+        strcpy(public_buf_l, extrude_menu.title);
+        break;
     case CHANGE_SPEED_UI:
       strcpy(public_buf_l, speed_menu.title);
       break;
@@ -826,6 +829,7 @@ void GUI_RefreshPage() {
         disp_hotend_temp();
       }
       break;
+    case EXTRUSION_UI_M: break;
     case PRE_HEAT_UI:
       if (temps_update_flag) {
         temps_update_flag = false;
@@ -992,6 +996,7 @@ void lv_clear_cur_ui() {
     case OPERATE_UI:                  lv_clear_operation(); break;
     case PAUSE_UI:                    break;
     case EXTRUSION_UI:                lv_clear_extrusion(); break;
+    case EXTRUSION_UI_M:                lv_clear_extrusion_m(); break;
     case PRE_HEAT_UI:                 lv_clear_preHeat(); break;
     case CHANGE_SPEED_UI:             lv_clear_change_speed(); break;
     case FAN_UI:                      lv_clear_fan(); break;
@@ -1108,6 +1113,7 @@ void lv_draw_return_ui() {
       case OPERATE_UI:                  lv_draw_operation(); break;
       case PAUSE_UI:                    break;
       case EXTRUSION_UI:                lv_draw_extrusion(); break;
+      case EXTRUSION_UI_M:                lv_draw_extrusion_m(); break;
       case PRE_HEAT_UI:                 lv_draw_preHeat(); break;
       case CHANGE_SPEED_UI:             lv_draw_change_speed(); break;
       case FAN_UI:                      lv_draw_fan(); break;
