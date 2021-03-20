@@ -71,7 +71,8 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - Configuation.h:   
      #define SERIAL_PORT -1  
      #define MKS_TS35_V2_0  
-     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V3     
+     //Revision number can be found on the back, bottom-right side ex: 001 or 003
+     #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V3_0_0 //or BOARD_MKS_ROBIN_NANO_V3_0_3
      #define TFT_LVGL_UI  
      #define TOUCH_SCREEN
 

@@ -600,8 +600,10 @@
   #include "stm32f4/pins_MKS_ROBIN2.h"          // STM32F4                                env:MKS_ROBIN2
 #elif MB(MKS_ROBIN_PRO_V2)
   #include "stm32f4/pins_MKS_ROBIN_PRO_V2.h"    // STM32F4                                env:mks_robin_pro2
-#elif MB(MKS_ROBIN_NANO_V3)
-  #include "stm32f4/pins_MKS_ROBIN_NANO_V3.h"   // STM32F4                                env:mks_robin_nano_v3 env:mks_robin_nano_v3_usb_flash_drive
+#elif MB(MKS_ROBIN_NANO_V3_0_0)
+  #include "stm32f4/pins_MKS_ROBIN_NANO_V3_0_0.h"  // STM32F4                             env:mks_robin_nano_v3 env:mks_robin_nano_v3_usb_flash_drive
+#elif MB(MKS_ROBIN_NANO_V3_0_3)
+  #include "stm32f4/pins_MKS_ROBIN_NANO_V3_0_3.h"  // STM32F4                             env:mks_robin_nano_v3 env:mks_robin_nano_v3_usb_flash_drive
 #elif MB(ANET_ET4)
   #include "stm32f4/pins_ANET_ET4.h"            // STM32F4                                env:Anet_ET4_OpenBLT
 #elif MB(ANET_ET4P)

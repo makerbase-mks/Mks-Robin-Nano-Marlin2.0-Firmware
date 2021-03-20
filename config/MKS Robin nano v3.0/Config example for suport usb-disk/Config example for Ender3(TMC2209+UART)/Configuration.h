@@ -128,7 +128,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V3
+  #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V3_0_0
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
