@@ -59,7 +59,8 @@ enum {
   ID_TOOL = 1,
   ID_SET,
   ID_PRINT,
-  ID_INFO
+  ID_INFO_EXT,
+  ID_INFO_BED
 };
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
@@ -72,9 +73,14 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_SET:
       lv_draw_set();
       break;
-    case ID_INFO:
+    case ID_INFO_EXT:
+      uiCfg.curTempType = 0;
       lv_draw_preHeat();
       break;
+    case ID_INFO_BED:
+        uiCfg.curTempType = 1;
+        lv_draw_preHeat();
+        break;
     case ID_PRINT:
       lv_draw_print_file();
       break;
@@ -227,13 +233,13 @@ void lv_temp_info() {
   // Create image buttons
 
   #if HAS_HEATED_BED
-    lv_big_button_create(scr, "F:/bmp_bed_state.bin", " ", 20, 260, event_handler, ID_INFO);
+    lv_big_button_create(scr, "F:/bmp_bed_state.bin", " ", 20, 260, event_handler, ID_INFO_BED);
   #endif
 
-  lv_big_button_create(scr, "F:/bmp_ext1_state.bin", " ", 180, 260, event_handler, ID_INFO);
+  lv_big_button_create(scr, "F:/bmp_ext1_state.bin", " ", 180, 260, event_handler, ID_INFO_EXT);
 
   #if HAS_MULTI_EXTRUDER
-    lv_big_button_create(scr, "F:/bmp_ext2_state.bin", " ", 325, 260, event_handler, ID_INFO);
+    lv_big_button_create(scr, "F:/bmp_ext2_state.bin", " ", 325, 260, event_handler, ID_INFO_EXT);
   #endif
 
   #if HAS_HEATED_BED

@@ -616,7 +616,7 @@ char *creat_title_text() {
   if (strlen(public_buf_m) > MAX_TITLE_LEN) {
     ZERO(public_buf_m);
     tmpText = 0;
-    for (index = 0; index <= disp_state_stack._disp_index && (!tmpText || *tmpText == 0); index++) 
+    for (index = 0; index <= disp_state_stack._disp_index && (!tmpText || *tmpText == 0); index++)
       tmpText = getDispText(index);
     if (*tmpText != 0) {
       titleText_cat(public_buf_m, sizeof(public_buf_m), tmpText);
