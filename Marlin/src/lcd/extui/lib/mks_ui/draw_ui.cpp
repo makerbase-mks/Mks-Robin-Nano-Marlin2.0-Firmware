@@ -833,8 +833,11 @@ void GUI_RefreshPage() {
       }
       break;
     case PRINT_READY_UI:
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        lv_temp_refr();
+      }
       break;
-
     case PRINT_FILE_UI: break;
 
     case PRINTING_UI:
@@ -984,8 +987,7 @@ void lv_clear_cur_ui() {
   last_disp_state = disp_state_stack._disp_state[disp_state_stack._disp_index];
 
   switch (disp_state_stack._disp_state[disp_state_stack._disp_index]) {
-    case PRINT_READY_UI:              
-                                      lv_clear_ready_print(); break;
+    case PRINT_READY_UI:              lv_clear_ready_print(); break;
     case PRINT_FILE_UI:               lv_clear_print_file(); break;
     case PRINTING_UI:                 lv_clear_printing(); break;
     case MOVE_MOTOR_UI:               lv_clear_move_motor(); break;
