@@ -32,7 +32,7 @@
 #define BOARD_INFO_NAME "MKS Robin Nano V3.0.3"
 //starting from revision 003
 
-#include "pins_MKS_ROBIN_NANO_V3_0.h"
+#include "pins_MKS_ROBIN_NANO_V3_0_0.h"
 
 #define FAN_PIN                             PC14  // FAN0
 #define FAN1_PIN                            PB1   // FAN1
