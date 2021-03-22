@@ -534,8 +534,11 @@ void lv_draw_dialog(uint8_t type) {
 
 void filament_sprayer_temp() {
   char buf[20] = {0};
-  sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
-
+  #if ENABLED(SINGLENOZZLE)
+    sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+  #else
+    sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
+  #endif
   strcpy(public_buf_l, uiCfg.curSprayerChoose < 1 ? extrude_menu.ext1 : extrude_menu.ext2);
   strcat_P(public_buf_l, PSTR(": "));
   strcat(public_buf_l, buf);
@@ -569,10 +572,17 @@ void filament_dialog_handle() {
     queue.inject(public_buf_m);
   }
 
+  #if ENABLED(SINGLENOZZLE)
+  if (((abs((int)((int)thermalManager.temp_hotend[0].celsius - gCfgItems.filament_limit_temper)) <= 1)
+    || ((int)thermalManager.temp_hotend[0].celsius > gCfgItems.filament_limit_temper))
+    && (uiCfg.filament_load_heat_flg == 1)
+  ) {
+  #else
   if (((abs((int)((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius - gCfgItems.filament_limit_temper)) <= 1)
     || ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius > gCfgItems.filament_limit_temper))
     && (uiCfg.filament_load_heat_flg == 1)
   ) {
+  #endif
     uiCfg.filament_load_heat_flg = 0;
     lv_clear_dialog();
     lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
@@ -584,10 +594,18 @@ void filament_dialog_handle() {
     lv_clear_dialog();
     lv_draw_dialog(DIALOG_TYPE_FILAMENT_LOAD_COMPLETED);
   }
+  
+  #if ENABLED(SINGLENOZZLE)
+  if (((abs((int)((int)thermalManager.temp_hotend[0].celsius - gCfgItems.filament_limit_temper)) <= 1)
+    || ((int)thermalManager.temp_hotend[0].celsius > gCfgItems.filament_limit_temper))
+    && (uiCfg.filament_load_heat_flg == 1)
+  ) {
+  #else
   if (((abs((int)((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius - gCfgItems.filament_limit_temper)) <= 1)
      || ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius > gCfgItems.filament_limit_temper))
      && (uiCfg.filament_unload_heat_flg == 1)
   ) {
+  #endif
     uiCfg.filament_unload_heat_flg = 0;
     lv_clear_dialog();
     lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);

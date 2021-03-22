@@ -198,8 +198,11 @@ void disp_filament_temp() {
   public_buf_l[0] = '\0';
 
   strcat(public_buf_l, uiCfg.curSprayerChoose < 1 ? preheat_menu.ext1 : preheat_menu.ext2);
-  sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
-
+  #if ENABLED(SINGLENOZZLE)
+    sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[0].celsius,  (int)thermalManager.temp_hotend[0].target);
+  #else
+    sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
+  #endif
   strcat_P(public_buf_l, PSTR(": "));
   strcat(public_buf_l, buf);
   lv_label_set_text(tempText1, public_buf_l);
