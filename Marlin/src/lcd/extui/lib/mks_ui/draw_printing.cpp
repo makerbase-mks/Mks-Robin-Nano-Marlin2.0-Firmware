@@ -167,9 +167,6 @@ void lv_draw_printing() {
       lv_group_add_obj(g, buttonPause);
       lv_group_add_obj(g, buttonStop);
       lv_group_add_obj(g, buttonOperat);
-      lv_group_add_obj(g, buttonPause);
-      lv_group_add_obj(g, buttonPause);
-      lv_group_add_obj(g, buttonPause);
     }
   #endif
 
