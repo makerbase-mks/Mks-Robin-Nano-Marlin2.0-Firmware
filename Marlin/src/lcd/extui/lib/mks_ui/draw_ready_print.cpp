@@ -44,6 +44,13 @@
 
 extern lv_group_t*  g;
 static lv_obj_t *scr;
+static lv_obj_t *labelExt1;
+
+TERN_(HAS_MULTI_EXTRUDER, static lv_obj_t *labelExt2);
+#if HAS_HEATED_BED
+  static lv_obj_t* labelBed;
+#endif
+
 #if ENABLED(MKS_TEST)
   uint8_t curent_disp_ui = 0;
 #endif
@@ -51,7 +58,9 @@ static lv_obj_t *scr;
 enum {
   ID_TOOL = 1,
   ID_SET,
-  ID_PRINT
+  ID_PRINT,
+  ID_INFO_EXT,
+  ID_INFO_BED
 };
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
@@ -64,6 +73,14 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_SET:
       lv_draw_set();
       break;
+    case ID_INFO_EXT:
+      uiCfg.curTempType = 0;
+      lv_draw_preHeat();
+      break;
+    case ID_INFO_BED:
+        uiCfg.curTempType = 1;
+        lv_draw_preHeat();
+        break;
     case ID_PRINT:
       lv_draw_print_file();
       break;
@@ -199,6 +216,7 @@ void lv_draw_ready_print(void) {
     lv_big_button_create(scr, "F:/bmp_tool.bin", main_menu.tool, 20, 90, event_handler, ID_TOOL);
     lv_big_button_create(scr, "F:/bmp_set.bin", main_menu.set, 180, 90, event_handler, ID_SET);
     lv_big_button_create(scr, "F:/bmp_printing.bin", main_menu.print, 340, 90, event_handler, ID_PRINT);
+    lv_temp_info();
   }
 
   #if ENABLED(TOUCH_SCREEN_CALIBRATION)
@@ -210,6 +228,46 @@ void lv_draw_ready_print(void) {
   #endif
 }
 
+void lv_temp_info() {
+  // Malderin
+  // Create image buttons
+
+  #if HAS_HEATED_BED
+    lv_big_button_create(scr, "F:/bmp_bed_state.bin", " ", 20, 260, event_handler, ID_INFO_BED);
+  #endif
+
+  lv_big_button_create(scr, "F:/bmp_ext1_state.bin", " ", 180, 260, event_handler, ID_INFO_EXT);
+
+  #if HAS_MULTI_EXTRUDER
+    lv_big_button_create(scr, "F:/bmp_ext2_state.bin", " ", 325, 260, event_handler, ID_INFO_EXT);
+  #endif
+
+  #if HAS_HEATED_BED
+    labelBed = lv_label_create(scr, 70, 270, nullptr);
+    #endif
+
+    labelExt1 = lv_label_create(scr, 230, 270, nullptr);
+
+    #if HAS_MULTI_EXTRUDER
+      labelExt2 = lv_label_create(scr, 375, 270, nullptr);
+    #endif
+    lv_temp_refr();
+}
+
+void lv_temp_refr() {
+#if HAS_HEATED_BED
+  sprintf(public_buf_l, printing_menu.bed_temp, (int)thermalManager.temp_bed.celsius, (int)thermalManager.temp_bed.target);
+  lv_label_set_text(labelBed, public_buf_l);
+#endif
+
+  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+  lv_label_set_text(labelExt1, public_buf_l);
+
+#if HAS_MULTI_EXTRUDER
+  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[1].celsius, (int)thermalManager.temp_hotend[1].target);
+  lv_label_set_text(labelExt2, public_buf_l);
+#endif
+}
 void lv_clear_ready_print() {
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_group_remove_all_objs(g);

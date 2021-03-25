@@ -47,9 +47,9 @@ static lv_obj_t *scr;
 static lv_obj_t *labelExt1, *labelFan, *labelZpos, *labelTime;
 static lv_obj_t *labelPause, *labelStop, *labelOperat;
 static lv_obj_t *bar1, *bar1ValueText;
-static lv_obj_t *buttonPause, *buttonOperat, *buttonStop;
+static lv_obj_t *buttonPause, *buttonOperat, *buttonStop, *buttonExt1, *buttonExt2, *buttonBedstate, *buttonFanstate, *buttonZpos;
 
-#if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
+#if ENABLED(HAS_MULTI_EXTRUDER)
   static lv_obj_t *labelExt2;
 #endif
 
@@ -60,7 +60,11 @@ static lv_obj_t *buttonPause, *buttonOperat, *buttonStop;
 enum {
   ID_PAUSE = 1,
   ID_STOP,
-  ID_OPTION
+  ID_OPTION,
+  ID_TEMP_EXT,
+  ID_TEMP_BED,
+  ID_BABYSTEP,
+  ID_FAN
 };
 
 bool once_flag; // = false
@@ -109,42 +113,50 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_clear_printing();
       lv_draw_operation();
       break;
+    case ID_TEMP_EXT:
+          uiCfg.curTempType = 0;
+          lv_clear_printing();
+          lv_draw_preHeat();
+          break;
+    case ID_TEMP_BED:
+              uiCfg.curTempType = 1;
+              lv_clear_printing();
+              lv_draw_preHeat();
+              break;
+    case ID_BABYSTEP:
+            lv_clear_printing();
+            lv_draw_baby_stepping();
+            break;
+    case ID_FAN:
+            lv_clear_printing();
+            lv_draw_fan();
+            break;
   }
 }
 
-void lv_draw_printing(void) {
+void lv_draw_printing() {
   disp_state_stack._disp_index = 0;
   ZERO(disp_state_stack._disp_state);
   scr = lv_screen_create(PRINTING_UI);
 
   // Create image buttons
-  lv_obj_t *buttonExt1 = lv_img_create(scr, nullptr);
-  lv_img_set_src(buttonExt1, "F:/bmp_ext1_state.bin");
-  lv_obj_set_pos(buttonExt1, 205, 136);
+  buttonExt1 = lv_imgbtn_create(scr, "F:/bmp_ext1_state.bin", 206, 136, event_handler, ID_TEMP_EXT);
 
-  #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
-    lv_obj_t *buttonExt2 = lv_img_create(scr, nullptr);
-    lv_img_set_src(buttonExt2, "F:/bmp_ext2_state.bin");
-    lv_obj_set_pos(buttonExt2, 350, 136);
+  #if HAS_MULTI_EXTRUDER
+    buttonExt2 = lv_imgbtn_create(scr, "F:/bmp_ext2_state.bin", 350, 136, event_handler, ID_TEMP_EXT);
   #endif
 
   #if HAS_HEATED_BED
-    lv_obj_t *buttonBedstate = lv_img_create(scr, nullptr);
-    lv_img_set_src(buttonBedstate, "F:/bmp_bed_state.bin");
-    lv_obj_set_pos(buttonBedstate, 205, 186);
+    buttonBedstate = lv_imgbtn_create(scr, "F:/bmp_bed_state.bin", 206, 186, event_handler, ID_TEMP_BED);
   #endif
 
-  lv_obj_t *buttonFanstate = lv_img_create(scr, nullptr);
-  lv_img_set_src(buttonFanstate, "F:/bmp_fan_state.bin");
-  lv_obj_set_pos(buttonFanstate, 350, 186);
+  buttonFanstate = lv_imgbtn_create(scr, "F:/bmp_fan_state.bin", 350, 186, event_handler, ID_FAN);
 
   lv_obj_t *buttonTime = lv_img_create(scr, nullptr);
   lv_img_set_src(buttonTime, "F:/bmp_time_state.bin");
-  lv_obj_set_pos(buttonTime, 205, 86);
+  lv_obj_set_pos(buttonTime, 206, 86);
 
-  lv_obj_t *buttonZpos = lv_img_create(scr, nullptr);
-  lv_img_set_src(buttonZpos, "F:/bmp_zpos_state.bin");
-  lv_obj_set_pos(buttonZpos, 350, 86);
+  buttonZpos = lv_imgbtn_create(scr, "F:/bmp_zpos_state.bin", 350, 86, event_handler, ID_BABYSTEP);
 
   buttonPause = lv_imgbtn_create(scr, uiCfg.print_state == WORKING ? "F:/bmp_pause.bin" : "F:/bmp_resume.bin", 5, 240, event_handler, ID_PAUSE);
   buttonStop = lv_imgbtn_create(scr, "F:/bmp_stop.bin", 165, 240, event_handler, ID_STOP);
@@ -160,7 +172,7 @@ void lv_draw_printing(void) {
 
   labelExt1 = lv_label_create(scr, 250, 146, nullptr);
 
-  #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
+  #if HAS_MULTI_EXTRUDER
     labelExt2 = lv_label_create(scr, 395, 146, nullptr);
   #endif
 
@@ -205,11 +217,11 @@ void lv_draw_printing(void) {
 }
 
 void disp_ext_temp() {
-  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.degHotend(0), (int)thermalManager.degTargetHotend(0));
   lv_label_set_text(labelExt1, public_buf_l);
 
-  #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
-    sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[1].celsius, (int)thermalManager.temp_hotend[1].target);
+  #if HAS_MULTI_EXTRUDER
+    sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.degHotend(1), (int)thermalManager.degTargetHotend(1));
     lv_label_set_text(labelExt2, public_buf_l);
   #endif
 }
@@ -277,6 +289,27 @@ void setProBarRate() {
     sprintf_P(public_buf_l, "%d%%", rate);
     lv_label_set_text(bar1ValueText,public_buf_l);
     lv_obj_align(bar1ValueText, bar1, LV_ALIGN_CENTER, 0, 0);
+
+    if (marlin_state == MF_SD_COMPLETE) {
+      if (once_flag == 0) {
+        stop_print_time();
+
+        flash_preview_begin = false;
+        default_preview_flg = false;
+        lv_clear_printing();
+        lv_draw_dialog(DIALOG_TYPE_FINISH_PRINT);
+
+        once_flag = true;
+
+        #if HAS_SUICIDE
+          if (gCfgItems.finish_power_off) {
+            gcode.process_subcommands_now_P(PSTR("M1001"));
+            queue.inject_P(PSTR("M81"));
+            marlin_state = MF_RUNNING;
+          }
+        #endif
+      }
+    }
   }
 }
 
