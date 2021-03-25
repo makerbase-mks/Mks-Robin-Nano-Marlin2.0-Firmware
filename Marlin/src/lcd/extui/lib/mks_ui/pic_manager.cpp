@@ -210,7 +210,10 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_custom4.bin",
   "bmp_custom5.bin",
   "bmp_custom6.bin",
-  "bmp_custom7.bin"
+  "bmp_custom7.bin",
+
+  // bltouch settings screen
+  "bmp_init_state.bin"
 };
 
 #if HAS_SPI_FLASH_FONT

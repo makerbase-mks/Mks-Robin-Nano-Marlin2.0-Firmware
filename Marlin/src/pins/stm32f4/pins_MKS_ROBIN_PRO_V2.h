@@ -260,33 +260,46 @@
 //
 // Onboard SD card
 //
-#define SDIO_D0_PIN                         PC8
-#define SDIO_D1_PIN                         PC9
-#define SDIO_D2_PIN                         PC10
-#define SDIO_D3_PIN                         PC11
-#define SDIO_SCK_PIN                        PC12
-#define SDIO_CMD_PIN                        PD2
+
 // detect pin dont work when ONBOARD and NO_SD_HOST_DRIVE disabled
 #if SD_CONNECTION_IS(ONBOARD)
-  #define SDIO_SUPPORT
-  #define SD_DETECT_PIN                     PD12
+  //#define SDIO_SUPPORT
+  #ifdef SDIO_SUPPORT
+    #define SDIO_D0_PIN                         PC8
+    #define SDIO_D1_PIN                         PC9
+    #define SDIO_D2_PIN                         PC10
+    #define SDIO_D3_PIN                         PC11
+    #define SDIO_SCK_PIN                        PC12
+    #define SDIO_CMD_PIN                        PD2
+    #define SD_DETECT_PIN                       PD12
 
-  #ifndef SDIO_CLOCK
-    #define SDIO_CLOCK                      18000000       /* 18 MHz */
-  #endif
+    #ifndef SDIO_CLOCK
+      #define SDIO_CLOCK                      18000000       /* 18 MHz */
+    #endif
 
-  // SDIO retries, configurable. Default is 3, from STM32F1
-  #ifndef SDIO_READ_RETRIES
-    #define SDIO_READ_RETRIES               3
+    // SDIO retries, configurable. Default is 3, from STM32F1
+    #ifndef SDIO_READ_RETRIES
+      #define SDIO_READ_RETRIES               3
+    #endif
+  #else
+    #define CUSTOM_SPI_PINS                         // TODO: needed because is the only way to set SPI3 for SD on STM32 (by now)
+    #if ENABLED(CUSTOM_SPI_PINS)
+      #define ENABLE_SPI3
+      #define SD_SS_PIN                       -1
+      #define SDSS                            PC9
+      #define SD_SCK_PIN                      PC10
+      #define SD_MISO_PIN                     PC11
+      #define SD_MOSI_PIN                     PC12
+      #define SD_DETECT_PIN                   PD12
+    #else
+      #define SOFTWARE_SPI                          // Use soft SPI for onboard SD
+      #define SDSS                            SDIO_D3_PIN
+      #define SD_SCK_PIN                      SDIO_SCK_PIN
+      #define SD_MISO_PIN                     SDIO_D0_PIN
+      #define SD_MOSI_PIN                     SDIO_CMD_PIN
+    #endif
   #endif
-
-  #ifndef SDIO_SUPPORT
-    #define SOFTWARE_SPI                          // Use soft SPI for onboard SD
-    #define SDSS                            SDIO_D3_PIN
-    #define SD_SCK_PIN                      SDIO_SCK_PIN
-    #define SD_MISO_PIN                     SDIO_D0_PIN
-    #define SD_MOSI_PIN                     SDIO_CMD_PIN
-  #endif
+  
 //
 // LCD SD
 // 
