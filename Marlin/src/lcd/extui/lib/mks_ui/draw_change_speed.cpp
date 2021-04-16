@@ -57,11 +57,13 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
           feedrate_percentage = MAX_EXT_SPEED_PERCENT;
       }
       else {
-        if (planner.flow_percentage[0] < MAX_EXT_SPEED_PERCENT - uiCfg.stepPrintSpeed)
-          planner.flow_percentage[0] += uiCfg.stepPrintSpeed;
-        else
-          planner.flow_percentage[0] = MAX_EXT_SPEED_PERCENT;
-        planner.refresh_e_factor(0);
+        #if EXTRUDERS
+          if (planner.flow_percentage[0] < MAX_EXT_SPEED_PERCENT - uiCfg.stepPrintSpeed)
+            planner.flow_percentage[0] += uiCfg.stepPrintSpeed;
+          else
+            planner.flow_percentage[0] = MAX_EXT_SPEED_PERCENT;
+          planner.refresh_e_factor(0);
+        #endif
         #if HAS_MULTI_EXTRUDER
           planner.flow_percentage[1] = planner.flow_percentage[0];
           planner.refresh_e_factor(1);
@@ -77,11 +79,13 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
           feedrate_percentage = MIN_EXT_SPEED_PERCENT;
       }
       else {
-        if (planner.flow_percentage[0] > MIN_EXT_SPEED_PERCENT + uiCfg.stepPrintSpeed)
-          planner.flow_percentage[0] -= uiCfg.stepPrintSpeed;
-        else
-          planner.flow_percentage[0] = MIN_EXT_SPEED_PERCENT;
-        planner.refresh_e_factor(0);
+        #if EXTRUDERS
+          if (planner.flow_percentage[0] > MIN_EXT_SPEED_PERCENT + uiCfg.stepPrintSpeed)
+            planner.flow_percentage[0] -= uiCfg.stepPrintSpeed;
+          else
+            planner.flow_percentage[0] = MIN_EXT_SPEED_PERCENT;
+          planner.refresh_e_factor(0);
+        #endif
         #if HAS_MULTI_EXTRUDER
           planner.flow_percentage[1] = planner.flow_percentage[0];
           planner.refresh_e_factor(1);
@@ -186,7 +190,11 @@ void disp_print_speed() {
   const char *lbl;
   if (editingFlowrate) {
     lbl = speed_menu.extrude_speed;
-    val = planner.flow_percentage[0];
+    #if EXTRUDERS
+      val = planner.flow_percentage[0];
+    #else
+      val = 0;
+    #endif
   }
   else {
     lbl = speed_menu.move_speed;

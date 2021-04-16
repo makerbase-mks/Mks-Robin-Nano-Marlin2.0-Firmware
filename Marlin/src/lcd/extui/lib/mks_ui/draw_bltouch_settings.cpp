@@ -188,9 +188,10 @@ void disp_bltouch_z_offset_value() {
   char str_1[16];
   sprintf_P(buf, PSTR("%s : %s mm"), move_menu.zoffset, dtostrf(probe.offset.z, 1, 2, str_1) );
   lv_label_set_text(zOffsetText, buf);
-
-  sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
-  lv_label_set_text(labelExt1, public_buf_l);
+  #if HAS_HOTEND
+    sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
+    lv_label_set_text(labelExt1, public_buf_l);
+  #endif
 
   #if HAS_HEATED_BED
     sprintf(public_buf_l, printing_menu.bed_temp, (int)thermalManager.temp_bed.celsius, (int)thermalManager.temp_bed.target);

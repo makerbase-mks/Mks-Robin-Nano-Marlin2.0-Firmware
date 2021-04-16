@@ -1110,8 +1110,10 @@ static void wifi_gcode_exec(uint8_t *cmd_line) {
                   if (card.isFileOpen()) {
                     //saved_feedrate_percentage = feedrate_percentage;
                     feedrate_percentage = 100;
-                    planner.flow_percentage[0] = 100;
-                    planner.e_factor[0] = planner.flow_percentage[0] * 0.01f;
+                    #if EXTRUDERS
+                      planner.flow_percentage[0] = 100;
+                      planner.e_factor[0] = planner.flow_percentage[0] * 0.01f;
+                    #endif
                     #if EXTRUDERS == 2
                       planner.flow_percentage[1] = 100;
                       planner.e_factor[1] = planner.flow_percentage[1] * 0.01f;
@@ -1242,14 +1244,21 @@ static void wifi_gcode_exec(uint8_t *cmd_line) {
           if (cmd_value == 105) {
             SEND_OK_TO_WIFI;
             sprintf((char *)tempBuf,"T:%.1f /%.1f B:%.1f /%.1f T0:%.1f /%.1f T1:%.1f /%.1f @:0 B@:0\r\n",
-
-            (float)thermalManager.temp_hotend[0].celsius, (float)thermalManager.temp_hotend[0].target,
+            #if HAS_HOTEND
+              (float)thermalManager.temp_hotend[0].celsius, (float)thermalManager.temp_hotend[0].target,
+            #else
+              0.0f, 0.0f,
+            #endif
             #if HAS_HEATED_BED
               (float)thermalManager.temp_bed.celsius, (float)thermalManager.temp_bed.target,
             #else
               0.0f, 0.0f,
             #endif
-            (float)thermalManager.temp_hotend[0].celsius, (float)thermalManager.temp_hotend[0].target,
+            #if HAS_HOTEND
+              (float)thermalManager.temp_hotend[0].celsius, (float)thermalManager.temp_hotend[0].target,
+            #else
+              0.0f, 0.0f,
+            #endif
             #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
               (float)thermalManager.temp_hotend[1].celsius, (float)thermalManager.temp_hotend[1].target
             #else
@@ -1259,19 +1268,26 @@ static void wifi_gcode_exec(uint8_t *cmd_line) {
           }
           else {
             sprintf((char *)tempBuf,"T:%d /%d B:%d /%d T0:%d /%d T1:%d /%d @:0 B@:0\r\n",
-
-            (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target,
+            #if HAS_HOTEND
+              (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target,
+            #else
+              0, 0,
+            #endif
             #if HAS_HEATED_BED
               (int)thermalManager.temp_bed.celsius, (int)thermalManager.temp_bed.target,
             #else
               0, 0,
             #endif
+            #if HAS_HOTEND
             (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target,
               #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
                 (int)thermalManager.temp_hotend[1].celsius, (int)thermalManager.temp_hotend[1].target
               #else
                 0, 0
               #endif
+            #else
+              0, 0, 0, 0
+            #endif
             );
           }
 
@@ -2052,7 +2068,7 @@ void mks_esp_wifi_init() {
 
   esp_state = TRANSFER_IDLE;
   esp_port_begin(1);
-
+  watchdog_refresh();
   wifi_reset();
 
   #if 0
@@ -2112,13 +2128,15 @@ void mks_esp_wifi_init() {
 
 
 void mks_wifi_firmware_upddate() {
+  watchdog_refresh();
   card.openFileRead((char *)ESP_FIRMWARE_FILE);
 
   if (card.isFileOpen()) {
     card.closefile();
 
     wifi_delay(2000);
-
+    watchdog_refresh();
+    
     if (usartFifoAvailable((SZ_USART_FIFO *)&WifiRxFifo) < 20)
       return;
 

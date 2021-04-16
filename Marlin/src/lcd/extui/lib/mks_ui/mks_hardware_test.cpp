@@ -56,7 +56,7 @@ void test_gpio_readlevel_L() {
     endstopx1_sta = !READ(X_MIN_PIN);
     endstopy1_sta = !READ(Y_MIN_PIN);
     endstopz1_sta = !READ(Z_MIN_PIN);
-    endstopz2_sta = !READ(Z_MAX_PIN);
+    endstopz2_sta = !READ(MKS_TEST_Z_MAX_PIN);
   #endif
 }
 
@@ -75,7 +75,7 @@ void test_gpio_readlevel_H() {
     endstopx1_sta = READ(X_MIN_PIN);
     endstopy1_sta = READ(Y_MIN_PIN);
     endstopz1_sta = READ(Z_MIN_PIN);
-    endstopz2_sta = READ(Z_MAX_PIN);
+    endstopz2_sta = READ(MKS_TEST_Z_MAX_PIN);
   #endif
 }
 
@@ -84,7 +84,7 @@ void init_test_gpio() {
     SET_INPUT_PULLUP(X_MIN_PIN);
     SET_INPUT_PULLUP(Y_MIN_PIN);
     SET_INPUT_PULLUP(Z_MIN_PIN);
-    SET_INPUT_PULLUP(Z_MAX_PIN);
+    SET_INPUT_PULLUP(MKS_TEST_Z_MAX_PIN);
 
     SET_OUTPUT(WIFI_IO0_PIN);
 
@@ -224,7 +224,7 @@ void mks_hardware_test() {
     else {
     }
 
-    if (disp_state == PRINT_READY_UI) mks_disp_test();
+    if (disp_state == MAIN_UI) mks_disp_test();
     
   #endif
 }

@@ -171,13 +171,6 @@ void gCfgItems_init() {
     gCfgItems.disp_rotation_180 = rot;
     update_spi_flash();
   }
-
-  uiCfg.F[0] = 'N';
-  uiCfg.F[1] = 'A';
-  uiCfg.F[2] = 'N';
-  uiCfg.F[3] = 'O';
-  W25QXX.SPI_FLASH_BlockErase(REFLSHE_FLGA_ADD + 32 - 64*1024);
-  W25QXX.SPI_FLASH_BufferWrite(uiCfg.F,REFLSHE_FLGA_ADD,4);
 }
 
 void ui_cfg_init() {
@@ -739,8 +732,10 @@ char *creat_title_text() {
           gCfgItems.curFilesize = card.getFileSize();
           update_spi_flash();
           feedrate_percentage = 100;
-          planner.flow_percentage[0] = 100;
-          planner.e_factor[0]        = planner.flow_percentage[0] * 0.01;
+          #if EXTRUDERS
+            planner.flow_percentage[0] = 100;
+            planner.e_factor[0]        = planner.flow_percentage[0] * 0.01;
+          #endif
           #if HAS_MULTI_EXTRUDER
             planner.flow_percentage[1] = 100;
             planner.e_factor[1]        = planner.flow_percentage[1] * 0.01;

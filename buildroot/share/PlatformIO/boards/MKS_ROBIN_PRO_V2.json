@@ -14,11 +14,11 @@
         "0x3748"
       ]
     ],
-    "mcu": "stm32f407zgt6",
+    "mcu": "stm32f407zet6",
     "variant": "MKS_ROBIN_PRO_V2"
   },
   "debug": {
-    "jlink_device": "STM32F407ZG",
+    "jlink_device": "STM32F407ZE",
     "openocd_target": "stm32f4x",
     "svd_path": "STM32F40x.svd",
     "tools": {
@@ -44,11 +44,11 @@
     "arduino",
     "stm32cube"
   ],
-  "name": "STM32F407ZGT6(192k RAM. 1024k Flash)",
+  "name": "STM32F407ZET6(192k RAM. 512k Flash)",
   "upload": {
     "disable_flushing": false,
     "maximum_ram_size": 196608,
-    "maximum_size": 1048576,
+    "maximum_size": 524288,
     "protocol": "dfu",
     "protocols": [
       "stlink",
@@ -59,6 +59,6 @@
     "use_1200bps_touch": false,
     "wait_for_upload_port": false
   },
-  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f407ZG.html",
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f407ZE.html",
   "vendor": "Generic"
 }

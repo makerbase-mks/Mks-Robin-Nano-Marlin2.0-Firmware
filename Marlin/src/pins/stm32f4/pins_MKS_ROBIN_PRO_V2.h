@@ -197,6 +197,9 @@
 #define FAN_PIN                             PB1   // FAN0
 #define FAN1_PIN                            PE11  // FAN1
 #define FAN2_PIN                            PE10  // FAN2
+#ifndef FAN_SOFT_PWM
+  #define FAN_SOFT_PWM
+#endif
 
 //
 // Misc. Functions
@@ -254,7 +257,7 @@
 #define WIFI_RESET_PIN                    PC14  // MKS ESP WIFI RESET PIN
 
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION              ONBOARD
+  #define SDCARD_CONNECTION               ONBOARD
 #endif
 
 //
@@ -263,7 +266,7 @@
 
 // detect pin dont work when ONBOARD and NO_SD_HOST_DRIVE disabled
 #if SD_CONNECTION_IS(ONBOARD)
-  //#define SDIO_SUPPORT
+  #define SDIO_SUPPORT
   #ifdef SDIO_SUPPORT
     #define SDIO_D0_PIN                         PC8
     #define SDIO_D1_PIN                         PC9
@@ -317,10 +320,10 @@
 
 // LCD / Controller
 #define SPI_FLASH
-#define HAS_SPI_FLASH                          1
-#define SPI_DEVICE                             2
-#define SPI_FLASH_SIZE                 0x1000000
 #if ENABLED(SPI_FLASH)
+  #define HAS_SPI_FLASH                     1
+  #define SPI_DEVICE                        2
+  #define SPI_FLASH_SIZE                    0x1000000
   #define W25QXX_CS_PIN                     PB12
   #define W25QXX_MOSI_PIN                   PC3
   #define W25QXX_MISO_PIN                   PC2
@@ -340,16 +343,6 @@
  *                ￣￣￣                                            ￣￣￣
  *                EXP1                                               EXP2
  */
-#define BEEPER_PIN                          PC5
-#define LCD_PINS_RS                         PG1
-#define LCD_PINS_ENABLE                     PG0
-#define LCD_PINS_D4                         PF14
-#define LCD_PINS_D5                         PF15
-#define LCD_PINS_D6                         PF12
-#define LCD_PINS_D7                         PF13
-#define BTN_EN1                             PG5
-#define BTN_EN2                             PG4
-#define BTN_ENC                             PG2 
 
 #if ANY(TFT_COLOR_UI, TFT_LVGL_UI, TFT_CLASSIC_UI)
   #ifndef TOUCH_CALIBRATION_X
@@ -405,13 +398,20 @@
 
   #define TFT_BUFFER_SIZE                  14400
 
-#elif HAS_SPI_LCD
-  #define BEEPER_PIN                        PC5
-  #define BTN_ENC                           PG2
-  #define LCD_PINS_ENABLE                   PG0
-  #define LCD_PINS_RS                       PG1
-  #define BTN_EN1                           PG5
-  #define BTN_EN2                           PG4
+  #define TFT_DRIVER                       ST7796
+
+#else
+  #define BEEPER_PIN                          PC5
+  #define LCD_PINS_RS                         PG1
+  #define LCD_PINS_ENABLE                     PG0
+  #define LCD_PINS_D4                         PF14
+  #define LCD_PINS_D5                         PF15
+  #define LCD_PINS_D6                         PF12
+  #define LCD_PINS_D7                         PF13
+  #define BTN_EN1                             PG5
+  #define BTN_EN2                             PG4
+  #define BTN_ENC                             PG2 
+
   #define LCD_BACKLIGHT_PIN                 -1
 
   // MKS MINI12864 and MKS LCD12864B; If using MKS LCD12864A (Need to remove RPK2 resistor)
@@ -434,8 +434,8 @@
       #define LCD_PINS_D7                   PF13
     #endif
 
-    #define BOARD_ST7920_DELAY_1    DELAY_NS(96)
-    #define BOARD_ST7920_DELAY_2    DELAY_NS(48)
+    #define BOARD_ST7920_DELAY_1    DELAY_NS(200)
+    #define BOARD_ST7920_DELAY_2    DELAY_NS(400)
     #define BOARD_ST7920_DELAY_3    DELAY_NS(600)
 
   #endif // !MKS_MINI_12864
@@ -445,11 +445,11 @@
 // ST7920 Delays
 //
 #ifndef BOARD_ST7920_DELAY_1
-  #define BOARD_ST7920_DELAY_1      DELAY_NS(96)
+  #define BOARD_ST7920_DELAY_1      DELAY_NS(200)
 #endif
 #ifndef BOARD_ST7920_DELAY_2
-  #define BOARD_ST7920_DELAY_2      DELAY_NS(48)
+  #define BOARD_ST7920_DELAY_2      DELAY_NS(400)
 #endif
 #ifndef BOARD_ST7920_DELAY_3
-  #define BOARD_ST7920_DELAY_3     DELAY_NS(715)
+  #define BOARD_ST7920_DELAY_3     DELAY_NS(600)
 #endif

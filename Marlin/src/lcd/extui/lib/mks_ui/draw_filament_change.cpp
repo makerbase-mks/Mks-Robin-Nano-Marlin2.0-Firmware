@@ -65,19 +65,21 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
           }
         }
       #else
-        if ((abs(thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius) <= 1)
-            || (gCfgItems.filament_limit_temper <= thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
-        }
-        else {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_LOAD_HEAT);
-          if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
-            thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
-            thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #if HAS_HOTEND
+          if ((abs(thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius) <= 1)
+              || (gCfgItems.filament_limit_temper <= thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
           }
-        }
+          else {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_LOAD_HEAT);
+            if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
+              thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
+              thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+            }
+          }
+        #endif
       #endif
       break;
     case ID_FILAMNT_OUT:
@@ -100,22 +102,24 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
           filament_sprayer_temp();
         }
       #else
-        if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > 0)
-          && ((abs((int)((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) <= 1)
-          || ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= gCfgItems.filament_limit_temper))
-        ) {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);
-        }
-        else {
-          lv_clear_filament_change();
-          lv_draw_dialog(DIALOG_TYPE_FILAMENT_UNLOAD_HEAT);
-          if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
-            thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
-            thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #if HAS_HOTEND
+          if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > 0)
+            && ((abs((int)((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target - thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius)) <= 1)
+            || ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= gCfgItems.filament_limit_temper))
+          ) {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED);
           }
-          filament_sprayer_temp();
-        }
+          else {
+            lv_clear_filament_change();
+            lv_draw_dialog(DIALOG_TYPE_FILAMENT_UNLOAD_HEAT);
+            if (thermalManager.temp_hotend[uiCfg.curSprayerChoose].target < gCfgItems.filament_limit_temper) {
+              thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = gCfgItems.filament_limit_temper;
+              thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+            }
+            filament_sprayer_temp();
+          }
+        #endif
       #endif
       break;
     case ID_FILAMNT_TYPE:
@@ -132,8 +136,10 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       feedrate_mm_s = (float)uiCfg.moveSpeed_bak;
       if (uiCfg.print_state == PAUSED)
         planner.set_e_position_mm((destination.e = current_position.e = uiCfg.current_e_position_bak));
-      thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
-      thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+      #if HAS_HOTEND
+        thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = uiCfg.desireSprayerTempBak;
+        thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+      #endif
 
       //Reset filament flag
       uiCfg.filament_heat_completed_load   = 0;
@@ -198,10 +204,12 @@ void disp_filament_temp() {
   public_buf_l[0] = '\0';
 
   strcat(public_buf_l, uiCfg.curSprayerChoose < 1 ? preheat_menu.ext1 : preheat_menu.ext2);
-  #if ENABLED(SINGLENOZZLE)
-    sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[0].celsius,  (int)thermalManager.temp_hotend[0].target);
-  #else
-    sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
+  #if HAS_HOTEND
+    #if ENABLED(SINGLENOZZLE)
+      sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[0].celsius,  (int)thermalManager.temp_hotend[0].target);
+    #else
+      sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
+    #endif
   #endif
   strcat_P(public_buf_l, PSTR(": "));
   strcat(public_buf_l, buf);

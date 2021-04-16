@@ -75,9 +75,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_in.bin",
   "bmp_out.bin",
   "bmp_extru1.bin",
-  #if HAS_MULTI_EXTRUDER
-    "bmp_extru2.bin",
-  #endif
+  "bmp_extru2.bin",
   "bmp_speed_high.bin",
   "bmp_speed_slow.bin",
   "bmp_speed_normal.bin",
@@ -126,9 +124,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_resume.bin",
   "bmp_stop.bin",
   "bmp_ext1_state.bin",
-  #if HAS_MULTI_EXTRUDER
-    "bmp_ext2_state.bin",
-  #endif
+  "bmp_ext2_state.bin",
   "bmp_bed_state.bin",
   "bmp_fan_state.bin",
   "bmp_time_state.bin",
@@ -136,41 +132,33 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_operate.bin",
 
   //manual leval screen (only if disabled auto level)
-  #if DISABLED(AUTO_BED_LEVELING_BILINEAR)
-    "bmp_leveling1.bin",
-    "bmp_leveling2.bin",
-    "bmp_leveling3.bin",
-    "bmp_leveling4.bin",
-    "bmp_leveling5.bin",
-  #endif
+  "bmp_leveling1.bin",
+  "bmp_leveling2.bin",
+  "bmp_leveling3.bin",
+  "bmp_leveling4.bin",
+  "bmp_leveling5.bin",
 
   //lang select screen
-  #if HAS_LANG_SELECT_SCREEN
-    "bmp_language.bin",
-    "bmp_simplified_cn.bin",
-    "bmp_simplified_cn_sel.bin",
-    "bmp_traditional_cn.bin",
-    "bmp_traditional_cn_sel.bin",
-    "bmp_english.bin",
-    "bmp_english_sel.bin",
-    "bmp_russian.bin",
-    "bmp_russian_sel.bin",
-    "bmp_spanish.bin",
-    "bmp_spanish_sel.bin",
-    "bmp_french.bin",
-    "bmp_french_sel.bin",
-    "bmp_italy.bin",
-    "bmp_italy_sel.bin",
-  #endif // HAS_LANG_SELECT_SCREEN
+  "bmp_language.bin",
+  "bmp_simplified_cn.bin",
+  "bmp_simplified_cn_sel.bin",
+  "bmp_traditional_cn.bin",
+  "bmp_traditional_cn_sel.bin",
+  "bmp_english.bin",
+  "bmp_english_sel.bin",
+  "bmp_russian.bin",
+  "bmp_russian_sel.bin",
+  "bmp_spanish.bin",
+  "bmp_spanish_sel.bin",
+  "bmp_french.bin",
+  "bmp_french_sel.bin",
+  "bmp_italy.bin",
+  "bmp_italy_sel.bin",
 
   // gcode preview
-  #if HAS_GCODE_DEFAULT_VIEW_IN_FLASH
-    "bmp_preview.bin",
-  #endif
+  "bmp_preview.bin",
 
-  #if HAS_LOGO_IN_FLASH
-    "bmp_logo.bin",
-  #endif
+  "bmp_logo.bin",
 
   // settings screen
   "bmp_about.bin",
@@ -192,11 +180,9 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_enable.bin",
   "bmp_return.bin",
 
-  #if ENABLED(MKS_WIFI_MODULE)
-    // wifi screen
-    "bmp_wifi.bin",
-    "bmp_cloud.bin",
-  #endif
+  // wifi screen
+  "bmp_wifi.bin",
+  "bmp_cloud.bin",
 
   // babystep screen
   "bmp_baby_move0_01.bin",
@@ -385,8 +371,8 @@ uint32_t Pic_Info_Write(uint8_t *P_name, uint32_t P_size) {
     longName[j] = '\0';
   }
 
-  static int8_t arrayFindStr(const char arr[][LONG_FILENAME_LENGTH], uint8_t arraySize, const char* str) {
-    for (uint8_t a = 0; a < arraySize; a++) {
+  static uint16_t arrayFindStr(const char arr[][LONG_FILENAME_LENGTH], uint16_t arraySize, const char* str) {
+    for (uint16_t a = 0; a < arraySize; a++) {
       if (strcasecmp(arr[a], str) == 0)
         return a;
     }
@@ -509,8 +495,8 @@ uint32_t Pic_Info_Write(uint8_t *P_name, uint32_t P_size) {
         if (card.longFilename[0] == 0) continue;
         if (card.longFilename[0] == '.') continue;
 
-        int8_t a = arrayFindStr(assets, COUNT(assets), card.longFilename);
-        if (a >= 0 && a < (int8_t)COUNT(assets)) {
+        uint16_t a = arrayFindStr(assets, COUNT(assets), card.longFilename);
+        if (a >= 0 && a < (uint16_t)COUNT(assets)) {
           uint8_t assetType = ASSET_TYPE_ICON;
           if (strstr(assets[a], "_logo"))
             assetType = ASSET_TYPE_LOGO;

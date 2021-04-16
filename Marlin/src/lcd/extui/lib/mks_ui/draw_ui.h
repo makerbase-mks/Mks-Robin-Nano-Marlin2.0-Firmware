@@ -247,7 +247,6 @@ typedef struct {
   uint8_t stepPrintSpeed;
   uint8_t waitEndMoves;
   uint8_t dialogType;
-  uint8_t F[4];
   uint8_t filament_rate;
   uint16_t moveSpeed;
   uint16_t cloud_port;

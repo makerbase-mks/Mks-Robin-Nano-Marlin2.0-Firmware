@@ -128,9 +128,11 @@ void disp_tmc_error() {
 
 lv_obj_t *e1, *e2, *e3, *bed;
 void mks_disp_test() {
-  char buf[30] = {0};
-  sprintf_P(buf, PSTR("e1:%d"), (int)thermalManager.temp_hotend[0].celsius);
-  lv_label_set_text(e1, buf);
+  #if HAS_HOTEND
+    char buf[30] = {0};
+    sprintf_P(buf, PSTR("e1:%d"), (int)thermalManager.temp_hotend[0].celsius);
+    lv_label_set_text(e1, buf);
+  #endif
   #if HAS_MULTI_HOTEND
     sprintf_P(buf, PSTR("e2:%d"), (int)thermalManager.temp_hotend[1].celsius);
     lv_label_set_text(e2, buf);
@@ -142,14 +144,17 @@ void mks_disp_test() {
 }
 
 void lv_draw_ready_print(void) {
-  char buf[30] = {0};
+  #if HAS_HOTEND
+    char buf[30] = {0};
+  #endif
   lv_obj_t *buttonTool;
 
   disp_state_stack._disp_index = 0;
   ZERO(disp_state_stack._disp_state);
-  scr = lv_screen_create(PRINT_READY_UI, "");
-
+  
   if (mks_test_flag == 0x1E) {
+    scr = lv_screen_create(MAIN_UI, "");
+
     // Create image buttons
     buttonTool = lv_imgbtn_create(scr, "F:/bmp_tool.bin", event_handler, ID_TOOL);
 
@@ -164,12 +169,14 @@ void lv_draw_ready_print(void) {
     #if 1
       e1 = lv_label_create_empty(scr);
       lv_obj_set_pos(e1, 20, 20);
-      sprintf_P(buf, PSTR("e1:  %d"), (int)thermalManager.temp_hotend[0].celsius);
-      lv_label_set_text(e1, buf);
+      #if HAS_HOTEND
+        sprintf_P(buf, PSTR("e1:  %d"), (int)thermalManager.temp_hotend[0].celsius);
+        lv_label_set_text(e1, buf);
+      #endif
       #if HAS_MULTI_HOTEND
         e2 = lv_label_create_empty(scr);
         lv_obj_set_pos(e2, 20, 45);
-        sprintf_P(buf, PSTR("e1:  %d"), (int)thermalManager.temp_hotend[1].celsius);
+        sprintf_P(buf, PSTR("e2:  %d"), (int)thermalManager.temp_hotend[1].celsius);
         lv_label_set_text(e2, buf);
       #endif
 
@@ -216,6 +223,7 @@ void lv_draw_ready_print(void) {
 
   }
   else {
+    scr = lv_screen_create(PRINT_READY_UI, "");
     lv_big_button_create(scr, "F:/bmp_tool.bin", main_menu.tool, 20, 90, event_handler, ID_TOOL);
     lv_big_button_create(scr, "F:/bmp_set.bin", main_menu.set, 180, 90, event_handler, ID_SET);
     lv_big_button_create(scr, "F:/bmp_printing.bin", main_menu.print, 340, 90, event_handler, ID_PRINT);
@@ -263,8 +271,10 @@ void lv_temp_refr() {
   lv_label_set_text(labelBed, public_buf_l);
 #endif
 
+#if HAS_HOTEND
   sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[0].celsius, (int)thermalManager.temp_hotend[0].target);
   lv_label_set_text(labelExt1, public_buf_l);
+#endif
 
 #if HAS_MULTI_EXTRUDER && DISABLED(SINGLENOZZLE)
   sprintf(public_buf_l, printing_menu.temp1, (int)thermalManager.temp_hotend[1].celsius, (int)thermalManager.temp_hotend[1].target);

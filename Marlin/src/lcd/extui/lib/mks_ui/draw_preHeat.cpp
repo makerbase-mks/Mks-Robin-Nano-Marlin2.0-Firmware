@@ -51,12 +51,14 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   switch (obj->mks_obj_id) {
     case ID_P_ADD:
       if (uiCfg.curTempType == 0) {
-        thermalManager.temp_hotend[uiCfg.curSprayerChoose].target += uiCfg.stepHeat;
-        if (uiCfg.curSprayerChoose == 0) {
-          if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > (HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1))) {
-            thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
+        #if HAS_HOTEND
+          thermalManager.temp_hotend[uiCfg.curSprayerChoose].target += uiCfg.stepHeat;
+          if (uiCfg.curSprayerChoose == 0) {
+            if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > (HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1))) {
+              thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
+            }
           }
-        }
+        #endif
         #if DISABLED(SINGLENOZZLE) && HAS_MULTI_EXTRUDER
           else if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > (HEATER_1_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1))) {
             thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = (float)HEATER_1_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
@@ -77,12 +79,13 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_P_DEC:
       if (uiCfg.curTempType == 0) {
-        if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > uiCfg.stepHeat)
-          thermalManager.temp_hotend[uiCfg.curSprayerChoose].target -= uiCfg.stepHeat;
-        else
-          thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = 0;
-
-        thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #if HAS_HOTEND
+          if ((int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target > uiCfg.stepHeat)
+            thermalManager.temp_hotend[uiCfg.curSprayerChoose].target -= uiCfg.stepHeat;
+          else
+            thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = 0;
+          thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #endif
       }
       #if HAS_HEATED_BED
         else {
@@ -145,8 +148,10 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_P_OFF:
       if (uiCfg.curTempType == 0) {
-        thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = 0;
-        thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #if HAS_HOTEND
+          thermalManager.temp_hotend[uiCfg.curSprayerChoose].target = 0;
+          thermalManager.start_watching_hotend(uiCfg.curSprayerChoose);
+        #endif
       }
       #if HAS_HEATED_BED
         else {
@@ -240,12 +245,14 @@ void disp_desire_temp() {
   public_buf_l[0] = '\0';
 
   if (uiCfg.curTempType == 0) {
-    #if DISABLED(SINGLENOZZLE)
-      strcat(public_buf_l, uiCfg.curSprayerChoose < 1 ? preheat_menu.ext1 : preheat_menu.ext2);
-      sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
-    #else
-      strcat(public_buf_l, preheat_menu.ext1);
-      sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[0].celsius,  (int)thermalManager.temp_hotend[0].target);
+    #if HAS_HOTEND
+      #if DISABLED(SINGLENOZZLE)
+        strcat(public_buf_l, uiCfg.curSprayerChoose < 1 ? preheat_menu.ext1 : preheat_menu.ext2);
+        sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius,  (int)thermalManager.temp_hotend[uiCfg.curSprayerChoose].target);
+      #else
+        strcat(public_buf_l, preheat_menu.ext1);
+        sprintf(buf, preheat_menu.value_state, (int)thermalManager.temp_hotend[0].celsius,  (int)thermalManager.temp_hotend[0].target);
+      #endif
     #endif
   }
   #if HAS_HEATED_BED
