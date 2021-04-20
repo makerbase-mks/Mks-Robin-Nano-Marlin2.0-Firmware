@@ -2420,14 +2420,17 @@
 
 #if ENABLED(TFT_LVGL_UI)
   #define MKS_WIFI_MODULE  // MKS WiFi module
+ 
   /**
-   * FRENCH KEYBOARD
+   * KEYBOARD LAYOUT
    * 
-   * Select the french keyboard layoud in MKS_UI
-   *  if defined  azerty layout
-   *  if npt      qwerty layout
+   * Select alternativ keyboard layout in MKS_UI
+   *  FRENCH_KEYBOARD - azerty layout
+   *  GERMAN_KEYBOARD - qwertz layout
+   *  if not defined - use qwerty layout
    */
   //#define FRENCH_KEYBOARD
+  #define GERMAN_KEYBOARD
 #endif
 
 /**
