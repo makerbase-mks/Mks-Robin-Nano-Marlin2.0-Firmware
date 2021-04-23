@@ -2430,7 +2430,7 @@
    *  if not defined - use qwerty layout
    */
   //#define FRENCH_KEYBOARD
-  #define GERMAN_KEYBOARD
+  //#define GERMAN_KEYBOARD
 #endif
 
 /**
