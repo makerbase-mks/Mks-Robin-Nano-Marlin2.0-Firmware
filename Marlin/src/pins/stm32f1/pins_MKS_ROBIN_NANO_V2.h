@@ -228,10 +228,12 @@
   #define WIFI_IO0_PIN                        PC13  // MKS ESP WIFI IO0 PIN
   #define WIFI_IO1_PIN       			            PC7   // MKS ESP WIFI IO1 PIN
   #define WIFI_RESET_PIN				              PE9   // MKS ESP WIFI RESET PIN
-
+  
+  //#define MKS_TEST
   #if ENABLED(MKS_TEST)
     #define MKS_TEST_POWER_LOSS_PIN         PA2   // PW_DET
     #define MKS_TEST_PS_ON_PIN              PB2   // PW_OFF
+    #define MKS_TEST_Z_MAX_PIN              PC4   // Z_MAX_PIN
   #endif
 #else
   //#define POWER_LOSS_PIN                  PA2   // PW_DET
@@ -246,7 +248,7 @@
 // SD Card
 //
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION              ONBOARD
+  #define SDCARD_CONNECTION                 ONBOARD
 #endif
 
 #if SD_CONNECTION_IS(LCD)
@@ -299,7 +301,7 @@
   #define TFT_MOSI_PIN                      PA7
   #define TFT_DC_PIN                        PD10
   #define TFT_RST_PIN                       PC6
-  #define TFT_A0_PIN                  TFT_DC_PIN
+  #define TFT_A0_PIN                        TFT_DC_PIN
 
   #define TFT_RESET_PIN                     PC6
   #define TFT_BACKLIGHT_PIN                 PD13
@@ -309,6 +311,7 @@
 
   #define LCD_USE_DMA_SPI
 
+  #define TFT_DRIVER                        ST7796
 #endif
 
 #if ENABLED(TFT_CLASSIC_UI)
