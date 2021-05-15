@@ -453,7 +453,7 @@
 #define  HEATER_5_MINTEMP 5   //   5
 #define  HEATER_6_MINTEMP 5   //   5
 #define  HEATER_7_MINTEMP 5   //   5
-//#define  BED_MINTEMP 5   //        5
+#define  BED_MINTEMP 5   //        5
 
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
@@ -1500,7 +1500,7 @@
 // - Move the Z probe (or nozzle) to a defined XY point before Z Homing.
 // - Prevent Z homing when the Z probe is outside bed area.
 //
-//#define Z_SAFE_HOMING
+#define Z_SAFE_HOMING
 
 #if ENABLED(Z_SAFE_HOMING)
   #define Z_SAFE_HOMING_X_POINT X_CENTER  // X point for Z homing
