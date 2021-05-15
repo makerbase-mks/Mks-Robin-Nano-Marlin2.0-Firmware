@@ -596,7 +596,7 @@
 
 // Enable one of the options below for CoreXY, CoreXZ, or CoreYZ kinematics,
 // either in the usual order or reversed
- #define COREXY
+//  #define COREXY
 //#define COREXZ
 //#define COREYZ
 //#define COREYX
