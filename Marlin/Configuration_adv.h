@@ -3372,13 +3372,13 @@
   #define USER_DESC_4 "TOUCH CAL."
   #define USER_GCODE_4 "M995"
 
-  //#define USER_CMD_5_ENABLE
-  //#define USER_DESC_5 "More1"
-  //#define USER_GCODE_5 "G28"
+  #define USER_CMD_5_ENABLE
+  #define USER_DESC_5 "STOP ALL"
+  #define USER_GCODE_5 "M112"
 
-  //#define USER_CMD_6_ENABLE
-  //#define USER_DESC_6 "More2"
-  //#define USER_GCODE_6 "G28"
+  #define USER_CMD_6_ENABLE
+  #define USER_DESC_6 "hello world"
+  #define USER_GCODE_6 "M118 E1 Yello World!"
 
   //#define USER_CMD_7_ENABLE
   //#define USER_DESC_7 "More3"
