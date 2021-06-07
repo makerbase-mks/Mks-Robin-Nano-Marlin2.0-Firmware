@@ -99,24 +99,6 @@
 #define TEMP_1_PIN                          PC2   // TH2
 #define TEMP_BED_PIN                        PC0   // TB1
 
-#if HAS_TMC_UART
-
-  #define X_SERIAL_TX_PIN                   PA10
-  #define X_SERIAL_RX_PIN                   PA10
-
-  #define Y_SERIAL_TX_PIN                   PA9
-  #define Y_SERIAL_RX_PIN                   PA9
-
-  #define Z_SERIAL_TX_PIN                   PC7
-  #define Z_SERIAL_RX_PIN                   PC7
-
-  #define E0_SERIAL_TX_PIN                  PC13
-  #define E0_SERIAL_RX_PIN                  PC13
-
-  // Reduce baud rate to improve software serial reliability
-  #define TMC_BAUD_RATE                    19200
-#endif // HAS_TMC_UART
-
 //
 // Heaters / Fans
 //
@@ -149,23 +131,6 @@
 // Misc. Functions
 //
 #if HAS_TFT_LVGL_UI
-  // LVGL
-  #ifndef TOUCH_CALIBRATION_X
-    #define TOUCH_CALIBRATION_X             17880
-  #endif
-  #ifndef TOUCH_CALIBRATION_Y
-    #define TOUCH_CALIBRATION_Y            -12234
-  #endif
-  #ifndef TOUCH_OFFSET_X
-    #define TOUCH_OFFSET_X                    -45
-  #endif
-  #ifndef TOUCH_OFFSET_Y
-    #define TOUCH_OFFSET_Y                    349
-  #endif
-  #ifndef TOUCH_ORIENTATION
-    #define TOUCH_ORIENTATION    TOUCH_LANDSCAPE
-  #endif
-
   //#define MKSPWC
   #ifdef MKSPWC
     #define SUICIDE_PIN                     PB2   // Enable MKSPWC SUICIDE PIN

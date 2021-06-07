@@ -40,7 +40,7 @@ static lv_obj_t *buttonPageUp, *buttonPageDown, *buttonBack,
                 *buttonGcode[FILE_BTN_CNT], *labelPageUp[FILE_BTN_CNT], *buttonText[FILE_BTN_CNT];
 
 enum {
-  ID_P_UP = 7,
+  ID_P_UP = (FILE_BTN_CNT + 1),
   ID_P_DOWN,
   ID_P_RETURN
 };
@@ -73,8 +73,7 @@ uint8_t sel_id = 0;
 
     for (uint16_t i = 0; i < fileCnt; i++) {
       if (list_file.Sd_file_cnt == list_file.Sd_file_offset) {
-        const uint16_t nr = SD_ORDER(i, fileCnt);
-        card.getfilename_sorted(nr);
+        card.getfilename_sorted(SD_ORDER(i, fileCnt));
 
         list_file.IsFolder[valid_name_cnt] = card.flag.filenameIsDir;
         strcpy(list_file.file_name[valid_name_cnt], list_file.curDirPath);
@@ -176,7 +175,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     }
     else {
       lv_clear_print_file();
-      lv_draw_ready_print();
+      TERN(MULTI_VOLUME, lv_draw_media_select(), lv_draw_ready_print());
     }
   }
   else {
@@ -267,6 +266,7 @@ void disp_gcode_icon(uint8_t file_num) {
     }
     */
     if (i >= file_num) break;
+    watchdog_refresh();
 
     #ifdef TFT35
       buttonGcode[i] = lv_imgbtn_create(scr, nullptr);
