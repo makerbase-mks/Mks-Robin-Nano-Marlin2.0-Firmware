@@ -76,7 +76,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
      #define TOUCH_SCREEN
 
 - Configuation_adv.h:    
-     After 2021.6.7, you can use the multi-vlume functions.     
+     After 2021.6.7, you can use the multi-volume function.     
      Use the TF card and USB disk together:   
      #define USB_FLASH_DRIVE_SUPPORT  
     Only use TF card:  
