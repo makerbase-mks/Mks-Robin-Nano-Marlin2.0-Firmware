@@ -37,6 +37,10 @@ The images should be added to gcode file when slicing, and MKS has developed the
      #define TFT_LVGL_UI  
      #define TOUCH_SCREEN  
 
+- Configuation_adv.h:  
+     //#define USB_FLASH_DRIVE_SUPPORT
+     //#define MULTI_VOLUME
+
 2. Update firmware:
    
 - Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
@@ -55,6 +59,10 @@ The images should be added to gcode file when slicing, and MKS has developed the
      #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2     
      #define TFT_LVGL_UI  
      #define TOUCH_SCREEN  
+
+- Configuation_adv.h:  
+     //#define USB_FLASH_DRIVE_SUPPORT
+     //#define MULTI_VOLUME
 
 2. Update firmware:
    
