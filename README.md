@@ -38,7 +38,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
      #define TOUCH_SCREEN  
 
 - Configuation_adv.h:  
-     //#define USB_FLASH_DRIVE_SUPPORT
+     //#define USB_FLASH_DRIVE_SUPPORT  
      //#define MULTI_VOLUME
 
 2. Update firmware:
@@ -61,7 +61,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
      #define TOUCH_SCREEN  
 
 - Configuation_adv.h:  
-     //#define USB_FLASH_DRIVE_SUPPORT
+     //#define USB_FLASH_DRIVE_SUPPORT  
      //#define MULTI_VOLUME
 
 2. Update firmware:
