@@ -70,23 +70,11 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   lv_clear_ready_print();
 
   switch (obj->mks_obj_id) {
-    case ID_TOOL:
-      lv_draw_tool();
-      break;
-    case ID_SET:
-      lv_draw_set();
-      break;
-    case ID_INFO_EXT:
-      uiCfg.curTempType = 0;
-      lv_draw_preHeat();
-      break;
-    case ID_INFO_BED:
-        uiCfg.curTempType = 1;
-        lv_draw_preHeat();
-        break;
-    case ID_PRINT:
-      lv_draw_print_file();
-      break;
+    case ID_TOOL:   lv_draw_tool(); break;
+    case ID_SET:    lv_draw_set(); break;
+    case ID_INFO_EXT:  uiCfg.curTempType = 0; lv_draw_preHeat(); break;
+    case ID_INFO_BED:  uiCfg.curTempType = 1; lv_draw_preHeat(); break;
+    case ID_PRINT: TERN(MULTI_VOLUME, lv_draw_media_select(), lv_draw_print_file()); break;
   }
 }
 

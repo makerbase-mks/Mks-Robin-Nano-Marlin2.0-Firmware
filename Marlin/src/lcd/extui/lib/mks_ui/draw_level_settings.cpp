@@ -52,7 +52,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_draw_manual_level_pos_settings();
       break;
     case ID_LEVEL_COMMAND:
-      keyboard_value = gcodeCommand;
+      keyboard_value = autoLevelGcodeCommand;
       lv_clear_level_settings();
       lv_draw_keyboard();
       break;

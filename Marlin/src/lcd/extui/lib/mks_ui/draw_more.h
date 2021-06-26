@@ -25,7 +25,6 @@
 extern "C" { /* C-declarations for C++ */
 #endif
 
-extern void lv_return_to_ready (void);
 extern void lv_draw_more(void);
 extern void lv_clear_more();
 

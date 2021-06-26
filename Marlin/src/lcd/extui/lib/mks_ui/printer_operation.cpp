@@ -48,7 +48,7 @@ void printer_state_polling() {
     lv_clear_cur_ui();
     lv_draw_dialog(DIALOG_TYPE_MACHINE_PAUSING_TIPS);
     #if ENABLED(SDSUPPORT)
-      while(queue.length) {
+      while(queue.ring_buffer.length) {
         queue.advance();
       }
       planner.synchronize();
@@ -167,7 +167,7 @@ void printer_state_polling() {
       #ifdef TOUCH_MI_PROBE
       lv_draw_touchmi_settings();
       #endif
-      uiCfg.autoLeveling = 0;
+      uiCfg.autoLeveling = false;
     }
   #endif
 }

@@ -35,7 +35,7 @@ static lv_obj_t *scr;
 
 static lv_obj_t *labelV, *buttonV, *labelP;
 static lv_task_t *updatePosTask;
-static char cur_label = 'Z'; 
+static char cur_label = 'Z';
 static float cur_pos = 0;
 
 void disp_cur_pos();
@@ -56,7 +56,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
     case ID_M_X_P:
-      if (queue.length <= (BUFSIZE - 3)) {
+      if (!queue.ring_buffer.full(3)) {
         queue.enqueue_one_P(PSTR("G91"));
         sprintf_P(public_buf_l, PSTR("G1 X%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
@@ -65,7 +65,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       }
       break;
     case ID_M_X_N:
-      if (queue.length <= (BUFSIZE - 3)) {
+      if (!queue.ring_buffer.full(3)) {
         queue.enqueue_now_P(PSTR("G91"));
         sprintf_P(public_buf_l, PSTR("G1 X-%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
@@ -74,7 +74,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       }
       break;
     case ID_M_Y_P:
-      if (queue.length <= (BUFSIZE - 3)) {
+      if (!queue.ring_buffer.full(3)) {
         queue.enqueue_now_P(PSTR("G91"));
         sprintf_P(public_buf_l, PSTR("G1 Y%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
@@ -83,7 +83,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       }
       break;
     case ID_M_Y_N:
-      if (queue.length <= (BUFSIZE - 3)) {
+      if (!queue.ring_buffer.full(3)) {
         queue.enqueue_now_P(PSTR("G91"));
         sprintf_P(public_buf_l, PSTR("G1 Y-%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
@@ -92,7 +92,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       }
       break;
     case ID_M_Z_P:
-      if (queue.length <= (BUFSIZE - 3)) {
+      if (!queue.ring_buffer.full(3)) {
         queue.enqueue_now_P(PSTR("G91"));
         sprintf_P(public_buf_l, PSTR("G1 Z%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
@@ -101,7 +101,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       }
       break;
     case ID_M_Z_N:
-      if (queue.length <= (BUFSIZE - 3)) {
+      if (!queue.ring_buffer.full(3)) {
         queue.enqueue_now_P(PSTR("G91"));
         sprintf_P(public_buf_l, PSTR("G1 Z-%s F%d"), dtostrf(uiCfg.move_dist, 1, 3, str_1), uiCfg.moveSpeed);
         queue.enqueue_one_now(public_buf_l);
@@ -113,7 +113,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       if (abs(10 * (int)uiCfg.move_dist) == 100)
         uiCfg.move_dist = 0.1;
       else
-        uiCfg.move_dist *= (float)10;
+        uiCfg.move_dist *= 10.0f;
       disp_move_dist();
       break;
     case ID_M_RETURN:
@@ -148,9 +148,7 @@ void lv_draw_move_motor(void) {
   buttonV = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_M_STEP);
   labelV = lv_label_create_empty(buttonV);
   #if HAS_ROTARY_ENCODER
-    if (gCfgItems.encoder_enable) {
-      lv_group_add_obj(g, buttonV);
-    }
+    if (gCfgItems.encoder_enable) lv_group_add_obj(g, buttonV);
   #endif
 
 
@@ -160,9 +158,8 @@ void lv_draw_move_motor(void) {
   lv_obj_t * title = lv_obj_get_child_back(scr, NULL);
   if (title != NULL) lv_obj_set_width(title, TFT_WIDTH - 101);
   labelP = lv_label_create(scr, TFT_WIDTH - 100, TITLE_YPOS, "Z:0.0mm");
-  if (labelP != NULL) {
+  if (labelP != NULL)
     updatePosTask = lv_task_create(refresh_pos, 300, LV_TASK_PRIO_LOWEST, 0);
-  }
 
 
   disp_move_dist();
