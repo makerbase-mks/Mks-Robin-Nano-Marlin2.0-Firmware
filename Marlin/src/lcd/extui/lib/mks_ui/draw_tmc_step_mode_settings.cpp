@@ -63,7 +63,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 
   switch (obj->mks_obj_id) {
     case ID_TMC_MODE_RETURN:
-      uiCfg.para_ui_page = 0;
+      uiCfg.para_ui_page = false;
       lv_clear_tmc_step_mode_settings();
       lv_draw_return_ui();
       break;
@@ -95,12 +95,12 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     #endif
 
     case ID_TMC_MODE_UP:
-      uiCfg.para_ui_page = 0;
+      uiCfg.para_ui_page = false;
       lv_clear_tmc_step_mode_settings();
       lv_draw_tmc_step_mode_settings();
       break;
     case ID_TMC_MODE_DOWN:
-      uiCfg.para_ui_page = 1;
+      uiCfg.para_ui_page = true;
       lv_clear_tmc_step_mode_settings();
       lv_draw_tmc_step_mode_settings();
       break;

@@ -32,18 +32,13 @@
 #include "eeprom_if.h"
 #include <Wire.h>
 
-#ifdef __STM32F1__
-  void eeprom_init() { Wire.begin(); }
-#else
-  #ifndef I2C_SDA_PIN
-    #define I2C_SDA_PIN PB7
-  #endif
-  #ifndef I2C_SCL_PIN
-    #define I2C_SCL_PIN PB6
-  #endif
-  void eeprom_init() { Wire.begin((uint8_t)I2C_SDA_PIN, (uint8_t)I2C_SCL_PIN); }
-#endif
-
+void eeprom_init() {
+  Wire.begin(
+    #if PINS_EXIST(I2C_SCL, I2C_SDA)
+      uint8_t(I2C_SDA_PIN), uint8_t(I2C_SCL_PIN)
+    #endif
+  );
+}
 
 #if ENABLED(USE_SHARED_EEPROM)
 
@@ -60,12 +55,15 @@ static constexpr uint8_t eeprom_device_address = I2C_ADDRESS(EEPROM_DEVICE_ADDRE
 // Public functions
 // ------------------------
 
-void eeprom_write_byte(uint8_t *pos, unsigned char value) {
+static void _eeprom_begin(uint8_t * const pos) {
   const unsigned eeprom_address = (unsigned)pos;
-
   Wire.beginTransmission(eeprom_device_address);
-  Wire.write(int(eeprom_address >> 8));   // MSB
-  Wire.write(int(eeprom_address & 0xFF)); // LSB
+  Wire.write(int(eeprom_address >> 8));   // Address High
+  Wire.write(int(eeprom_address & 0xFF)); // Address Low
+}
+
+void eeprom_write_byte(uint8_t *pos, uint8_t value) {
+  _eeprom_begin(pos);
   Wire.write(value);
   Wire.endTransmission();
 
@@ -75,11 +73,7 @@ void eeprom_write_byte(uint8_t *pos, unsigned char value) {
 }
 
 uint8_t eeprom_read_byte(uint8_t *pos) {
-  const unsigned eeprom_address = (unsigned)pos;
-
-  Wire.beginTransmission(eeprom_device_address);
-  Wire.write(int(eeprom_address >> 8));   // MSB
-  Wire.write(int(eeprom_address & 0xFF)); // LSB
+  _eeprom_begin(pos);
   Wire.endTransmission();
   Wire.requestFrom(eeprom_device_address, (byte)1);
   return Wire.available() ? Wire.read() : 0xFF;
