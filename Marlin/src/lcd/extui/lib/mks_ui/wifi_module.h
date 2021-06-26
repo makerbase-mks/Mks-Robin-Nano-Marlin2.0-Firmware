@@ -191,7 +191,7 @@ extern int  package_to_wifi(WIFI_RET_TYPE type, uint8_t *buf, int len);
 extern void get_wifi_list_command_send();
 extern void get_wifi_commands();
 extern int  readWifiBuf(int8_t *buf, int32_t len);
-extern void mks_wifi_firmware_upddate();
+extern void mks_wifi_firmware_update();
 extern int usartFifoAvailable(SZ_USART_FIFO *fifo);
 extern int readUsartFifo(SZ_USART_FIFO *fifo, int8_t *buf, int32_t len);
 extern void esp_port_begin(uint8_t interrupt);

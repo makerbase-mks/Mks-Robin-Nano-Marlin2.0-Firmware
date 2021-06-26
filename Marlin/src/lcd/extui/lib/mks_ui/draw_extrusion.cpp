@@ -57,9 +57,9 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_E_ADD:
     #if HAS_HOTEND
       #if ENABLED(SINGLENOZZLE)
-      if ((thermalManager.temp_hotend[0].celsius >= EXTRUDE_MINTEMP) && (queue.length <= (BUFSIZE - 3))) {
+      if ((thermalManager.temp_hotend[0].celsius >= EXTRUDE_MINTEMP) && (!queue.ring_buffer.full(3))) {
       #else
-      if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= EXTRUDE_MINTEMP) && (queue.length <= (BUFSIZE - 3))) {
+      if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= EXTRUDE_MINTEMP) && (!queue.ring_buffer.full(3))) {
       #endif
     #else
       if (queue.length <= (BUFSIZE - 3)) {
@@ -75,9 +75,9 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_E_DEC:
     #if HAS_HOTEND
       #if ENABLED(SINGLENOZZLE)
-      if ((thermalManager.temp_hotend[0].celsius >= EXTRUDE_MINTEMP) && (queue.length <= (BUFSIZE - 3))) {
+      if ((thermalManager.temp_hotend[0].celsius >= EXTRUDE_MINTEMP) && (!queue.ring_buffer.full(3))) {
       #else
-      if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= EXTRUDE_MINTEMP) && (queue.length <= (BUFSIZE - 3))) {
+      if ((thermalManager.temp_hotend[uiCfg.curSprayerChoose].celsius >= EXTRUDE_MINTEMP) && (!queue.ring_buffer.full(3))) {
       #endif
     #else
       if (queue.length <= (BUFSIZE - 3)) {

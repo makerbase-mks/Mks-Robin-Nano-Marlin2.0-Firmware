@@ -33,6 +33,8 @@
 #define AUTO_LEVELING_TEXT_RU           "aвтоуровень"
 #define SET_TEXT_RU                     "настройки"
 #define MORE_TEXT_RU                    "больше"
+#define MORE_GCODE_RU                   "G-код"
+#define MORE_ENTER_GCODE_RU             "Введите G-код"
 
 #define ADD_TEXT_RU                     "добавить"
 #define DEC_TEXT_RU                     "уменьшить"
@@ -193,7 +195,7 @@
 #define TITLE_HOME_RU                       "Home"
 #define TITLE_EXTRUDE_RU                    "экструзия"
 #define TITLE_LEVELING_RU                   "уровень"
-#define TITLE_MLEVELING_RU                   "углы"
+#define TITLE_MLEVELING_RU                  "углы"
 #define TITLE_SET_RU                        "настройки"
 #define TITLE_MORE_RU                       "больше"
 #define TITLE_CHOOSEFILE_RU                 "файла"
@@ -256,17 +258,13 @@
 #define EEPROM_SETTINGS_READ_RU       "Чтение настроек из EEPROM"
 #define EEPROM_SETTINGS_REVERT_RU     "Bосстановить заводские настройки по умолчанию"
 
-#define MORE_CUSTOM1_TEXT_RU  USER_DESC_1
-#define MORE_CUSTOM2_TEXT_RU  USER_DESC_2
-#define MORE_CUSTOM3_TEXT_RU  USER_DESC_3
-#define MORE_CUSTOM4_TEXT_RU  USER_DESC_4
-#define MORE_CUSTOM5_TEXT_RU  USER_DESC_5
-#define MORE_CUSTOM6_TEXT_RU  USER_DESC_6
-#define MORE_CUSTOM7_TEXT_RU  USER_DESC_7
+#define MORE_CUSTOM1_TEXT_RU  MAIN_MENU_ITEM_1_DESC
+#define MORE_CUSTOM2_TEXT_RU  MAIN_MENU_ITEM_2_DESC
+#define MORE_CUSTOM3_TEXT_RU  MAIN_MENU_ITEM_3_DESC
+#define MORE_CUSTOM4_TEXT_RU  MAIN_MENU_ITEM_4_DESC
+#define MORE_CUSTOM5_TEXT_RU  MAIN_MENU_ITEM_5_DESC
+#define MORE_CUSTOM6_TEXT_RU  MAIN_MENU_ITEM_6_DESC
 
-//Malderin translate
-//
-//
 #define EEPROM_STORE_TIPS_RU          "Cохранить настройки в EEPROM?"
 #define EEPROM_READ_TIPS_RU           "читать настройки из EEPROM?"
 #define EEPROM_REVERT_TIPS_RU         "Cбросить настройки к значениям по умолчанию?"
