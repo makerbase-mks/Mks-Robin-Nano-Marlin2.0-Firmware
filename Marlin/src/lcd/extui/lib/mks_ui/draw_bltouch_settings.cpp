@@ -109,7 +109,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       lv_clear_bltouch_settings();
       if (last_disp_state == DIALOG_UI) lv_draw_ready_print();
       else lv_draw_return_ui();
-      queue.enqueue_now_P(PSTR("G28 X Y"));
+      // queue.enqueue_now_P(PSTR("G28 X Y"));  // fix-wang
+      queue.inject_P(PSTR("G28 X Y"));
       break;
   }
 }
@@ -214,7 +215,8 @@ void bltouch_do_init(bool resetZoffset) {
   {
     sprintf_P(str_1, PSTR("G28\nG1 Z10 F2400\nG1 X%d Y%d\nG0 Z0.3"), X_MAX_POS / 2, Y_MAX_POS / 2);
   }
-  queue.enqueue_now_P(PSTR(str_1));
+  queue.enqueue_now_P(PSTR(str_1));  // fix-wang
+  // queue.inject_P(PSTR(str_1));
 }
 
 void lv_clear_bltouch_settings() { 
