@@ -148,6 +148,7 @@ bool DiskIODriver_USBFlash::usbStartup() {
 // of initializing the USB library for the first time.
 
 void DiskIODriver_USBFlash::idle() {
+  
   usb.Task();
 
   const uint8_t task_state = usb.getUsbTaskState();
@@ -182,6 +183,7 @@ void DiskIODriver_USBFlash::idle() {
   #define GOTO_STATE_AFTER_DELAY(STATE, DELAY) do{ state = STATE; next_state_ms  = millis() + DELAY; }while(0)
 
   if (ELAPSED(millis(), next_state_ms)) {
+    
     GOTO_STATE_AFTER_DELAY(state, 250); // Default delay
 
     switch (state) {
@@ -201,6 +203,7 @@ void DiskIODriver_USBFlash::idle() {
           #endif
           GOTO_STATE_AFTER_DELAY( WAIT_FOR_LUN, 250 );
         }
+
         break;
 
       case WAIT_FOR_LUN:
