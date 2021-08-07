@@ -50,6 +50,9 @@ custom_graphics_toolpath = os.path.join(env.Dictionary("PROJECT_DIR"), "custom_g
 custom_graphics_path = os.path.join(env.Dictionary("PROJECT_DIR"), "custom_graphics", "images") + "/"
 custom_fonts_path = os.path.join(env.Dictionary("PROJECT_DIR"), "custom_graphics", "fonts") + "/"
 assets_path = os.path.join(env.Dictionary("PROJECT_BUILD_DIR"), env.Dictionary("PIOENV"), "assets")
+pioEnv_path = os.path.join(env.Dictionary("PROJECT_BUILD_DIR"), env.Dictionary("PIOENV"))
+wifi_filename= "MksWifi.bin"
+
 
 def convert_assets():
 	print("*** Converting Assets *** ")
@@ -67,7 +70,10 @@ def copy_fonts():
 			print("-> " + filename )
 			shutil.copy(os.path.join(custom_fonts_path, filename), assets_path)	
 
-
+def copy_wifimodule():
+    print("*** Copying Wifi Module***")
+    shutil.copy(os.path.join(custom_graphics_toolpath, wifi_filename), pioEnv_path)	
+    print("-> " + wifi_filename )
 
 # shutil.rmtree(assets_path, ignore_errors=True)
 if os.path.exists(assets_path) == False:
@@ -75,3 +81,4 @@ if os.path.exists(assets_path) == False:
 
 convert_assets()
 copy_fonts()
+copy_wifimodule()
