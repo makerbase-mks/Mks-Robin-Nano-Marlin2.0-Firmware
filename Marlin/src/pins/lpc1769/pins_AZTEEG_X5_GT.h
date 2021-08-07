@@ -25,7 +25,9 @@
  * Azteeg X5 GT pin assignments
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(MCU_LPC1769)
+  #error "Oops! Make sure you have the LPC1769 environment selected in your IDE."
+#endif
 
 #define BOARD_INFO_NAME   "Azteeg X5 GT"
 #define BOARD_WEBSITE_URL "tinyurl.com/yx8tdqa3"

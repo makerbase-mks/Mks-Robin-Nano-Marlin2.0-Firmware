@@ -20,9 +20,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_CASE_LIGHT_SCREEN
+#if BOTH(TOUCH_UI_FTDI_EVE, CASE_LIGHT_ENABLE)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -58,4 +59,4 @@ bool CaseLightScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_CASE_LIGHT_SCREEN
+#endif // TOUCH_UI_FTDI_EVE

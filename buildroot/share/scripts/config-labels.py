@@ -22,7 +22,8 @@
 # 2020-06-05 SRL style tweaks
 #-----------------------------------
 #
-import sys,os
+import sys
+import os
 from pathlib import Path
 from distutils.dir_util import copy_tree  # for copy_tree, because shutil.copytree can't handle existing files, dirs
 

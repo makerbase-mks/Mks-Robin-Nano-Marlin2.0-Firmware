@@ -56,7 +56,7 @@
 
     // S: Report the current power supply state and exit
     if (parser.seen('S')) {
-      SERIAL_ECHOPGM_P(powersupply_on ? PSTR("PS:1\n") : PSTR("PS:0\n"));
+      serialprintPGM(powersupply_on ? PSTR("PS:1\n") : PSTR("PS:0\n"));
       return;
     }
 

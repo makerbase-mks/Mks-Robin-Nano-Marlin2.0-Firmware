@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_LINEAR_ADVANCE_SCREEN
+#if BOTH(TOUCH_UI_FTDI_EVE, LIN_ADVANCE)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -73,4 +74,4 @@ bool LinearAdvanceScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_LINEAR_ADVANCE_SCREEN
+#endif // TOUCH_UI_FTDI_EVE

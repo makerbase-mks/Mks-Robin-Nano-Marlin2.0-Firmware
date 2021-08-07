@@ -22,10 +22,13 @@
 #pragma once
 
 /**
- * Geeetech GTM32 Mini A30 board pin assignments
+ * 24 May 2018 - @chepo for STM32F103VET6
+ * Schematic: https://github.com/chepo92/Smartto/blob/master/circuit_diagram/Rostock301/Hardware_GTM32_PRO_VB.pdf
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__STM32F1__)
+  #error "Oops! Select an STM32F1 board in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME      "GTM32 Pro VB"
 #define DEFAULT_MACHINE_NAME "STM32F103VET6"

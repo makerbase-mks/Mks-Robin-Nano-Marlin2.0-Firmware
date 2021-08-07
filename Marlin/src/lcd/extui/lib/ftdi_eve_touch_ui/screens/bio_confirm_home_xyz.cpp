@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_BIO_CONFIRM_HOME_XYZ
+#if BOTH(TOUCH_UI_FTDI_EVE, TOUCH_UI_LULZBOT_BIO)
+
+#include "screens.h"
 
 using namespace FTDI;
 
@@ -52,4 +53,4 @@ bool BioConfirmHomeXYZ::onTouchEnd(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_BIO_CONFIRM_HOME_XYZ
+#endif // TOUCH_UI_FTDI_EVE && TOUCH_UI_LULZBOT_BIO

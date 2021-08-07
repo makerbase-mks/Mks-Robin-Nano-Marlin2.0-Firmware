@@ -876,9 +876,5 @@
   #undef BOARD_ST7920_DELAY_3
 #endif
 
-#if !NEED_CASE_LIGHT_PIN
-  #undef CASE_LIGHT_PIN
-#endif
-
 #undef HAS_FREE_AUX2_PINS
 #undef DIAG_REMAPPED

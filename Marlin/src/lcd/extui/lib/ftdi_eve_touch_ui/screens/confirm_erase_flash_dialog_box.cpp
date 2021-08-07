@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_CONFIRM_ERASE_FLASH_DIALOG_BOX
+#if BOTH(TOUCH_UI_FTDI_EVE, TOUCH_UI_DEVELOPER_MENU)
+
+#include "screens.h"
 
 #include "../archim2-flash/flash_storage.h"
 
@@ -50,4 +51,4 @@ bool ConfirmEraseFlashDialogBox::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // FTDI_CONFIRM_ERASE_FLASH_DIALOG_BOX
+#endif // TOUCH_UI_FTDI_EVE

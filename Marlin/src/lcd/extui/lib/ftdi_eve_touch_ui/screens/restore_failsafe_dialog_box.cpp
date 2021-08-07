@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_RESTORE_FAILSAFE_DIALOG_BOX
+#if ENABLED(TOUCH_UI_FTDI_EVE)
+
+#include "screens.h"
 
 using namespace ExtUI;
 
@@ -47,4 +48,4 @@ bool RestoreFailsafeDialogBox::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // FTDI_RESTORE_FAILSAFE_DIALOG_BOX
+#endif // TOUCH_UI_FTDI_EVE

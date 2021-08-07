@@ -38,9 +38,9 @@
 #endif
 
 void host_action(PGM_P const pstr, const bool eol) {
-  PORT_REDIRECT(SerialMask::All);
+  PORT_REDIRECT(SERIAL_ALL);
   SERIAL_ECHOPGM("//action:");
-  SERIAL_ECHOPGM_P(pstr);
+  serialprintPGM(pstr);
   if (eol) SERIAL_EOL();
 }
 
@@ -78,29 +78,30 @@ void host_action(PGM_P const pstr, const bool eol) {
   PromptReason host_prompt_reason = PROMPT_NOT_DEFINED;
 
   void host_action_notify(const char * const message) {
-    PORT_REDIRECT(SerialMask::All);
+    PORT_REDIRECT(SERIAL_ALL);
     host_action(PSTR("notification "), false);
     SERIAL_ECHOLN(message);
   }
 
   void host_action_notify_P(PGM_P const message) {
-    PORT_REDIRECT(SerialMask::All);
+    PORT_REDIRECT(SERIAL_ALL);
     host_action(PSTR("notification "), false);
-    SERIAL_ECHOLNPGM_P(message);
+    serialprintPGM(message);
+    SERIAL_EOL();
   }
 
   void host_action_prompt(PGM_P const ptype, const bool eol=true) {
-    PORT_REDIRECT(SerialMask::All);
+    PORT_REDIRECT(SERIAL_ALL);
     host_action(PSTR("prompt_"), false);
-    SERIAL_ECHOPGM_P(ptype);
+    serialprintPGM(ptype);
     if (eol) SERIAL_EOL();
   }
 
   void host_action_prompt_plus(PGM_P const ptype, PGM_P const pstr, const char extra_char='\0') {
     host_action_prompt(ptype, false);
-    PORT_REDIRECT(SerialMask::All);
+    PORT_REDIRECT(SERIAL_ALL);
     SERIAL_CHAR(' ');
-    SERIAL_ECHOPGM_P(pstr);
+    serialprintPGM(pstr);
     if (extra_char != '\0') SERIAL_CHAR(extra_char);
     SERIAL_EOL();
   }
@@ -142,20 +143,28 @@ void host_action(PGM_P const pstr, const bool eol) {
   //  - Dismissal of info
   //
   void host_response_handler(const uint8_t response) {
+    #ifdef DEBUG_HOST_ACTIONS
+      static PGMSTR(m876_prefix, "M876 Handle Re");
+      serialprintPGM(m876_prefix); SERIAL_ECHOLNPAIR("ason: ", host_prompt_reason);
+      serialprintPGM(m876_prefix); SERIAL_ECHOLNPAIR("sponse: ", response);
+    #endif
+    PGM_P msg = PSTR("UNKNOWN STATE");
     const PromptReason hpr = host_prompt_reason;
     host_prompt_reason = PROMPT_NOT_DEFINED;  // Reset now ahead of logic
     switch (hpr) {
       case PROMPT_FILAMENT_RUNOUT:
+        msg = PSTR("FILAMENT_RUNOUT");
         switch (response) {
 
           case 0: // "Purge More" button
-            #if BOTH(M600_PURGE_MORE_RESUMABLE, ADVANCED_PAUSE_FEATURE)
+            #if BOTH(HAS_LCD_MENU, ADVANCED_PAUSE_FEATURE)
               pause_menu_response = PAUSE_RESPONSE_EXTRUDE_MORE;  // Simulate menu selection (menu exits, doesn't extrude more)
             #endif
+            filament_load_host_prompt();                          // Initiate another host prompt. (NOTE: The loop in load_filament may also do this!)
             break;
 
           case 1: // "Continue" / "Disable Runout" button
-            #if BOTH(M600_PURGE_MORE_RESUMABLE, ADVANCED_PAUSE_FEATURE)
+            #if BOTH(HAS_LCD_MENU, ADVANCED_PAUSE_FEATURE)
               pause_menu_response = PAUSE_RESPONSE_RESUME_PRINT;  // Simulate menu selection
             #endif
             #if HAS_FILAMENT_SENSOR
@@ -169,17 +178,23 @@ void host_action(PGM_P const pstr, const bool eol) {
         break;
       case PROMPT_USER_CONTINUE:
         TERN_(HAS_RESUME_CONTINUE, wait_for_user = false);
+        msg = PSTR("FILAMENT_RUNOUT_CONTINUE");
         break;
       case PROMPT_PAUSE_RESUME:
-        #if BOTH(ADVANCED_PAUSE_FEATURE, SDSUPPORT)
+        msg = PSTR("LCD_PAUSE_RESUME");
+        #if ENABLED(ADVANCED_PAUSE_FEATURE)
           extern const char M24_STR[];
           queue.inject_P(M24_STR);
         #endif
         break;
       case PROMPT_INFO:
+        msg = PSTR("GCODE_INFO");
         break;
       default: break;
     }
+    SERIAL_ECHOPGM("M876 Responding PROMPT_");
+    serialprintPGM(msg);
+    SERIAL_EOL();
   }
 
 #endif // HOST_PROMPT_SUPPORT

@@ -48,22 +48,22 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
     case ID_H_ALL:
-      queue.inject_P(G28_STR);
+      queue.inject_P(PSTR("G28"));
       break;
     case ID_H_X:
-      queue.inject_P(PSTR("G28X"));
+      queue.inject_P(PSTR("G28 X0"));
       break;
     case ID_H_Y:
-      queue.inject_P(PSTR("G28Y"));
+      queue.inject_P(PSTR("G28 Y0"));
       break;
     case ID_H_Z:
-      queue.inject_P(PSTR("G28Z"));
+      queue.inject_P(PSTR("G28 Z0"));
       break;
     case ID_H_OFF_ALL:
       queue.inject_P(PSTR("M84"));
       break;
     case ID_H_OFF_XY:
-      queue.inject_P(PSTR("M84XY"));
+      queue.inject_P(PSTR("M84 X Y"));
       break;
     case ID_H_RETURN:
       lv_clear_cur_ui();

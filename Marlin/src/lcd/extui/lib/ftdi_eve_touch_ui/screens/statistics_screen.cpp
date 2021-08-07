@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_STATISTICS_SCREEN
+#if BOTH(TOUCH_UI_FTDI_EVE, PRINTCOUNTER)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -74,4 +75,4 @@ bool StatisticsScreen::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // FTDI_STATISTICS_SCREEN
+#endif // TOUCH_UI_FTDI_EVE && PRINTCOUNTER

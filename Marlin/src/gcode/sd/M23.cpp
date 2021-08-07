@@ -36,13 +36,6 @@
 void GcodeSuite::M23() {
   // Simplify3D includes the size, so zero out all spaces (#7227)
   for (char *fn = parser.string_arg; *fn; ++fn) if (*fn == ' ') *fn = '\0';
-  #if BOTH(MULTI_VOLUME, USB_FLASH_DRIVE_SUPPORT)
-    if (READ(SD_DETECT_PIN) == LOW) card.changeMedia(&card.media_sd_spi);
-    else card.changeMedia(&card.media_usbFlashDrive);
-    card.mount();
-    card.cdroot();
-    card.endFilePrint();
-  #endif
   card.openFileRead(parser.string_arg);
 
   TERN_(LCD_SET_PROGRESS_MANUALLY, ui.set_progress(0));

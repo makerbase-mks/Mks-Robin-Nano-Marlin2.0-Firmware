@@ -25,7 +25,11 @@
  * MKS SBASE pin assignments
  */
 
-#include "env_validate.h"
+#if defined(MKS_HAS_LPC1769) && NOT_TARGET(MCU_LPC1769)
+  #error "Oops! Make sure you have the LPC1769 environment selected in your IDE."
+#elif !defined(MKS_HAS_LPC1769) && NOT_TARGET(MCU_LPC1768)
+  #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
+#endif
 
 #ifndef BOARD_INFO_NAME
   #define BOARD_INFO_NAME   "MKS SBASE"

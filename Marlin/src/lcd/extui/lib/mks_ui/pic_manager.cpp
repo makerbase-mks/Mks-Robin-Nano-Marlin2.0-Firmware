@@ -64,6 +64,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_speed255.bin",
   "bmp_speed127.bin",
   "bmp_speed0.bin",
+  "bmp_speed0.bin",
 
   "bmp_bed.bin",
   "bmp_step1_degree.bin",
@@ -182,17 +183,13 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   // wifi screen
   "bmp_wifi.bin",
   "bmp_cloud.bin",
-  
-  // multi volume selected
-  "bmp_usb_disk.bin",
-  "bmp_sd.bin",
 
-  // Babystep screen
+  // babystep screen
   "bmp_baby_move0_01.bin",
   "bmp_baby_move0_05.bin",
   "bmp_baby_move0_1.bin",
 
-  // More screen
+  // more screen
   "bmp_custom1.bin",
   "bmp_custom2.bin",
   "bmp_custom3.bin",
@@ -202,11 +199,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_custom7.bin",
 
   // bltouch settings screen
-  "bmp_init_state.bin",
-  
-  // media select
-  "bmp_sd.bin",
-  "bmp_usb_disk.bin"
+  "bmp_init_state.bin"
 };
 
 #if HAS_SPI_FLASH_FONT
@@ -240,13 +233,14 @@ uint32_t lv_get_pic_addr(uint8_t *Pname) {
     } while (PIC.name[j++] != '\0');
 
     if ((strcasecmp((char*)Pname, (char*)PIC.name)) == 0) {
-      if (DeviceCode == 0x9488 || DeviceCode == 0x5761)
+      if ((DeviceCode == 0x9488) || (DeviceCode == 0x5761))
         addr = PIC_DATA_ADDR_TFT35 + i * PER_PIC_MAX_SPACE_TFT35;
       else
         addr = PIC_DATA_ADDR_TFT32 + i * PER_PIC_MAX_SPACE_TFT32;
       return addr;
     }
   }
+
   return addr;
 }
 
@@ -367,7 +361,7 @@ uint32_t Pic_Info_Write(uint8_t *P_name, uint32_t P_size) {
 
 #if ENABLED(SDSUPPORT)
 
-  static void dosName2LongName(const char dosName[11], char *longName) {
+  static void dosName2LongName(const char dosName[11], char* longName) {
     uint8_t j = 0;
     LOOP_L_N(i, 11) {
       if (i == 8) longName[j++] = '.';

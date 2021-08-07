@@ -25,7 +25,9 @@
  * DUE3DOM MINI pin assignments
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__SAM3X8E__)
+  #error "Oops! Select 'Arduino Due' in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME "DUE3DOM MINI"
 

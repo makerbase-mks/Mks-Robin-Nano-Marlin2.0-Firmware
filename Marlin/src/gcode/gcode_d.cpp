@@ -30,9 +30,6 @@
   #include "../HAL/shared/eeprom_if.h"
   #include "../HAL/shared/Delay.h"
   #include "../sd/cardreader.h"
-  #include "../MarlinCore.h" // for kill
-
-  extern void dump_delay_accuracy_check();
 
   /**
    * Dn: G-code for development and testing
@@ -45,14 +42,10 @@
     switch (dcode) {
 
       case -1:
-        for (;;) { /* loop forever (watchdog reset) */ }
+        for (;;); // forever
 
       case 0:
         HAL_reboot();
-        break;
-
-      case 10:
-        kill(PSTR("D10"), PSTR("KILL TEST"), parser.seen('P'));
         break;
 
       case 1: {
@@ -216,8 +209,7 @@
         } break;
 
         case 102: { // D102 Test SD Read
-          char testfile[] = "test.gco";
-          card.openFileRead(testfile);
+          card.openFileRead("test.gco");
           if (!card.isFileOpen()) {
             SERIAL_ECHOLNPAIR("Failed to open test.gco to read.");
             return;

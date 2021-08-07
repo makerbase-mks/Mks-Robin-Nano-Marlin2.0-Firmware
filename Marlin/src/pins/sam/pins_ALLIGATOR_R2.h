@@ -26,7 +26,9 @@
  * https://reprap.org/wiki/Alligator_Board
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__SAM3X8E__)
+  #error "Oops! Select 'Arduino Due' in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME    "Alligator Board R2"
 

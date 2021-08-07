@@ -29,7 +29,9 @@
  *  BOARD_BIQU_BQ111_A4 (Hotend, Fan, Bed)
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(MCU_LPC1768)
+  #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
+#endif
 
 #define BOARD_INFO_NAME "BIQU BQ111-A4"
 

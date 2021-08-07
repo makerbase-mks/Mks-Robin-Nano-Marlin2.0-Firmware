@@ -106,7 +106,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_BABY_STEP_RETURN:
       if (has_adjust_z) {
-        uiCfg.adjustZoffset = true;
+        uiCfg.adjustZoffset = 1;
         has_adjust_z = false;
       }
       lv_clear_cur_ui();

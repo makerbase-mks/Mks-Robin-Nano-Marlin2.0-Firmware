@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_DEFAULT_ACCELERATION_SCREEN
+#if ENABLED(TOUCH_UI_FTDI_EVE)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -59,4 +60,4 @@ bool DefaultAccelerationScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_DEFAULT_ACCELERATION_SCREEN
+#endif // TOUCH_UI_FTDI_EVE

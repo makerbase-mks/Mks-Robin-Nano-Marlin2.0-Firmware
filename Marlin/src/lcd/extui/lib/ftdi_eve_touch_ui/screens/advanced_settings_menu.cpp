@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_ADVANCED_SETTINGS_MENU
+#if ENABLED(TOUCH_UI_FTDI_EVE) && NONE(TOUCH_UI_LULZBOT_BIO, TOUCH_UI_COCOA_PRESS)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -152,4 +153,4 @@ bool AdvancedSettingsMenu::onTouchEnd(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_ADVANCED_SETTINGS_MENU
+#endif // TOUCH_UI_FTDI_EVE && !TOUCH_UI_LULZBOT_BIO

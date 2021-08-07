@@ -201,10 +201,10 @@ void PrintJobRecovery::save(const bool force/*=false*/, const float zraise/*=0*/
     #endif
 
     #if EXTRUDERS
-      HOTEND_LOOP() info.target_temperature[e] = thermalManager.degTargetHotend(e);
+      HOTEND_LOOP() info.target_temperature[e] = thermalManager.temp_hotend[e].target;
     #endif
 
-    TERN_(HAS_HEATED_BED, info.target_temperature_bed = thermalManager.degTargetBed());
+    TERN_(HAS_HEATED_BED, info.target_temperature_bed = thermalManager.temp_bed.target);
 
     #if HAS_FAN
       COPY(info.fan_speed, thermalManager.fan_speed);
@@ -240,7 +240,7 @@ void PrintJobRecovery::save(const bool force/*=false*/, const float zraise/*=0*/
 
   #if ENABLED(BACKUP_POWER_SUPPLY)
 
-    void PrintJobRecovery::retract_and_lift(const_float_t zraise) {
+    void PrintJobRecovery::retract_and_lift(const float &zraise) {
       #if POWER_LOSS_RETRACT_LEN || POWER_LOSS_ZRAISE
 
         gcode.set_relative_mode(true);  // Use relative coordinates
@@ -343,7 +343,7 @@ void PrintJobRecovery::resume() {
   #endif
 
   #if HAS_HEATED_BED
-    const celsius_t bt = info.target_temperature_bed;
+    const int16_t bt = info.target_temperature_bed;
     if (bt) {
       // Restore the bed temperature
       sprintf_P(cmd, PSTR("M190 S%i"), bt);
@@ -354,7 +354,7 @@ void PrintJobRecovery::resume() {
   // Restore all hotend temperatures
   #if HAS_HOTEND
     HOTEND_LOOP() {
-      const celsius_t et = info.target_temperature[e];
+      const int16_t et = info.target_temperature[e];
       if (et) {
         #if HAS_MULTI_HOTEND
           sprintf_P(cmd, PSTR("T%i S"), e);
@@ -384,25 +384,18 @@ void PrintJobRecovery::resume() {
     // Home safely with no Z raise
     gcode.process_subcommands_now_P(PSTR(
       "G28"                               // No raise during G28
-      #if IS_CARTESIAN && (DISABLED(POWER_LOSS_RECOVER_ZHOME) || defined(POWER_LOSS_ZHOME_POS))
+      #if IS_CARTESIAN && DISABLED(POWER_LOSS_RECOVER_ZHOME)
         "XY"                                // Don't home Z on Cartesian unless overridden
       #endif
     ));
 
   #endif
 
-  #ifdef POWER_LOSS_ZHOME_POS
-    // If defined move to a safe Z homing position that avoids the print
-    constexpr xy_pos_t p = POWER_LOSS_ZHOME_POS;
-    sprintf_P(cmd, PSTR("G1 X%s Y%s F1000\nG28Z"), dtostrf(p.x, 1, 3, str_1), dtostrf(p.y, 1, 3, str_2));
-    gcode.process_subcommands_now(cmd);
-  #endif
-
-  // Ensure that all axes are marked as homed
+  // Pretend that all axes are homed
   set_all_homed();
 
   #if ENABLED(POWER_LOSS_RECOVER_ZHOME)
-    // Now move to ZsavedPos + POWER_LOSS_ZRAISE
+    // Z has been homed so restore Z to ZsavedPos + POWER_LOSS_ZRAISE
     sprintf_P(cmd, PSTR("G1 F500 Z%s"), dtostrf(info.current_position.z + POWER_LOSS_ZRAISE, 1, 3, str_1));
     gcode.process_subcommands_now(cmd);
   #endif
@@ -474,7 +467,7 @@ void PrintJobRecovery::resume() {
 
   // Additional purge if configured
   #if POWER_LOSS_PURGE_LEN
-    sprintf_P(cmd, PSTR("G1 E%d F3000"), (POWER_LOSS_PURGE_LEN) + (POWER_LOSS_RETRACT_LEN));
+    sprintf_P(cmd, PSTR("G1 E%d F200"), (POWER_LOSS_PURGE_LEN) + (POWER_LOSS_RETRACT_LEN));
     gcode.process_subcommands_now(cmd);
   #endif
 
@@ -492,7 +485,7 @@ void PrintJobRecovery::resume() {
   // Move back to the saved Z
   dtostrf(info.current_position.z, 1, 3, str_1);
   #if Z_HOME_DIR > 0 || ENABLED(POWER_LOSS_RECOVER_ZHOME)
-    sprintf_P(cmd, PSTR("G1 Z%s F500"), str_1);
+    sprintf_P(cmd, PSTR("G1 Z%s F200"), str_1);
   #else
     gcode.process_subcommands_now_P(PSTR("G1 Z0 F200"));
     sprintf_P(cmd, PSTR("G92.9 Z%s"), str_1);
@@ -538,8 +531,8 @@ void PrintJobRecovery::resume() {
 #if ENABLED(DEBUG_POWER_LOSS_RECOVERY)
 
   void PrintJobRecovery::debug(PGM_P const prefix) {
-    DEBUG_ECHOPGM_P(prefix);
-    DEBUG_ECHOLNPAIR(" Job Recovery Info...\nvalid_head:", info.valid_head, " valid_foot:", info.valid_foot);
+    DEBUG_PRINT_P(prefix);
+    DEBUG_ECHOLNPAIR(" Job Recovery Info...\nvalid_head:", int(info.valid_head), " valid_foot:", int(info.valid_foot));
     if (info.valid_head) {
       if (info.valid_head == info.valid_foot) {
         DEBUG_ECHOPGM("current_position: ");
@@ -572,7 +565,7 @@ void PrintJobRecovery::resume() {
         DEBUG_ECHOLNPAIR("feedrate: ", info.feedrate);
 
         #if HAS_MULTI_EXTRUDER
-          DEBUG_ECHOLNPAIR("active_extruder: ", info.active_extruder);
+          DEBUG_ECHOLNPAIR("active_extruder: ", int(info.active_extruder));
         #endif
 
         #if HAS_HOTEND
@@ -591,14 +584,14 @@ void PrintJobRecovery::resume() {
         #if HAS_FAN
           DEBUG_ECHOPGM("fan_speed: ");
           FANS_LOOP(i) {
-            DEBUG_ECHO(info.fan_speed[i]);
+            DEBUG_ECHO(int(info.fan_speed[i]));
             if (i < FAN_COUNT - 1) DEBUG_CHAR(',');
           }
           DEBUG_EOL();
         #endif
 
         #if HAS_LEVELING
-          DEBUG_ECHOLNPAIR("leveling: ", info.flag.leveling, " fade: ", info.fade);
+          DEBUG_ECHOLNPAIR("leveling: ", int(info.flag.leveling), " fade: ", info.fade);
         #endif
         #if ENABLED(FWRETRACT)
           DEBUG_ECHOPGM("retract: ");
@@ -612,8 +605,8 @@ void PrintJobRecovery::resume() {
         DEBUG_ECHOLNPAIR("sd_filename: ", info.sd_filename);
         DEBUG_ECHOLNPAIR("sdpos: ", info.sdpos);
         DEBUG_ECHOLNPAIR("print_job_elapsed: ", info.print_job_elapsed);
-        DEBUG_ECHOLNPAIR("dryrun: ", AS_DIGIT(info.flag.dryrun));
-        DEBUG_ECHOLNPAIR("allow_cold_extrusion: ", info.flag.allow_cold_extrusion);
+        DEBUG_ECHOLNPAIR("dryrun: ", int(info.flag.dryrun));
+        DEBUG_ECHOLNPAIR("allow_cold_extrusion: ", int(info.flag.allow_cold_extrusion));
       }
       else
         DEBUG_ECHOLNPGM("INVALID DATA");

@@ -29,7 +29,7 @@
   #include "watchdog.h"
 #endif
 
-DefaultSerial1 USBSerial(false, UsbSerial);
+DefaultSerial USBSerial(false, UsbSerial);
 
 uint32_t HAL_adc_reading = 0;
 
@@ -63,12 +63,7 @@ int16_t PARSED_PIN_INDEX(const char code, const int16_t dval) {
   return ind > -1 ? ind : dval;
 }
 
-void flashFirmware(const int16_t) {
-  delay(500);          // Give OS time to disconnect
-  USB_Connect(false);  // USB clear connection
-  delay(1000);         // Give OS time to notice
-  HAL_reboot();
-}
+void flashFirmware(const int16_t) { NVIC_SystemReset(); }
 
 void HAL_clear_reset_source(void) {
   TERN_(USE_WATCHDOG, watchdog_clear_timeout_flag());
@@ -80,7 +75,5 @@ uint8_t HAL_get_reset_source(void) {
   #endif
   return RST_POWER_ON;
 }
-
-void HAL_reboot() { NVIC_SystemReset(); }
 
 #endif // TARGET_LPC1768

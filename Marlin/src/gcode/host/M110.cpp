@@ -29,6 +29,6 @@
 void GcodeSuite::M110() {
 
   if (parser.seenval('N'))
-    queue.set_current_line_number(parser.value_long());
+    queue.last_N[queue.command_port()] = parser.value_long();
 
 }

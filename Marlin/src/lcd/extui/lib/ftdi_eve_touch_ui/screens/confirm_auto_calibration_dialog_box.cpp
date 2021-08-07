@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_CONFIRM_AUTO_CALIBRATION_DIALOG_BOX
+#if BOTH(TOUCH_UI_FTDI_EVE, CALIBRATION_GCODE)
+
+#include "screens.h"
 
 using namespace ExtUI;
 using namespace Theme;
@@ -44,4 +45,4 @@ bool ConfirmAutoCalibrationDialogBox::onTouchEnd(uint8_t tag) {
   }
 }
 
-#endif // FTDI_CONFIRM_AUTO_CALIBRATION_DIALOG_BOX
+#endif // TOUCH_UI_FTDI_EVE

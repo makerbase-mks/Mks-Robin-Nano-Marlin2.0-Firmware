@@ -60,27 +60,28 @@ extern "C" volatile uint32_t _millis;
   #define ST7920_DELAY_3 DELAY_NS(750)
 #endif
 
-typedef ForwardSerial1Class< decltype(UsbSerial) > DefaultSerial1;
-extern DefaultSerial1 USBSerial;
+typedef ForwardSerial0Type< decltype(UsbSerial) > DefaultSerial;
+extern DefaultSerial USBSerial;
 
 #define _MSERIAL(X) MSerial##X
 #define MSERIAL(X) _MSERIAL(X)
+#define MSerial0 MSerial
 
 #if SERIAL_PORT == -1
-  #define MYSERIAL1 USBSerial
+  #define MYSERIAL0 USBSerial
 #elif WITHIN(SERIAL_PORT, 0, 3)
-  #define MYSERIAL1 MSERIAL(SERIAL_PORT)
+  #define MYSERIAL0 MSERIAL(SERIAL_PORT)
 #else
-  #error "SERIAL_PORT must be from 0 to 3. You can also use -1 if the board supports Native USB."
+  #error "SERIAL_PORT must be from -1 to 3. Please update your configuration."
 #endif
 
 #ifdef SERIAL_PORT_2
   #if SERIAL_PORT_2 == -1
-    #define MYSERIAL2 USBSerial
+    #define MYSERIAL1 USBSerial
   #elif WITHIN(SERIAL_PORT_2, 0, 3)
-    #define MYSERIAL2 MSERIAL(SERIAL_PORT_2)
+    #define MYSERIAL1 MSERIAL(SERIAL_PORT_2)
   #else
-    #error "SERIAL_PORT_2 must be from 0 to 3. You can also use -1 if the board supports Native USB."
+    #error "SERIAL_PORT_2 must be from -1 to 3. Please update your configuration."
   #endif
 #endif
 
@@ -90,7 +91,7 @@ extern DefaultSerial1 USBSerial;
   #elif WITHIN(MMU2_SERIAL_PORT, 0, 3)
     #define MMU2_SERIAL MSERIAL(MMU2_SERIAL_PORT)
   #else
-    #error "MMU2_SERIAL_PORT must be from 0 to 3. You can also use -1 if the board supports Native USB."
+    #error "MMU2_SERIAL_PORT must be from -1 to 3. Please update your configuration."
   #endif
 #endif
 
@@ -100,10 +101,7 @@ extern DefaultSerial1 USBSerial;
   #elif WITHIN(LCD_SERIAL_PORT, 0, 3)
     #define LCD_SERIAL MSERIAL(LCD_SERIAL_PORT)
   #else
-    #error "LCD_SERIAL_PORT must be from 0 to 3. You can also use -1 if the board supports Native USB."
-  #endif
-  #if HAS_DGUS_LCD
-    #define SERIAL_GET_TX_BUFFER_FREE() MSerial0.available()
+    #error "LCD_SERIAL_PORT must be from -1 to 3. Please update your configuration."
   #endif
 #endif
 
@@ -218,4 +216,4 @@ void set_pwm_duty(const pin_t pin, const uint16_t v, const uint16_t v_size=255, 
 void HAL_clear_reset_source(void);
 uint8_t HAL_get_reset_source(void);
 
-void HAL_reboot();
+inline void HAL_reboot() {}  // reboot the board or restart the bootloader

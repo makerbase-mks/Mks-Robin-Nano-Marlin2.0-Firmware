@@ -291,8 +291,6 @@
 #define AUTO_LEVELING_TEXT_T_CN         "自動調平"
 #define SET_TEXT_T_CN                   "設置"
 #define MORE_TEXT_T_CN                  "更多"
-#define MORE_GCODE_T_CN                 "G-Code"
-#define MORE_ENTER_GCODE_T_CN           "Enter G-Code"
 
 #define ADD_TEXT_T_CN                   "增加"
 #define DEC_TEXT_T_CN                   "減少"
@@ -523,9 +521,10 @@
 #define EEPROM_READ_TIPS_T_CN         "是否使用EEPROM參數?"
 #define EEPROM_REVERT_TIPS_T_CN       "是否恢復默認參數?"
 
-#define MORE_CUSTOM1_TEXT_T_CN  MAIN_MENU_ITEM_1_DESC
-#define MORE_CUSTOM2_TEXT_T_CN  MAIN_MENU_ITEM_2_DESC
-#define MORE_CUSTOM3_TEXT_T_CN  MAIN_MENU_ITEM_3_DESC
-#define MORE_CUSTOM4_TEXT_T_CN  MAIN_MENU_ITEM_4_DESC
-#define MORE_CUSTOM5_TEXT_T_CN  MAIN_MENU_ITEM_5_DESC
-#define MORE_CUSTOM6_TEXT_T_CN  MAIN_MENU_ITEM_6_DESC
+#define MORE_CUSTOM1_TEXT_T_CN  USER_DESC_1
+#define MORE_CUSTOM2_TEXT_T_CN  USER_DESC_2
+#define MORE_CUSTOM3_TEXT_T_CN  USER_DESC_3
+#define MORE_CUSTOM4_TEXT_T_CN  USER_DESC_4
+#define MORE_CUSTOM5_TEXT_T_CN  USER_DESC_5
+#define MORE_CUSTOM6_TEXT_T_CN  USER_DESC_6
+#define MORE_CUSTOM7_TEXT_T_CN  USER_DESC_7

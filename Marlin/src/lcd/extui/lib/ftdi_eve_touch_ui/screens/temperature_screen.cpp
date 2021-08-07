@@ -1,6 +1,6 @@
-/**************************
- * temperature_screen.cpp *
- **************************/
+/*******************
+ * boot_screen.cpp *
+ *******************/
 
 /****************************************************************************
  *   Written By Mark Pelletier  2017 - Aleph Objects, Inc.                  *
@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_TEMPERATURE_SCREEN
+#if ENABLED(TOUCH_UI_FTDI_EVE)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace Theme;
@@ -101,8 +102,13 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
       case 11: UI_INCREMENT(TargetFan_percent, FAN0); break;
     #endif
     case 30:
-      coolDown();
+      #define _HOTEND_OFF(N) setTargetTemp_celsius(0, E##N);
+      REPEAT(HOTENDS, _HOTEND_OFF);
+      TERN_(HAS_HEATED_BED, setTargetTemp_celsius(0, BED));
       TERN_(HAS_HEATED_CHAMBER, setTargetTemp_celsius(0, CHAMBER));
+      #if HAS_FAN
+        setTargetFan_percent(0, FAN0);
+      #endif
       break;
     default:
       return false;
@@ -110,4 +116,4 @@ bool TemperatureScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_TEMPERATURE_SCREEN
+#endif // TOUCH_UI_FTDI_EVE

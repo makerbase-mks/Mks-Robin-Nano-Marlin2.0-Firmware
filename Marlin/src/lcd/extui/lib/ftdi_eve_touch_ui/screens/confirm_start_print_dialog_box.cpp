@@ -21,16 +21,15 @@
  ****************************************************************************/
 
 #include "../config.h"
+
+#if ENABLED(TOUCH_UI_FTDI_EVE)
+
 #include "screens.h"
 #include "screen_data.h"
-
-#ifdef FTDI_CONFIRM_START_PRINT_DIALOG_BOX
 
 using namespace FTDI;
 using namespace Theme;
 using namespace ExtUI;
-
-constexpr static ConfirmStartPrintDialogBoxData &mydata = screen_data.ConfirmStartPrintDialogBox;
 
 void ConfirmStartPrintDialogBox::onRedraw(draw_mode_t) {
   const char *filename = getLongFilename();
@@ -54,13 +53,13 @@ bool ConfirmStartPrintDialogBox::onTouchEnd(uint8_t tag) {
 
 const char *ConfirmStartPrintDialogBox::getFilename(bool longName) {
   FileList files;
-  files.seek(mydata.file_index, true);
+  files.seek(screen_data.ConfirmStartPrintDialog.file_index, true);
   return longName ? files.longFilename() : files.shortFilename();
 }
 
 void ConfirmStartPrintDialogBox::show(uint8_t file_index) {
-  mydata.file_index = file_index;
+  screen_data.ConfirmStartPrintDialog.file_index = file_index;
    GOTO_SCREEN(ConfirmStartPrintDialogBox);
 }
 
-#endif // FTDI_CONFIRM_START_PRINT_DIALOG_BOX
+#endif // TOUCH_UI_FTDI_EVE

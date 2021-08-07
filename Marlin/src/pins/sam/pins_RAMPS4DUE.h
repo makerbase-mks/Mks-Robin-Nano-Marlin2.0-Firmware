@@ -39,8 +39,13 @@
  *       A15 | NC
  */
 
-#define ALLOW_SAM3X8E
+#if NOT_TARGET(__SAM3X8E__, __AVR_ATmega2560__)
+  #error "Oops! Select 'Arduino Due' or 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
+#endif
+
 #define BOARD_INFO_NAME "RAMPS4DUE"
+
+#define IS_RAMPS4DUE
 
 //
 // Temperature Sensors

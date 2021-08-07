@@ -48,7 +48,7 @@
   #include "stm32_def.h"
 
   #define DEBUG_OUT ENABLED(EEPROM_CHITCHAT)
-  #include "../../core/debug_out.h"
+  #include "src/core/debug_out.h"
 
   #ifndef MARLIN_EEPROM_SIZE
     #define MARLIN_EEPROM_SIZE    0x1000 // 4KB

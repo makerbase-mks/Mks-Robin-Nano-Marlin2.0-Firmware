@@ -59,7 +59,6 @@
 
 #if ENABLED(U8GLIB_ST7920)
 
-#include "../../../inc/MarlinConfig.h"
 #include "../../shared/Delay.h"
 
 #include <U8glib.h>

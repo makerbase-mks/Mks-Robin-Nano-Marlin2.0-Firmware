@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_WIDGET_DEMO_SCREEN
+#if BOTH(TOUCH_UI_FTDI_EVE, TOUCH_UI_DEVELOPER_MENU)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -154,4 +155,4 @@ void WidgetsScreen::onIdle() {
   BaseScreen::onIdle();
 }
 
-#endif // FTDI_WIDGET_DEMO_SCREEN
+#endif // TOUCH_UI_FTDI_EVE && TOUCH_UI_DEVELOPER_MENU

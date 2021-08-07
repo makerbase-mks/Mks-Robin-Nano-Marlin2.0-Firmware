@@ -194,8 +194,6 @@ public:
 
   #if ENABLED(LED_CONTROL_MENU)
     static void toggle();  // swap "off" with color
-  #endif
-  #if EITHER(LED_CONTROL_MENU, CASE_LIGHT_USE_RGB_LED)
     static inline void update() { set_color(color); }
   #endif
 
@@ -205,7 +203,7 @@ public:
     public:
       static inline void reset_timeout(const millis_t &ms) {
         led_off_time = ms + LED_BACKLIGHT_TIMEOUT;
-        if (!lights_on) update();
+        if (!lights_on) set_default();
       }
       static void update_timeout(const bool power_on);
   #endif

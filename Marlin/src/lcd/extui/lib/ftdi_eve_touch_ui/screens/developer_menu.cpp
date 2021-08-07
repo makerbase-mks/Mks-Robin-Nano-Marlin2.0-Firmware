@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_DEVELOPER_MENU
+#if BOTH(TOUCH_UI_FTDI_EVE, TOUCH_UI_DEVELOPER_MENU)
+
+#include "screens.h"
 
 #include "../archim2-flash/flash_storage.h"
 
@@ -146,4 +147,4 @@ bool DeveloperMenu::onTouchEnd(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_DEVELOPER_MENU
+#endif // TOUCH_UI_FTDI_EVE

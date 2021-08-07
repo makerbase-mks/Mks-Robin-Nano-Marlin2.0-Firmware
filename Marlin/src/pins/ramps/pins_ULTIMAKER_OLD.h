@@ -60,7 +60,9 @@
 //#define BOARD_REV_1_0
 //#define BOARD_REV_1_5
 
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega1280__, __AVR_ATmega2560__)
+  #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
+#endif
 
 #ifdef BOARD_REV_1_1_TO_1_3
   #define BOARD_INFO_NAME       "Ultimaker 1.1-1.3"

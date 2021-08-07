@@ -72,12 +72,13 @@
 from __future__ import print_function
 from __future__ import division
 
-import sys,os
+import sys
+import os
 
 pwd = os.getcwd()  # make sure we're executing from the correct directory level
 pwd = pwd.replace('\\', '/')
-if 0 <= pwd.find('buildroot/share/vscode'):
-  pwd = pwd[:pwd.find('buildroot/share/vscode')]
+if 0 <= pwd.find('buildroot/share/atom'):
+  pwd = pwd[:pwd.find('buildroot/share/atom')]
   os.chdir(pwd)
 print('pwd: ', pwd)
 

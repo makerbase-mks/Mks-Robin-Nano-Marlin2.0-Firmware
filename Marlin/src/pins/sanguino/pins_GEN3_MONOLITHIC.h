@@ -48,8 +48,9 @@
  * Once installed select the Sanguino board and then select the CPU.
  */
 
-#define REQUIRE_MEGA644P
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega644P__)
+  #error "Oops! Select 'Sanguino' in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME "Gen3 Monolithic"
 #define DEBUG_PIN                              0

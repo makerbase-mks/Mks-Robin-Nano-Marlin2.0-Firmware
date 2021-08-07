@@ -67,9 +67,9 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_T_LEVELING:
       #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
         lv_draw_dialog(DIALOG_TYPE_AUTO_LEVELING_TIPS);
-        uiCfg.autoLeveling = true;
+        uiCfg.autoLeveling = 1;
       #else
-        uiCfg.leveling_first_time = true;
+        uiCfg.leveling_first_time = 1;
         lv_draw_manualLevel();
       #endif
       break;

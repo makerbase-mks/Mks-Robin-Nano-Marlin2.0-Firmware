@@ -105,14 +105,12 @@
 #if ENABLED(CASE_LIGHT_MENU)
   #include "../../feature/caselight.h"
 
-  #define CASELIGHT_TOGGLE_ITEM() EDIT_ITEM(bool, MSG_CASE_LIGHT, (bool*)&caselight.on, caselight.update_enabled)
-
   #if CASELIGHT_USES_BRIGHTNESS
     void menu_case_light() {
       START_MENU();
       BACK_ITEM(MSG_CONFIGURATION);
       EDIT_ITEM(percent, MSG_CASE_LIGHT_BRIGHTNESS, &caselight.brightness, 0, 255, caselight.update_brightness, true);
-      CASELIGHT_TOGGLE_ITEM();
+      EDIT_ITEM(bool, MSG_CASE_LIGHT, (bool*)&caselight.on, caselight.update_enabled);
       END_MENU();
     }
   #endif
@@ -123,20 +121,11 @@ void menu_led() {
   BACK_ITEM(MSG_MAIN);
 
   #if ENABLED(LED_CONTROL_MENU)
-    #if ENABLED(PSU_CONTROL)
-      extern bool powersupply_on;
-    #else
-      constexpr bool powersupply_on = true;
-    #endif
-    if (powersupply_on) {
-      editable.state = leds.lights_on;
-      EDIT_ITEM(bool, MSG_LEDS, &editable.state, leds.toggle);
-    }
-
+    editable.state = leds.lights_on;
+    EDIT_ITEM(bool, MSG_LEDS, &editable.state, leds.toggle);
     #if ENABLED(LED_COLOR_PRESETS)
       ACTION_ITEM(MSG_SET_LEDS_DEFAULT, leds.set_default);
     #endif
-
     #if ENABLED(NEOPIXEL2_SEPARATE)
       editable.state = leds2.lights_on;
       EDIT_ITEM(bool, MSG_LEDS2, &editable.state, leds2.toggle);
@@ -157,14 +146,13 @@ void menu_led() {
   // Set Case light on/off/brightness
   //
   #if ENABLED(CASE_LIGHT_MENU)
-    #if CASELIGHT_USES_BRIGHTNESS
-      if (caselight.has_brightness())
+    #if DISABLED(CASE_LIGHT_NO_BRIGHTNESS)
+      if (TERN1(CASE_LIGHT_USE_NEOPIXEL, PWM_PIN(CASE_LIGHT_PIN)))
         SUBMENU(MSG_CASE_LIGHT, menu_case_light);
       else
     #endif
-        CASELIGHT_TOGGLE_ITEM();
+        EDIT_ITEM(bool, MSG_CASE_LIGHT, (bool*)&caselight.on, caselight.update_enabled);
   #endif
-
   END_MENU();
 }
 

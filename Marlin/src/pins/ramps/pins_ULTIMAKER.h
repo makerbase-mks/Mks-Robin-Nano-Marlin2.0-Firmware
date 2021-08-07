@@ -33,7 +33,9 @@
  *    case light
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega1280__, __AVR_ATmega2560__)
+  #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME         "Ultimaker"
 #define DEFAULT_MACHINE_NAME    BOARD_INFO_NAME

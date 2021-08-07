@@ -1,5 +1,5 @@
-/***************************************
- * stepper_bump_sensitivity_screen.cpp *
+/**************************************
+ * stepper_bump_sensiivity_screen.cpp *
  **************************************/
 
 /****************************************************************************
@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_STEPPER_BUMP_SENSITIVITY_SCREEN
+#if BOTH(TOUCH_UI_FTDI_EVE, HAS_TRINAMIC_CONFIG)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -55,4 +56,4 @@ bool StepperBumpSensitivityScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_STEPPER_BUMP_SENSITIVITY_SCREEN
+#endif // TOUCH_UI_FTDI_EVE && HAS_TRINAMIC_CONFIG

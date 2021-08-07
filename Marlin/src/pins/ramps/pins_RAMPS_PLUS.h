@@ -37,7 +37,9 @@
  *  RAMPS_PLUS_SF  (Spindle, Controller Fan)
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega1280__, __AVR_ATmega2560__)
+ #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME "RAMPS 1.4 Plus"
 

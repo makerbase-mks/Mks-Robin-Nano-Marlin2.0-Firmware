@@ -25,7 +25,9 @@
  * Espressif ESP32 (Tensilica Xtensa LX6) pin assignments
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(ARDUINO_ARCH_ESP32)
+  "Oops! Select an ESP32 board in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME "Espressif ESP32"
 

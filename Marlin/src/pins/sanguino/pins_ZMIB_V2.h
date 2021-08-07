@@ -21,8 +21,9 @@
  */
 #pragma once
 
-#define ALLOW_MEGA644P
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega644P__, __AVR_ATmega1284P__)
+  #error "Oops! Select 'Sanguino' in 'Tools > Boards' and 'ATmega644P' or 'ATmega1284P' in 'Tools > Processor.'"
+#endif
 
 #define BOARD_INFO_NAME   "Zonestar ZMIB_V2"
 #define BOARD_WEBSITE_URL "www.aliexpress.com/item/32957490744.html"

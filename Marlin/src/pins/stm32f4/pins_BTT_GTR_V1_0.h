@@ -21,9 +21,9 @@
  */
 #pragma once
 
-#include "env_validate.h"
-
-#if HOTENDS > 8 || E_STEPPERS > 8
+#if NOT_TARGET(STM32F4)
+  #error "Oops! Select an STM32F4 board in 'Tools > Board.'"
+#elif HOTENDS > 8 || E_STEPPERS > 8
   #error "BIGTREE GTR V1.0 supports up to 8 hotends / E-steppers."
 #elif HOTENDS > MAX_E_STEPPERS || E_STEPPERS > MAX_E_STEPPERS
   #error "Marlin extruder/hotends limit! Increase MAX_E_STEPPERS to continue."
@@ -38,21 +38,17 @@
 // USB Flash Drive support
 #define HAS_OTG_USB_HOST_SUPPORT
 
+#define TP                                        // Enable to define servo and probe pins
 #define M5_EXTENDER                               // The M5 extender is attached
 
 //
 // Servos
 //
-#define SERVO0_PIN                          PB11  // BLTOUCH
-#define SOL0_PIN                            PC7   // Toolchanger
-
-#if ENABLED(TOOL_SENSOR)
-  #define TOOL_SENSOR1_PIN                  PH6
-  #define TOOL_SENSOR2_PIN                  PI4
-  //#define TOOL_SENSOR3_PIN                PF4
-#else
-  #define PS_ON_PIN                         PH6
+#if ENABLED(TP)
+  #define SERVO0_PIN                        PB11
 #endif
+
+#define PS_ON_PIN                           PH6
 
 //
 // Trinamic Stallguard pins
@@ -114,7 +110,7 @@
   #define Z4_STOP_PIN                       PF6   // M5 M3_STOP
 #endif
 
-#ifndef Z_MIN_PROBE_PIN
+#if ENABLED(TP) && !defined(Z_MIN_PROBE_PIN)
   #define Z_MIN_PROBE_PIN                   PH11  // Z Probe must be PH11
 #endif
 

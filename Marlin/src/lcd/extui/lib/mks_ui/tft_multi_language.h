@@ -503,8 +503,6 @@ typedef struct more_menu_disp {
   const char *custom5;
   const char *custom6;
   const char *custom7;
-  const char *gcode;
-  const char *entergcode;
   const char *back;
 } more_menu_def;
 
@@ -747,14 +745,6 @@ typedef struct tool_menu_disp {
 
 extern tool_menu_def tool_menu;
 
-typedef struct media_select_menu_disp {
-  const char *title;
-  const char *sd_disk;
-  const char *usb_disk;
-} media_select_menu_def;
-
-extern media_select_menu_def media_select_menu;
-
 typedef struct MachinePara_menu_disp {
   const char *title;
   const char *MachineSetting;
@@ -884,7 +874,7 @@ extern eeprom_def eeprom_menu;
 #define DIALOG_UPLOAD_SPEED_EN          "Speed"
 #define DIALOG_UPDATE_WIFI_FIRMWARE_EN  "Updating wifi model firmware"
 #define DIALOG_UPDATE_WIFI_WEB_EN       "Updating wifi model web data"
-#define DIALOG_UPDATE_NO_DEVICE_EN      "Please check whether\nmemory device inserted!"
+#define DIALOG_UPDATE_NO_DEVICE_EN      "Please check\nwether memory device insert!"
 
 #define ZOFFSET_STEP001                 "0.01 mm"
 #define ZOFFSET_STEP01                  "0.1 mm"

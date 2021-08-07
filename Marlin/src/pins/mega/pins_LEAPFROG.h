@@ -25,8 +25,9 @@
  * Leapfrog Driver board pin assignments
  */
 
-#define ALLOW_MEGA1280
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega1280__, __AVR_ATmega2560__)
+  #error "Oops! Select 'Mega 1280' or 'Mega 2560' in 'Tools > Board.'"
+#endif
 
 #define BOARD_INFO_NAME "Leapfrog"
 

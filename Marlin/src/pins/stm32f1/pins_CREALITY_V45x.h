@@ -24,7 +24,9 @@
  * Creality v4.5.2 and v4.5.3 (STM32F103RET6) board pin assignments
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__STM32F1__)
+  #error "Oops! Select an STM32F1 board in 'Tools > Board.'"
+#endif
 
 #define DEFAULT_MACHINE_NAME "Creality3D"
 

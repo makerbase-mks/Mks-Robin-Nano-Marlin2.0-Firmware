@@ -22,7 +22,8 @@ from __future__ import print_function
 from __future__ import division
 
 from math import *
-import sys,getopt
+import sys
+import getopt
 
 "Constants"
 ZERO   = 273.15                             # zero point of Kelvin scale

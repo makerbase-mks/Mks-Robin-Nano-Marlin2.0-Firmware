@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_FILAMENT_RUNOUT_SCREEN
+#if BOTH(TOUCH_UI_FTDI_EVE, FILAMENT_RUNOUT_SENSOR)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace ExtUI;
@@ -61,4 +62,4 @@ bool FilamentRunoutScreen::onTouchHeld(uint8_t tag) {
   return true;
 }
 
-#endif // FTDI_FILAMENT_RUNOUT_SCREEN
+#endif // TOUCH_UI_FTDI_EVE

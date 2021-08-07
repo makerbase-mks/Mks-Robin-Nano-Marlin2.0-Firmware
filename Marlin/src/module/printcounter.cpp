@@ -43,7 +43,6 @@ Stopwatch print_job_timer;      // Global Print Job Timer instance
 
 #if PRINTCOUNTER_SYNC
   #include "../module/planner.h"
-  #warning "To prevent step loss, motion will pause for PRINTCOUNTER auto-save."
 #endif
 
 // Service intervals
@@ -119,7 +118,7 @@ void PrintCounter::initStats() {
   inline bool _service_warn(const char * const msg) {
     _print_divider();
     SERIAL_ECHO_START();
-    SERIAL_ECHOPGM_P(msg);
+    serialprintPGM(msg);
     SERIAL_ECHOLNPGM("!");
     _print_divider();
     return true;
@@ -178,7 +177,7 @@ void PrintCounter::saveStats() {
 #if HAS_SERVICE_INTERVALS
   inline void _service_when(char buffer[], const char * const msg, const uint32_t when) {
     SERIAL_ECHOPGM(STR_STATS);
-    SERIAL_ECHOPGM_P(msg);
+    serialprintPGM(msg);
     SERIAL_ECHOLNPAIR(" in ", duration_t(when).toString(buffer));
   }
 #endif
@@ -319,7 +318,6 @@ void PrintCounter::reset() {
   }
 
   bool PrintCounter::needsService(const int index) {
-    if (!loaded) loadStats();
     switch (index) {
       #if SERVICE_INTERVAL_1 > 0
         case 1: return data.nextService1 == 0;
@@ -341,7 +339,7 @@ void PrintCounter::reset() {
   void PrintCounter::debug(const char func[]) {
     if (DEBUGGING(INFO)) {
       SERIAL_ECHOPGM("PrintCounter::");
-      SERIAL_ECHOPGM_P(func);
+      serialprintPGM(func);
       SERIAL_ECHOLNPGM("()");
     }
   }

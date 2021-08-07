@@ -56,36 +56,32 @@
 #endif
 
 #include "../../core/serial_hook.h"
-#define Serial0 Serial
-#define _DECLARE_SERIAL(X) \
-  typedef ForwardSerial1Class<decltype(Serial##X)> DefaultSerial##X; \
-  extern DefaultSerial##X MSerial##X
-#define DECLARE_SERIAL(X) _DECLARE_SERIAL(X)
-
-typedef ForwardSerial1Class<decltype(SerialUSB)> USBSerialType;
+typedef Serial0Type<decltype(Serial)> DefaultSerial;
+extern DefaultSerial MSerial;
+typedef ForwardSerial0Type<decltype(SerialUSB)> USBSerialType;
 extern USBSerialType USBSerial;
 
 #define _MSERIAL(X) MSerial##X
 #define MSERIAL(X) _MSERIAL(X)
+#define MSerial0 MSerial
 
 #if SERIAL_PORT == -1
-  #define MYSERIAL1 SerialUSB
+  #define MYSERIAL0 SerialUSB
 #elif WITHIN(SERIAL_PORT, 0, 8)
-  DECLARE_SERIAL(SERIAL_PORT);
-  #define MYSERIAL1 MSERIAL(SERIAL_PORT)
+  #define MYSERIAL0 MSERIAL(SERIAL_PORT)
 #else
-  #error "The required SERIAL_PORT must be from 0 to 8, or -1 for Native USB."
+  #error "The required SERIAL_PORT must be from -1 to 8. Please update your configuration."
 #endif
 
 #ifdef SERIAL_PORT_2
   #if SERIAL_PORT_2 == -1
-    #define MYSERIAL2 usbSerial
+    #define MYSERIAL1 usbSerial
   #elif SERIAL_PORT_2 == -2
-    #define MYSERIAL2 ethernet.telnetClient
+    #define MYSERIAL1 ethernet.telnetClient
   #elif WITHIN(SERIAL_PORT_2, 0, 8)
-    #define MYSERIAL2 MSERIAL(SERIAL_PORT_2)
+    #define MYSERIAL1 MSERIAL(SERIAL_PORT_2)
   #else
-    #error "SERIAL_PORT_2 must be from 0 to 8, or -1 for Native USB, or -2 for Ethernet."
+    #error "SERIAL_PORT_2 must be from -2 to 8. Please update your configuration."
   #endif
 #endif
 
@@ -120,8 +116,6 @@ void HAL_clear_reset_source();
 
 // Reset reason
 uint8_t HAL_get_reset_source();
-
-void HAL_reboot();
 
 FORCE_INLINE void _delay_ms(const int delay_ms) { delay(delay_ms); }
 

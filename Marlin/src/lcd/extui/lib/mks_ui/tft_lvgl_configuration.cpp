@@ -95,22 +95,22 @@ void SysTick_Callback() {
     if (tips_disp.timer == TIPS_TIMER_START)
       tips_disp.timer_count++;
   #endif
-  if (uiCfg.filament_loading_time_flg) {
+  if (uiCfg.filament_loading_time_flg == 1) {
     uiCfg.filament_loading_time_cnt++;
-    uiCfg.filament_rate = uint32_t(100.0f * uiCfg.filament_loading_time_cnt / SEC_TO_MS(uiCfg.filament_loading_time) + 0.5f);
-    if (uiCfg.filament_loading_time_cnt >= SEC_TO_MS(uiCfg.filament_loading_time)) {
+    uiCfg.filament_rate = (uint32_t)(((uiCfg.filament_loading_time_cnt / (uiCfg.filament_loading_time * 1000.0)) * 100.0) + 0.5);
+    if (uiCfg.filament_loading_time_cnt >= (uiCfg.filament_loading_time * 1000)) {
       uiCfg.filament_loading_time_cnt  = 0;
-      uiCfg.filament_loading_time_flg  = false;
-      uiCfg.filament_loading_completed = true;
+      uiCfg.filament_loading_time_flg  = 0;
+      uiCfg.filament_loading_completed = 1;
     }
   }
-  if (uiCfg.filament_unloading_time_flg) {
+  if (uiCfg.filament_unloading_time_flg == 1) {
     uiCfg.filament_unloading_time_cnt++;
-    uiCfg.filament_rate = uint32_t(100.0f * uiCfg.filament_unloading_time_cnt / SEC_TO_MS(uiCfg.filament_unloading_time) + 0.5f);
-    if (uiCfg.filament_unloading_time_cnt >= SEC_TO_MS(uiCfg.filament_unloading_time)) {
+    uiCfg.filament_rate = (uint32_t)(((uiCfg.filament_unloading_time_cnt / (uiCfg.filament_unloading_time * 1000.0)) * 100.0) + 0.5);
+    if (uiCfg.filament_unloading_time_cnt >= (uiCfg.filament_unloading_time * 1000)) {
       uiCfg.filament_unloading_time_cnt  = 0;
-      uiCfg.filament_unloading_time_flg  = false;
-      uiCfg.filament_unloading_completed = true;
+      uiCfg.filament_unloading_time_flg  = 0;
+      uiCfg.filament_unloading_completed = 1;
       uiCfg.filament_rate = 100;
     }
   }
@@ -140,16 +140,11 @@ void tft_lvgl_init() {
 
   #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
     uint16_t usb_flash_loop = 1000;
-    #if ENABLED(MULTI_VOLUME)
-      SET_INPUT_PULLUP(SD_DETECT_PIN);
-      if (READ(SD_DETECT_PIN) == LOW) card.changeMedia(&card.media_sd_spi);
-      else card.changeMedia(&card.media_usbFlashDrive);
-    #endif
     do {
-      card.media_usbFlashDrive.idle();
+      Sd2Card::idle();
       watchdog_refresh();
       delay(2);
-    } while((!card.media_usbFlashDrive.isInserted()) && (usb_flash_loop--));
+    } while((!Sd2Card::isInserted()) && (usb_flash_loop--));
     card.mount();
   #elif HAS_LOGO_IN_FLASH
     delay(2000);
@@ -168,19 +163,19 @@ void tft_lvgl_init() {
 
   lv_init();
 
-  lv_disp_buf_init(&disp_buf, bmp_public_buf, nullptr, LV_HOR_RES_MAX * 14); // Initialize the display buffer
+  lv_disp_buf_init(&disp_buf, bmp_public_buf, nullptr, LV_HOR_RES_MAX * 14); /*Initialize the display buffer*/
 
-  lv_disp_drv_t disp_drv;     // Descriptor of a display driver
-  lv_disp_drv_init(&disp_drv);    // Basic initialization
-  disp_drv.flush_cb = my_disp_flush; // Set your driver function
-  disp_drv.buffer = &disp_buf;    // Assign the buffer to the display
-  lv_disp_drv_register(&disp_drv);  // Finally register the driver
+  lv_disp_drv_t disp_drv;     /*Descriptor of a display driver*/
+  lv_disp_drv_init(&disp_drv);    /*Basic initialization*/
+  disp_drv.flush_cb = my_disp_flush; /*Set your driver function*/
+  disp_drv.buffer = &disp_buf;    /*Assign the buffer to the display*/
+  lv_disp_drv_register(&disp_drv);  /*Finally register the driver*/
 
   lv_indev_drv_t indev_drv;
-  lv_indev_drv_init(&indev_drv);     // Descriptor of a input device driver
-  indev_drv.type = LV_INDEV_TYPE_POINTER; // Touch pad is a pointer-like device
-  indev_drv.read_cb = my_touchpad_read;  // Set your driver function
-  lv_indev_drv_register(&indev_drv);   // Finally register the driver
+  lv_indev_drv_init(&indev_drv);     /*Descriptor of a input device driver*/
+  indev_drv.type = LV_INDEV_TYPE_POINTER; /*Touch pad is a pointer-like device*/
+  indev_drv.read_cb = my_touchpad_read;  /*Set your driver function*/
+  lv_indev_drv_register(&indev_drv);   /*Finally register the driver*/
 
   #if HAS_ROTARY_ENCODER
     g = lv_group_create();
@@ -229,7 +224,7 @@ void tft_lvgl_init() {
     //WIFISERIAL.begin(WIFI_BAUDRATE);
     //uint32_t serial_connect_timeout = millis() + 1000UL;
     //while (/*!WIFISERIAL && */PENDING(millis(), serial_connect_timeout)) { /*nada*/ }
-    mks_wifi_firmware_update();
+    mks_wifi_firmware_upddate();
   #endif
   TERN_(HAS_SERVOS, servo_init());
   TERN_(HAS_Z_SERVO_PROBE, probe.servo_probe_init());
@@ -256,9 +251,12 @@ void tft_lvgl_init() {
     }
   #endif
 
-  if (ready) lv_draw_ready_print();
+  if (ready) {
+    lv_draw_ready_print();
+  }
 
-  if (mks_test_flag == 0x1E) mks_gpio_test();
+  if (mks_test_flag == 0x1E)
+    mks_gpio_test();
 }
 
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p) {
@@ -270,7 +268,7 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
   for (uint16_t i = 0; i < height; i++)
     SPI_TFT.tftio.WriteSequence((uint16_t*)(color_p + width * i), width);
 
-  lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
+  lv_disp_flush_ready(disp);       /* Indicate you are ready with the flushing*/
 
   W25QXX.init(SPI_QUARTER_SPEED);
 }
@@ -366,13 +364,13 @@ int16_t enc_diff = 0;
 lv_indev_state_t state = LV_INDEV_STATE_REL;
 
 bool my_mousewheel_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data) {
-  (void) indev_drv;   // Unused
+  (void) indev_drv;   /*Unused*/
 
   data->state = state;
   data->enc_diff = enc_diff;
   enc_diff = 0;
 
-  return false;       // No more data to read so return false
+  return false;       /*No more data to read so return false*/
 }
 
 extern uint8_t currentFlashPage;
@@ -395,7 +393,7 @@ lv_fs_res_t spi_flash_open_cb (lv_fs_drv_t * drv, void * file_p, const char * pa
 
 lv_fs_res_t spi_flash_close_cb (lv_fs_drv_t * drv, void * file_p) {
   lv_fs_res_t res = LV_FS_RES_OK;
-  /* Add your code here */
+  /* Add your code here*/
   pic_read_addr_offset = pic_read_base_addr;
   return res;
 }
@@ -524,16 +522,26 @@ void lv_encoder_pin_init() {
         #if ANY_BUTTON(EN1, EN2, ENC, BACK)
 
           uint8_t newbutton = 0;
-          if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
-          if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
-          if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
-          if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+
+          #if BUTTON_EXISTS(EN1)
+            if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
+          #endif
+          #if BUTTON_EXISTS(EN2)
+            if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
+          #endif
+          #if BUTTON_EXISTS(ENC)
+            if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
+          #endif
+          #if BUTTON_EXISTS(BACK)
+            if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+          #endif
 
         #else
 
           constexpr uint8_t newbutton = 0;
 
         #endif
+
 
         static uint8_t buttons = 0;
         buttons = newbutton;
@@ -542,7 +550,7 @@ void lv_encoder_pin_init() {
         #define encrot0 0
         #define encrot1 1
         #define encrot2 2
-
+        
         uint8_t enc = 0;
         if (buttons & EN_A) enc |= B01;
         if (buttons & EN_B) enc |= B10;

@@ -53,8 +53,9 @@
  * Once installed select the Sanguino board and then select the CPU.
  */
 
-#define ALLOW_MEGA644
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega644P__, __AVR_ATmega644__, __AVR_ATmega1284P__)
+  #error "Oops! Select 'Sanguino' in 'Tools > Boards' and 'ATmega644', 'ATmega644P', or 'ATmega1284P' in 'Tools > Processor.'"
+#endif
 
 #define BOARD_INFO_NAME "Gen7 Custom"
 

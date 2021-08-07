@@ -21,10 +21,9 @@
  */
 #pragma once
 
-#define ALLOW_STM32DUINO
-#include "env_validate.h"
-
-#if HOTENDS > 6 || E_STEPPERS > 6
+#if NOT_TARGET(STM32F4, STM32F4xx)
+  #error "Oops! Select an STM32F4 board in 'Tools > Board.'"
+#elif HOTENDS > 6 || E_STEPPERS > 6
   #error "FLYF407ZG supports up to 6 hotends / E-steppers."
 #endif
 

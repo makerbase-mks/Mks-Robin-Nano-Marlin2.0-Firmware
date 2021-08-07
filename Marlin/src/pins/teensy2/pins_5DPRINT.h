@@ -68,7 +68,9 @@
  * https://bitbucket.org/makible/5dprint-d8-controller-board
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_AT90USB1286__)
+  #error "Oops! Select 'Teensy++ 2.0' or 'Printrboard' in 'Tools > Board.'"
+#endif
 
 #define DEFAULT_MACHINE_NAME "Makibox"
 #define BOARD_INFO_NAME      "5DPrint D8"

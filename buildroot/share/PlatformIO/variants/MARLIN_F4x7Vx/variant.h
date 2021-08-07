@@ -143,12 +143,8 @@ extern "C" {
 #define PIN_SPI_SCK             PA5
 
 // I2C definitions
-#ifndef PIN_WIRE_SDA
-  #define PIN_WIRE_SDA          PB9
-#endif
-#ifndef PIN_WIRE_SCL
-  #define PIN_WIRE_SCL          PB8
-#endif
+#define PIN_WIRE_SDA            PB9
+#define PIN_WIRE_SCL            PB8
 
 // Timer Definitions
 // Use TIM6/TIM7 when possible as servo and tone don't need GPIO output pin

@@ -25,7 +25,9 @@
  * Mini-RAMBo pin assignments
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__AVR_ATmega2560__)
+  #error "Oops! Select 'RAMBo' in 'Tools > Board' or the Mega2560 environment in PlatformIO."
+#endif
 
 #if MB(MINIRAMBO_10A)
   #define BOARD_INFO_NAME "Mini RAMBo 1.0a"

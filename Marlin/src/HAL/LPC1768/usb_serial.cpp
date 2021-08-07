@@ -29,8 +29,8 @@
 
 EmergencyParser::State emergency_state;
 
-bool CDC_RecvCallback(const char c) {
-  emergency_parser.update(emergency_state, c);
+bool CDC_RecvCallback(const char buffer) {
+  emergency_parser.update(emergency_state, buffer);
   return true;
 }
 

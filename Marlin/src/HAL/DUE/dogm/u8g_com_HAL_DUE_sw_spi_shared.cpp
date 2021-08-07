@@ -59,7 +59,6 @@
 
 #if HAS_MARLINUI_U8GLIB
 
-#include "../../../inc/MarlinConfig.h"
 #include "../../shared/Delay.h"
 
 #include <U8glib.h>

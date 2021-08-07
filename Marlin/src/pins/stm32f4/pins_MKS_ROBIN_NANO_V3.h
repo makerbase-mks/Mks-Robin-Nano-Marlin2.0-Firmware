@@ -21,10 +21,9 @@
  */
 #pragma once
 
-#define ALLOW_STM32DUINO
-#include "env_validate.h"
-
-#if HOTENDS > 2 || E_STEPPERS > 2
+#if NOT_TARGET(STM32F4, STM32F4xx)
+  #error "Oops! Select an STM32F4 board in 'Tools > Board.'"
+#elif HOTENDS > 2 || E_STEPPERS > 2
   #error "MKS Robin Nano V3 supports up to 2 hotends / E-steppers."
 #elif HAS_FSMC_TFT
   #error "MKS Robin Nano V3 doesn't support FSMC-based TFT displays."
@@ -47,8 +46,9 @@
 //#define FLASH_EEPROM_EMULATION                  // Use Flash-based EEPROM emulation
 #define I2C_EEPROM
 #define MARLIN_EEPROM_SIZE                0x1000  // 4KB
-#define I2C_SCL_PIN                         PB6
-#define I2C_SDA_PIN                         PB7
+
+#define I2C_SCL_PIN                       PB6 
+#define I2C_SDA_PIN                       PB7
 
 //
 // Release PB4 (Z_DIR_PIN) from JTAG NRST role
@@ -227,7 +227,7 @@
 #define WIFI_RESET_PIN                    PE9   // MKS ESP WIFI RESET PIN
 
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION              ONBOARD
+  #define SDCARD_CONNECTION               ONBOARD
 #endif
 
 //

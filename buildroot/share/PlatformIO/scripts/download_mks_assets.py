@@ -1,9 +1,9 @@
-#
-# buildroot/share/PlatformIO/scripts/download_mks_assets.py
-# Added by HAS_TFT_LVGL_UI to download assets from Makerbase repo
-#
 Import("env")
-import os,requests,zipfile,tempfile,shutil
+import os
+import requests
+import zipfile
+import tempfile
+import shutil
 
 url = "https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/archive/master.zip"
 zip_path = os.path.join(env.Dictionary("PROJECT_LIBDEPS_DIR"), "mks-assets.zip")

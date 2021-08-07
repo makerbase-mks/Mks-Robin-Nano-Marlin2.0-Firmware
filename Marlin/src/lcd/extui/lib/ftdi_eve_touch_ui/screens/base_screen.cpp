@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_BASE_SCREEN
+#if ENABLED(TOUCH_UI_FTDI_EVE)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace Theme;
@@ -86,4 +87,4 @@ void BaseScreen::reset_menu_timeout() {
   uint32_t BaseScreen::last_interaction;
 #endif
 
-#endif // FTDI_BASE_SCREEN
+#endif // TOUCH_UI_FTDI_EVE

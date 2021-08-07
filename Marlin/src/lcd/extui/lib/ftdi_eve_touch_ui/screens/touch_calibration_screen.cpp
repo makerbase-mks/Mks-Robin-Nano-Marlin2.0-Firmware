@@ -21,9 +21,10 @@
  ****************************************************************************/
 
 #include "../config.h"
-#include "screens.h"
 
-#ifdef FTDI_TOUCH_CALIBRATION_SCREEN
+#if ENABLED(TOUCH_UI_FTDI_EVE)
+
+#include "screens.h"
 
 using namespace FTDI;
 using namespace Theme;
@@ -90,4 +91,4 @@ void TouchCalibrationScreen::onIdle() {
   }
 }
 
-#endif // FTDI_TOUCH_CALIBRATION_SCREEN
+#endif // TOUCH_UI_FTDI_EVE

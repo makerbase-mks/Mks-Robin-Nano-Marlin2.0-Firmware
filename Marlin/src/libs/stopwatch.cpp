@@ -98,7 +98,7 @@ millis_t Stopwatch::duration() {
   void Stopwatch::debug(const char func[]) {
     if (DEBUGGING(INFO)) {
       SERIAL_ECHOPGM("Stopwatch::");
-      SERIAL_ECHOPGM_P(func);
+      serialprintPGM(func);
       SERIAL_ECHOLNPGM("()");
     }
   }

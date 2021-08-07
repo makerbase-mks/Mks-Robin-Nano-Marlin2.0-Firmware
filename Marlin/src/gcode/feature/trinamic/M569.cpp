@@ -32,7 +32,8 @@ template<typename TMC>
 void tmc_say_stealth_status(TMC &st) {
   st.printLabel();
   SERIAL_ECHOPGM(" driver mode:\t");
-  SERIAL_ECHOLNPGM_P(st.get_stealthChop() ? PSTR("stealthChop") : PSTR("spreadCycle"));
+  serialprintPGM(st.get_stealthChop() ? PSTR("stealthChop") : PSTR("spreadCycle"));
+  SERIAL_EOL();
 }
 template<typename TMC>
 void tmc_set_stealthChop(TMC &st, const bool enable) {

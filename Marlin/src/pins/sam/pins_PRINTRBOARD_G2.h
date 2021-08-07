@@ -25,7 +25,9 @@
  * PRINTRBOARD_G2
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(__SAM3X8E__)
+  #error "Oops! Select 'Arduino Due' in 'Tools > Board.'"
+#endif
 
 #ifndef BOARD_INFO_NAME
   #define BOARD_INFO_NAME "Printrboard G2"

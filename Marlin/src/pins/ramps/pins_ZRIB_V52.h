@@ -46,7 +46,6 @@
 #define E2_STEP_PIN                            4
 #define E2_DIR_PIN                             5
 #define E2_ENABLE_PIN                         22
-#define HEATER_1_PIN                           7
 
 #include "pins_MKS_BASE_common.h"
 

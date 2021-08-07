@@ -22,7 +22,7 @@
 
 #include "../../core/serial_hook.h"
 
-typedef Serial1Class<Uart> UartT;
+typedef Serial0Type<Uart> UartT;
 
 extern UartT Serial2;
 extern UartT Serial3;

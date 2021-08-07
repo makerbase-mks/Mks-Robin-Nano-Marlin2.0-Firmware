@@ -25,21 +25,8 @@
 #include <wiring_private.h>
 
 #ifdef ADAFRUIT_GRAND_CENTRAL_M4
-  #if USING_HW_SERIALUSB
-    DefaultSerial1 MSerial0(false, Serial);
-  #endif
-  #if USING_HW_SERIAL0
-    DefaultSerial2 MSerial1(false, Serial1);
-  #endif
-  #if USING_HW_SERIAL1
-    DefaultSerial3 MSerial2(false, Serial2);
-  #endif
-  #if USING_HW_SERIAL2
-    DefaultSerial4 MSerial3(false, Serial3);
-  #endif
-  #if USING_HW_SERIAL3
-    DefaultSerial5 MSerial4(false, Serial4);
-  #endif
+  DefaultSerial MSerial(false, Serial);
+  DefaultSerial1 MSerial1(false, Serial1);
 #endif
 
 // ------------------------
@@ -57,7 +44,6 @@
 #define GET_PROBE_ADC()           TERN(HAS_TEMP_PROBE,        PIN_TO_ADC(TEMP_PROBE_PIN),   -1)
 #define GET_BED_ADC()             TERN(HAS_TEMP_ADC_BED,      PIN_TO_ADC(TEMP_BED_PIN),     -1)
 #define GET_CHAMBER_ADC()         TERN(HAS_TEMP_ADC_CHAMBER,  PIN_TO_ADC(TEMP_CHAMBER_PIN), -1)
-#define GET_COOLER_ADC()          TERN(HAS_TEMP_ADC_COOLER,   PIN_TO_ADC(TEMP_COOLER_PIN),  -1)
 #define GET_FILAMENT_WIDTH_ADC()  TERN(FILAMENT_WIDTH_SENSOR, PIN_TO_ADC(FILWIDTH_PIN),     -1)
 #define GET_BUTTONS_ADC()         TERN(HAS_ADC_BUTTONS,       PIN_TO_ADC(ADC_KEYPAD_PIN),   -1)
 
@@ -67,7 +53,6 @@
   || GET_PROBE_ADC() == n          \
   || GET_BED_ADC() == n            \
   || GET_CHAMBER_ADC() == n        \
-  || GET_COOLER_ADC() == n         \
   || GET_FILAMENT_WIDTH_ADC() == n \
   || GET_BUTTONS_ADC() == n        \
 )
@@ -146,9 +131,6 @@ uint16_t HAL_adc_result;
     #if GET_CHAMBER_ADC() == 0
       TEMP_CHAMBER_PIN,
     #endif
-    #if GET_COOLER_ADC() == 0
-      TEMP_COOLER_PIN,
-    #endif
     #if GET_FILAMENT_WIDTH_ADC() == 0
       FILWIDTH_PIN,
     #endif
@@ -188,9 +170,6 @@ uint16_t HAL_adc_result;
     #endif
     #if GET_CHAMBER_ADC() == 1
       TEMP_CHAMBER_PIN,
-    #endif
-    #if GET_COOLER_ADC() == 1
-      TEMP_COOLER_PIN,
     #endif
     #if GET_FILAMENT_WIDTH_ADC() == 1
       FILWIDTH_PIN,
@@ -240,9 +219,6 @@ uint16_t HAL_adc_result;
       #if GET_CHAMBER_ADC() == 0
         { PIN_TO_INPUTCTRL(TEMP_CHAMBER_PIN) },
       #endif
-      #if GET_COOLER_ADC() == 0
-        { PIN_TO_INPUTCTRL(TEMP_COOLER_PIN) },
-      #endif
       #if GET_FILAMENT_WIDTH_ADC() == 0
         { PIN_TO_INPUTCTRL(FILWIDTH_PIN) },
       #endif
@@ -291,9 +267,6 @@ uint16_t HAL_adc_result;
       #endif
       #if GET_CHAMBER_ADC() == 1
         { PIN_TO_INPUTCTRL(TEMP_CHAMBER_PIN) },
-      #endif
-      #if GET_COOLER_ADC() == 1
-        { PIN_TO_INPUTCTRL(TEMP_COOLER_PIN) },
       #endif
       #if GET_FILAMENT_WIDTH_ADC() == 1
         { PIN_TO_INPUTCTRL(FILWIDTH_PIN) },
@@ -435,8 +408,6 @@ uint8_t HAL_get_reset_source() {
   return 0;
 }
 #pragma pop_macro("WDT")
-
-void HAL_reboot() { NVIC_SystemReset(); }
 
 extern "C" {
   void * _sbrk(int incr);

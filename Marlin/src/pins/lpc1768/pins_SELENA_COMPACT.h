@@ -25,7 +25,9 @@
  * Selena Compact pin assignments
  */
 
-#include "env_validate.h"
+#if NOT_TARGET(MCU_LPC1768)
+  #error "Oops! Make sure you have the LPC1768 environment selected in your IDE."
+#endif
 
 #define BOARD_INFO_NAME   "Selena Compact"
 #define BOARD_WEBSITE_URL "github.com/Ales2-k/Selena"
