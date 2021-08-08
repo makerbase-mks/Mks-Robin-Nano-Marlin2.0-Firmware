@@ -71,7 +71,7 @@ def copy_fonts():
 			shutil.copy(os.path.join(custom_fonts_path, filename), assets_path)	
 
 def copy_wifimodule():
-    print("*** Copying Wifi Module***")
+    print("*** Copying Wifi Module ***")
     shutil.copy(os.path.join(custom_graphics_toolpath, wifi_filename), pioEnv_path)	
     print("-> " + wifi_filename )
 
