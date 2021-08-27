@@ -1166,6 +1166,10 @@ void disp_language_init() {
       print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_CN;
       print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_CN;
       print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_CN;
+      print_file_dialog_menu.hourText           = DIALOG_HOUR_TEXT_CN;
+      print_file_dialog_menu.minuteText         = DIALOG_MINUTE_TEXT_CN;
+      print_file_dialog_menu.secondText         = DIALOG_SECOND_TEXT_CN;
+      print_file_dialog_menu.timeConsum         = DIALOG_TIME_CONSUMING_TEXT_CN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_CN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_CN;
@@ -1413,6 +1417,7 @@ void disp_language_init() {
             print_file_dialog_menu.wifi_enable_tips    = DIALOG_WIFI_ENABLE_TIPS_T_CN;
             print_file_dialog_menu.machinePausingTips  = DIALOG_PAUSING_TIPS_T_CN;
             print_file_dialog_menu.autolevelingTips    = DIALOG_AUTO_LEVELING_TIPS_T_CN;
+            print_file_dialog_menu.timeConsum         = DIALOG_TIME_CONSUMING_TEXT_T_CN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_T_CN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_T_CN;
@@ -1650,6 +1655,7 @@ void disp_language_init() {
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
             print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_EN;
             print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_EN;
+            print_file_dialog_menu.timeConsum            = DIALOG_TIME_CONSUMING_TEXT_EN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_EN;

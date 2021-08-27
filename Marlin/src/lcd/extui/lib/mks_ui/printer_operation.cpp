@@ -149,8 +149,10 @@ void printer_state_polling() {
     }
   #endif
 
-  if (uiCfg.print_state == WORKING)
-    filament_check();
+  if (uiCfg.print_state == WORKING) {
+    filament_check_2(); // filament_check();
+  }
+    
 
   TERN_(MKS_WIFI_MODULE, wifi_looping());
 
@@ -172,6 +174,8 @@ void printer_state_polling() {
   #endif
 }
 
+filament_check_t filament_c;
+
 void filament_pin_setup() {
   #if PIN_EXISTS(MT_DET_1)
     SET_INPUT_PULLUP(MT_DET_1_PIN);
@@ -182,6 +186,11 @@ void filament_pin_setup() {
   #if PIN_EXISTS(MT_DET_3)
     SET_INPUT_PULLUP(MT_DET_3_PIN);
   #endif
+
+  filament_c.status = F_STATUS_CHECK;
+  filament_c.tick_delay = MT_TIME_DELAY;
+  filament_c.tick_start = 0;
+  filament_c.tick_end = 0;
 }
 
 void filament_check() {
@@ -262,6 +271,89 @@ void filament_check() {
 
     lv_draw_printing();
   }
+}
+
+
+bool get_filemant_pins(void) {
+
+  #if PIN_EXISTS(MT_DET_1)
+    if(READ(MT_DET_1_PIN) == MT_DET_PIN_INVERTING) {
+      return false;
+    }
+  #endif
+
+  #if PIN_EXISTS(MT_DET_2)
+    if(READ(MT_DET_2_PIN) == MT_DET_PIN_INVERTING) {
+       return false;
+    }
+  #endif
+
+  #if PIN_EXISTS(MT_DET_3)
+    if(READ(MT_DET_3_PIN) == MT_DET_PIN_INVERTING) {
+       return false;
+    }
+  #endif
+
+  return true;
+}
+
+void filament_check_2() {
+
+  switch(filament_c.status) {
+
+    case F_STATUS_CHECK:
+
+      if(get_filemant_pins() == false) {
+        filament_c.status = F_STATUS_WAIT;
+        filament_c.tick_start = millis(); 
+      }
+
+    break;
+
+    case F_STATUS_WAIT:
+      filament_c.tick_end = millis(); 
+
+      if(get_filemant_pins() == false) {
+
+          if(filament_c.tick_end - filament_c.tick_start > filament_c.tick_delay) {  
+              filament_c.status = F_STATUS_RUN;
+          }
+      }else {
+        filament_c.status = F_STATUS_END;
+      }
+    break;
+
+    case F_STATUS_RUN:
+      lv_clear_cur_ui();
+      TERN_(SDSUPPORT, card.pauseSDPrint());
+      stop_print_time();
+      uiCfg.print_state = PAUSING;
+
+      if (gCfgItems.from_flash_pic)
+        flash_preview_begin = true;
+      else
+        default_preview_flg = true;
+
+      lv_draw_printing();
+      filament_c.status = F_STATUS_WAIT_UP;
+    break;
+
+    case F_STATUS_WAIT_UP:
+      if(get_filemant_pins() == true) {
+        filament_c.status = F_STATUS_END;
+      }
+    break;
+
+    case F_STATUS_END:
+      filament_c.tick_start = 0;
+      filament_c.tick_end  = 0;
+      filament_c.status = F_STATUS_CHECK;
+    break;
+  }
+}
+
+void filament_set_status (filament_status_t status) {
+  filament_c.status = status;
 }
 
 #endif // HAS_TFT_LVGL_UI

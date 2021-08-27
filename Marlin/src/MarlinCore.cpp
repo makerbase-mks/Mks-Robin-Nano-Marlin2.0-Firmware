@@ -396,7 +396,7 @@ void startOrResumeJob() {
       TERN_(DGUS_LCD_UI_MKS, ScreenHandler.SDPrintingFinished());
     }
   }
-
+  
 #endif // SDSUPPORT
 
 /**
@@ -740,7 +740,7 @@ void idle(TERN_(ADVANCED_PAUSE_FEATURE, bool no_stepper_sleep/*=false*/)) {
   // Handle filament runout sensors
   TERN_(HAS_FILAMENT_SENSOR, runout.run());
 
-  // Run HAL idle tasks
+  // Run HAL idle tasks 
   TERN_(HAL_IDLETASK, HAL_idletask());
 
   // Check network connection

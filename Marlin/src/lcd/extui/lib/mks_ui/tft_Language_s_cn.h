@@ -495,6 +495,11 @@
 #define DIALOG_WIFI_ENABLE_TIPS_CN  "wifi模块正在配置中,请稍等......"
 #define DIALOG_PAUSING_TIPS_CN      "机器暂停中..."
 #define DIALOG_AUTO_LEVELING_TIPS_CN    "正在自动调平,请稍等..."
+#define DIALOG_HOUR_TEXT_CN          "小时"
+#define DIALOG_MINUTE_TEXT_CN        "分"
+#define DIALOG_SECOND_TEXT_CN        "秒"
+#define DIALOG_TIME_CONSUMING_TEXT_CN "打印耗时:"
+
 
 #define TEXT_VALUE_CN               "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_CN     ": %d℃"

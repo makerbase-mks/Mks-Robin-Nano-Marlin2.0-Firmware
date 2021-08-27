@@ -454,7 +454,7 @@ void tft_style_init() {
 
 char public_buf_m[100] = {0};
 char public_buf_l[30];
-
+char public_buf_t[40];
 void titleText_cat(char *str, int strSize, char *addPart) {
   if (str == 0 || addPart == 0) return;
   if ((int)(strlen(str) + strlen(addPart)) >= strSize) return;
