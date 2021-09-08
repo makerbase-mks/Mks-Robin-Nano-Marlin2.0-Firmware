@@ -1459,14 +1459,16 @@ void lv_print_finished() {
 
     once_flag = true;
 
-    #if HAS_SUICIDE
-      if (gCfgItems.finish_power_off) {
-        gcode.process_subcommands_now_P(PSTR("M1001"));
-        queue.inject_P(PSTR("M81"));
-        marlin_state = MF_RUNNING;
-      }
-    #endif
     uiCfg.print_state = IDLE;
+    queue.inject_P(PSTR("M81"));
+    // #if HAS_SUICIDE
+    //   if (gCfgItems.finish_power_off) {
+    //     gcode.process_subcommands_now_P(PSTR("M1001"));
+    //     queue.inject_P(PSTR("M81"));
+    //     marlin_state = MF_RUNNING;
+    //   }
+    // #endif
+    
   }
 }
 
