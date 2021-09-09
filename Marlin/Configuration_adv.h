@@ -3376,9 +3376,9 @@
   #define USER_DESC_5 "STOP ALL"
   #define USER_GCODE_5 "M112"
 
-  #define USER_CMD_6_ENABLE
-  #define USER_DESC_6 "hello world"
-  #define USER_GCODE_6 "M118 E1 Yello World!"
+  // #define USER_CMD_6_ENABLE
+  // #define USER_DESC_6 "hello world"
+  // #define USER_GCODE_6 "M118 E1 Yello World!"
 
   //#define USER_CMD_7_ENABLE
   //#define USER_DESC_7 "More3"
@@ -3410,7 +3410,7 @@
  *
  * Implement M486 to allow Marlin to skip objects
  */
-//#define CANCEL_OBJECTS
+#define CANCEL_OBJECTS
 
 /**
  * I2C position encoders for closed loop control.
