@@ -664,7 +664,7 @@
 
 #define  HOMING_BUMP_MM {5,5,5}   // (mm) Backoff from endstops after first bump
                                               // For delta all values must be the same
-#define  HOMING_BUMP_DIVISOR {10,10,10}   // Re-Bump Speed Divisor (Divides the Homing Feedrate)
+#define  HOMING_BUMP_DIVISOR {4,4,4}   // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 
 #define HOMING_BACKOFF_POST_MM { 0, 0, 0 }  // (mm) Backoff from endstops after homing
 
@@ -3376,9 +3376,9 @@
   #define USER_DESC_5 "STOP ALL"
   #define USER_GCODE_5 "M112"
 
-  // #define USER_CMD_6_ENABLE
-  // #define USER_DESC_6 "hello world"
-  // #define USER_GCODE_6 "M118 E1 Yello World!"
+  //#define USER_CMD_6_ENABLE
+  //#define USER_DESC_6 "More2"
+  //#define USER_GCODE_6 "G28"
 
   //#define USER_CMD_7_ENABLE
   //#define USER_DESC_7 "More3"
