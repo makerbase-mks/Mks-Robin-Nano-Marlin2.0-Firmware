@@ -1720,7 +1720,7 @@
  *
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
-//#define LIN_ADVANCE
+#define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
   //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
   #define LIN_ADVANCE_K 0.22    // Unit: mm compression per 1mm/s extruder speed
@@ -3372,9 +3372,9 @@
   #define USER_DESC_4 "TOUCH CAL."
   #define USER_GCODE_4 "M995"
 
-  //#define USER_CMD_5_ENABLE
-  //#define USER_DESC_5 "More1"
-  //#define USER_GCODE_5 "G28"
+  #define USER_CMD_5_ENABLE
+  #define USER_DESC_5 "STOP ALL"
+  #define USER_GCODE_5 "M112"
 
   //#define USER_CMD_6_ENABLE
   //#define USER_DESC_6 "More2"
@@ -3410,7 +3410,7 @@
  *
  * Implement M486 to allow Marlin to skip objects
  */
-//#define CANCEL_OBJECTS
+#define CANCEL_OBJECTS
 
 /**
  * I2C position encoders for closed loop control.
