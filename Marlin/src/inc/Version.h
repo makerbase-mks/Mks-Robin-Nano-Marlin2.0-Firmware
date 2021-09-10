@@ -25,8 +25,10 @@
  * Release version. Leave the Marlin version or apply a custom scheme.
  */
 #ifndef SHORT_BUILD_VERSION
-  #define SHORT_BUILD_VERSION "-bugfix2.0.x-MKS-2.1.3"
+  #define SHORT_BUILD_VERSION "bugfix2.0.x-MKS-2.1.3"
 #endif
+
+#define IM_VERSION "1.0.1"
 
 /**
  * Verbose version identifier containing a unique identifier, such as the
