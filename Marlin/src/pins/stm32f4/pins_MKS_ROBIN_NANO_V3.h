@@ -53,7 +53,7 @@
 //
 // Release PB4 (Z_DIR_PIN) from JTAG NRST role
 //
-//#define DISABLE_DEBUG
+// #define DISABLE_DEBUG
 
 //
 // Servos
@@ -63,7 +63,7 @@
 //
 // Limit Switches
 //
-#define X_DIAG_PIN                          PD15
+#define X_DIAG_PIN                          PA15
 #define Y_DIAG_PIN                          PD2
 #define Z_DIAG_PIN                          PC8
 #define E0_DIAG_PIN                         PC4
