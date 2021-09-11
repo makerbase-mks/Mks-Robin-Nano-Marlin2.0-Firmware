@@ -30,6 +30,9 @@ extern void lv_clear_preHeat();
 extern void disp_temp_type();
 extern void disp_step_heat();
 extern void disp_desire_temp();
+extern void disp_ext_heart();
+extern void disp_add_dec();
+extern void dis_ext_heart_change(uint8_t mode);
 
 #ifdef __cplusplus
   } /* C-declarations for C++ */

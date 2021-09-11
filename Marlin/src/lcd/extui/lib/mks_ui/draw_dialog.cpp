@@ -165,8 +165,9 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
   #if ENABLED(ADVANCED_PAUSE_FEATURE)
     else if (DIALOG_IS(PAUSE_MESSAGE_WAITING, PAUSE_MESSAGE_INSERT, PAUSE_MESSAGE_HEAT))
       wait_for_user = false;
-    else if (DIALOG_IS(PAUSE_MESSAGE_OPTION))
-      pause_menu_response = PAUSE_RESPONSE_EXTRUDE_MORE;
+    else if (DIALOG_IS(PAUSE_MESSAGE_OPTION)) {
+      // pause_menu_response = PAUSE_RESPONSE_EXTRUDE_MORE; fix-wang
+    }
     else if (DIALOG_IS(PAUSE_MESSAGE_RESUME)) {
       lv_clear_cur_ui();
       lv_draw_return_ui();
@@ -225,7 +226,7 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
 static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   if (DIALOG_IS(PAUSE_MESSAGE_OPTION)) {
-    TERN_(ADVANCED_PAUSE_FEATURE, pause_menu_response = PAUSE_RESPONSE_RESUME_PRINT);
+    // TERN_(ADVANCED_PAUSE_FEATURE, pause_menu_response = PAUSE_RESPONSE_RESUME_PRINT);
   }
   else if (DIALOG_IS(TYPE_FILAMENT_LOAD_HEAT, TYPE_FILAMENT_UNLOAD_HEAT, TYPE_FILAMENT_HEAT_LOAD_COMPLETED, TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED)) {
     #if HAS_HOTEND
@@ -265,9 +266,9 @@ void lv_draw_dialog(uint8_t type) {
   lv_obj_t *labelDialog = lv_label_create(scr, "");
 
   if (DIALOG_IS(TYPE_FINISH_PRINT, PAUSE_MESSAGE_RESUME)) {
-      btnOk = lv_button_btn_create(scr, BTN_OK_X + 90, BTN_OK_Y, 100, 50, btn_ok_event_cb);
-      lv_obj_t *labelOk = lv_label_create_empty(btnOk);             // Add a label to the button
-      lv_label_set_text(labelOk, print_file_dialog_menu.confirm);    // Set the labels text
+    btnOk = lv_button_btn_create(scr, BTN_OK_X + 90, BTN_OK_Y, 100, 50, btn_ok_event_cb);
+    lv_obj_t *labelOk = lv_label_create_empty(btnOk);             // Add a label to the button
+    lv_label_set_text(labelOk, print_file_dialog_menu.confirm);    // Set the labels text
   }
   else if (DIALOG_IS(PAUSE_MESSAGE_WAITING, PAUSE_MESSAGE_INSERT, PAUSE_MESSAGE_HEAT)) {
     btnOk = lv_button_btn_create(scr, BTN_OK_X + 90, BTN_OK_Y, 100, 50, btn_ok_event_cb);

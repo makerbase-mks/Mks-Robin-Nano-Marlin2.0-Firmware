@@ -108,7 +108,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
       lv_clear_bltouch_settings();
       if (last_disp_state == DIALOG_UI) lv_draw_ready_print();
       else lv_draw_return_ui();
-      queue.enqueue_now_P(PSTR("G28 X Y"));
+      // queue.enqueue_now_P(PSTR("G28 X Y"));  // fix-wang
+      queue.inject_P(PSTR("G28 X Y"));
       break;
   }
 }
@@ -150,7 +151,7 @@ void lv_draw_bltouch_settings(void) {
   labelV  = lv_label_create_empty(buttonV);
 
   lv_big_button_create(scr, "F:/bmp_in.bin", machine_menu.BLTouchTest, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_BLTOUCH_TEST);
-  lv_big_button_create(scr, "F:/bmp_set.bin", machine_menu.BLTouchSave, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_BLTOUCH_SAVE);
+  lv_big_button_create(scr, "F:/bmp_save.bin", machine_menu.BLTouchSave, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_BLTOUCH_SAVE);
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_BLTOUCH_RETURN);
 
   disp_step_dist();
@@ -215,10 +216,11 @@ void bltouch_do_init(bool resetZoffset) {
   {
     sprintf_P(str_1, PSTR("G28\nG1 Z10 F2400\nG1 X%d Y%d\nG0 Z0.3"), X_MAX_POS / 2, Y_MAX_POS / 2);
   }
-  queue.enqueue_now_P(PSTR(str_1));
+  queue.enqueue_now_P(PSTR(str_1));  // fix-wang
+  // queue.inject_P(PSTR(str_1));
 }
 
-void lv_clear_bltouch_settings() { 
+void lv_clear_bltouch_settings() {
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_group_remove_all_objs(g);
   #endif

@@ -41,6 +41,23 @@ dalla riga 676
 #define  E0_DRIVER_TYPE A4988   // A4988
 ```
 
+per asse Z e Estrusore nel caso di modifica con TMC2208 o TMC2209
+modificare a true i loro campi.
+
+riga: 1122
+
+```C++
+// Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
+#define  INVERT_X_DIR false   // false
+#define  INVERT_Y_DIR false   // true
+#define  INVERT_Z_DIR false   // false
+
+// @section extruder
+
+// For direct drive extruder v9 set to true, for geared extruder set to false.
+#define  INVERT_E0_DIR false   // false
+```
+
 ### Step/mm
 
 modificare gli step per mm in base alla vostra configurazione
@@ -87,5 +104,4 @@ fbGhost4s
 
 Credits:
 fork from [Makerbase Robin Nano firmware](https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware)
-
 Italy Makers Flyingbear Ghost Group: [Italy Makers - Flying Bear Ghost](https://www.facebook.com/groups/907067056500590)
