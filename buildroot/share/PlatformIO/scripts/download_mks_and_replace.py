@@ -4,6 +4,7 @@ import requests
 import zipfile
 import tempfile
 import shutil
+from distutils.dir_util import copy_tree
 
 url = "https://github.com/makerbase-mks/Mks-Robin-Nano-Marlin2.0-Firmware/archive/master.zip"
 zip_path = os.path.join(env.Dictionary("PROJECT_LIBDEPS_DIR"), "mks-assets.zip")
@@ -48,6 +49,7 @@ if os.path.exists(assets_path) == False:
  
 custom_graphics_toolpath = os.path.join(env.Dictionary("PROJECT_DIR"), "custom_graphics") + "/"
 custom_graphics_path = os.path.join(env.Dictionary("PROJECT_DIR"), "custom_graphics", "images") + "/"
+custom_graphics_path_bin = os.path.join(env.Dictionary("PROJECT_DIR"), "custom_graphics", "bin") + "/"
 custom_fonts_path = os.path.join(env.Dictionary("PROJECT_DIR"), "custom_graphics", "fonts") + "/"
 assets_path = os.path.join(env.Dictionary("PROJECT_BUILD_DIR"), env.Dictionary("PIOENV"), "assets")
 pioEnv_path = os.path.join(env.Dictionary("PROJECT_BUILD_DIR"), env.Dictionary("PIOENV"))
@@ -55,13 +57,19 @@ wifi_filename= "MksWifi.bin"
 
 
 def convert_assets():
-	print("*** Converting Assets *** ")
-	for filename in os.listdir(custom_graphics_path):
-		if ".png" in filename:			
-			img_name=os.path.splitext(filename)[0]
-			command = 'php '+custom_graphics_toolpath+'/_img_conv_core.php "name='+img_name+'&img='+custom_graphics_path+"/"+filename+'&cf=true_color&format=bin_565&out='+assets_path+'/"'
-			print("-> " + filename )
-			os.system(command)
+	if not os.path.exists(custom_graphics_path_bin):
+		print("*** Converting Assets *** ")
+		os.mkdir(custom_graphics_path_bin)
+		for filename in os.listdir(custom_graphics_path):
+			if ".png" in filename:
+				img_name=os.path.splitext(filename)[0]
+				command = 'php '+custom_graphics_toolpath+'/_img_conv_core.php "name='+img_name+'&img='+custom_graphics_path+"/"+filename+'&cf=true_color&format=bin_565&out='+custom_graphics_path_bin+'/"'
+				print("-> " + filename )
+				os.system(command)
+
+	print("*** Copying Assets *** ")
+	copy_tree(custom_graphics_path_bin, assets_path)
+
 
 def copy_fonts():
 	print("*** Copying Fonts *** ")
