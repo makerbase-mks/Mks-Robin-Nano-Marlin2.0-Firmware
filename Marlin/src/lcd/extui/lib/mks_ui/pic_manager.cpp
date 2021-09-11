@@ -171,8 +171,9 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_set.bin",
   "bmp_tool.bin",
 
+
   // base icons
-  "bmp_arrow.bin",
+  "bmp_arrow.bin", //TODO
   "bmp_back70x40.bin",
   "bmp_value_blank.bin",
   "bmp_blank_sel.bin",
@@ -184,7 +185,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_wifi.bin",
   "bmp_cloud.bin",
 
-  // babystep screen
+  // babystep screen //TODO all
   "bmp_baby_move0_01.bin",
   "bmp_baby_move0_05.bin",
   "bmp_baby_move0_1.bin",
@@ -200,6 +201,9 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
 
   // bltouch settings screen
   "bmp_init_state.bin"
+
+  //custom icons
+  "bmp_save.bin"
 };
 
 #if HAS_SPI_FLASH_FONT
