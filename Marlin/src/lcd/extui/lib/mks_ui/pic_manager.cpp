@@ -203,7 +203,8 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_init_state.bin"
 
   //custom icons
-  "bmp_save.bin"
+  "bmp_save.bin",
+  "bmp_zero_temp.bin"
 };
 
 #if HAS_SPI_FLASH_FONT

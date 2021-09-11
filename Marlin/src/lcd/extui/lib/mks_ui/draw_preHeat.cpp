@@ -50,7 +50,7 @@ enum {
   ID_P_TYPE,
   ID_P_STEP,
   ID_P_OFF,
-  ID_P_RETURN, 
+  ID_P_RETURN,
   ID_P_ABS,
   ID_P_PLA,
 };
@@ -197,7 +197,7 @@ void lv_draw_preHeat(void) {
   scr = lv_screen_create(PRE_HEAT_UI);
 
   disp_add_dec();
-  
+
   buttonType = lv_imgbtn_create(scr, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_P_TYPE);
   buttonStep = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_P_STEP);
   #if HAS_ROTARY_ENCODER
@@ -207,7 +207,7 @@ void lv_draw_preHeat(void) {
     }
   #endif
 
-  lv_big_button_create(scr, "F:/bmp_speed0.bin", preheat_menu.off, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_P_OFF);
+  lv_big_button_create(scr, "F:/bmp_zero_temp.bin", preheat_menu.off, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_P_OFF);
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_P_RETURN);
 
   if(uiCfg.curTempType == 0) {
@@ -246,7 +246,7 @@ void disp_ext_heart() {
 
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre); 
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
 
     label_abs = lv_label_create(btn_abs, PREHEAT_2_LABEL);
@@ -259,13 +259,13 @@ void dis_ext_heart_change(uint8_t mode) {
     btn_style_pre.body.opa = 0;
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre); 
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
   }else {
     btn_style_pre.body.opa = 255;
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre); 
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
   }
 }
