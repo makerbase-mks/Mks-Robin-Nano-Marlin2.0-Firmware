@@ -3369,7 +3369,7 @@
   #define USER_GCODE_3 "M106 S0\nM104 S0\nM140 S0"
 
   #define USER_CMD_4_ENABLE
-  #define USER_DESC_4 "Emergency Stop"
+  #define USER_DESC_4 "Stop All"
   #define USER_GCODE_4 "M112"
 
   // #define USER_CMD_5_ENABLE
