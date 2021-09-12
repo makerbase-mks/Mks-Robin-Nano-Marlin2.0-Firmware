@@ -3331,7 +3331,7 @@
  *
  * Execute certain G-code commands immediately after power-on.
  */
-//#define STARTUP_COMMANDS "M17 Z"
+#define STARTUP_COMMANDS "M107"
 
 /**
  * G-code Macros
@@ -3369,20 +3369,20 @@
   #define USER_GCODE_3 "M106 S0\nM104 S0\nM140 S0"
 
   #define USER_CMD_4_ENABLE
-  #define USER_DESC_4 "TOUCH CAL."
-  #define USER_GCODE_4 "M995"
+  #define USER_DESC_4 "Emergency Stop"
+  #define USER_GCODE_4 "M112"
 
-  #define USER_CMD_5_ENABLE
-  #define USER_DESC_5 "STOP ALL"
-  #define USER_GCODE_5 "M112"
+  // #define USER_CMD_5_ENABLE
+  // #define USER_DESC_5 "TOUCH CAL."
+  // #define USER_GCODE_5 "M995"
 
   //#define USER_CMD_6_ENABLE
   //#define USER_DESC_6 "More2"
   //#define USER_GCODE_6 "G28"
 
-  //#define USER_CMD_7_ENABLE
-  //#define USER_DESC_7 "More3"
-  //#define USER_GCODE_7 "G28"
+  #define USER_CMD_7_ENABLE
+  #define USER_DESC_7 "Start Logging"
+  #define USER_GCODE_7 "M928 log.txt"
 #endif
 
 /**

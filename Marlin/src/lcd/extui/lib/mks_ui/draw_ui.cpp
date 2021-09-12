@@ -424,12 +424,12 @@ void tft_style_init() {
   style_btn_pr.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
 
   lv_style_copy(&lv_bar_style_indic, &lv_style_pretty_color);
-  lv_bar_style_indic.text.color        = lv_color_hex3(0xADF);
-  lv_bar_style_indic.image.color       = lv_color_hex3(0xADF);
-  lv_bar_style_indic.line.color        = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.main_color   = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.grad_color   = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.border.color = lv_color_hex3(0xADF);
+  lv_bar_style_indic.text.color        = LV_COLOR_MAKE(0x08, 0x10, 0x18);
+  lv_bar_style_indic.image.color       = LV_COLOR_MAKE(0x08, 0x10, 0x18);
+  lv_bar_style_indic.line.color        = LV_COLOR_MAKE(0x08, 0x10, 0x18);
+  lv_bar_style_indic.body.main_color   = LV_COLOR_MAKE(0x08, 0x10, 0x18);
+  lv_bar_style_indic.body.grad_color   = LV_COLOR_MAKE(0x08, 0x10, 0x18);
+  lv_bar_style_indic.body.border.color = LV_COLOR_MAKE(0x08, 0x10, 0x18);
 
   lv_style_copy(&style_check_box_selected, &lv_style_btn_pr);
 	style_check_box_selected.body.main_color   = LV_COLOR_YELLOW;
@@ -1191,6 +1191,9 @@ void lv_draw_return_ui() {
         case DUAL_X_CARRIAGE_MODE_UI:   lv_draw_dual_x_carriage_mode(); break;
         case HOTEND_OFFSET_UI:          lv_draw_hotend_offset_settings(); break;
       #endif
+      #if ENABLED(TOUCH_SCREEN_CALIBRATION)
+      case TOUCH_CALIBRATION_UI:        lv_draw_more(); break;
+    #endif
       default: break;
     }
   }

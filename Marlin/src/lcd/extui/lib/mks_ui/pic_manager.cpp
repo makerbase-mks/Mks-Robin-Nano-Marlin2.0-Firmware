@@ -173,7 +173,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
 
 
   // base icons
-  "bmp_arrow.bin", //TODO
+  "bmp_arrow.bin",
   "bmp_back70x40.bin",
   "bmp_value_blank.bin",
   "bmp_blank_sel.bin",
@@ -185,7 +185,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_wifi.bin",
   "bmp_cloud.bin",
 
-  // babystep screen //TODO all
+  // babystep screen
   "bmp_baby_move0_01.bin",
   "bmp_baby_move0_05.bin",
   "bmp_baby_move0_1.bin",
@@ -204,7 +204,8 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
 
   //custom icons
   "bmp_save.bin",
-  "bmp_zero_temp.bin"
+  "bmp_zero_temp.bin",
+  "bmp_reconnect.bin"
 };
 
 #if HAS_SPI_FLASH_FONT

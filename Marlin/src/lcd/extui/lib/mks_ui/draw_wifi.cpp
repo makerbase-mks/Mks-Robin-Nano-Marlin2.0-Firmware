@@ -72,7 +72,7 @@ void lv_draw_wifi(void) {
     if (gCfgItems.cloud_enable)
       buttonCloud = lv_imgbtn_create(scr, "F:/bmp_cloud.bin", BTN_X_PIXEL+INTERVAL_V*2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_W_CLOUD);
 
-    buttonReconnect = lv_imgbtn_create(scr, "F:/bmp_wifi.bin", BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_W_RECONNECT);
+    buttonReconnect = lv_imgbtn_create(scr, "F:/bmp_reconnect.bin", BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_W_RECONNECT);
 
     #if HAS_ROTARY_ENCODER
       if (gCfgItems.cloud_enable) lv_group_add_obj(g, buttonCloud);
@@ -89,14 +89,14 @@ void lv_draw_wifi(void) {
   lv_obj_t *label_Back = lv_label_create_empty(buttonBack);
 
   if (gCfgItems.multiple_language) {
-    if (gCfgItems.wifi_mode_sel == STA_MODEL) {
+    // if (gCfgItems.wifi_mode_sel == STA_MODEL) {
       if (gCfgItems.cloud_enable) {
         lv_label_set_text(label_Cloud, wifi_menu.cloud);
         lv_obj_align(label_Cloud, buttonCloud, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
       }
       lv_label_set_text(label_Reconnect, wifi_menu.reconnect);
       lv_obj_align(label_Reconnect, buttonReconnect, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
-    }
+    // }
     lv_label_set_text(label_Back, common_menu.text_back);
     lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
   }
