@@ -414,7 +414,7 @@
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
 // before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
-#define  FAN_KICKSTART_TIME 100   // 100
+#define  FAN_KICKSTART_TIME 50   // 100
 
 // Some coolers may require a non-zero "off" state.
 //#define FAN_OFF_PWM  1
@@ -3369,7 +3369,7 @@
   #define USER_GCODE_3 "M106 S0\nM104 S0\nM140 S0"
 
   #define USER_CMD_4_ENABLE
-  #define USER_DESC_4 "Emergency Stop"
+  #define USER_DESC_4 "Stop All"
   #define USER_GCODE_4 "M112"
 
   // #define USER_CMD_5_ENABLE
