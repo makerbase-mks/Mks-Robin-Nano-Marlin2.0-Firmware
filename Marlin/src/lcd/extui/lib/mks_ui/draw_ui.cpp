@@ -429,6 +429,7 @@ void tft_style_init() {
   lv_bar_style_indic.line.color        = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
   lv_bar_style_indic.body.main_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
   lv_bar_style_indic.body.grad_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.body.shadow.width = 0;
   lv_bar_style_indic.body.border.color = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
 
   lv_style_copy(&style_check_box_selected, &lv_style_btn_pr);
