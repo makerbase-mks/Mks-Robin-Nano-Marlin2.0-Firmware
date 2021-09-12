@@ -187,7 +187,7 @@
   #define FIL_RUNOUT_PIN                    PA4
   #define FIL_RUNOUT2_PIN                   PE6
 #endif
-#define FIL_RUNOUT_PIN                    PA4
+
 //#define LED_PIN                           PB2
 
 //
