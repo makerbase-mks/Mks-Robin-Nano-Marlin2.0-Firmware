@@ -236,4 +236,5 @@ void TFT_IO::write_esc_sequence(const uint16_t *Sequence) {
   io.DataTransferEnd();
 }
 
+
 #endif // HAS_SPI_TFT || HAS_FSMC_TFT

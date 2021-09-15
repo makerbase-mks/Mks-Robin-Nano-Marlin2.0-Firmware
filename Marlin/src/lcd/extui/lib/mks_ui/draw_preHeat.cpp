@@ -149,7 +149,6 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 
         lv_obj_del(buttonAdd);
         lv_obj_del(buttonDec);
-
         disp_add_dec();
         disp_ext_heart();
       }

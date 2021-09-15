@@ -728,6 +728,10 @@ typedef struct print_file_dialog_disp {
   const char *wifi_enable_tips;
   const char *machinePausingTips;
   const char *autolevelingTips;
+  const char *hourText;
+  const char *minuteText;
+  const char *secondText;
+  const char *timeConsum;
 } print_file_dialog_menu_def;
 
 extern print_file_dialog_menu_def print_file_dialog_menu;

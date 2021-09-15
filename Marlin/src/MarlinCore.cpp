@@ -393,10 +393,11 @@ void startOrResumeJob() {
     if (queue.enqueue_one_P(PSTR("M1001"))) {
       marlin_state = MF_RUNNING;
       TERN_(PASSWORD_AFTER_SD_PRINT_END, password.lock_machine());
-      TERN_(DGUS_LCD_UI_MKS, ScreenHandler.SDPrintingFinished());
+      TERN_(DGUS_LCD_UI_MKS, ScreenHandler.SDPrintingFinished()); 
+      // TERN_(HAS_TFT_LVGL_UI, lv_print_finished());
     }
   }
-
+  
 #endif // SDSUPPORT
 
 /**
@@ -740,7 +741,7 @@ void idle(TERN_(ADVANCED_PAUSE_FEATURE, bool no_stepper_sleep/*=false*/)) {
   // Handle filament runout sensors
   TERN_(HAS_FILAMENT_SENSOR, runout.run());
 
-  // Run HAL idle tasks
+  // Run HAL idle tasks 
   TERN_(HAL_IDLETASK, HAL_idletask());
 
   // Check network connection
@@ -1529,6 +1530,8 @@ void setup() {
   #if BOTH(HAS_LCD_MENU, TOUCH_SCREEN_CALIBRATION) && EITHER(TFT_CLASSIC_UI, TFT_COLOR_UI)
     ui.check_touch_calibration();
   #endif
+
+  
 
   marlin_state = MF_RUNNING;
 

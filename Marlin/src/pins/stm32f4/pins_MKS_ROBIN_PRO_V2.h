@@ -73,6 +73,7 @@
 
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN                    PA4   // MT_DET
+  #define MT_TIME_DELAY                       3000  // Default 3s   
 #endif
 
 //

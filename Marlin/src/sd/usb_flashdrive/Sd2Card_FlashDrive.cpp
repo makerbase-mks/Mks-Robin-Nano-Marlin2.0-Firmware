@@ -150,9 +150,7 @@ bool DiskIODriver_USBFlash::usbStartup() {
 void DiskIODriver_USBFlash::idle() {
   
   usb.Task();
-
   const uint8_t task_state = usb.getUsbTaskState();
-
   #if USB_DEBUG >= 2
     if (state > DO_STARTUP) {
       static uint8_t laststate = 232;
@@ -203,7 +201,6 @@ void DiskIODriver_USBFlash::idle() {
           #endif
           GOTO_STATE_AFTER_DELAY( WAIT_FOR_LUN, 250 );
         }
-
         break;
 
       case WAIT_FOR_LUN:
@@ -228,7 +225,6 @@ void DiskIODriver_USBFlash::idle() {
           GOTO_STATE_AFTER_DELAY(state, 2000);
         }
         break;
-
       case MEDIA_READY: break;
       case MEDIA_ERROR: break;
     }

@@ -172,7 +172,6 @@
 
 #define FAN_PIN                             PC14  // FAN0
 #define FAN1_PIN                            PB1   // FAN1
-
 //
 // Thermocouples
 //
@@ -185,6 +184,7 @@
 #define MT_DET_1_PIN                        PA4
 #define MT_DET_2_PIN                        PE6
 #define MT_DET_PIN_INVERTING                false // LVGL UI filament RUNOUT PIN STATE
+#define MT_TIME_DELAY                       3000  // Default 3s   
 #define PW_DET                              PA13
 #define PW_OFF                              PB2
 

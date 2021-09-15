@@ -72,6 +72,8 @@ extern int upload_result;
 extern uint32_t upload_time;
 extern uint32_t upload_size;
 extern bool temps_update_flag;
+extern char public_buf_t[30];
+
 
 static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
@@ -367,7 +369,9 @@ void lv_draw_dialog(uint8_t type) {
   }
   else if (DIALOG_IS(TYPE_FINISH_PRINT)) {
     lv_label_set_text(labelDialog, print_file_dialog_menu.print_finish);
+    lv_obj_t *labeltime = lv_label_create(scr,public_buf_t);
     lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_align(labeltime, nullptr, LV_ALIGN_CENTER, 0, 0);
   }
   else if (DIALOG_IS(PAUSE_MESSAGE_PAUSING)) {
     lv_label_set_text(labelDialog, pause_msg_menu.pausing);
@@ -431,6 +435,10 @@ void lv_draw_dialog(uint8_t type) {
   }
   else if (DIALOG_IS(WIFI_ENABLE_TIPS)) {
     lv_label_set_text(labelDialog, print_file_dialog_menu.wifi_enable_tips);
+    lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -20);
+  }
+  else if(DIALOG_IS(TYPE_FILAMENT_NO_PRESS)) {
+    lv_label_set_text(labelDialog, print_file_dialog_menu.filament_no_press);
     lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -20);
   }
   else if (DIALOG_IS(TRANSFER_NO_DEVICE)) {

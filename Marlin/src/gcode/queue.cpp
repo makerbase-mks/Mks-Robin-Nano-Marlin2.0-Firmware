@@ -647,7 +647,6 @@ void GCodeQueue::advance() {
             SERIAL_ECHOLNPAIR("Max RX Queue Size: ", MYSERIAL1.rxMaxEnqueued());
           #endif
         #endif
-
         ok_to_send();
       }
       else {

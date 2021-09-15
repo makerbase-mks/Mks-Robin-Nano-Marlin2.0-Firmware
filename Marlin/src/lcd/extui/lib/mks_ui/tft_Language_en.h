@@ -514,6 +514,8 @@
 #define DIALOG_WIFI_ENABLE_TIPS_EN          "The wifi module is being configured\nplease wait a moment....."
 #define DIALOG_PAUSING_TIPS_EN              "The machine pauses..."
 #define DIALOG_AUTO_LEVELING_TIPS_EN        "Auto-leveling, please wait..."
+#define DIALOG_TIME_CONSUMING_TEXT_EN       "Printing time:"
+
 
 #define HOTBED_ENABLE_EN        "Enable heatbed"
 #define MOTOR_EN_HIGH_LEVEL_EN  "High"

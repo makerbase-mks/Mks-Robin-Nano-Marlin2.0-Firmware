@@ -454,7 +454,7 @@ void tft_style_init() {
 
 char public_buf_m[100] = {0};
 char public_buf_l[30];
-
+char public_buf_t[40];
 void titleText_cat(char *str, int strSize, char *addPart) {
   if (str == 0 || addPart == 0) return;
   if ((int)(strlen(str) + strlen(addPart)) >= strSize) return;
@@ -1459,19 +1459,23 @@ void lv_print_finished() {
 
     once_flag = true;
 
-    #if HAS_SUICIDE
-      if (gCfgItems.finish_power_off) {
-        gcode.process_subcommands_now_P(PSTR("M1001"));
-        queue.inject_P(PSTR("M81"));
-        marlin_state = MF_RUNNING;
-      }
-    #endif
     uiCfg.print_state = IDLE;
+    queue.inject_P(PSTR("M81"));
+    // #if HAS_SUICIDE
+    //   if (gCfgItems.finish_power_off) {
+    //     gcode.process_subcommands_now_P(PSTR("M1001"));
+    //     queue.inject_P(PSTR("M81"));
+    //     marlin_state = MF_RUNNING;
+    //   }
+    // #endif
+    
   }
 }
 
 void LV_TASK_HANDLER() {
+
   lv_task_handler();
+
   if (mks_test_flag == 0x1E) mks_hardware_test();
 
   TERN_(HAS_GCODE_PREVIEW, disp_pre_gcode(2, 36));
@@ -1483,6 +1487,7 @@ void LV_TASK_HANDLER() {
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_update_encoder();
   #endif
+  
   if (marlin_state == MF_SD_COMPLETE) lv_print_finished();
 }
 
