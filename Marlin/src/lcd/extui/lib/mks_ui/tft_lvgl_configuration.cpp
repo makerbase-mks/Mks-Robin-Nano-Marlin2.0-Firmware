@@ -118,7 +118,7 @@ void SysTick_Callback() {
 
 void tft_lvgl_init() {
 
-  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.init(SPI_FULL_SPEED);  // SPI_QUARTER_SPEED
 
   gCfgItems_init();
   ui_cfg_init();
@@ -267,9 +267,9 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 
   SPI_TFT.setWindow((uint16_t)area->x1, (uint16_t)area->y1, width, height);
 
-  // for (uint16_t i = 0; i < height; i++)
-  //   SPI_TFT.tftio.WriteSequence((uint16_t*)(color_p + width * i), width);
-  SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
+  for (uint16_t i = 0; i < height; i++)
+    SPI_TFT.tftio.WriteSequence((uint16_t*)(color_p + width * i), width);
+  // SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
 
   lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
 

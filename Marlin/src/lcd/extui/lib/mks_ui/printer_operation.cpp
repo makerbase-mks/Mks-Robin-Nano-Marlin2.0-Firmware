@@ -125,6 +125,7 @@ void printer_state_polling() {
       #endif
 
       recovery.resume();
+
       #if 0
         // Move back to the saved XY
         char str_1[16], str_2[16];
@@ -150,10 +151,9 @@ void printer_state_polling() {
   #endif
 
   if (uiCfg.print_state == WORKING) {
-    filament_check_2(); // filament_check();
+    filament_check(); // filament_check();
   }
     
-
   TERN_(MKS_WIFI_MODULE, wifi_looping());
 
   #if ENABLED(AUTO_BED_LEVELING_BILINEAR)

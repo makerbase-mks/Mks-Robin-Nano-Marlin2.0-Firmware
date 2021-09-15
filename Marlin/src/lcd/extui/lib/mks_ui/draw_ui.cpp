@@ -1473,7 +1473,9 @@ void lv_print_finished() {
 }
 
 void LV_TASK_HANDLER() {
+
   lv_task_handler();
+
   if (mks_test_flag == 0x1E) mks_hardware_test();
 
   TERN_(HAS_GCODE_PREVIEW, disp_pre_gcode(2, 36));
@@ -1485,6 +1487,7 @@ void LV_TASK_HANDLER() {
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_update_encoder();
   #endif
+  
   if (marlin_state == MF_SD_COMPLETE) lv_print_finished();
 }
 
