@@ -281,6 +281,7 @@ lv_style_t style_para_value;
 lv_style_t style_para_back;
 
 lv_style_t lv_bar_style_indic;
+lv_style_t lv_bar_style_text;
 
 lv_style_t style_btn_pr;
 lv_style_t style_btn_rel;
@@ -425,12 +426,16 @@ void tft_style_init() {
 
   lv_style_copy(&lv_bar_style_indic, &lv_style_pretty_color);
   lv_bar_style_indic.text.color        = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.text.sel_color    = LV_COLOR_MAKE(0xFF, 0x00, 0x00);
   lv_bar_style_indic.image.color       = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
   lv_bar_style_indic.line.color        = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
   lv_bar_style_indic.body.main_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
   lv_bar_style_indic.body.grad_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
   lv_bar_style_indic.body.shadow.width = 0;
   lv_bar_style_indic.body.border.color = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.body.radius       = 0;
+
+
 
   lv_style_copy(&style_check_box_selected, &lv_style_btn_pr);
 	style_check_box_selected.body.main_color   = LV_COLOR_YELLOW;
