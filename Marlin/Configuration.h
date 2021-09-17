@@ -673,8 +673,8 @@
  *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'L6474', 'POWERSTEP01', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
-#define  X_DRIVER_TYPE A4988   //  A4988
-#define  Y_DRIVER_TYPE A4988   //  A4988
+#define  X_DRIVER_TYPE TMC2208_STANDALONE   //  A4988
+#define  Y_DRIVER_TYPE TMC2208_STANDALONE   //  A4988
 #define  Z_DRIVER_TYPE A4988   //  A4988
 //#define  X2_DRIVER_TYPE A4988   // A4988
 //#define  Y2_DRIVER_TYPE A4988   // A4988
@@ -736,7 +736,7 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 394.9}
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 419}
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -785,9 +785,9 @@
  */
 #define CLASSIC_JERK
 #if ENABLED(CLASSIC_JERK)
-  #define  DEFAULT_XJERK 10.0   // 10.0
-  #define  DEFAULT_YJERK 10.0   // 10.0
-  #define  DEFAULT_ZJERK 0.3   //  0.3
+  #define  DEFAULT_XJERK 15.0   // 10.0
+  #define  DEFAULT_YJERK 15.0   // 10.0
+  #define  DEFAULT_ZJERK 0.4   //  0.3
 
   //#define TRAVEL_EXTRA_XYJERK 0.0     // Additional jerk allowance for all travel moves
 
@@ -870,14 +870,14 @@
  * Use G29 repeatedly, adjusting the Z height at each point with movement commands
  * or (with LCD_BED_LEVELING) the LCD controller.
  */
-#define PROBE_MANUALLY
-#define  MANUAL_PROBE_START_Z 0.2   // 0.2
+//#define PROBE_MANUALLY
+//#define  MANUAL_PROBE_START_Z 0.2   // 0.2
 
 /**
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
  *   (e.g., an inductive probe or a nozzle-based probe-switch.)
  */
-#define FIX_MOUNTED_PROBE
+//#define FIX_MOUNTED_PROBE
 
 /**
  * Use the nozzle as the probe, as with a conductive
@@ -1120,8 +1120,8 @@
 // @section machine
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
-#define  INVERT_X_DIR true   // false
-#define  INVERT_Y_DIR true   // true
+#define  INVERT_X_DIR false   // false
+#define  INVERT_Y_DIR false   // true
 #define  INVERT_Z_DIR false   // false
 
 // @section extruder
@@ -1309,9 +1309,9 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-// #define AUTO_BED_LEVELING_BILINEAR
+//#define AUTO_BED_LEVELING_BILINEAR
 //#define AUTO_BED_LEVELING_UBL
-// #define MESH_BED_LEVELING
+#define MESH_BED_LEVELING
 
 /**
  * Normally G28 leaves leveling disabled on completion. Enable one of
@@ -1503,8 +1503,8 @@
 #define Z_SAFE_HOMING
 
 #if ENABLED(Z_SAFE_HOMING)
-  #define Z_SAFE_HOMING_X_POINT 0 //X_CENTER  // X point for Z homing
-  #define Z_SAFE_HOMING_Y_POINT 0 //Y_CENTER  // Y point for Z homing
+  #define Z_SAFE_HOMING_X_POINT 0  // X point for Z homing
+  #define Z_SAFE_HOMING_Y_POINT 0  // Y point for Z homing
 #endif
 
 // Homing speeds (mm/min)
