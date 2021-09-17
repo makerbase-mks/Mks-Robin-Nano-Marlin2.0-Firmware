@@ -28,7 +28,7 @@
   #define SHORT_BUILD_VERSION "bugfix2.0.x-MKS-2.1.3"
 #endif
 
-#define IM_VERSION "1.0.1"
+#define IM_VERSION "2.0.1"
 
 /**
  * Verbose version identifier containing a unique identifier, such as the

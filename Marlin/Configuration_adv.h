@@ -360,7 +360,7 @@
 // Extruder runout prevention.
 // If the machine is idle and the temperature over MINTEMP
 // then extrude some filament every couple of SECONDS.
-//#define EXTRUDER_RUNOUT_PREVENT
+// #define EXTRUDER_RUNOUT_PREVENT
 #if ENABLED(EXTRUDER_RUNOUT_PREVENT)
   #define  EXTRUDER_RUNOUT_MINTEMP 190   // 190
   #define  EXTRUDER_RUNOUT_SECONDS 30   // 30
@@ -414,7 +414,7 @@
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
 // before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
-#define  FAN_KICKSTART_TIME 100   // 100
+#define  FAN_KICKSTART_TIME 50   // 100
 
 // Some coolers may require a non-zero "off" state.
 //#define FAN_OFF_PWM  1
@@ -1376,7 +1376,7 @@
    * Tested with this bootloader:
    *   https://github.com/FleetProbe/MicroBridge-Arduino-ATMega2560
    */
-  //#define SD_FIRMWARE_UPDATE
+  // #define SD_FIRMWARE_UPDATE
   #if ENABLED(SD_FIRMWARE_UPDATE)
     #define SD_FIRMWARE_UPDATE_EEPROM_ADDR    0x1FF
     #define SD_FIRMWARE_UPDATE_ACTIVE_VALUE   0xF0
@@ -1720,7 +1720,7 @@
  *
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
-//#define LIN_ADVANCE
+#define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
   //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
   #define LIN_ADVANCE_K 0.22    // Unit: mm compression per 1mm/s extruder speed
@@ -2161,7 +2161,7 @@
  * Requires NOZZLE_PARK_FEATURE.
  * This feature is required for the default FILAMENT_RUNOUT_SCRIPT.
  */
-// #define ADVANCED_PAUSE_FEATURE
+#define ADVANCED_PAUSE_FEATURE
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #define  PAUSE_PARK_RETRACT_FEEDRATE 60   // (mm/s) Initial retract feedrate.
   #define PAUSE_PARK_RETRACT_LENGTH            2  // (mm) Initial retract.
@@ -2199,10 +2199,10 @@
   #define FILAMENT_CHANGE_ALERT_BEEPS         10  // Number of alert beeps to play when a response is needed.
   #define PAUSE_PARK_NO_STEPPER_TIMEOUT           // Enable for XYZ steppers to stay powered on during filament change.
 
-  //#define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
+  // #define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
   //#define HOME_BEFORE_FILAMENT_CHANGE           // If needed, home before parking for filament change
 
-  //#define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
+  #define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
   //#define FILAMENT_UNLOAD_ALL_EXTRUDERS         // Allow M702 to unload all extruders above a minimum target temp (as set by M302)
 #endif
 
@@ -3331,7 +3331,7 @@
  *
  * Execute certain G-code commands immediately after power-on.
  */
-//#define STARTUP_COMMANDS "M17 Z"
+#define STARTUP_COMMANDS "M107"
 
 /**
  * G-code Macros
@@ -3369,20 +3369,20 @@
   #define USER_GCODE_3 "M106 S0\nM104 S0\nM140 S0"
 
   #define USER_CMD_4_ENABLE
-  #define USER_DESC_4 "TOUCH CAL."
-  #define USER_GCODE_4 "M995"
+  #define USER_DESC_4 "Stop All"
+  #define USER_GCODE_4 "M112"
 
-  //#define USER_CMD_5_ENABLE
-  //#define USER_DESC_5 "More1"
-  //#define USER_GCODE_5 "G28"
+  // #define USER_CMD_5_ENABLE
+  // #define USER_DESC_5 "TOUCH CAL."
+  // #define USER_GCODE_5 "M995"
 
   //#define USER_CMD_6_ENABLE
   //#define USER_DESC_6 "More2"
   //#define USER_GCODE_6 "G28"
 
-  //#define USER_CMD_7_ENABLE
-  //#define USER_DESC_7 "More3"
-  //#define USER_GCODE_7 "G28"
+  #define USER_CMD_7_ENABLE
+  #define USER_DESC_7 "Start Logging"
+  #define USER_GCODE_7 "M928 log.txt"
 #endif
 
 /**
@@ -3410,7 +3410,7 @@
  *
  * Implement M486 to allow Marlin to skip objects
  */
-//#define CANCEL_OBJECTS
+#define CANCEL_OBJECTS
 
 /**
  * I2C position encoders for closed loop control.
