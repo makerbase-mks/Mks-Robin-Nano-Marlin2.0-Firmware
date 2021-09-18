@@ -281,6 +281,7 @@ lv_style_t style_para_value;
 lv_style_t style_para_back;
 
 lv_style_t lv_bar_style_indic;
+lv_style_t lv_bar_style_text;
 
 lv_style_t style_btn_pr;
 lv_style_t style_btn_rel;
@@ -395,41 +396,46 @@ void tft_style_init() {
   style_para_value.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
 
   lv_style_copy(&style_para_back, &lv_style_plain);
-  style_para_back.body.border.color = LV_COLOR_BACKGROUND;
+  style_para_back.body.border.color = lv_color_hex3(0xFFF);
   style_para_back.body.border.width = 1;
-  style_para_back.body.main_color   = TFT_LV_PARA_BACK_BODY_COLOR;
-  style_para_back.body.grad_color   = TFT_LV_PARA_BACK_BODY_COLOR;
+  style_para_back.body.main_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  style_para_back.body.grad_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
   style_para_back.body.shadow.width = 0;
   style_para_back.body.radius       = 3;
-  style_para_back.text.color        = LV_COLOR_WHITE;
+  style_para_back.text.color        = lv_color_hex3(0x000);
   style_para_back.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
 
   lv_style_copy(&style_btn_rel, &lv_style_plain);
-  style_btn_rel.body.border.color = lv_color_hex3(0x269);
+  style_btn_rel.body.border.color = lv_color_hex3(0x000);
   style_btn_rel.body.border.width = 1;
-  style_btn_rel.body.main_color   = lv_color_hex3(0xADF);
-  style_btn_rel.body.grad_color   = lv_color_hex3(0x46B);
-  style_btn_rel.body.shadow.width = 4;
-  style_btn_rel.body.shadow.type  = LV_SHADOW_BOTTOM;
+  style_btn_rel.body.main_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  style_btn_rel.body.grad_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  // style_btn_rel.body.shadow.width = 4;
+  // style_btn_rel.body.shadow.type  = LV_SHADOW_BOTTOM;
   style_btn_rel.body.radius       = LV_RADIUS_CIRCLE;
-  style_btn_rel.text.color        = lv_color_hex3(0xDEF);
+  style_btn_rel.text.color        = lv_color_hex3(0x000);
   style_btn_rel.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
 
   lv_style_copy(&style_btn_pr, &style_btn_rel);
-  style_btn_pr.body.border.color = lv_color_hex3(0x46B);
-  style_btn_pr.body.main_color   = lv_color_hex3(0x8BD);
-  style_btn_pr.body.grad_color   = lv_color_hex3(0x24A);
-  style_btn_pr.body.shadow.width = 2;
-  style_btn_pr.text.color        = lv_color_hex3(0xBCD);
+  style_btn_pr.body.border.color = lv_color_hex3(0xFFF);
+  style_btn_pr.body.main_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  style_btn_pr.body.grad_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  // style_btn_pr.body.shadow.width = 2;
+  style_btn_pr.text.color        = lv_color_hex3(0x000);
   style_btn_pr.text.font         = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
 
   lv_style_copy(&lv_bar_style_indic, &lv_style_pretty_color);
-  lv_bar_style_indic.text.color        = lv_color_hex3(0xADF);
-  lv_bar_style_indic.image.color       = lv_color_hex3(0xADF);
-  lv_bar_style_indic.line.color        = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.main_color   = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.grad_color   = lv_color_hex3(0xADF);
-  lv_bar_style_indic.body.border.color = lv_color_hex3(0xADF);
+  lv_bar_style_indic.text.color        = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.text.sel_color    = LV_COLOR_MAKE(0xFF, 0x00, 0x00);
+  lv_bar_style_indic.image.color       = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.line.color        = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.body.main_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.body.grad_color   = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.body.shadow.width = 0;
+  lv_bar_style_indic.body.border.color = LV_COLOR_MAKE(0xFB, 0xB3, 0x51);
+  lv_bar_style_indic.body.radius       = 0;
+
+
 
   lv_style_copy(&style_check_box_selected, &lv_style_btn_pr);
 	style_check_box_selected.body.main_color   = LV_COLOR_YELLOW;

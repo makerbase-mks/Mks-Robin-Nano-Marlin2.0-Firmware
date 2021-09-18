@@ -64,6 +64,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_speed255.bin",
   "bmp_speed127.bin",
   "bmp_speed0.bin",
+  "bmp_speed0.bin",
 
   "bmp_bed.bin",
   "bmp_step1_degree.bin",
@@ -170,6 +171,7 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   "bmp_set.bin",
   "bmp_tool.bin",
 
+
   // base icons
   "bmp_arrow.bin",
   "bmp_back70x40.bin",
@@ -182,17 +184,13 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
   // wifi screen
   "bmp_wifi.bin",
   "bmp_cloud.bin",
-  
-  // multi volume selected
-  "bmp_usb_disk.bin",
-  "bmp_sd.bin",
 
-  // Babystep screen
+  // babystep screen
   "bmp_baby_move0_01.bin",
   "bmp_baby_move0_05.bin",
   "bmp_baby_move0_1.bin",
 
-  // More screen
+  // more screen
   "bmp_custom1.bin",
   "bmp_custom2.bin",
   "bmp_custom3.bin",
@@ -203,10 +201,12 @@ static const char assets[][LONG_FILENAME_LENGTH] = {
 
   // bltouch settings screen
   "bmp_init_state.bin",
-  
-  // media select
-  "bmp_sd.bin",
-  "bmp_usb_disk.bin"
+
+  //custom icons
+  "bmp_save.bin",
+  "bmp_zero_temp.bin",
+  "bmp_reconnect.bin",
+  "bmp_power_on_custom.bin"
 };
 
 #if HAS_SPI_FLASH_FONT

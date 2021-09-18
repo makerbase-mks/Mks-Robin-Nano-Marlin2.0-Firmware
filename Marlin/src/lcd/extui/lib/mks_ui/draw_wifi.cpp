@@ -72,7 +72,7 @@ void lv_draw_wifi(void) {
     if (gCfgItems.cloud_enable)
       buttonCloud = lv_imgbtn_create(scr, "F:/bmp_cloud.bin", BTN_X_PIXEL+INTERVAL_V*2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_W_CLOUD);
 
-    buttonReconnect = lv_imgbtn_create(scr, "F:/bmp_wifi.bin", BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_W_RECONNECT);
+    buttonReconnect = lv_imgbtn_create(scr, "F:/bmp_reconnect.bin", BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_W_RECONNECT);
 
     #if HAS_ROTARY_ENCODER
       if (gCfgItems.cloud_enable) lv_group_add_obj(g, buttonCloud);

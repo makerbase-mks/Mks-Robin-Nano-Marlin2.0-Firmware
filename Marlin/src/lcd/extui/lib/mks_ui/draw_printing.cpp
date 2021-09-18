@@ -48,6 +48,8 @@ static lv_obj_t *labelExt1, *labelFan, *labelZpos, *labelTime;
 static lv_obj_t *labelPause, *labelStop, *labelOperat;
 static lv_obj_t *bar1, *bar1ValueText;
 static lv_obj_t *buttonPause, *buttonOperat, *buttonStop, *buttonExt1, *buttonFanstate, *buttonZpos;
+static lv_style_t lv_bar_style_text;
+static lv_style_t lv_bar_style_base;
 
 #if HAS_MULTI_EXTRUDER && DISABLED(SINGLENOZZLE)
   static lv_obj_t *labelExt2;
@@ -200,14 +202,28 @@ void lv_draw_printing() {
     lv_obj_align(labelOperat, buttonOperat, LV_ALIGN_CENTER, 20, 0);
   }
 
+  lv_style_copy(&lv_bar_style_text, &lv_style_plain);
+  lv_bar_style_text.text.color         = LV_COLOR_MAKE(0x10, 0x20, 0x31);
+  lv_bar_style_text.text.font          = &TERN(HAS_SPI_FLASH_FONT, gb2312_puhui32, lv_font_roboto_22);
+
+lv_style_copy(&lv_bar_style_base, &lv_style_pretty_color);
+
+  lv_bar_style_base.body.main_color   = LV_COLOR_MAKE(0xFF, 0xFF, 0xFF);
+  lv_bar_style_base.body.grad_color   = LV_COLOR_MAKE(0xFF, 0xFF, 0xFF);
+  lv_bar_style_base.body.shadow.width = 0;
+  lv_bar_style_base.body.radius       = 0;
+
+
   bar1 = lv_bar_create(scr, nullptr);
   lv_obj_set_pos(bar1, 205, 36);
   lv_obj_set_size(bar1, 270, 40);
+  lv_bar_set_style(bar1, LV_BAR_STYLE_BG, &lv_bar_style_base);
   lv_bar_set_style(bar1, LV_BAR_STYLE_INDIC, &lv_bar_style_indic);
   lv_bar_set_anim_time(bar1, 1000);
   lv_bar_set_value(bar1, 0, LV_ANIM_ON);
   bar1ValueText  = lv_label_create_empty(bar1);
   lv_label_set_text(bar1ValueText,"0%");
+  lv_label_set_style(bar1ValueText, LV_LABEL_STYLE_MAIN, &lv_bar_style_text);
   lv_obj_align(bar1ValueText, bar1, LV_ALIGN_CENTER, 0, 0);
 
   disp_ext_temp();
