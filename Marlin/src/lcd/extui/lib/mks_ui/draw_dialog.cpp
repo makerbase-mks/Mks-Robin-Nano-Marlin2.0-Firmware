@@ -214,7 +214,7 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
   }
   #if ENABLED(MKS_WIFI_MODULE)
     else if (DIALOG_IS(TYPE_UNBIND)) {
-      cloud_unbind();
+      // cloud_unbind();
       lv_clear_cur_ui();
       lv_draw_return_ui();
     }
@@ -607,14 +607,14 @@ void filament_dialog_handle() {
       lv_clear_dialog();
       lv_draw_dialog(DIALOG_TYPE_FILAMENT_HEAT_LOAD_COMPLETED);
     }
-  
+
   if (uiCfg.filament_loading_completed) {
     uiCfg.filament_rate = 0;
     uiCfg.filament_loading_completed = false;
     lv_clear_dialog();
     lv_draw_dialog(DIALOG_TYPE_FILAMENT_LOAD_COMPLETED);
   }
-  
+
   #if HAS_HOTEND
     #if ENABLED(SINGLENOZZLE)
     if (((abs((int)((int)thermalManager.temp_hotend[0].celsius - gCfgItems.filament_limit_temp)) <= 1)

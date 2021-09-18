@@ -47,8 +47,8 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_draw_set();
       break;
     case ID_W_CLOUD:
-      lv_draw_cloud_bind();
-      break;
+      // lv_draw_cloud_bind();
+      // break;
     #if ENABLED(MKS_WIFI_MODULE)
       case ID_W_RECONNECT: {
         uint8_t cmd_wifi_list[] = { 0xA5, 0x07, 0x00, 0x00, 0xFC };
