@@ -273,14 +273,24 @@ void lv_draw_keyboard() {
   lv_style_copy(&rel_style, &lv_style_btn_rel);
   rel_style.body.radius = 0;
   rel_style.body.border.width = 1;
-  rel_style.body.main_color = lv_color_make(0xA9, 0x62, 0x1D);
-  rel_style.body.grad_color = lv_color_make(0xA7, 0x59, 0x0E);
+  rel_style.body.main_color = lv_color_make(0xFB, 0xB3, 0x51);
+  rel_style.body.grad_color = lv_color_make(0xFB, 0xB3, 0x51);
+  rel_style.text.color      = lv_color_make(0x00, 0x00, 0x00);
+  rel_style.text.sel_color  = lv_color_make(0xFF, 0xFF, 0xFF);
+  rel_style.body.border.color= lv_color_make(0xFF, 0xFF, 0xFF);
+  rel_style.body.border.opa     = 1;
+  rel_style.body.shadow.color   = lv_color_make(0xFB, 0xB3, 0x51);
+  rel_style.body.shadow.width   = 0;
+
+
 
   lv_style_copy(&pr_style, &lv_style_btn_pr);
   pr_style.body.radius = 0;
   pr_style.body.border.width = 1;
   pr_style.body.main_color = lv_color_make(0x72, 0x42, 0x15);
-  pr_style.body.grad_color = lv_color_make(0x6A, 0x3A, 0x0C);
+  pr_style.body.grad_color = lv_color_make(0x72, 0x42, 0x15);
+  pr_style.body.border.color= lv_color_make(0xFF, 0xFF, 0xFF);
+  pr_style.text.color      = lv_color_make(0xFF, 0xFF, 0xFF);
 
   // Create a keyboard and apply the styles
   lv_obj_t *kb = lv_kb_create(scr, nullptr);

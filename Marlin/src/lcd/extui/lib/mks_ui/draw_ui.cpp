@@ -522,7 +522,7 @@ char *getDispText(int index) {
     case FILAMENTCHANGE_UI:   strcpy(public_buf_l, filament_menu.title); break;
     case LEVELING_UI:
     case MESHLEVELING_UI:     strcpy(public_buf_l, leveling_menu.title); break;
-    case BIND_UI:             strcpy(public_buf_l, cloud_menu.title); break;
+    // case BIND_UI:             strcpy(public_buf_l, cloud_menu.title); break;
     case TOOL_UI:             strcpy(public_buf_l, tool_menu.title); break;
     case WIFI_LIST_UI:        TERN_(MKS_WIFI_MODULE, strcpy(public_buf_l, list_menu.title)); break;
     case MACHINE_PARA_UI:     strcpy(public_buf_l, MachinePara_menu.title); break;
@@ -829,7 +829,7 @@ void GUI_RefreshPage() {
         }
         break;
 
-      case BIND_UI: refresh_bind_ui(); break;
+      // case BIND_UI: refresh_bind_ui(); break;
     #endif
 
     case FILAMENTCHANGE_UI:
@@ -963,7 +963,7 @@ void lv_clear_cur_ui() {
     case FILAMENTCHANGE_UI:           lv_clear_filament_change(); break;
     case LEVELING_UI:                 lv_clear_manualLevel(); break;
     #if ENABLED(MKS_WIFI_MODULE)
-      case BIND_UI:                   lv_clear_cloud_bind(); break;
+      // case BIND_UI:                   lv_clear_cloud_bind(); break;
     #endif
     #if HAS_BED_PROBE
       case NOZZLE_PROBE_OFFSET_UI:    lv_clear_auto_level_offset_settings(); break;
@@ -1080,7 +1080,7 @@ void lv_draw_return_ui() {
       case FILAMENTCHANGE_UI:           lv_draw_filament_change(); break;
       case LEVELING_UI:                 lv_draw_manualLevel(); break;
       #if ENABLED(MKS_WIFI_MODULE)
-        case BIND_UI:                   lv_draw_cloud_bind(); break;
+        // case BIND_UI:                   lv_draw_cloud_bind(); break;
       #endif
       #if HAS_BED_PROBE
         case NOZZLE_PROBE_OFFSET_UI:    lv_draw_auto_level_offset_settings(); break;
@@ -1474,7 +1474,7 @@ void lv_print_finished() {
     //     marlin_state = MF_RUNNING;
     //   }
     // #endif
-    
+
   }
 }
 
@@ -1493,7 +1493,7 @@ void LV_TASK_HANDLER() {
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_update_encoder();
   #endif
-  
+
   if (marlin_state == MF_SD_COMPLETE) lv_print_finished();
 }
 

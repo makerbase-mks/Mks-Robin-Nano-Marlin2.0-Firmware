@@ -94,7 +94,7 @@
   #include "draw_wifi.h"
   #include "draw_wifi_list.h"
   #include "draw_wifi_tips.h"
-  #include "draw_cloud_bind.h"
+  // #include "draw_cloud_bind.h"
 #endif
 
 #define ESP_WIFI          0x02
