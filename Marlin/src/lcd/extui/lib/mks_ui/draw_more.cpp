@@ -87,8 +87,8 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
 void lv_draw_more() {
   scr = lv_screen_create(MORE_UI);
 
-  lv_big_button_create(scr, "F:/bmp_machine_para.bin", more_menu.gcode, INTERVAL_V, titleHeight, event_handler, ID_GCODE);
-  
+  lv_big_button_create(scr, "F:/bmp_gcode.bin", more_menu.gcode, INTERVAL_V, titleHeight, event_handler, ID_GCODE);
+
   #if HAS_USER_ITEM(1)
     lv_big_button_create(scr, "F:/bmp_custom1.bin", more_menu.custom1, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_CUSTOM_1);
   #endif
