@@ -60,19 +60,64 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
   switch (obj->mks_obj_id) {
     case ID_GCODE: lv_clear_more(); lv_draw_gcode(true); break;
     #if HAS_USER_ITEM(1)
-      case ID_CUSTOM_1: queue.inject_P(PSTR(MAIN_MENU_ITEM_1_GCODE)); break;
+      case ID_CUSTOM_1:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_1_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_1_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_1_BACK_HOME)
+          lv_clear_more();
+          lv_draw_home();
+        #endif
+      break;
     #endif
     #if HAS_USER_ITEM(2)
-      case ID_CUSTOM_2: queue.inject_P(PSTR(MAIN_MENU_ITEM_2_GCODE)); break;
+      case ID_CUSTOM_2:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_2_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_2_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_2_BACK_HOME)
+          lv_clear_more();
+          lv_draw_home();
+        #endif
+      break;
     #endif
     #if HAS_USER_ITEM(3)
-      case ID_CUSTOM_3: queue.inject_P(PSTR(MAIN_MENU_ITEM_3_GCODE)); break;
+      case ID_CUSTOM_3:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_3_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_3_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_3_BACK_HOME)
+          lv_clear_more();
+          lv_draw_home();
+        #endif
+      break;
     #endif
     #if HAS_USER_ITEM(4)
-      case ID_CUSTOM_4: queue.inject_P(PSTR(MAIN_MENU_ITEM_4_GCODE)); break;
+      case ID_CUSTOM_4:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_4_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_4_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_4_BACK_HOME)
+          lv_clear_more();
+          lv_draw_home();
+        #endif
+      break;
     #endif
     #if HAS_USER_ITEM(5)
-      case ID_CUSTOM_5: queue.inject_P(PSTR(MAIN_MENU_ITEM_5_GCODE)); break;
+      case ID_CUSTOM_5:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_5_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_5_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_5_BACK_HOME)
+          lv_clear_more();
+          lv_draw_home();
+        #endif
+      break;
     #endif
     #if HAS_USER_ITEM(6)
       case ID_CUSTOM_6: queue.inject_P(PSTR(MAIN_MENU_ITEM_6_GCODE)); break;
