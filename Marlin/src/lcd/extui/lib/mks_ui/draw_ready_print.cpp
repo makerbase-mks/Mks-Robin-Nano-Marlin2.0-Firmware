@@ -87,7 +87,7 @@ void disp_Limit_ok() {
   lv_label_set_text(limit_info, "Limit:ok");
 }
 void disp_Limit_error() {
-  limit_style.text.color.full = 0xF800;
+  limit_style.text.color.full = 0xFB3314;
   lv_obj_set_style(limit_info, &limit_style);
   lv_label_set_text(limit_info, "Limit:error");
 }
@@ -98,7 +98,7 @@ void disp_det_ok() {
   lv_label_set_text(det_info, "det:ok");
 }
 void disp_det_error() {
-  det_style.text.color.full = 0xF800;
+  det_style.text.color.full = 0xFB3314;
   lv_obj_set_style(det_info, &det_style);
   lv_label_set_text(det_info, "det:error");
 }
@@ -109,7 +109,7 @@ void disp_tmc_ok() {
   lv_label_set_text(tmc_state_info, "TMC CONNECTION OK");
 }
 void disp_tmc_error() {
-  tmc_state_style.text.color.full = 0xF800;
+  tmc_state_style.text.color.full = 0xFB3314;
   lv_obj_set_style(tmc_state_info, &tmc_state_style);
   lv_label_set_text(tmc_state_info, "TMC CONNECTION ERROR");
 }
@@ -139,7 +139,7 @@ void lv_draw_ready_print(void) {
 
   disp_state_stack._disp_index = 0;
   ZERO(disp_state_stack._disp_state);
-  
+
   if (mks_test_flag == 0x1E) {
     scr = lv_screen_create(MAIN_UI, "");
 

@@ -44,7 +44,7 @@
  * version was tagged.
  */
 #ifndef STRING_DISTRIBUTION_DATE
-  #define STRING_DISTRIBUTION_DATE "2021-02-01"
+  #define STRING_DISTRIBUTION_DATE "2021-09-23"
 #endif
 
 /**
@@ -84,7 +84,7 @@
  * providing the source code to your customers.)
  */
 #ifndef SOURCE_CODE_URL
-  #define SOURCE_CODE_URL "github.com/MarlinFirmware/Marlin"
+  #define SOURCE_CODE_URL "github.com/ItalyMakers/Mks-Robin-Nano-Marlin2.0-Firmware"
 #endif
 
 /**
