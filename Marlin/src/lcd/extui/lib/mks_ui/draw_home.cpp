@@ -48,7 +48,12 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
     case ID_H_ALL:
-      queue.inject_P(G28_STR);
+      #if ENABLED(BLTOUCH)
+        queue.inject_P(PSTR("G28Z\nG28XY"));
+      #else
+        queue.inject_P(G28_STR);
+      #endif
+
       break;
     case ID_H_X:
       queue.inject_P(PSTR("G28X"));
