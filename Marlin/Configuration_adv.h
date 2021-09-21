@@ -2103,7 +2103,7 @@
 // For debug-echo: 128 bytes for the optimal speed.
 // Other output doesn't need to be that speedy.
 // :[0, 2, 4, 8, 16, 32, 64, 128, 256]
-#define TX_BUFFER_SIZE 32
+#define TX_BUFFER_SIZE 0
 
 // Host Receive Buffer Size
 // Without XON/XOFF flow control (see SERIAL_XON_XOFF below) 32 bytes should be enough.
@@ -2351,7 +2351,7 @@
   #define FILAMENT_CHANGE_ALERT_BEEPS         10  // Number of alert beeps to play when a response is needed.
   #define PAUSE_PARK_NO_STEPPER_TIMEOUT           // Enable for XYZ steppers to stay powered on during filament change.
 
-  //#define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
+  // #define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
   //#define HOME_BEFORE_FILAMENT_CHANGE           // If needed, home before parking for filament change
 
   #define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
@@ -3548,25 +3548,25 @@
 
   #define MAIN_MENU_ITEM_1_DESC PREHEAT_1_LABEL " (" STRINGIFY(PREHEAT_1_TEMP_HOTEND) "/" STRINGIFY(PREHEAT_1_TEMP_BED) ")"
   #define MAIN_MENU_ITEM_1_GCODE "M140 S" STRINGIFY(PREHEAT_1_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_1_TEMP_HOTEND)
-  #define MAIN_MENU_ITEM_1_CONFIRM          // Show a confirmation dialog before this action
+  // #define MAIN_MENU_ITEM_1_CONFIRM          // Show a confirmation dialog before this action
   // #define MAIN_MENU_ITEM_1_BACK
   #define MAIN_MENU_ITEM_1_BACK_HOME
 
   #define MAIN_MENU_ITEM_2_DESC PREHEAT_2_LABEL   " (" STRINGIFY(PREHEAT_2_TEMP_HOTEND) "/" STRINGIFY(PREHEAT_2_TEMP_BED) ")"
   #define MAIN_MENU_ITEM_2_GCODE "M140 S" STRINGIFY(PREHEAT_2_TEMP_BED) "\nM104 S" STRINGIFY(PREHEAT_2_TEMP_HOTEND)
-  #define MAIN_MENU_ITEM_2_CONFIRM
+  // #define MAIN_MENU_ITEM_2_CONFIRM
   // #define MAIN_MENU_ITEM_2_BACK
   #define MAIN_MENU_ITEM_2_BACK_HOME
 
   #define MAIN_MENU_ITEM_3_DESC "COOL DOWN"
   #define MAIN_MENU_ITEM_3_GCODE "M106 S0\nM104 S0\nM140 S0"
-  #define MAIN_MENU_ITEM_3_CONFIRM
+  // #define MAIN_MENU_ITEM_3_CONFIRM
   // #define MAIN_MENU_ITEM_3_BACK
   #define MAIN_MENU_ITEM_3_BACK_HOME
 
   #define MAIN_MENU_ITEM_4_DESC "Stop All"
   #define MAIN_MENU_ITEM_4_GCODE "M112"
-  #define MAIN_MENU_ITEM_4_CONFIRM
+  // #define MAIN_MENU_ITEM_4_CONFIRM
   // #define MAIN_MENU_ITEM_4_BACK
   #define MAIN_MENU_ITEM_4_BACK_HOME
 
