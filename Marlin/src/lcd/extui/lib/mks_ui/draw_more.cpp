@@ -67,7 +67,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           lv_draw_tool();
         #elif ENABLED(MAIN_MENU_ITEM_1_BACK_HOME)
           lv_clear_more();
-          lv_draw_home();
+          lv_draw_ready_print();
         #endif
       break;
     #endif
@@ -79,7 +79,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           lv_draw_tool();
         #elif ENABLED(MAIN_MENU_ITEM_2_BACK_HOME)
           lv_clear_more();
-          lv_draw_home();
+          lv_draw_ready_print();
         #endif
       break;
     #endif
@@ -91,7 +91,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           lv_draw_tool();
         #elif ENABLED(MAIN_MENU_ITEM_3_BACK_HOME)
           lv_clear_more();
-          lv_draw_home();
+          lv_draw_ready_print();
         #endif
       break;
     #endif
@@ -103,7 +103,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           lv_draw_tool();
         #elif ENABLED(MAIN_MENU_ITEM_4_BACK_HOME)
           lv_clear_more();
-          lv_draw_home();
+          lv_draw_ready_print();
         #endif
       break;
     #endif
@@ -115,12 +115,19 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
           lv_draw_tool();
         #elif ENABLED(MAIN_MENU_ITEM_5_BACK_HOME)
           lv_clear_more();
-          lv_draw_home();
+          lv_draw_ready_print();
         #endif
       break;
     #endif
     #if HAS_USER_ITEM(6)
       case ID_CUSTOM_6: queue.inject_P(PSTR(MAIN_MENU_ITEM_6_GCODE)); break;
+      #if ENABLED(MAIN_MENU_ITEM_6_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_6_BACK_HOME)
+          lv_clear_more();
+          lv_draw_ready_print();
+        #endif
     #endif
     case ID_M_RETURN:
       lv_clear_more();
