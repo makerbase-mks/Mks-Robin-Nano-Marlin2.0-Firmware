@@ -138,6 +138,7 @@ void lv_draw_ready_print(void) {
   lv_obj_t *buttonTool;
 
   disp_state_stack._disp_index = 0;
+  
   ZERO(disp_state_stack._disp_state);
   
   if (mks_test_flag == 0x1E) {

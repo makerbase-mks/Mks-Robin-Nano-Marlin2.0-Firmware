@@ -141,12 +141,10 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         }
         lv_obj_del(btn_pla);
         lv_obj_del(btn_abs);
-
       }
       else if (uiCfg.curTempType == 1) {
         uiCfg.curSprayerChoose = 0;
         uiCfg.curTempType      = 0;
-
         lv_obj_del(buttonAdd);
         lv_obj_del(buttonDec);
         disp_add_dec();
