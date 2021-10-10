@@ -50,7 +50,7 @@ enum {
   ID_P_TYPE,
   ID_P_STEP,
   ID_P_OFF,
-  ID_P_RETURN,
+  ID_P_RETURN, 
   ID_P_ABS,
   ID_P_PLA,
 };
@@ -141,15 +141,12 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         }
         lv_obj_del(btn_pla);
         lv_obj_del(btn_abs);
-
       }
       else if (uiCfg.curTempType == 1) {
         uiCfg.curSprayerChoose = 0;
         uiCfg.curTempType      = 0;
-
         lv_obj_del(buttonAdd);
         lv_obj_del(buttonDec);
-
         disp_add_dec();
         disp_ext_heart();
       }
@@ -197,7 +194,7 @@ void lv_draw_preHeat(void) {
   scr = lv_screen_create(PRE_HEAT_UI);
 
   disp_add_dec();
-
+  
   buttonType = lv_imgbtn_create(scr, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_P_TYPE);
   buttonStep = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_P_STEP);
   #if HAS_ROTARY_ENCODER
@@ -246,7 +243,7 @@ void disp_ext_heart() {
 
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre); 
     lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
 
     label_abs = lv_label_create(btn_abs, PREHEAT_2_LABEL);
@@ -259,13 +256,13 @@ void dis_ext_heart_change(uint8_t mode) {
     btn_style_pre.body.opa = 0;
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre); 
     lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
   }else {
     btn_style_pre.body.opa = 255;
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
     lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre); 
     lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
   }
 }

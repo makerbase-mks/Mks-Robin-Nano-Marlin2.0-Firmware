@@ -59,6 +59,7 @@ MachinePara_menu_def         MachinePara_menu;
 pause_msg_def                pause_msg_menu;
 eeprom_def                   eeprom_menu;
 touchmi_menu_def             touchmi_menu;
+media_select_menu_def        media_select_menu;
 
 machine_common_def machine_menu;
 void machine_setting_disp() {
@@ -909,6 +910,10 @@ void disp_language_init() {
 
   filament_menu.stat_temp = TEXT_VALUE;
 
+  media_select_menu.title    = MEDIA_SELECT_TITLE_EN;
+  media_select_menu.sd_disk  = SD_CARD_TITLE_EN;
+  media_select_menu.usb_disk = USB_DRIVE_TITLE_EN;
+
   machine_menu.key_0     = KEYBOARD_KEY0_EN;
   machine_menu.key_1     = KEYBOARD_KEY1_EN;
   machine_menu.key_2     = KEYBOARD_KEY2_EN;
@@ -1032,27 +1037,26 @@ void disp_language_init() {
       filesys_menu.sd_sys  = SD_CARD_TEXT_CN;
       filesys_menu.usb_sys = U_DISK_TEXT_CN;
       //
-      more_menu.title   = TITLE_MORE_CN;
-      #if ENABLED(USER_CMD_1_ENABLE)
+      more_menu.title       = TITLE_MORE_CN;
+      more_menu.gcode       = MORE_GCODE_CN;
+      more_menu.entergcode  = MORE_ENTER_GCODE_CN;
+      #if HAS_USER_ITEM(1)
         more_menu.custom1 = MORE_CUSTOM1_TEXT_CN;
       #endif
-      #if ENABLED(USER_CMD_2_ENABLE)
+      #if HAS_USER_ITEM(2)
         more_menu.custom2 = MORE_CUSTOM2_TEXT_CN;
       #endif
-      #if ENABLED(USER_CMD_3_ENABLE)
+      #if HAS_USER_ITEM(3)
         more_menu.custom3 = MORE_CUSTOM3_TEXT_CN;
       #endif
-      #if ENABLED(USER_CMD_4_ENABLE)
+      #if HAS_USER_ITEM(4)
         more_menu.custom4 = MORE_CUSTOM4_TEXT_CN;
       #endif
-      #if ENABLED(USER_CMD_5_ENABLE)
+      #if HAS_USER_ITEM(5)
         more_menu.custom5 = MORE_CUSTOM5_TEXT_CN;
       #endif
-      #if ENABLED(USER_CMD_6_ENABLE)
+      #if HAS_USER_ITEM(6)
         more_menu.custom6 = MORE_CUSTOM6_TEXT_CN;
-      #endif
-      #if ENABLED(USER_CMD_7_ENABLE)
-        more_menu.custom7 = MORE_CUSTOM7_TEXT_CN;
       #endif
       // WIFI
       wifi_menu.title = WIFI_TEXT;
@@ -1093,7 +1097,6 @@ void disp_language_init() {
       filament_menu.filament_dialog_unload_heat_confirm = FILAMENT_DIALOG_UNLOAD_CONFIRM_TIPS_CN;
       filament_menu.filament_dialog_unloading           = FILAMENT_DIALOG_UNLOADING_TIPS_CN;
       filament_menu.filament_dialog_unload_completed    = FILAMENT_DIALOG_UNLOAD_COMPLETE_TIPS_CN;
-
 
       //
       language_menu.title = TITLE_LANGUAGE_CN;
@@ -1163,6 +1166,10 @@ void disp_language_init() {
       print_file_dialog_menu.wifi_enable_tips   = DIALOG_WIFI_ENABLE_TIPS_CN;
       print_file_dialog_menu.machinePausingTips = DIALOG_PAUSING_TIPS_CN;
       print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_CN;
+      print_file_dialog_menu.hourText           = DIALOG_HOUR_TEXT_CN;
+      print_file_dialog_menu.minuteText         = DIALOG_MINUTE_TEXT_CN;
+      print_file_dialog_menu.secondText         = DIALOG_SECOND_TEXT_CN;
+      print_file_dialog_menu.timeConsum         = DIALOG_TIME_CONSUMING_TEXT_CN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_CN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_CN;
@@ -1282,30 +1289,29 @@ void disp_language_init() {
             filesys_menu.sd_sys   = SD_CARD_TEXT_T_CN;
             filesys_menu.usb_sys  = U_DISK_TEXT_T_CN;
             //
-            more_menu.title = TITLE_MORE_T_CN;
-            #if ENABLED(USER_CMD_1_ENABLE)
-              more_menu.custom1 = MORE_CUSTOM1_TEXT_T_CN;
+            more_menu.title       = TITLE_MORE_T_CN;
+            more_menu.gcode       = MORE_GCODE_T_CN;
+            more_menu.entergcode  = MORE_ENTER_GCODE_T_CN;
+            #if HAS_USER_ITEM(1)
+              more_menu.custom1 = MORE_CUSTOM1_TEXT_CN;
             #endif
-            #if ENABLED(USER_CMD_2_ENABLE)
-              more_menu.custom2 = MORE_CUSTOM2_TEXT_T_CN;
+            #if HAS_USER_ITEM(2)
+              more_menu.custom2 = MORE_CUSTOM2_TEXT_CN;
             #endif
-            #if ENABLED(USER_CMD_3_ENABLE)
-              more_menu.custom3 = MORE_CUSTOM3_TEXT_T_CN;
+            #if HAS_USER_ITEM(3)
+              more_menu.custom3 = MORE_CUSTOM3_TEXT_CN;
             #endif
-            #if ENABLED(USER_CMD_4_ENABLE)
-              more_menu.custom4 = MORE_CUSTOM4_TEXT_T_CN;
+            #if HAS_USER_ITEM(4)
+              more_menu.custom4 = MORE_CUSTOM4_TEXT_CN;
             #endif
-            #if ENABLED(USER_CMD_5_ENABLE)
-              more_menu.custom5 = MORE_CUSTOM5_TEXT_T_CN;
+            #if HAS_USER_ITEM(5)
+              more_menu.custom5 = MORE_CUSTOM5_TEXT_CN;
             #endif
-            #if ENABLED(USER_CMD_6_ENABLE)
-              more_menu.custom6 = MORE_CUSTOM6_TEXT_T_CN;
-            #endif
-            #if ENABLED(USER_CMD_7_ENABLE)
-              more_menu.custom7 = MORE_CUSTOM7_TEXT_T_CN;
+            #if HAS_USER_ITEM(6)
+              more_menu.custom6 = MORE_CUSTOM6_TEXT_CN;
             #endif
             // WIFI
-            wifi_menu.title = WIFI_TEXT;
+            wifi_menu.title     = WIFI_TEXT;
             wifi_menu.cloud     = CLOUD_TEXT_T_CN;
             wifi_menu.reconnect = WIFI_RECONNECT_TEXT_T_CN;
             // CLOUD
@@ -1411,6 +1417,7 @@ void disp_language_init() {
             print_file_dialog_menu.wifi_enable_tips    = DIALOG_WIFI_ENABLE_TIPS_T_CN;
             print_file_dialog_menu.machinePausingTips  = DIALOG_PAUSING_TIPS_T_CN;
             print_file_dialog_menu.autolevelingTips    = DIALOG_AUTO_LEVELING_TIPS_T_CN;
+            print_file_dialog_menu.timeConsum         = DIALOG_TIME_CONSUMING_TEXT_T_CN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_T_CN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_T_CN;
@@ -1517,27 +1524,27 @@ void disp_language_init() {
             set_menu.shutdown     = SHUTDOWN_TEXT_EN;
             set_menu.machine_para = MACHINE_PARA_EN;
             set_menu.eepromSet    = EEPROM_SETTINGS_EN;
+            //
             more_menu.title       = TITLE_MORE_EN;
-            #if ENABLED(USER_CMD_1_ENABLE)
+            more_menu.gcode       = MORE_GCODE_EN;
+            more_menu.entergcode  = MORE_ENTER_GCODE_EN;
+            #if HAS_USER_ITEM(1)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_EN;
             #endif
-            #if ENABLED(USER_CMD_2_ENABLE)
+            #if HAS_USER_ITEM(2)
               more_menu.custom2 = MORE_CUSTOM2_TEXT_EN;
             #endif
-            #if ENABLED(USER_CMD_3_ENABLE)
+            #if HAS_USER_ITEM(3)
               more_menu.custom3 = MORE_CUSTOM3_TEXT_EN;
             #endif
-            #if ENABLED(USER_CMD_4_ENABLE)
+            #if HAS_USER_ITEM(4)
               more_menu.custom4 = MORE_CUSTOM4_TEXT_EN;
             #endif
-            #if ENABLED(USER_CMD_5_ENABLE)
+            #if HAS_USER_ITEM(5)
               more_menu.custom5 = MORE_CUSTOM5_TEXT_EN;
             #endif
-            #if ENABLED(USER_CMD_6_ENABLE)
+            #if HAS_USER_ITEM(6)
               more_menu.custom6 = MORE_CUSTOM6_TEXT_EN;
-            #endif
-            #if ENABLED(USER_CMD_7_ENABLE)
-              more_menu.custom7 = MORE_CUSTOM7_TEXT_EN;
             #endif
 
             //
@@ -1545,7 +1552,7 @@ void disp_language_init() {
             filesys_menu.sd_sys  = SD_CARD_TEXT_EN;
             filesys_menu.usb_sys = U_DISK_TEXT_EN;
             // WIFI
-            wifi_menu.title = WIFI_TEXT;
+            wifi_menu.title     = WIFI_TEXT;
             wifi_menu.cloud     = CLOUD_TEXT_EN;
             wifi_menu.reconnect = WIFI_RECONNECT_TEXT_EN;
 
@@ -1648,6 +1655,7 @@ void disp_language_init() {
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
             print_file_dialog_menu.machinePausingTips    = DIALOG_PAUSING_TIPS_EN;
             print_file_dialog_menu.autolevelingTips      = DIALOG_AUTO_LEVELING_TIPS_EN;
+            print_file_dialog_menu.timeConsum            = DIALOG_TIME_CONSUMING_TEXT_EN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_EN;
@@ -1755,26 +1763,25 @@ void disp_language_init() {
             set_menu.machine_para = MACHINE_PARA_RU;
             set_menu.eepromSet    = EEPROM_SETTINGS_RU;
             more_menu.title       = TITLE_MORE_RU;
-            #if ENABLED(USER_CMD_1_ENABLE)
+            more_menu.gcode       = MORE_GCODE_RU;
+            more_menu.entergcode  = MORE_ENTER_GCODE_RU;
+            #if HAS_USER_ITEM(1)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_RU;
             #endif
-            #if ENABLED(USER_CMD_2_ENABLE)
+            #if HAS_USER_ITEM(2)
               more_menu.custom2 = MORE_CUSTOM2_TEXT_RU;
             #endif
-            #if ENABLED(USER_CMD_3_ENABLE)
+            #if HAS_USER_ITEM(3)
               more_menu.custom3 = MORE_CUSTOM3_TEXT_RU;
             #endif
-            #if ENABLED(USER_CMD_4_ENABLE)
+            #if HAS_USER_ITEM(4)
               more_menu.custom4 = MORE_CUSTOM4_TEXT_RU;
             #endif
-            #if ENABLED(USER_CMD_5_ENABLE)
+            #if HAS_USER_ITEM(5)
               more_menu.custom5 = MORE_CUSTOM5_TEXT_RU;
             #endif
-            #if ENABLED(USER_CMD_6_ENABLE)
+            #if HAS_USER_ITEM(6)
               more_menu.custom6 = MORE_CUSTOM6_TEXT_RU;
-            #endif
-            #if ENABLED(USER_CMD_7_ENABLE)
-              more_menu.custom7 = MORE_CUSTOM7_TEXT_RU;
             #endif
             //
             filesys_menu.title   = TITLE_FILESYS_RU;
@@ -2116,26 +2123,25 @@ void disp_language_init() {
             set_menu.machine_para = MACHINE_PARA_SP;
             set_menu.eepromSet    = EEPROM_SETTINGS_SP;
             more_menu.title       = TITLE_MORE_SP;
-            #if ENABLED(USER_CMD_1_ENABLE)
+            more_menu.gcode       = MORE_GCODE_SP;
+            more_menu.entergcode  = MORE_ENTER_GCODE_SP;
+            #if HAS_USER_ITEM(1)
               more_menu.custom1 = MORE_CUSTOM1_TEXT_SP;
             #endif
-            #if ENABLED(USER_CMD_2_ENABLE)
+            #if HAS_USER_ITEM(2)
               more_menu.custom2 = MORE_CUSTOM2_TEXT_SP;
             #endif
-            #if ENABLED(USER_CMD_3_ENABLE)
+            #if HAS_USER_ITEM(3)
               more_menu.custom3 = MORE_CUSTOM3_TEXT_SP;
             #endif
-            #if ENABLED(USER_CMD_4_ENABLE)
+            #if HAS_USER_ITEM(4)
               more_menu.custom4 = MORE_CUSTOM4_TEXT_SP;
             #endif
-            #if ENABLED(USER_CMD_5_ENABLE)
+            #if HAS_USER_ITEM(5)
               more_menu.custom5 = MORE_CUSTOM5_TEXT_SP;
             #endif
-            #if ENABLED(USER_CMD_6_ENABLE)
+            #if HAS_USER_ITEM(6)
               more_menu.custom6 = MORE_CUSTOM6_TEXT_SP;
-            #endif
-            #if ENABLED(USER_CMD_7_ENABLE)
-              more_menu.custom7 = MORE_CUSTOM7_TEXT_SP;
             #endif
             //
             filesys_menu.title   = TITLE_FILESYS_SP;
@@ -2143,7 +2149,7 @@ void disp_language_init() {
             filesys_menu.usb_sys = U_DISK_TEXT_SP;
 
             // WIFI
-            wifi_menu.title = WIFI_TEXT;
+            wifi_menu.title     = WIFI_TEXT;
             wifi_menu.cloud     = CLOUD_TEXT_SP;
             wifi_menu.reconnect = WIFI_RECONNECT_TEXT_SP;
 
@@ -2354,26 +2360,25 @@ void disp_language_init() {
           set_menu.machine_para = MACHINE_PARA_FR;
           set_menu.eepromSet    = EEPROM_SETTINGS_FR;
           more_menu.title       = TITLE_MORE_FR;
-          #if ENABLED(USER_CMD_1_ENABLE)
+          more_menu.gcode       = MORE_GCODE_FR;
+          more_menu.entergcode  = MORE_ENTER_GCODE_FR;
+          #if HAS_USER_ITEM(1)
             more_menu.custom1 = MORE_CUSTOM1_TEXT_FR;
           #endif
-          #if ENABLED(USER_CMD_2_ENABLE)
+          #if HAS_USER_ITEM(2)
             more_menu.custom2 = MORE_CUSTOM2_TEXT_FR;
           #endif
-          #if ENABLED(USER_CMD_3_ENABLE)
+          #if HAS_USER_ITEM(3)
             more_menu.custom3 = MORE_CUSTOM3_TEXT_FR;
           #endif
-          #if ENABLED(USER_CMD_4_ENABLE)
+          #if HAS_USER_ITEM(4)
             more_menu.custom4 = MORE_CUSTOM4_TEXT_FR;
           #endif
-          #if ENABLED(USER_CMD_5_ENABLE)
+          #if HAS_USER_ITEM(5)
             more_menu.custom5 = MORE_CUSTOM5_TEXT_FR;
           #endif
-          #if ENABLED(USER_CMD_6_ENABLE)
+          #if HAS_USER_ITEM(6)
             more_menu.custom6 = MORE_CUSTOM6_TEXT_FR;
-          #endif
-          #if ENABLED(USER_CMD_7_ENABLE)
-            more_menu.custom7 = MORE_CUSTOM7_TEXT_FR;
           #endif
           //
           filesys_menu.title          = TITLE_FILESYS_FR;
@@ -2383,7 +2388,7 @@ void disp_language_init() {
           file_menu.no_file           = NO_FILE_FR;
           file_menu.no_file_and_check = NO_FILE_FR;
           // WIFI
-          wifi_menu.title = WIFI_NAME_TEXT_FR;
+          wifi_menu.title     = WIFI_NAME_TEXT_FR;
           wifi_menu.cloud     = CLOUD_TEXT_FR;
           wifi_menu.reconnect = WIFI_RECONNECT_TEXT_FR;
 
@@ -2593,26 +2598,25 @@ void disp_language_init() {
           set_menu.machine_para = MACHINE_PARA_IT;
           set_menu.eepromSet    = EEPROM_SETTINGS_IT;
           more_menu.title       = TITLE_MORE_IT;
-          #if ENABLED(USER_CMD_1_ENABLE)
+          more_menu.gcode       = MORE_GCODE_IT;
+          more_menu.entergcode  = MORE_ENTER_GCODE_IT;
+          #if HAS_USER_ITEM(1)
             more_menu.custom1 = MORE_CUSTOM1_TEXT_IT;
           #endif
-          #if ENABLED(USER_CMD_2_ENABLE)
+          #if HAS_USER_ITEM(2)
             more_menu.custom2 = MORE_CUSTOM2_TEXT_IT;
           #endif
-          #if ENABLED(USER_CMD_3_ENABLE)
+          #if HAS_USER_ITEM(3)
             more_menu.custom3 = MORE_CUSTOM3_TEXT_IT;
           #endif
-          #if ENABLED(USER_CMD_4_ENABLE)
+          #if HAS_USER_ITEM(4)
             more_menu.custom4 = MORE_CUSTOM4_TEXT_IT;
           #endif
-          #if ENABLED(USER_CMD_5_ENABLE)
+          #if HAS_USER_ITEM(5)
             more_menu.custom5 = MORE_CUSTOM5_TEXT_IT;
           #endif
-          #if ENABLED(USER_CMD_6_ENABLE)
+          #if HAS_USER_ITEM(6)
             more_menu.custom6 = MORE_CUSTOM6_TEXT_IT;
-          #endif
-          #if ENABLED(USER_CMD_7_ENABLE)
-            more_menu.custom7 = MORE_CUSTOM7_TEXT_IT;
           #endif
           //
           filesys_menu.title   = TITLE_FILESYS_IT;
@@ -2620,7 +2624,7 @@ void disp_language_init() {
           filesys_menu.usb_sys = U_DISK_TEXT_IT;
 
           // WIFI
-          wifi_menu.title = WIFI_NAME_TEXT_IT;
+          wifi_menu.title     = WIFI_NAME_TEXT_IT;
           wifi_menu.cloud     = CLOSE_TEXT_IT;
           wifi_menu.reconnect = WIFI_RECONNECT_TEXT_IT;
 
@@ -2831,34 +2835,33 @@ void disp_language_init() {
       set_menu.machine_para = MACHINE_PARA_EN;
       set_menu.eepromSet    = EEPROM_SETTINGS_EN;
       //
-      more_menu.title   = TITLE_MORE_EN;
-      #if ENABLED(USER_CMD_1_ENABLE)
+      more_menu.title       = TITLE_MORE_EN;
+      more_menu.gcode       = MORE_GCODE_EN;
+      more_menu.entergcode  = MORE_ENTER_GCODE_EN;
+      #if HAS_USER_ITEM(1)
         more_menu.custom1 = MORE_CUSTOM1_TEXT_EN;
       #endif
-      #if ENABLED(USER_CMD_2_ENABLE)
+      #if HAS_USER_ITEM(2)
         more_menu.custom2 = MORE_CUSTOM2_TEXT_EN;
       #endif
-      #if ENABLED(USER_CMD_3_ENABLE)
+      #if HAS_USER_ITEM(3)
         more_menu.custom3 = MORE_CUSTOM3_TEXT_EN;
       #endif
-      #if ENABLED(USER_CMD_4_ENABLE)
+      #if HAS_USER_ITEM(4)
         more_menu.custom4 = MORE_CUSTOM4_TEXT_EN;
       #endif
-      #if ENABLED(USER_CMD_5_ENABLE)
+      #if HAS_USER_ITEM(5)
         more_menu.custom5 = MORE_CUSTOM5_TEXT_EN;
       #endif
-      #if ENABLED(USER_CMD_6_ENABLE)
+      #if HAS_USER_ITEM(6)
         more_menu.custom6 = MORE_CUSTOM6_TEXT_EN;
-      #endif
-      #if ENABLED(USER_CMD_7_ENABLE)
-        more_menu.custom7 = MORE_CUSTOM7_TEXT_EN;
       #endif
       //
       filesys_menu.title   = TITLE_FILESYS_EN;
       filesys_menu.sd_sys  = SD_CARD_TEXT_EN;
       filesys_menu.usb_sys = U_DISK_TEXT_EN;
       // WIFI
-      wifi_menu.title = WIFI_TEXT;
+      wifi_menu.title     = WIFI_TEXT;
       wifi_menu.cloud     = CLOUD_TEXT_EN;
       wifi_menu.reconnect = WIFI_RECONNECT_TEXT_EN;
 

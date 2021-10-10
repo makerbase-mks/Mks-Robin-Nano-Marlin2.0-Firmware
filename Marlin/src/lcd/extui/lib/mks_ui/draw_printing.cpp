@@ -74,7 +74,7 @@ enum {
 bool once_flag; // = false
 extern bool flash_preview_begin, default_preview_flg, gcode_preview_over;
 extern uint32_t To_pre_view;
-
+extern char public_buf_t[30];
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   if (gcode_preview_over) return;
@@ -108,7 +108,6 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         }
       #endif
       break;
-
     case ID_STOP:
       lv_clear_printing();
       lv_draw_dialog(DIALOG_TYPE_STOP);
@@ -118,23 +117,23 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       lv_draw_operation();
       break;
     case ID_TEMP_EXT:
-          uiCfg.curTempType = 0;
-          lv_clear_printing();
-          lv_draw_preHeat();
-          break;
+      uiCfg.curTempType = 0;
+      lv_clear_printing();
+      lv_draw_preHeat();
+      break;
     case ID_TEMP_BED:
-              uiCfg.curTempType = 1;
-              lv_clear_printing();
-              lv_draw_preHeat();
-              break;
+      uiCfg.curTempType = 1;
+      lv_clear_printing();
+      lv_draw_preHeat();
+      break;
     case ID_BABYSTEP:
-            lv_clear_printing();
-            lv_draw_baby_stepping();
-            break;
+      lv_clear_printing();
+      lv_draw_baby_stepping();
+      break;
     case ID_FAN:
-            lv_clear_printing();
-            lv_draw_fan();
-            break;
+      lv_clear_printing();
+      lv_draw_fan();
+      break;
   }
 }
 
@@ -252,7 +251,7 @@ void disp_bed_temp() {
 }
 
 void disp_fan_speed() {
-  sprintf_P(public_buf_l, PSTR("%3d"), thermalManager.fan_speed[0]);
+  sprintf_P(public_buf_l, PSTR("%d%%"), (int)thermalManager.fanSpeedPercent(0));
   lv_label_set_text(labelFan, public_buf_l);
 }
 
@@ -315,7 +314,10 @@ void setProBarRate() {
         flash_preview_begin = false;
         default_preview_flg = false;
         lv_clear_printing();
-        lv_draw_dialog(DIALOG_TYPE_FINISH_PRINT);
+
+        sprintf_P((char *)public_buf_t,PSTR("%s %d%d-%d%d-%d%d"),print_file_dialog_menu.timeConsum,print_time.hours / 10, print_time.hours % 10, print_time.minutes / 10, print_time.minutes % 10, print_time.seconds / 10, print_time.seconds % 10);
+
+        lv_draw_dialog(DIALOG_TYPE_FINISH_PRINT); 
 
         once_flag = true;
 

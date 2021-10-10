@@ -175,7 +175,7 @@
   #endif
 
   #define MT_DET_1_PIN                      PA4   // LVGL UI FILAMENT RUNOUT1 PIN
-  #define MT_DET_2_PIN                      PE6   // LVGL UI FILAMENT RUNOUT2 PIN
+  // #define MT_DET_2_PIN                      PE6   // LVGL UI FILAMENT RUNOUT2 PIN
   #define MT_DET_PIN_INVERTING             false  // LVGL UI filament RUNOUT PIN STATE
 
   #define WIFI_IO0_PIN                      PC13  // MKS ESP WIFI IO0 PIN
@@ -184,9 +184,11 @@
 #else
   //#define POWER_LOSS_PIN                  PA2   // PW_DET
   //#define PS_ON_PIN                       PB2   // PW_OFF
-  #define FIL_RUNOUT_PIN                    PA4
   #define FIL_RUNOUT2_PIN                   PE6
 #endif
+
+#define FIL_RUNOUT_PIN                      PA4
+#define MT_TIME_DELAY                       3000  // Default 3s
 
 //#define LED_PIN                           PB2
 

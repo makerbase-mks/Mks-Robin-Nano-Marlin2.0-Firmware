@@ -119,12 +119,20 @@ void unicode_2_utf8(char *des, uint16_t *source, uint8_t Len) {
     for (uint16_t i = 0; i < fileCnt; i++) {
 
       if (list_file.Sd_file_cnt == list_file.Sd_file_offset) {
+
         card.getfilename_sorted(SD_ORDER(i, fileCnt));
+
         list_file.IsFolder[valid_name_cnt] = card.flag.filenameIsDir;
+        // if()
+
         strcpy(list_file.file_name[valid_name_cnt], list_file.curDirPath);
+
         strcat_P(list_file.file_name[valid_name_cnt], PSTR("/"));
+
         strcat(list_file.file_name[valid_name_cnt], card.filename);
+
         // strcpy(list_file.long_name[valid_name_cnt], card.longest_filename());
+
         ZERO(list_file.long_name[valid_name_cnt]);
 				if (lv_longFilename[0] == 0)
 				  strncpy(list_file.long_name[valid_name_cnt], card.filename, strlen(card.filename));
@@ -251,7 +259,11 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
           else {
             sel_id = i;
             lv_clear_print_file();
-            lv_draw_dialog(DIALOG_TYPE_PRINT_FILE);
+            if(get_filemant_pins() == false ) { 
+              lv_draw_dialog(DIALOG_TYPE_FILAMENT_NO_PRESS);  
+            }else {
+              lv_draw_dialog(DIALOG_TYPE_PRINT_FILE);
+            }
           }
           break;
         }
@@ -280,25 +292,10 @@ void lv_draw_print_file(void) {
     file_count = search_file();
   #endif
   disp_gcode_icon(file_count);
-
-  //lv_obj_t *labelPageUp = lv_label_create_empty(buttonPageUp);
-  //lv_obj_t *labelPageDown = lv_label_create_empty(buttonPageDown);
-  //lv_obj_t *label_Back = lv_label_create_empty(buttonBack);
-
-  /*
-  if (gCfgItems.multiple_language) {
-    lv_label_set_text(labelPageUp, tool_menu.preheat);
-    lv_obj_align(labelPageUp, buttonPageUp, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
-
-    lv_label_set_text(labelPageDown, tool_menu.extrude);
-    lv_obj_align(labelPageDown, buttonPageDown, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
-
-    lv_label_set_text(label_Back, common_menu.text_back);
-    lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID,0, BUTTON_TEXT_Y_OFFSET);
-  }
-  */
 }
+
 static char test_public_buf_l[(SHORT_NAME_LEN + 1) * MAX_DIR_LEVEL + strlen("S:/") + 1];
+
 void disp_gcode_icon(uint8_t file_num) {
   uint8_t i;
 
@@ -347,15 +344,23 @@ void disp_gcode_icon(uint8_t file_num) {
       }
       else {
         if (have_pre_pic((char *)list_file.file_name[i])) {
-
           //lv_obj_set_event_cb_mks(buttonGcode[i], event_handler, (i + 1), list_file.file_name[i], 1);
 
+          memset(test_public_buf_l, 0, sizeof(test_public_buf_l));
+          memset(buttonGcode[i]->mks_pic_name, 0, sizeof(buttonGcode[i]->mks_pic_name));
+          
           strcpy(test_public_buf_l, "S:");
+
           strcat(test_public_buf_l, list_file.file_name[i]);
+
           char *temp = strstr(test_public_buf_l, ".GCO");
+
           if (temp) strcpy(temp, ".bin");
+
           lv_obj_set_event_cb_mks(buttonGcode[i], event_handler, (i + 1), test_public_buf_l, 0);
+
           lv_imgbtn_set_src_both(buttonGcode[i], buttonGcode[i]->mks_pic_name);
+
           if (i < 3) {
             lv_obj_set_pos(buttonGcode[i], BTN_X_PIXEL * i + INTERVAL_V * (i + 1) + FILE_PRE_PIC_X_OFFSET, titleHeight + FILE_PRE_PIC_Y_OFFSET);
             buttonText[i] = lv_btn_create(scr, nullptr);
@@ -380,8 +385,10 @@ void disp_gcode_icon(uint8_t file_num) {
             lv_obj_set_pos(buttonText[i], BTN_X_PIXEL * (i - 3) + INTERVAL_V * ((i - 3) + 1) + FILE_PRE_PIC_X_OFFSET, BTN_Y_PIXEL + INTERVAL_H + titleHeight + FILE_PRE_PIC_Y_OFFSET + 100);
             lv_obj_set_size(buttonText[i], 100, 40);
           }
+
           labelPageUp[i] = lv_label_create(buttonText[i], public_buf_m);
           lv_obj_align(labelPageUp[i], buttonText[i], LV_ALIGN_IN_BOTTOM_MID, 0, 0);
+          // lv_refr_now(lv_refr_get_disp_refreshing());
         }
         else {
           lv_obj_set_event_cb_mks(buttonGcode[i], event_handler, (i + 1), "", 0);
@@ -393,6 +400,7 @@ void disp_gcode_icon(uint8_t file_num) {
 
           labelPageUp[i] = lv_label_create(buttonGcode[i], public_buf_m);
           lv_obj_align(labelPageUp[i], buttonGcode[i], LV_ALIGN_IN_BOTTOM_MID, 0, -5);
+          // lv_refr_now(lv_refr_get_disp_refreshing());
         }
       }
       #if HAS_ROTARY_ENCODER
@@ -402,6 +410,23 @@ void disp_gcode_icon(uint8_t file_num) {
     #else // !TFT35
     #endif // !TFT35
   }
+
+  if(file_num != 0) {
+    if (have_pre_pic((char *)list_file.file_name[0])) {
+        // memset(test_public_buf_l, 0, sizeof(test_public_buf_l));
+        // memset(buttonGcode[0]->mks_pic_name, 0, sizeof(buttonGcode[0]->mks_pic_name));
+        strcpy(test_public_buf_l, "S:");
+
+        strcat(test_public_buf_l, list_file.file_name[0]);
+
+        char *temp = strstr(test_public_buf_l, ".GCO");
+
+        if (temp) strcpy(temp, ".bin");
+
+        lv_imgbtn_set_src_both(buttonGcode[0], buttonGcode[0]->mks_pic_name);
+    }
+  }
+  
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) {
       lv_group_add_obj(g, buttonPageUp);

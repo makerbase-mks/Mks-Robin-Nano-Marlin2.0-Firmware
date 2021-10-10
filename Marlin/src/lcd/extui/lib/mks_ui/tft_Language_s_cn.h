@@ -292,6 +292,8 @@
 #define AUTO_LEVELING_TEXT_CN       "自动调平"
 #define SET_TEXT_CN                 "设置"
 #define MORE_TEXT_CN                "更多"
+#define MORE_GCODE_CN               "G-Code"
+#define MORE_ENTER_GCODE_CN         "Enter G-Code"
 
 #define ADD_TEXT_CN                 "增加"
 #define DEC_TEXT_CN                 "减少"
@@ -493,6 +495,11 @@
 #define DIALOG_WIFI_ENABLE_TIPS_CN  "wifi模块正在配置中,请稍等......"
 #define DIALOG_PAUSING_TIPS_CN      "机器暂停中..."
 #define DIALOG_AUTO_LEVELING_TIPS_CN    "正在自动调平,请稍等..."
+#define DIALOG_HOUR_TEXT_CN          "小时"
+#define DIALOG_MINUTE_TEXT_CN        "分"
+#define DIALOG_SECOND_TEXT_CN        "秒"
+#define DIALOG_TIME_CONSUMING_TEXT_CN "打印耗时:"
+
 
 #define TEXT_VALUE_CN               "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_CN     ": %d℃"
@@ -524,10 +531,9 @@
 #define EEPROM_READ_TIPS_CN   "是否使用EEPROM参数?"
 #define EEPROM_REVERT_TIPS_CN "是否恢复默认参数?"
 
-#define MORE_CUSTOM1_TEXT_CN  USER_DESC_1
-#define MORE_CUSTOM2_TEXT_CN  USER_DESC_2
-#define MORE_CUSTOM3_TEXT_CN  USER_DESC_3
-#define MORE_CUSTOM4_TEXT_CN  USER_DESC_4
-#define MORE_CUSTOM5_TEXT_CN  USER_DESC_5
-#define MORE_CUSTOM6_TEXT_CN  USER_DESC_6
-#define MORE_CUSTOM7_TEXT_CN  USER_DESC_7
+#define MORE_CUSTOM1_TEXT_CN  MAIN_MENU_ITEM_1_DESC
+#define MORE_CUSTOM2_TEXT_CN  MAIN_MENU_ITEM_2_DESC
+#define MORE_CUSTOM3_TEXT_CN  MAIN_MENU_ITEM_3_DESC
+#define MORE_CUSTOM4_TEXT_CN  MAIN_MENU_ITEM_4_DESC
+#define MORE_CUSTOM5_TEXT_CN  MAIN_MENU_ITEM_5_DESC
+#define MORE_CUSTOM6_TEXT_CN  MAIN_MENU_ITEM_6_DESC
