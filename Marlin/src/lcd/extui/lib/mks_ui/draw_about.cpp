@@ -48,14 +48,15 @@ void lv_draw_about(void) {
   scr = lv_screen_create(ABOUT_UI);
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_A_RETURN);
 
-  fw_type = lv_label_create(scr, "Firmware: Marlin " SHORT_BUILD_VERSION);
-  lv_obj_align(fw_type, nullptr, LV_ALIGN_CENTER, 0, -40);
 
   edits = lv_label_create(scr, "Customization by: Italy Makers v" IM_VERSION);
-  lv_obj_align(edits, nullptr, LV_ALIGN_CENTER, 0, 0);
+  lv_obj_align(edits, nullptr, LV_ALIGN_IN_TOP_MID, 0, 130);
+
+  fw_type = lv_label_create(scr, "Firmware: Marlin " SHORT_BUILD_VERSION);
+  lv_obj_align(fw_type, nullptr, LV_ALIGN_IN_TOP_MID, 0, 90);
 
   board = lv_label_create(scr, "Board: " BOARD_INFO_NAME);
-  lv_obj_align(board, nullptr, LV_ALIGN_CENTER, 0, -80);
+  lv_obj_align(board, nullptr, LV_ALIGN_IN_TOP_MID, 0, 50);
 }
 
 void lv_clear_about() {
