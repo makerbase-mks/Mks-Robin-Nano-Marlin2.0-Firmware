@@ -330,10 +330,10 @@
   #define TOUCH_MISO_PIN                    PA6   // SPI1_MISO
   #define TOUCH_MOSI_PIN                    PA7   // SPI1_MOSI
 
-  #define BTN_EN1                           PE8
-  #define BTN_EN2                           PE11
+  // #define BTN_EN1                           PE8
+  // #define BTN_EN2                           PE11
   #define BEEPER_PIN                        PC5
-  #define BTN_ENC                           PE13
+  // #define BTN_ENC                           PE13
 
   #define LCD_READ_ID                       0xD3
   #define LCD_USE_DMA_SPI
