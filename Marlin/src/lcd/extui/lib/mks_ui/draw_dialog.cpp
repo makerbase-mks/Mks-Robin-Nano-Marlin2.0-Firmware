@@ -227,6 +227,7 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
 
 static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
+  
   if (DIALOG_IS(PAUSE_MESSAGE_OPTION)) {
     // TERN_(ADVANCED_PAUSE_FEATURE, pause_menu_response = PAUSE_RESPONSE_RESUME_PRINT);
   }
@@ -253,6 +254,11 @@ static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
     #endif
     lv_clear_cur_ui();
     lv_draw_return_ui();
+  }
+  else if(DIALOG_IS(TYPE_PRINT_FILE)) {
+
+    lv_clear_cur_ui();
+    lv_draw_print_file();
   }
   else {
     lv_clear_cur_ui();
