@@ -227,7 +227,7 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
 
 static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
-  
+
   if (DIALOG_IS(PAUSE_MESSAGE_OPTION)) {
     // TERN_(ADVANCED_PAUSE_FEATURE, pause_menu_response = PAUSE_RESPONSE_RESUME_PRINT);
   }
@@ -325,6 +325,14 @@ void lv_draw_dialog(uint8_t type) {
     btnOk = lv_button_btn_create(scr, BTN_OK_X + 90, BTN_OK_Y, 100, 50, btn_ok_event_cb);
     lv_obj_t *labelOk = lv_label_create_empty(btnOk);
     lv_label_set_text(labelOk, print_file_dialog_menu.confirm);
+  }
+  else if(DIALOG_IS(TYPE_FILAMENT_NO_PRESS)) {
+    btnCancel = lv_button_btn_create(scr, BTN_OK_X+90, BTN_OK_Y, 100, 50, btn_cancel_event_cb);
+    lv_obj_t *labelCancel = lv_label_create_empty(btnCancel);
+    lv_label_set_text(labelCancel, print_file_dialog_menu.cancel);
+
+    lv_label_set_text(labelDialog, print_file_dialog_menu.filament_no_press);
+    lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -20);
   }
   else if (DIALOG_IS(TYPE_FILAMENT_LOADING, TYPE_FILAMENT_UNLOADING)) {
     btnCancel = lv_button_btn_create(scr, BTN_OK_X + 90, BTN_OK_Y, 100, 50, btn_cancel_event_cb);
@@ -441,10 +449,6 @@ void lv_draw_dialog(uint8_t type) {
   }
   else if (DIALOG_IS(WIFI_ENABLE_TIPS)) {
     lv_label_set_text(labelDialog, print_file_dialog_menu.wifi_enable_tips);
-    lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -20);
-  }
-  else if(DIALOG_IS(TYPE_FILAMENT_NO_PRESS)) {
-    lv_label_set_text(labelDialog, print_file_dialog_menu.filament_no_press);
     lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -20);
   }
   else if (DIALOG_IS(TRANSFER_NO_DEVICE)) {
