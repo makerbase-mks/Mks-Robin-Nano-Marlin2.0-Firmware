@@ -21,9 +21,10 @@
  */
 #pragma once
 
-#if NOT_TARGET(STM32F4, STM32F4xx)
-  #error "Oops! Select an STM32F4 board in 'Tools > Board.'"
-#elif HOTENDS > 2 || E_STEPPERS > 2
+#define ALLOW_STM32DUINO
+#include "env_validate.h"
+
+#if HOTENDS > 2 || E_STEPPERS > 2
   #error "MKS Robin Nano V3 supports up to 2 hotends / E-steppers."
 #elif HAS_FSMC_TFT
   #error "MKS Robin Nano V3 doesn't support FSMC-based TFT displays."
@@ -46,14 +47,13 @@
 //#define FLASH_EEPROM_EMULATION                  // Use Flash-based EEPROM emulation
 #define I2C_EEPROM
 #define MARLIN_EEPROM_SIZE                0x1000  // 4KB
-
-#define I2C_SCL_PIN                       PB6 
-#define I2C_SDA_PIN                       PB7
+#define I2C_SCL_PIN                         PB6
+#define I2C_SDA_PIN                         PB7
 
 //
 // Release PB4 (Z_DIR_PIN) from JTAG NRST role
 //
-//#define DISABLE_DEBUG
+// #define DISABLE_DEBUG
 
 //
 // Servos
@@ -63,7 +63,7 @@
 //
 // Limit Switches
 //
-#define X_DIAG_PIN                          PD15
+#define X_DIAG_PIN                          PA15
 #define Y_DIAG_PIN                          PD2
 #define Z_DIAG_PIN                          PC8
 #define E0_DIAG_PIN                         PC4
@@ -172,7 +172,6 @@
 
 #define FAN_PIN                             PC14  // FAN0
 #define FAN1_PIN                            PB1   // FAN1
-
 //
 // Thermocouples
 //
@@ -185,6 +184,7 @@
 #define MT_DET_1_PIN                        PA4
 #define MT_DET_2_PIN                        PE6
 #define MT_DET_PIN_INVERTING                false // LVGL UI filament RUNOUT PIN STATE
+#define MT_TIME_DELAY                       3000  // Default 3s   
 #define PW_DET                              PA13
 #define PW_OFF                              PB2
 
@@ -227,7 +227,7 @@
 #define WIFI_RESET_PIN                    PE9   // MKS ESP WIFI RESET PIN
 
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION               ONBOARD
+  #define SDCARD_CONNECTION              ONBOARD
 #endif
 
 //
@@ -330,10 +330,10 @@
   #define TOUCH_MISO_PIN                    PA6   // SPI1_MISO
   #define TOUCH_MOSI_PIN                    PA7   // SPI1_MOSI
 
-  #define BTN_EN1                           PE8
-  #define BTN_EN2                           PE11
+  // #define BTN_EN1                           PE8
+  // #define BTN_EN2                           PE11
   #define BEEPER_PIN                        PC5
-  #define BTN_ENC                           PE13
+  // #define BTN_ENC                           PE13
 
   #define LCD_READ_ID                       0xD3
   #define LCD_USE_DMA_SPI

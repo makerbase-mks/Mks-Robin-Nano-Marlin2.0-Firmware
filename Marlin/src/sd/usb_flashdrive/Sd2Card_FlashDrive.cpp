@@ -54,7 +54,7 @@
   #define UHS_DEVICE_WINDOWS_USB_SPEC_VIOLATION_DESCRIPTOR_DEVICE 1
   #define UHS_HOST_MAX_INTERFACE_DRIVERS 2
   #define MASS_MAX_SUPPORTED_LUN 1
-  #define USB_HOST_SERIAL MYSERIAL0
+  #define USB_HOST_SERIAL MYSERIAL1
 
   // Workaround for certain issues with UHS3
   #define SKIP_PAGE3F // Required for IOGEAR media adapter
@@ -121,7 +121,7 @@ static enum {
   uint32_t lun0_capacity;
 #endif
 
-bool Sd2Card::usbStartup() {
+bool DiskIODriver_USBFlash::usbStartup() {
   if (state <= DO_STARTUP) {
     SERIAL_ECHOPGM("Starting USB host...");
     if (!UHS_START) {
@@ -147,11 +147,10 @@ bool Sd2Card::usbStartup() {
 // the USB library to monitor for such events. This function also takes care
 // of initializing the USB library for the first time.
 
-void Sd2Card::idle() {
+void DiskIODriver_USBFlash::idle() {
+  
   usb.Task();
-
   const uint8_t task_state = usb.getUsbTaskState();
-
   #if USB_DEBUG >= 2
     if (state > DO_STARTUP) {
       static uint8_t laststate = 232;
@@ -182,6 +181,7 @@ void Sd2Card::idle() {
   #define GOTO_STATE_AFTER_DELAY(STATE, DELAY) do{ state = STATE; next_state_ms  = millis() + DELAY; }while(0)
 
   if (ELAPSED(millis(), next_state_ms)) {
+    
     GOTO_STATE_AFTER_DELAY(state, 250); // Default delay
 
     switch (state) {
@@ -225,7 +225,6 @@ void Sd2Card::idle() {
           GOTO_STATE_AFTER_DELAY(state, 2000);
         }
         break;
-
       case MEDIA_READY: break;
       case MEDIA_ERROR: break;
     }
@@ -258,16 +257,16 @@ void Sd2Card::idle() {
 
 // Marlin calls this function to check whether an USB drive is inserted.
 // This is equivalent to polling the SD_DETECT when using SD cards.
-bool Sd2Card::isInserted() {
+bool DiskIODriver_USBFlash::isInserted() {
   return state == MEDIA_READY;
 }
 
-bool Sd2Card::isReady() {
-  return state > DO_STARTUP;
+bool DiskIODriver_USBFlash::isReady() {
+  return state > DO_STARTUP && usb.getUsbTaskState() == UHS_STATE(RUNNING);
 }
 
 // Marlin calls this to initialize an SD card once it is inserted.
-bool Sd2Card::init(const uint8_t, const pin_t) {
+bool DiskIODriver_USBFlash::init(const uint8_t, const pin_t) {
   if (!isInserted()) return false;
 
   #if USB_DEBUG >= 1
@@ -286,7 +285,7 @@ bool Sd2Card::init(const uint8_t, const pin_t) {
 }
 
 // Returns the capacity of the card in blocks.
-uint32_t Sd2Card::cardSize() {
+uint32_t DiskIODriver_USBFlash::cardSize() {
   if (!isInserted()) return false;
   #if USB_DEBUG < 3
     const uint32_t
@@ -295,7 +294,7 @@ uint32_t Sd2Card::cardSize() {
   return lun0_capacity;
 }
 
-bool Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
+bool DiskIODriver_USBFlash::readBlock(uint32_t block, uint8_t *dst) {
   if (!isInserted()) return false;
   #if USB_DEBUG >= 3
     if (block >= lun0_capacity) {
@@ -309,7 +308,7 @@ bool Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
   return bulk.Read(0, block, 512, 1, dst) == 0;
 }
 
-bool Sd2Card::writeBlock(uint32_t block, const uint8_t* src) {
+bool DiskIODriver_USBFlash::writeBlock(uint32_t block, const uint8_t *src) {
   if (!isInserted()) return false;
   #if USB_DEBUG >= 3
     if (block >= lun0_capacity) {

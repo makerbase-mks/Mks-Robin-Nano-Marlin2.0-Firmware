@@ -307,6 +307,8 @@
 #define AUTO_LEVELING_TEXT_EN   "AutoLevel"
 #define SET_TEXT_EN             "Settings"
 #define MORE_TEXT_EN            "More"
+#define MORE_GCODE_EN           "G-Code"
+#define MORE_ENTER_GCODE_EN     "Enter G-Code"
 
 #define ADD_TEXT_EN             "Add"
 #define DEC_TEXT_EN             "Dec"
@@ -512,6 +514,8 @@
 #define DIALOG_WIFI_ENABLE_TIPS_EN          "The wifi module is being configured\nplease wait a moment....."
 #define DIALOG_PAUSING_TIPS_EN              "The machine pauses..."
 #define DIALOG_AUTO_LEVELING_TIPS_EN        "Auto-leveling, please wait..."
+#define DIALOG_TIME_CONSUMING_TEXT_EN       "Printing time:"
+
 
 #define HOTBED_ENABLE_EN        "Enable heatbed"
 #define MOTOR_EN_HIGH_LEVEL_EN  "High"
@@ -569,6 +573,7 @@
 #define USB_DRIVE_BACK_EN                 "< Back"
 #define FILE_PAGES_EN                     "%d/%d"
 #define FILE_NEXT_PAGE_EN                 "Next Page"
+#define MEDIA_SELECT_TITLE_EN             "Select Media"
 
 //BUILD PLATE
 #define PLATE_TITLE_EN                    "Build Plate"
@@ -701,14 +706,14 @@
 
 //manual ip
 #define MANUAL_IP_TITLE_EN          "Manual IP"
-#define MANUAL_IP_CANCEL_EN          "< Cancel"
+#define MANUAL_IP_CANCEL_EN         "< Cancel"
 #define MANUAL_IP_APPLY_EN          "Join >"
 #define MANUAL_IP_ADDRESS_EN        "IP Address"
 #define MANUAL_IP_MASK_EN           "Subnet Mask"
 #define MANUAL_IP_GATEWAY_EN        "Default Gateway"
 #define MANUAL_IP_SERVER_EN         "Name Server"
 #define MANUAL_IP_INIT_DATA_EN      "0.0.0.0"
-#define MANUAL_TEXT_POINT_EN         "."
+#define MANUAL_TEXT_POINT_EN        "."
 #define MANUAL_TEXT_ENTER_EN        "enter"
 
 #define TEXT_FORGET_TIPS_TITLE_EN "Forget Network"
@@ -757,10 +762,9 @@
 #define EEPROM_READ_TIPS_EN   "Read settings from EEPROM?"
 #define EEPROM_REVERT_TIPS_EN "Revert settings to factory defaults?"
 
-#define MORE_CUSTOM1_TEXT_EN  USER_DESC_1
-#define MORE_CUSTOM2_TEXT_EN  USER_DESC_2
-#define MORE_CUSTOM3_TEXT_EN  USER_DESC_3
-#define MORE_CUSTOM4_TEXT_EN  USER_DESC_4
-#define MORE_CUSTOM5_TEXT_EN  USER_DESC_5
-#define MORE_CUSTOM6_TEXT_EN  USER_DESC_6
-#define MORE_CUSTOM7_TEXT_EN  USER_DESC_7
+#define MORE_CUSTOM1_TEXT_EN  MAIN_MENU_ITEM_1_DESC
+#define MORE_CUSTOM2_TEXT_EN  MAIN_MENU_ITEM_2_DESC
+#define MORE_CUSTOM3_TEXT_EN  MAIN_MENU_ITEM_3_DESC
+#define MORE_CUSTOM4_TEXT_EN  MAIN_MENU_ITEM_4_DESC
+#define MORE_CUSTOM5_TEXT_EN  MAIN_MENU_ITEM_5_DESC
+#define MORE_CUSTOM6_TEXT_EN  MAIN_MENU_ITEM_6_DESC

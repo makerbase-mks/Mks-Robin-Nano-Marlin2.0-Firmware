@@ -25,8 +25,10 @@
  * Release version. Leave the Marlin version or apply a custom scheme.
  */
 #ifndef SHORT_BUILD_VERSION
-  #define SHORT_BUILD_VERSION "-bugfix2.0.x-MKS-2.1.3"
+  #define SHORT_BUILD_VERSION "bugfix2.0.x-MKS-2.1.3"
 #endif
+
+#define IM_VERSION "2.2.0"
 
 /**
  * Verbose version identifier containing a unique identifier, such as the
@@ -42,7 +44,7 @@
  * version was tagged.
  */
 #ifndef STRING_DISTRIBUTION_DATE
-  #define STRING_DISTRIBUTION_DATE "2021-02-01"
+  #define STRING_DISTRIBUTION_DATE "2021-09-23"
 #endif
 
 /**
@@ -82,7 +84,7 @@
  * providing the source code to your customers.)
  */
 #ifndef SOURCE_CODE_URL
-  #define SOURCE_CODE_URL "github.com/MarlinFirmware/Marlin"
+  #define SOURCE_CODE_URL "github.com/ItalyMakers/Mks-Robin-Nano-Marlin2.0-Firmware"
 #endif
 
 /**

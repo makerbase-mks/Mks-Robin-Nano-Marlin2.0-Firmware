@@ -33,39 +33,101 @@ extern lv_group_t * g;
 static lv_obj_t * scr;
 
 enum {
-  ID_CUSTOM_1 = 1,
-  ID_CUSTOM_2,
-  ID_CUSTOM_3,
-  ID_CUSTOM_4,
-  ID_CUSTOM_5,
-  ID_CUSTOM_6,
-  ID_CUSTOM_7,
-  ID_M_RETURN
+  ID_GCODE = 1,
+  #if HAS_USER_ITEM(1)
+    ID_CUSTOM_1,
+  #endif
+  #if HAS_USER_ITEM(2)
+    ID_CUSTOM_2,
+  #endif
+  #if HAS_USER_ITEM(3)
+    ID_CUSTOM_3,
+  #endif
+  #if HAS_USER_ITEM(4)
+    ID_CUSTOM_4,
+  #endif
+  #if HAS_USER_ITEM(5)
+    ID_CUSTOM_5,
+  #endif
+  #if HAS_USER_ITEM(6)
+    ID_CUSTOM_6,
+  #endif
+  ID_M_RETURN,
 };
 
 static void event_handler(lv_obj_t * obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
-    #if ENABLED(USER_CMD_1_ENABLE)
-      case ID_CUSTOM_1: queue.inject_P(PSTR(USER_GCODE_1)); lv_return_to_ready(); break;
+    case ID_GCODE: lv_clear_more(); lv_draw_gcode(true); break;
+    #if HAS_USER_ITEM(1)
+      case ID_CUSTOM_1:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_1_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_1_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_1_BACK_HOME)
+          lv_clear_more();
+          lv_draw_ready_print();
+        #endif
+      break;
     #endif
-    #if ENABLED(USER_CMD_2_ENABLE)
-      case ID_CUSTOM_2: queue.inject_P(PSTR(USER_GCODE_2)); lv_return_to_ready(); break;
+    #if HAS_USER_ITEM(2)
+      case ID_CUSTOM_2:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_2_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_2_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_2_BACK_HOME)
+          lv_clear_more();
+          lv_draw_ready_print();
+        #endif
+      break;
     #endif
-    #if ENABLED(USER_CMD_3_ENABLE)
-      case ID_CUSTOM_3: queue.inject_P(PSTR(USER_GCODE_3)); lv_return_to_ready(); break;
+    #if HAS_USER_ITEM(3)
+      case ID_CUSTOM_3:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_3_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_3_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_3_BACK_HOME)
+          lv_clear_more();
+          lv_draw_ready_print();
+        #endif
+      break;
     #endif
-    #if ENABLED(USER_CMD_4_ENABLE)
-      case ID_CUSTOM_4: queue.inject_P(PSTR(USER_GCODE_4)); lv_return_to_ready(); break;
+    #if HAS_USER_ITEM(4)
+      case ID_CUSTOM_4:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_4_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_4_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_4_BACK_HOME)
+          lv_clear_more();
+          lv_draw_ready_print();
+        #endif
+      break;
     #endif
-    #if ENABLED(USER_CMD_5_ENABLE)
-      case ID_CUSTOM_5: queue.inject_P(PSTR(USER_GCODE_5)); lv_return_to_ready(); break;
+    #if HAS_USER_ITEM(5)
+      case ID_CUSTOM_5:
+        queue.inject_P(PSTR(MAIN_MENU_ITEM_5_GCODE));
+        #if ENABLED(MAIN_MENU_ITEM_5_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_5_BACK_HOME)
+          lv_clear_more();
+          lv_draw_ready_print();
+        #endif
+      break;
     #endif
-    #if ENABLED(USER_CMD_6_ENABLE)
-      case ID_CUSTOM_6: queue.inject_P(PSTR(USER_GCODE_6)); lv_return_to_ready(); break;
-    #endif
-    #if ENABLED(USER_CMD_7_ENABLE)
-      case ID_CUSTOM_7: queue.inject_P(PSTR(USER_GCODE_7)); lv_return_to_ready(); break;
+    #if HAS_USER_ITEM(6)
+      case ID_CUSTOM_6: queue.inject_P(PSTR(MAIN_MENU_ITEM_6_GCODE)); break;
+      #if ENABLED(MAIN_MENU_ITEM_6_BACK)
+          lv_clear_more();
+          lv_draw_tool();
+        #elif ENABLED(MAIN_MENU_ITEM_6_BACK_HOME)
+          lv_clear_more();
+          lv_draw_ready_print();
+        #endif
     #endif
     case ID_M_RETURN:
       lv_clear_more();
@@ -74,46 +136,36 @@ static void event_handler(lv_obj_t * obj, lv_event_t event) {
   }
 }
 
-void lv_return_to_ready (void) {
-  #ifdef CUSTOM_RETURN_READY_PRINT
-    lv_clear_more();
-    lv_draw_ready_print();
-  #endif
-}
-
-void lv_draw_more(void) {
+void lv_draw_more() {
   scr = lv_screen_create(MORE_UI);
 
-  #if ENABLED(USER_CMD_1_ENABLE)
-    lv_big_button_create(scr, "F:/bmp_custom1.bin", more_menu.custom1, INTERVAL_V, titleHeight, event_handler, ID_CUSTOM_1);
+  lv_big_button_create(scr, "F:/bmp_gcode.bin", more_menu.gcode, INTERVAL_V, titleHeight, event_handler, ID_GCODE);
+
+  #if HAS_USER_ITEM(1)
+    lv_big_button_create(scr, "F:/bmp_custom1.bin", more_menu.custom1, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_CUSTOM_1);
   #endif
 
-  #if ENABLED(USER_CMD_2_ENABLE)
-    lv_big_button_create(scr, "F:/bmp_custom2.bin", more_menu.custom2, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_CUSTOM_2);
+  #if HAS_USER_ITEM(2)
+    lv_big_button_create(scr, "F:/bmp_custom2.bin", more_menu.custom2, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_CUSTOM_2);
   #endif
 
-  #if ENABLED(USER_CMD_3_ENABLE)
-    lv_big_button_create(scr, "F:/bmp_custom3.bin", more_menu.custom3, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_CUSTOM_3);
+  #if HAS_USER_ITEM(3)
+    lv_big_button_create(scr, "F:/bmp_custom3.bin", more_menu.custom3, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_CUSTOM_3);
   #endif
 
-  #if ENABLED(USER_CMD_4_ENABLE)
-    lv_big_button_create(scr, "F:/bmp_custom4.bin", more_menu.custom4, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_CUSTOM_4);
+  #if HAS_USER_ITEM(4)
+    lv_big_button_create(scr, "F:/bmp_custom4.bin", more_menu.custom4, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_CUSTOM_4);
   #endif
 
-  #if ENABLED(USER_CMD_5_ENABLE)
-    lv_big_button_create(scr, "F:/bmp_custom5.bin", more_menu.custom5, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_CUSTOM_5);
+  #if HAS_USER_ITEM(5)
+    lv_big_button_create(scr, "F:/bmp_custom5.bin", more_menu.custom5, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_CUSTOM_5);
   #endif
 
-  #if ENABLED(USER_CMD_6_ENABLE)
-    lv_big_button_create(scr, "F:/bmp_custom6.bin", more_menu.custom6, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_CUSTOM_6);
-  #endif
-
-  #if ENABLED(USER_CMD_7_ENABLE)
-    lv_big_button_create(scr, "F:/bmp_custom7.bin", more_menu.custom7, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_CUSTOM_7);
+  #if HAS_USER_ITEM(6)
+    lv_big_button_create(scr, "F:/bmp_custom6.bin", more_menu.custom6, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_CUSTOM_6);
   #endif
 
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_RETURN);
-
 }
 
 void lv_clear_more() {

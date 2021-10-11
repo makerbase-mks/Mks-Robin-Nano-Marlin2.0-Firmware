@@ -70,23 +70,11 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   lv_clear_ready_print();
 
   switch (obj->mks_obj_id) {
-    case ID_TOOL:
-      lv_draw_tool();
-      break;
-    case ID_SET:
-      lv_draw_set();
-      break;
-    case ID_INFO_EXT:
-      uiCfg.curTempType = 0;
-      lv_draw_preHeat();
-      break;
-    case ID_INFO_BED:
-        uiCfg.curTempType = 1;
-        lv_draw_preHeat();
-        break;
-    case ID_PRINT:
-      lv_draw_print_file();
-      break;
+    case ID_TOOL:   lv_draw_tool(); break;
+    case ID_SET:    lv_draw_set(); break;
+    case ID_INFO_EXT:  uiCfg.curTempType = 0; lv_draw_preHeat(); break;
+    case ID_INFO_BED:  uiCfg.curTempType = 1; lv_draw_preHeat(); break;
+    case ID_PRINT: TERN(MULTI_VOLUME, lv_draw_media_select(), lv_draw_print_file()); break;
   }
 }
 
@@ -99,7 +87,7 @@ void disp_Limit_ok() {
   lv_label_set_text(limit_info, "Limit:ok");
 }
 void disp_Limit_error() {
-  limit_style.text.color.full = 0xF800;
+  limit_style.text.color = lv_color_make(0xFB, 0x33, 0x14);
   lv_obj_set_style(limit_info, &limit_style);
   lv_label_set_text(limit_info, "Limit:error");
 }
@@ -110,7 +98,7 @@ void disp_det_ok() {
   lv_label_set_text(det_info, "det:ok");
 }
 void disp_det_error() {
-  det_style.text.color.full = 0xF800;
+  det_style.text.color = lv_color_make(0xFB, 0x33, 0x14);
   lv_obj_set_style(det_info, &det_style);
   lv_label_set_text(det_info, "det:error");
 }
@@ -121,7 +109,7 @@ void disp_tmc_ok() {
   lv_label_set_text(tmc_state_info, "TMC CONNECTION OK");
 }
 void disp_tmc_error() {
-  tmc_state_style.text.color.full = 0xF800;
+  tmc_state_style.text.color = lv_color_make(0xFB, 0x33, 0x14);
   lv_obj_set_style(tmc_state_info, &tmc_state_style);
   lv_label_set_text(tmc_state_info, "TMC CONNECTION ERROR");
 }
@@ -150,8 +138,9 @@ void lv_draw_ready_print(void) {
   lv_obj_t *buttonTool;
 
   disp_state_stack._disp_index = 0;
-  ZERO(disp_state_stack._disp_state);
   
+  ZERO(disp_state_stack._disp_state);
+
   if (mks_test_flag == 0x1E) {
     scr = lv_screen_create(MAIN_UI, "");
 
