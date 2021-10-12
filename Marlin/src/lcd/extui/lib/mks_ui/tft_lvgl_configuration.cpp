@@ -267,9 +267,9 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 
   SPI_TFT.setWindow((uint16_t)area->x1, (uint16_t)area->y1, width, height);
 
-  // for (uint16_t i = 0; i < height; i++)
-  //   SPI_TFT.tftio.WriteSequence((uint16_t*)(color_p + width * i), width);
-  SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
+  for (uint16_t i = 0; i < height; i++)
+    SPI_TFT.tftio.WriteSequence((uint16_t*)(color_p + width * i), width);
+  // SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
 
   lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
 
@@ -326,62 +326,40 @@ static bool get_point(int16_t *x, int16_t *y) {
 }
 
 bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
-  // static int16_t last_x = 0, last_y = 0;
-  // static uint8_t last_touch_state = LV_INDEV_STATE_REL;
-  // static int32_t touch_time1 = 0;
-  // uint32_t tmpTime, diffTime = 0;
-
-  // tmpTime = millis();
-  // diffTime = getTickDiff(tmpTime, touch_time1);
-  // if (diffTime > 20) {
-  //   if (get_point(&last_x, &last_y)) {
-
-  //     if (last_touch_state == LV_INDEV_STATE_PR) return false;
-  //     data->state = LV_INDEV_STATE_PR;
-
-  //     // Set the coordinates (if released use the last-pressed coordinates)
-  //     #if TFT_ROTATION == TFT_ROTATE_180
-  //       data->point.x = TFT_WIDTH - last_x;
-  //       data->point.y = TFT_HEIGHT -last_y;
-  //     #else
-  //       data->point.x = last_x;
-  //       data->point.y = last_y;
-  //     #endif
-
-  //     last_x = last_y = 0;
-  //     last_touch_state = LV_INDEV_STATE_PR;
-  //   }
-  //   else {
-  //     if (last_touch_state == LV_INDEV_STATE_PR)
-  //       data->state = LV_INDEV_STATE_REL;
-  //     last_touch_state = LV_INDEV_STATE_REL;
-  //   }
-
-  //   touch_time1 = tmpTime;
-  // }
-
-  // return false; // Return `false` since no data is buffering or left to read
   static int16_t last_x = 0, last_y = 0;
-  if (get_point(&last_x, &last_y)) {
-    #if TFT_ROTATION == TFT_ROTATE_180
-      data->point.x = TFT_WIDTH - last_x;
-      data->point.y = TFT_HEIGHT - last_y;
-    #else
-      data->point.x = last_x;
-      data->point.y = last_y;
-    #endif
-    data->state = LV_INDEV_STATE_PR;
+  static uint8_t last_touch_state = LV_INDEV_STATE_REL;
+  static int32_t touch_time1 = 0;
+  uint32_t tmpTime, diffTime = 0;
+
+  tmpTime = millis();
+  diffTime = getTickDiff(tmpTime, touch_time1);
+  if (diffTime > 20) {
+    if (get_point(&last_x, &last_y)) {
+
+      if (last_touch_state == LV_INDEV_STATE_PR) return false;
+      data->state = LV_INDEV_STATE_PR;
+
+      // Set the coordinates (if released use the last-pressed coordinates)
+      #if TFT_ROTATION == TFT_ROTATE_180
+        data->point.x = TFT_WIDTH - last_x;
+        data->point.y = TFT_HEIGHT -last_y;
+      #else
+        data->point.x = last_x;
+        data->point.y = last_y;
+      #endif
+
+      last_x = last_y = 0;
+      last_touch_state = LV_INDEV_STATE_PR;
+    }
+    else {
+      if (last_touch_state == LV_INDEV_STATE_PR)
+        data->state = LV_INDEV_STATE_REL;
+      last_touch_state = LV_INDEV_STATE_REL;
+    }
+
+    touch_time1 = tmpTime;
   }
-  else {
-    #if TFT_ROTATION == TFT_ROTATE_180
-      data->point.x = TFT_WIDTH - last_x;
-      data->point.y = TFT_HEIGHT - last_y;
-    #else
-      data->point.x = last_x;
-      data->point.y = last_y;
-    #endif
-    data->state = LV_INDEV_STATE_REL;
-  }
+
   return false; // Return `false` since no data is buffering or left to read
 }
 
@@ -454,11 +432,10 @@ char *cur_namefff;
 uint32_t sd_read_base_addr = 0, sd_read_addr_offset = 0, small_image_size = 409;
 char last_path[(SHORT_NAME_LEN + 1) * MAX_DIR_LEVEL + strlen("S:/") + 1];
 lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_fs_mode_t mode) {
-
   if (path != nullptr && card.isFileOpen() && strcmp((const char*)path, (const char*)last_path) == 0) return LV_FS_RES_OK;
   strcpy(last_path, path);
   lv_close_gcode_file();
-  char name_buf[100] = {0};
+  char name_buf[100];
   *name_buf = '/';
   strcpy(name_buf + 1, path);
   char *temp = strstr(name_buf, ".bin");
