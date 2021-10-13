@@ -799,7 +799,7 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 825.423}
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 75.865, 79.523, 400, 825.423}
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -1328,7 +1328,7 @@
     // Enable this option to use an encoder disc that toggles the runout pin
     // as the filament moves. (Be sure to set FILAMENT_RUNOUT_DISTANCE_MM
     // large enough to avoid false positives.)
-    #define FILAMENT_MOTION_SENSOR
+    // #define FILAMENT_MOTION_SENSOR
   #endif
 #endif
 
