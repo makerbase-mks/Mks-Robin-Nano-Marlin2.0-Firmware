@@ -97,7 +97,7 @@ void GcodeSuite::M701() {
   };
 
   // Raise the Z axis (with max limit)
-  const float park_raise = _MIN(0, park_point.z, (Z_MAX_POS) - current_position.z);
+  const float park_raise = _MIN(park_point.z, (Z_MAX_POS) - current_position.z);
   move_z_by(park_raise);
 
   // Load filament
@@ -114,9 +114,7 @@ void GcodeSuite::M701() {
       true,                                           // show_lcd
       thermalManager.still_heating(target_extruder),  // pause_for_user
       PAUSE_MODE_LOAD_FILAMENT                        // pause_mode
-      #if ENABLED(DUAL_X_CARRIAGE)
-        , target_extruder                             // Dual X target
-      #endif
+      OPTARG(DUAL_X_CARRIAGE, target_extruder)        // Dual X target
     );
   #endif
 

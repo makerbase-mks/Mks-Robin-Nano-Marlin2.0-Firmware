@@ -22,10 +22,6 @@
 #pragma once
 
 /**
- * gcode.h - Temporary container for all gcode handlers
- */
-
-/**
  * -----------------
  * G-Codes in Marlin
  * -----------------
@@ -159,6 +155,7 @@
  * M145 - Set heatup values for materials on the LCD. H<hotend> B<bed> F<fan speed> for S<material> (0=PLA, 1=ABS)
  * M149 - Set temperature units. (Requires TEMPERATURE_UNITS_SUPPORT)
  * M150 - Set Status LED Color as R<red> U<green> B<blue> W<white> P<bright>. Values 0-255. (Requires BLINKM, RGB_LED, RGBW_LED, NEOPIXEL_LED, PCA9533, or PCA9632).
+ * M154 - Auto-report position with interval of S<seconds>. (Requires AUTO_REPORT_POSITION)
  * M155 - Auto-report temperatures with interval of S<seconds>. (Requires AUTO_REPORT_TEMPERATURES)
  * M163 - Set a single proportion for a mixing extruder. (Requires MIXING_EXTRUDER)
  * M164 - Commit the mix and save to a virtual tool (current, or as specified by 'S'). (Requires MIXING_EXTRUDER)
@@ -190,10 +187,12 @@
  * M226 - Wait until a pin is in a given state: "M226 P<pin> S<state>" (Requires DIRECT_PIN_CONTROL)
  * M240 - Trigger a camera to take a photograph. (Requires PHOTO_GCODE)
  * M250 - Set LCD contrast: "M250 C<contrast>" (0-63). (Requires LCD support)
+ * M256 - Set LCD brightness: "M256 B<brightness>" (0-255). (Requires an LCD with brightness control)
  * M260 - i2c Send Data (Requires EXPERIMENTAL_I2CBUS)
  * M261 - i2c Request Data (Requires EXPERIMENTAL_I2CBUS)
  * M280 - Set servo position absolute: "M280 P<index> S<angle|µs>". (Requires servos)
  * M281 - Set servo min|max position: "M281 P<index> L<min> U<max>". (Requires EDITABLE_SERVO_ANGLES)
+ * M282 - Detach servo: "M282 P<index>". (Requires SERVO_DETACH_GCODE)
  * M290 - Babystepping (Requires BABYSTEPPING)
  * M300 - Play beep sound S<frequency Hz> P<duration ms>
  * M301 - Set PID parameters P I and D. (Requires PIDTEMP)
@@ -240,10 +239,12 @@
  * M553 - Get or set IP netmask. (Requires enabled Ethernet port)
  * M554 - Get or set IP gateway. (Requires enabled Ethernet port)
  * M569 - Enable stealthChop on an axis. (Requires at least one _DRIVER_TYPE to be TMC2130/2160/2208/2209/5130/5160)
+ * M575 - Change the serial baud rate. (Requires BAUD_RATE_GCODE)
  * M600 - Pause for filament change: "M600 X<pos> Y<pos> Z<raise> E<first_retract> L<later_retract>". (Requires ADVANCED_PAUSE_FEATURE)
  * M603 - Configure filament change: "M603 T<tool> U<unload_length> L<load_length>". (Requires ADVANCED_PAUSE_FEATURE)
  * M605 - Set Dual X-Carriage movement mode: "M605 S<mode> [X<x_offset>] [R<temp_offset>]". (Requires DUAL_X_CARRIAGE)
  * M665 - Set delta configurations: "M665 H<delta height> L<diagonal rod> R<delta radius> S<segments/s> B<calibration radius> X<Alpha angle trim> Y<Beta angle trim> Z<Gamma angle trim> (Requires DELTA)
+ *        Set SCARA configurations: "M665 S<segments-per-second> P<theta-psi-offset> T<theta-offset> Z<z-offset> (Requires MORGAN_SCARA or MP_SCARA)
  * M666 - Set/get offsets for delta (Requires DELTA) or dual endstops. (Requires [XYZ]_DUAL_ENDSTOPS)
  * M672 - Set/Reset Duet Smart Effector's sensitivity. (Requires DUET_SMART_EFFECTOR and SMART_EFFECTOR_MOD_PIN)
  * M701 - Load filament (Requires FILAMENT_LOAD_UNLOAD_GCODES)
@@ -296,6 +297,7 @@
  * M997 - Perform in-application firmware update
  * M999 - Restart after being stopped by error
  * D... - Custom Development G-code. Add hooks to 'gcode_D.cpp' for developers to test features. (Requires MARLIN_DEV_MODE)
+ *        D576 - Set buffer monitoring options. (Requires BUFFER_MONITORING)
  *
  * "T" Codes
  *
@@ -313,33 +315,46 @@
   #define HAS_FAST_MOVES 1
 #endif
 
-enum AxisRelative : uint8_t { REL_X, REL_Y, REL_Z, REL_E, E_MODE_ABS, E_MODE_REL };
+enum AxisRelative : uint8_t {
+  LOGICAL_AXIS_LIST(REL_E, REL_X, REL_Y, REL_Z, REL_I, REL_J, REL_K)
+  #if HAS_EXTRUDERS
+    , E_MODE_ABS, E_MODE_REL
+  #endif
+};
 
 extern const char G28_STR[];
 
 class GcodeSuite {
 public:
 
-  static uint8_t axis_relative;
+  static axis_bits_t axis_relative;
 
   static inline bool axis_is_relative(const AxisEnum a) {
-    if (a == E_AXIS) {
-      if (TEST(axis_relative, E_MODE_REL)) return true;
-      if (TEST(axis_relative, E_MODE_ABS)) return false;
-    }
+    #if HAS_EXTRUDERS
+      if (a == E_AXIS) {
+        if (TEST(axis_relative, E_MODE_REL)) return true;
+        if (TEST(axis_relative, E_MODE_ABS)) return false;
+      }
+    #endif
     return TEST(axis_relative, a);
   }
   static inline void set_relative_mode(const bool rel) {
-    axis_relative = rel ? _BV(REL_X) | _BV(REL_Y) | _BV(REL_Z) | _BV(REL_E) : 0;
+    axis_relative = rel ? (0 LOGICAL_AXIS_GANG(
+      | _BV(REL_E),
+      | _BV(REL_X), | _BV(REL_Y), | _BV(REL_Z),
+      | _BV(REL_I), | _BV(REL_J), | _BV(REL_K)
+    )) : 0;
   }
-  static inline void set_e_relative() {
-    CBI(axis_relative, E_MODE_ABS);
-    SBI(axis_relative, E_MODE_REL);
-  }
-  static inline void set_e_absolute() {
-    CBI(axis_relative, E_MODE_REL);
-    SBI(axis_relative, E_MODE_ABS);
-  }
+  #if HAS_EXTRUDERS
+    static inline void set_e_relative() {
+      CBI(axis_relative, E_MODE_ABS);
+      SBI(axis_relative, E_MODE_REL);
+    }
+    static inline void set_e_absolute() {
+      CBI(axis_relative, E_MODE_REL);
+      SBI(axis_relative, E_MODE_ABS);
+    }
+  #endif
 
   #if ENABLED(CNC_WORKSPACE_PLANES)
     /**
@@ -366,6 +381,14 @@ public:
     return ELAPSED(ms, previous_move_ms + stepper_inactive_time);
   }
 
+  static void report_echo_start(const bool forReplay);
+  static void report_heading(const bool forReplay, PGM_P const pstr, const bool eol=true);
+  static inline void report_heading_etc(const bool forReplay, PGM_P const pstr, const bool eol=true) {
+    report_heading(forReplay, pstr, eol);
+    report_echo_start(forReplay);
+  }
+  static void say_units();
+
   static int8_t get_target_extruder_from_command();
   static int8_t get_target_e_stepper_from_command();
   static void get_destination_from_command();
@@ -378,7 +401,7 @@ public:
   static void process_subcommands_now(char * gcode);
 
   static inline void home_all_axes(const bool keep_leveling=false) {
-    process_subcommands_now_P(keep_leveling ? G28_STR : TERN(G28_L0_ENSURES_LEVELING_OFF, PSTR("G28L0"), G28_STR));
+    process_subcommands_now_P(keep_leveling ? G28_STR : TERN(CAN_SET_LEVELING_AFTER_G28, PSTR("G28L0"), G28_STR));
   }
 
   #if EITHER(HAS_AUTO_REPORTING, HOST_KEEPALIVE_FEATURE)
@@ -410,6 +433,7 @@ public:
     static uint8_t host_keepalive_interval;
 
     static void host_keepalive();
+    static inline bool host_keepalive_is_paused() { return busy_state >= PAUSED_FOR_USER; }
 
     #define KEEPALIVE_STATE(N) REMEMBER(_KA_, gcode.busy_state, gcode.N)
   #else
@@ -419,6 +443,8 @@ public:
   static void dwell(millis_t time);
 
 private:
+
+  friend class MarlinSettings;
 
   #if ENABLED(MARLIN_DEV_MODE)
     static void D(const int16_t dcode);
@@ -500,6 +526,7 @@ private:
 
   #if ENABLED(Z_STEPPER_AUTO_ALIGN)
     static void M422();
+    static void M422_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(ASSISTED_TRAMMING)
@@ -510,7 +537,7 @@ private:
     static void G38(const int8_t subcode);
   #endif
 
-  #if ENABLED(HAS_MESH)
+  #if HAS_MESH
     static void G42();
   #endif
 
@@ -543,27 +570,30 @@ private:
     static void G425();
   #endif
 
-  #if ENABLED(HAS_RESUME_CONTINUE)
+  #if HAS_RESUME_CONTINUE
     static void M0_M1();
   #endif
 
   #if HAS_CUTTER
     static void M3_M4(const bool is_M4);
     static void M5();
-    #if ENABLED(AIR_EVACUATION)
-      static void M10();
-      static void M11();
-    #endif
   #endif
 
-  #if ENABLED(COOLANT_CONTROL)
-    #if ENABLED(COOLANT_MIST)
-      static void M7();
-    #endif
-    #if ENABLED(COOLANT_FLOOD)
-      static void M8();
-    #endif
+  #if ENABLED(COOLANT_MIST)
+    static void M7();
+  #endif
+
+  #if EITHER(AIR_ASSIST, COOLANT_FLOOD)
+    static void M8();
+  #endif
+
+  #if EITHER(AIR_ASSIST, COOLANT_CONTROL)
     static void M9();
+  #endif
+
+  #if ENABLED(AIR_EVACUATION)
+    static void M10();
+    static void M11();
   #endif
 
   #if ENABLED(EXTERNAL_CLOSED_LOOP_CONTROLLER)
@@ -595,7 +625,7 @@ private:
   static void M31();
 
   #if ENABLED(SDSUPPORT)
-    #if ENABLED(HAS_MEDIA_SUBCALLS)
+    #if HAS_MEDIA_SUBCALLS
       static void M32();
     #endif
     #if ENABLED(LONG_FILENAME_HOST_SUPPORT)
@@ -632,20 +662,25 @@ private:
   #if ENABLED(PSU_CONTROL)
     static void M80();
   #endif
-
   static void M81();
-  static void M82();
-  static void M83();
+
+  #if HAS_EXTRUDERS
+    static void M82();
+    static void M83();
+  #endif
+
   static void M85();
   static void M92();
+  static void M92_report(const bool forReplay=true, const int8_t e=-1);
 
   #if ENABLED(M100_FREE_MEMORY_WATCHER)
     static void M100();
   #endif
 
-  #if EXTRUDERS
-    static void M104();
-    static void M109();
+  #if HAS_EXTRUDERS
+    static void M104_M109(const bool isM109);
+    FORCE_INLINE static void M104() { M104_M109(false); }
+    FORCE_INLINE static void M109() { M104_M109(true); }
   #endif
 
   static void M105();
@@ -673,7 +708,11 @@ private:
 
   static void M114();
   static void M115();
-  static void M117();
+
+  #if HAS_STATUS_MESSAGE
+    static void M117();
+  #endif
+
   static void M118();
   static void M119();
   static void M120();
@@ -695,8 +734,9 @@ private:
   #endif
 
   #if HAS_HEATED_BED
-    static void M140();
-    static void M190();
+    static void M140_M190(const bool isM190);
+    FORCE_INLINE static void M140() { M140_M190(false); }
+    FORCE_INLINE static void M190() { M140_M190(true); }
   #endif
 
   #if HAS_HEATED_CHAMBER
@@ -711,14 +751,20 @@ private:
 
   #if PREHEAT_COUNT
     static void M145();
+    static void M145_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(TEMPERATURE_UNITS_SUPPORT)
     static void M149();
+    static void M149_report(const bool forReplay=true);
   #endif
 
-  #if ENABLED(HAS_COLOR_LEDS)
+  #if HAS_COLOR_LEDS
     static void M150();
+  #endif
+
+  #if ENABLED(AUTO_REPORT_POSITION)
+    static void M154();
   #endif
 
   #if BOTH(AUTO_REPORT_TEMPERATURES, HAS_TEMP_SENSOR)
@@ -736,42 +782,56 @@ private:
     #endif
   #endif
 
-  static void M200();
+  #if DISABLED(NO_VOLUMETRICS)
+    static void M200();
+    static void M200_report(const bool forReplay=true);
+  #endif
   static void M201();
+  static void M201_report(const bool forReplay=true);
 
   #if 0
     static void M202(); // Not used for Sprinter/grbl gen6
   #endif
 
   static void M203();
+  static void M203_report(const bool forReplay=true);
   static void M204();
+  static void M204_report(const bool forReplay=true);
   static void M205();
+  static void M205_report(const bool forReplay=true);
 
-  #if ENABLED(HAS_M206_COMMAND)
+  #if HAS_M206_COMMAND
     static void M206();
+    static void M206_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(FWRETRACT)
     static void M207();
+    static void M207_report(const bool forReplay=true);
     static void M208();
+    static void M208_report(const bool forReplay=true);
     #if ENABLED(FWRETRACT_AUTORETRACT)
       static void M209();
+      static void M209_report(const bool forReplay=true);
     #endif
   #endif
 
   static void M211();
+  static void M211_report(const bool forReplay=true);
 
-  #if ENABLED(HAS_MULTI_EXTRUDER)
+  #if HAS_MULTI_EXTRUDER
     static void M217();
+    static void M217_report(const bool forReplay=true);
   #endif
 
-  #if ENABLED(HAS_HOTEND_OFFSET)
+  #if HAS_HOTEND_OFFSET
     static void M218();
+    static void M218_report(const bool forReplay=true);
   #endif
 
   static void M220();
 
-  #if EXTRUDERS
+  #if HAS_EXTRUDERS
     static void M221();
   #endif
 
@@ -783,8 +843,14 @@ private:
     static void M240();
   #endif
 
-  #if ENABLED(HAS_LCD_CONTRAST)
+  #if HAS_LCD_CONTRAST
     static void M250();
+    static void M250_report(const bool forReplay=true);
+  #endif
+
+  #if HAS_LCD_BRIGHTNESS
+    static void M256();
+    static void M256_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(EXPERIMENTAL_I2CBUS)
@@ -796,6 +862,10 @@ private:
     static void M280();
     #if ENABLED(EDITABLE_SERVO_ANGLES)
       static void M281();
+      static void M281_report(const bool forReplay=true);
+    #endif
+    #if ENABLED(SERVO_DETACH_GCODE)
+      static void M282();
     #endif
   #endif
 
@@ -803,32 +873,35 @@ private:
     static void M290();
   #endif
 
-  #if ENABLED(HAS_BUZZER)
+  #if HAS_BUZZER
     static void M300();
   #endif
 
   #if ENABLED(PIDTEMP)
     static void M301();
+    static void M301_report(const bool forReplay=true E_OPTARG(const int8_t eindex=-1));
   #endif
 
   #if ENABLED(PREVENT_COLD_EXTRUSION)
     static void M302();
   #endif
 
-  #if ENABLED(HAS_PID_HEATING)
+  #if HAS_PID_HEATING
     static void M303();
   #endif
 
   #if ENABLED(PIDTEMPBED)
     static void M304();
+    static void M304_report(const bool forReplay=true);
   #endif
 
-  #if ENABLED(HAS_USER_THERMISTORS)
+  #if HAS_USER_THERMISTORS
     static void M305();
   #endif
 
   #if ENABLED(PIDTEMPCHAMBER)
     static void M309();
+    static void M309_report(const bool forReplay=true);
   #endif
 
   #if HAS_MICROSTEPS
@@ -864,7 +937,7 @@ private:
     static void M402();
   #endif
 
-  #if ENABLED(HAS_PRUSA_MMU2)
+  #if HAS_PRUSA_MMU2
     static void M403();
   #endif
 
@@ -875,28 +948,32 @@ private:
     static void M407();
   #endif
 
-  #if ENABLED(HAS_FILAMENT_SENSOR)
+  #if HAS_FILAMENT_SENSOR
     static void M412();
+    static void M412_report(const bool forReplay=true);
   #endif
 
-  #if ENABLED(HAS_MULTI_LANGUAGE)
+  #if HAS_MULTI_LANGUAGE
     static void M414();
+    static void M414_report(const bool forReplay=true);
   #endif
 
   #if HAS_LEVELING
     static void M420();
+    static void M420_report(const bool forReplay=true);
     static void M421();
   #endif
 
   #if ENABLED(BACKLASH_GCODE)
     static void M425();
+    static void M425_report(const bool forReplay=true);
   #endif
 
-  #if ENABLED(HAS_M206_COMMAND)
+  #if HAS_M206_COMMAND
     static void M428();
   #endif
 
-  #if ENABLED(HAS_POWER_MONITOR)
+  #if HAS_POWER_MONITOR
     static void M430();
   #endif
 
@@ -934,8 +1011,16 @@ private:
 
   #if HAS_ETHERNET
     static void M552();
+    static void M552_report();
     static void M553();
+    static void M553_report();
     static void M554();
+    static void M554_report();
+  #endif
+
+  #if HAS_STEALTHCHOP
+    static void M569();
+    static void M569_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(BAUD_RATE_GCODE)
@@ -945,18 +1030,21 @@ private:
   #if ENABLED(ADVANCED_PAUSE_FEATURE)
     static void M600();
     static void M603();
+    static void M603_report(const bool forReplay=true);
   #endif
 
-  #if ENABLED(HAS_DUPLICATION_MODE)
+  #if HAS_DUPLICATION_MODE
     static void M605();
   #endif
 
-  #if ENABLED(IS_KINEMATIC)
+  #if IS_KINEMATIC
     static void M665();
+    static void M665_report(const bool forReplay=true);
   #endif
 
-  #if ENABLED(DELTA) || HAS_EXTRA_ENDSTOPS
+  #if EITHER(DELTA, HAS_EXTRA_ENDSTOPS)
     static void M666();
+    static void M666_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(DUET_SMART_EFFECTOR) && PIN_EXISTS(SMART_EFFECTOR_MOD)
@@ -976,12 +1064,14 @@ private:
     static void M810_819();
   #endif
 
-  #if ENABLED(HAS_BED_PROBE)
+  #if HAS_BED_PROBE
     static void M851();
+    static void M851_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(SKEW_CORRECTION_GCODE)
     static void M852();
+    static void M852_report(const bool forReplay=true);
   #endif
 
   #if ENABLED(I2C_POSITION_ENCODERS)
@@ -1004,23 +1094,24 @@ private:
 
   #if ENABLED(LIN_ADVANCE)
     static void M900();
+    static void M900_report(const bool forReplay=true);
   #endif
 
   #if HAS_TRINAMIC_CONFIG
     static void M122();
     static void M906();
-    #if ENABLED(HAS_STEALTHCHOP)
-      static void M569();
-    #endif
+    static void M906_report(const bool forReplay=true);
     #if ENABLED(MONITOR_DRIVER_STATUS)
       static void M911();
       static void M912();
     #endif
     #if ENABLED(HYBRID_THRESHOLD)
       static void M913();
+      static void M913_report(const bool forReplay=true);
     #endif
     #if ENABLED(USE_SENSORLESS)
       static void M914();
+      static void M914_report(const bool forReplay=true);
     #endif
   #endif
 
@@ -1032,15 +1123,18 @@ private:
     static void M918();
   #endif
 
-  #if ANY(HAS_MOTOR_CURRENT_SPI, HAS_MOTOR_CURRENT_PWM, HAS_MOTOR_CURRENT_I2C, HAS_MOTOR_CURRENT_DAC)
+  #if HAS_MOTOR_CURRENT_SPI || HAS_MOTOR_CURRENT_PWM || HAS_MOTOR_CURRENT_I2C || HAS_MOTOR_CURRENT_DAC
     static void M907();
-    #if EITHER(HAS_MOTOR_CURRENT_SPI, HAS_MOTOR_CURRENT_DAC)
-      static void M908();
-      #if ENABLED(HAS_MOTOR_CURRENT_DAC)
-        static void M909();
-        static void M910();
-      #endif
+    #if HAS_MOTOR_CURRENT_SPI || HAS_MOTOR_CURRENT_PWM
+      static void M907_report(const bool forReplay=true);
     #endif
+  #endif
+  #if HAS_MOTOR_CURRENT_SPI || HAS_MOTOR_CURRENT_DAC
+    static void M908();
+  #endif
+  #if HAS_MOTOR_CURRENT_DAC
+    static void M909();
+    static void M910();
   #endif
 
   #if ENABLED(SDSUPPORT)
@@ -1068,6 +1162,7 @@ private:
 
   #if ENABLED(POWER_LOSS_RECOVERY)
     static void M413();
+    static void M413_report(const bool forReplay=true);
     static void M1000();
   #endif
 
@@ -1079,12 +1174,17 @@ private:
     static void M1002();
   #endif
 
+  #if ENABLED(UBL_MESH_WIZARD)
+    static void M1004();
+  #endif
+
   #if ENABLED(MAX7219_GCODE)
     static void M7219();
   #endif
 
   #if ENABLED(CONTROLLER_FAN_EDITABLE)
     static void M710();
+    static void M710_report(const bool forReplay=true);
   #endif
 
   static void T(const int8_t tool_index);

@@ -274,8 +274,6 @@ float bilinear_z_offset(const xy_pos_t &raw) {
   // Whole units for the grid line indices. Constrained within bounds.
   static xy_int8_t thisg, nextg, lastg { -99, -99 };
 
-  const xyz_pos_t reset { -9999.999, -9999.999, 0 };
-
   // XY relative to the probed area
   xy_pos_t rel = raw - bilinear_start.asFloat();
 
@@ -284,11 +282,6 @@ float bilinear_z_offset(const xy_pos_t &raw) {
   #else
     #define FAR_EDGE_OR_BOX 1   // Just use the grid far edge
   #endif
-
-  if(raw == reset) {
-    lastg.x = -99;
-    lastg.y = -99;
-  }
 
   if (prev.x != rel.x) {
     prev.x = rel.x;
@@ -343,11 +336,11 @@ float bilinear_z_offset(const xy_pos_t &raw) {
   /*
   static float last_offset = 0;
   if (ABS(last_offset - offset) > 0.2) {
-    SERIAL_ECHOLNPAIR("Sudden Shift at x=", rel.x, " / ", bilinear_grid_spacing.x, " -> thisg.x=", thisg.x);
-    SERIAL_ECHOLNPAIR(" y=", rel.y, " / ", bilinear_grid_spacing.y, " -> thisg.y=", thisg.y);
-    SERIAL_ECHOLNPAIR(" ratio.x=", ratio.x, " ratio.y=", ratio.y);
-    SERIAL_ECHOLNPAIR(" z1=", z1, " z2=", z2, " z3=", z3, " z4=", z4);
-    SERIAL_ECHOLNPAIR(" L=", L, " R=", R, " offset=", offset);
+    SERIAL_ECHOLNPGM("Sudden Shift at x=", rel.x, " / ", bilinear_grid_spacing.x, " -> thisg.x=", thisg.x);
+    SERIAL_ECHOLNPGM(" y=", rel.y, " / ", bilinear_grid_spacing.y, " -> thisg.y=", thisg.y);
+    SERIAL_ECHOLNPGM(" ratio.x=", ratio.x, " ratio.y=", ratio.y);
+    SERIAL_ECHOLNPGM(" z1=", z1, " z2=", z2, " z3=", z3, " z4=", z4);
+    SERIAL_ECHOLNPGM(" L=", L, " R=", R, " offset=", offset);
   }
   last_offset = offset;
   //*/

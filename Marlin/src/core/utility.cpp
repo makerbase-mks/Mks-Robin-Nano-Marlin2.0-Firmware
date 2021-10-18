@@ -35,18 +35,6 @@ void safe_delay(millis_t ms) {
   thermalManager.manage_heater(); // This keeps us safe if too many small safe_delay() calls are made
 }
 
-#if ENABLED(MARLIN_DEV_MODE)
-  void early_safe_delay(millis_t ms) {
-    while (ms > 50) {
-      ms -= 50;
-      delay(50);
-      watchdog_refresh();
-    }
-    delay(ms);
-    watchdog_refresh();
-  }
-#endif
-
 // A delay to provide brittle hosts time to receive bytes
 #if ENABLED(SERIAL_OVERRUN_PROTECTION)
 
@@ -91,9 +79,9 @@ void safe_delay(millis_t ms) {
     #if HAS_BED_PROBE
 
       #if !HAS_PROBE_XY_OFFSET
-        SERIAL_ECHOPAIR("Probe Offset X0 Y0 Z", probe.offset.z, " (");
+        SERIAL_ECHOPGM("Probe Offset X0 Y0 Z", probe.offset.z, " (");
       #else
-        SERIAL_ECHOPAIR_P(PSTR("Probe Offset X"), probe.offset_xy.x, SP_Y_STR, probe.offset_xy.y, SP_Z_STR, probe.offset.z);
+        SERIAL_ECHOPGM_P(PSTR("Probe Offset X"), probe.offset_xy.x, SP_Y_STR, probe.offset_xy.y, SP_Z_STR, probe.offset.z);
         if (probe.offset_xy.x > 0)
           SERIAL_ECHOPGM(" (Right");
         else if (probe.offset_xy.x < 0)
@@ -131,13 +119,13 @@ void safe_delay(millis_t ms) {
         SERIAL_ECHOLNPGM(" (enabled)");
         #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
           if (planner.z_fade_height)
-            SERIAL_ECHOLNPAIR("Z Fade: ", planner.z_fade_height);
+            SERIAL_ECHOLNPGM("Z Fade: ", planner.z_fade_height);
         #endif
         #if ABL_PLANAR
-          SERIAL_ECHOPGM("ABL Adjustment X");
-          LOOP_XYZ(a) {
+          SERIAL_ECHOPGM("ABL Adjustment");
+          LOOP_LINEAR_AXES(a) {
             const float v = planner.get_axis_position_mm(AxisEnum(a)) - current_position[a];
-            SERIAL_CHAR(' ', XYZ_CHAR(a));
+            SERIAL_CHAR(' ', AXIS_CHAR(a));
             if (v > 0) SERIAL_CHAR('+');
             SERIAL_DECIMAL(v);
           }
@@ -152,7 +140,7 @@ void safe_delay(millis_t ms) {
           SERIAL_ECHO(ftostr43sign(rz, '+'));
           #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
             if (planner.z_fade_height) {
-              SERIAL_ECHOPAIR(" (", ftostr43sign(rz * planner.fade_scaling_factor_for_z(current_position.z), '+'));
+              SERIAL_ECHOPGM(" (", ftostr43sign(rz * planner.fade_scaling_factor_for_z(current_position.z), '+'));
               SERIAL_CHAR(')');
             }
           #endif
@@ -168,10 +156,10 @@ void safe_delay(millis_t ms) {
       SERIAL_ECHOPGM("Mesh Bed Leveling");
       if (planner.leveling_active) {
         SERIAL_ECHOLNPGM(" (enabled)");
-        SERIAL_ECHOPAIR("MBL Adjustment Z", ftostr43sign(mbl.get_z(current_position), '+'));
+        SERIAL_ECHOPGM("MBL Adjustment Z", ftostr43sign(mbl.get_z(current_position), '+'));
         #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
           if (planner.z_fade_height) {
-            SERIAL_ECHOPAIR(" (", ftostr43sign(
+            SERIAL_ECHOPGM(" (", ftostr43sign(
               mbl.get_z(current_position, planner.fade_scaling_factor_for_z(current_position.z)), '+'
             ));
             SERIAL_CHAR(')');

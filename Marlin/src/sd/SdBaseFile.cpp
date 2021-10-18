@@ -1089,7 +1089,7 @@ int8_t SdBaseFile::readDir(dir_t *dir, char *longFilename) {
   if (longFilename) {
     INVALIDATE_LONGNAME();
     TERN0(HAS_TFT_LVGL_UI, lv_longFilename[0] = '\0');
-  }
+  } 
 
   uint8_t checksum_error = 0xFF, checksum = 0;
 

@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+
 #include "../../inc/MarlinConfig.h"
 
 #if ENABLED(REPETIER_GCODE_M360)
@@ -28,7 +29,7 @@
 #include "../../module/motion.h"
 #include "../../module/planner.h"
 
-#if EXTRUDERS
+#if HAS_EXTRUDERS
   #include "../../module/temperature.h"
 #endif
 
@@ -36,7 +37,7 @@ static void config_prefix(PGM_P const name, PGM_P const pref=nullptr, const int8
   SERIAL_ECHOPGM("Config:");
   if (pref) SERIAL_ECHOPGM_P(pref);
   if (ind >= 0) { SERIAL_ECHO(ind); SERIAL_CHAR(':'); }
-  SERIAL_ECHOPAIR_P(name, AS_CHAR(':'));
+  SERIAL_ECHOPGM_P(name, AS_CHAR(':'));
 }
 static void config_line(PGM_P const name, const float val, PGM_P const pref=nullptr, const int8_t ind=-1) {
   config_prefix(name, pref, ind);
@@ -171,7 +172,7 @@ void GcodeSuite::M360() {
   // Per-Extruder settings
   //
   config_line(PSTR("NumExtruder"), EXTRUDERS);
-  #if EXTRUDERS
+  #if HAS_EXTRUDERS
     LOOP_L_N(e, EXTRUDERS) {
       config_line_e(e, JERK_STR, TERN(HAS_LINEAR_E_JERK, planner.max_e_jerk[E_INDEX_N(e)], TERN(HAS_CLASSIC_JERK, planner.max_jerk.e, DEFAULT_EJERK)));
       config_line_e(e, PSTR("MaxSpeed"), planner.settings.max_feedrate_mm_s[E_AXIS_N(e)]);
