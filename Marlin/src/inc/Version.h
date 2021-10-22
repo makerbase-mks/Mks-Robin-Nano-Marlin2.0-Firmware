@@ -28,7 +28,7 @@
   #define SHORT_BUILD_VERSION "bugfix2.0.x-MKS-2.1.3"
 #endif
 
-#define IM_VERSION "2.2.0"
+#define IM_VERSION "2.2.1"
 
 /**
  * Verbose version identifier containing a unique identifier, such as the
@@ -44,7 +44,7 @@
  * version was tagged.
  */
 #ifndef STRING_DISTRIBUTION_DATE
-  #define STRING_DISTRIBUTION_DATE "2021-09-23"
+  #define STRING_DISTRIBUTION_DATE "2021-10-11"
 #endif
 
 /**
