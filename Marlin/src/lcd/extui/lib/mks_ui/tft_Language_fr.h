@@ -69,6 +69,7 @@
 
 #define HOME_X_TEXT_FR                "X"
 #define HOME_Y_TEXT_FR                "Y"
+#define HOME_XY_TEXT_FR          "X-Y"
 #define HOME_Z_TEXT_FR                "Z"
 #define HOME_ALL_TEXT_FR              "ALL"
 #define HOME_STOPMOVE_FR              "Quickstop"

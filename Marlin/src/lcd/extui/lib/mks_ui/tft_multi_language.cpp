@@ -126,7 +126,7 @@ void machine_setting_disp() {
     machine_menu.LevelingManuPosConf     = LEVELING_MANUAL_POS_CN;
     machine_menu.LevelingAutoCommandConf = LEVELING_AUTO_COMMAND_CN;
   	machine_menu.LevelingAutoZoffsetConf = LEVELING_AUTO_ZOFFSET_CN;
-    
+
     machine_menu.LevelingSubConfTitle = LEVELING_PARA_CONF_TITLE_CN;
     machine_menu.AutoLevelEnable      = AUTO_LEVELING_ENABLE_CN;
     machine_menu.BLtouchEnable        = BLTOUCH_LEVELING_ENABLE_CN;
@@ -185,7 +185,7 @@ void machine_setting_disp() {
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_CN;
     machine_menu.EncoderSettings       = ENCODER_SETTINGS_CN;
     machine_menu.xModeSettings         = X_MODE_SETTINGS_CN;
-    machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_CN;               
+    machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_CN;
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_CN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_CN;
@@ -290,7 +290,7 @@ void machine_setting_disp() {
     machine_menu.TouchmiOffsetneg    = TM_ZOFFSETNEG_CN;
     machine_menu.TouchmiSave         = TM_SAVE_CN;
     machine_menu.TouchmiTest         = TM_TEST_CN;
-    
+
     machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_CN;
     machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_CN;
     machine_menu.BLTouchInit              = BLTOUCH_INIT_CN;
@@ -382,7 +382,7 @@ void machine_setting_disp() {
     machine_menu.LevelingManuPosConf     = LEVELING_MANUAL_POS_T_CN;
     machine_menu.LevelingAutoCommandConf = LEVELING_AUTO_COMMAND_T_CN;
     machine_menu.LevelingAutoZoffsetConf = LEVELING_AUTO_ZOFFSET_T_CN;
-    
+
     machine_menu.LevelingSubConfTitle = LEVELING_PARA_CONF_TITLE_T_CN;
     machine_menu.AutoLevelEnable      = AUTO_LEVELING_ENABLE_T_CN;
     machine_menu.BLtouchEnable        = BLTOUCH_LEVELING_ENABLE_T_CN;
@@ -441,7 +441,7 @@ void machine_setting_disp() {
     machine_menu.HomingSensitivityConf = HOMING_SENSITIVITY_CONF_T_CN;
     machine_menu.EncoderSettings       = ENCODER_SETTINGS_T_CN;
     machine_menu.xModeSettings         = X_MODE_SETTINGS_T_CN;
-    machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_T_CN;  
+    machine_menu.hotendOffsetSettings  = HOTEND_OFFSET_SETTINGS_T_CN;
 
     machine_menu.MaxFeedRateConfTitle = MAXFEEDRATE_CONF_TITLE_T_CN;
     machine_menu.XMaxFeedRate         = X_MAXFEEDRATE_T_CN;
@@ -639,7 +639,7 @@ void machine_setting_disp() {
     machine_menu.LevelingManuPosConf     = LEVELING_MANUAL_POS_EN;
     machine_menu.LevelingAutoCommandConf = LEVELING_AUTO_COMMAND_EN;
     machine_menu.LevelingAutoZoffsetConf = LEVELING_AUTO_ZOFFSET_EN;
-    
+
     machine_menu.LevelingSubConfTitle = LEVELING_PARA_CONF_TITLE_EN;
     machine_menu.AutoLevelEnable      = AUTO_LEVELING_ENABLE_EN;
     machine_menu.BLtouchEnable        = BLTOUCH_LEVELING_ENABLE_EN;
@@ -860,6 +860,7 @@ void disp_language_init() {
 
   home_menu.home_x   = HOME_X_TEXT;
   home_menu.home_y   = HOME_Y_TEXT;
+  home_menu.home_xy   = HOME_XY_TEXT;
   home_menu.home_z   = HOME_Z_TEXT;
   home_menu.home_all = HOME_ALL_TEXT;
 
@@ -1823,7 +1824,7 @@ void disp_language_init() {
             machine_menu.LevelingManuPosConf     = LEVELING_MANUAL_POS_RU;
           	machine_menu.LevelingAutoCommandConf = LEVELING_AUTO_COMMAND_RU;
           	machine_menu.LevelingAutoZoffsetConf = LEVELING_AUTO_ZOFFSET_RU;
-            
+
             machine_menu.AccelerationConfTitle = ACCELERATION_CONF_TITLE_RU;
             machine_menu.PrintAcceleration     = PRINT_ACCELERATION_RU;
             machine_menu.RetractAcceleration   = RETRACT_ACCELERATION_RU;
@@ -1913,7 +1914,7 @@ void disp_language_init() {
             machine_menu.hotendXoffset           = HOTEND_OFFSET_X_RU;
             machine_menu.hotendYoffset           = HOTEND_OFFSET_Y_RU;
             machine_menu.hotendZoffset           = HOTEND_OFFSET_Z_RU;
-            
+
             cloud_menu.title        = TITLE_CLOUD_TEXT_RU;
             cloud_menu.bind         = CLOUD_BINDED_RU;
             cloud_menu.binded       = CLOUD_BINDED_RU;
@@ -2081,6 +2082,7 @@ void disp_language_init() {
             home_menu.title    = TITLE_HOME_SP;
             home_menu.home_x   = HOME_X_TEXT_SP;
             home_menu.home_y   = HOME_Y_TEXT_SP;
+            home_menu.home_xy   = HOME_XY_TEXT_SP;
             home_menu.home_z   = HOME_Z_TEXT_SP;
             home_menu.home_all = HOME_ALL_TEXT_SP;
             home_menu.stopmove = HOME_STOPMOVE_SP;
