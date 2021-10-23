@@ -49,11 +49,11 @@ static lv_obj_t *labelExt1;
 
 static lv_obj_t *btn_pla;
 static lv_obj_t *btn_abs;
-
-static lv_style_t btn_style_pre;
-static lv_style_t btn_style_rel;
 static lv_obj_t *label_abs;
 static lv_obj_t *label_pla;
+
+// static lv_style_t btn_style_pre;
+// static lv_style_t btn_style_rel;
 
 #if HAS_MULTI_EXTRUDER && DISABLED(SINGLENOZZLE)
   static lv_obj_t *labelExt2;
@@ -154,24 +154,6 @@ void mks_disp_test() {
   #endif
 }
 
-void disp_ext_heart_ready_print() {
-
-// buttonBedstate = lv_imgbtn_create(scr, "F:/bmp_bed_state.bin", 206, 186, event_handler, ID_TEMP_BED);
-    btn_abs = lv_big_button_create(scr, "F:/bmp_temp_mini.bin",PREHEAT_2_LABEL, 350, 270,  event_handler, ID_P_ABS);
-    btn_pla = lv_big_button_create(scr, "F:/bmp_temp_mini.bin",PREHEAT_1_LABEL, 350, 230, event_handler, ID_P_PLA);
-
-    // lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
-    // lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    // lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
-    // lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
-
-    // e1 = lv_label_create_empty(scr);
-    //   lv_obj_set_pos(e1, 20, 20);
-
-    // label_abs = lv_label_create(btn_abs, PREHEAT_2_LABEL);
-
-    // label_pla = lv_label_create(btn_pla, PREHEAT_1_LABEL);
-}
 
 void lv_draw_ready_print(void) {
   #if HAS_HOTEND
@@ -259,6 +241,7 @@ void lv_draw_ready_print(void) {
     lv_big_button_create(scr, "F:/bmp_set.bin", main_menu.set, 180, 90, event_handler, ID_SET);
     lv_big_button_create(scr, "F:/bmp_printing.bin", main_menu.print, 340, 90, event_handler, ID_PRINT);
     lv_temp_info();
+    disp_ext_heart_ready_print();
   }
 
   #if ENABLED(TOUCH_SCREEN_CALIBRATION)
@@ -268,7 +251,6 @@ void lv_draw_ready_print(void) {
       lv_draw_touch_calibration_screen();
     }
   #endif
-  disp_ext_heart_ready_print();
 }
 
 void lv_temp_info() {
@@ -276,24 +258,25 @@ void lv_temp_info() {
   // Create image buttons
 
   #if HAS_HEATED_BED
-    lv_big_button_create(scr, "F:/bmp_bed_state.bin", " ", 20, 260, event_handler, ID_INFO_BED);
+    lv_big_button_create(scr, "F:/bmp_bed_state.bin", " ", 180, 260, event_handler, ID_INFO_BED);
   #endif
 
-  lv_big_button_create(scr, "F:/bmp_ext1_state.bin", " ", 180, 260, event_handler, ID_INFO_EXT);
+  lv_big_button_create(scr, "F:/bmp_ext1_state.bin", " ", 340, 260, event_handler, ID_INFO_EXT);
 
   #if HAS_MULTI_EXTRUDER && DISABLED(SINGLENOZZLE)
     lv_big_button_create(scr, "F:/bmp_ext2_state.bin", " ", 325, 260, event_handler, ID_INFO_EXT);
   #endif
 
   #if HAS_HEATED_BED
-    labelBed = lv_label_create(scr, 70, 270, nullptr);
+    labelBed = lv_label_create(scr, (180 + 50), 270, nullptr);
     #endif
 
-    labelExt1 = lv_label_create(scr, 230, 270, nullptr);
+    labelExt1 = lv_label_create(scr, (340 + 50), 270, nullptr);
 
     #if HAS_MULTI_EXTRUDER && DISABLED(SINGLENOZZLE)
       labelExt2 = lv_label_create(scr, 375, 270, nullptr);
     #endif
+
     lv_temp_refr();
 }
 
@@ -319,5 +302,17 @@ void lv_clear_ready_print() {
   #endif
   lv_obj_del(scr);
 }
+
+void disp_ext_heart_ready_print() {
+
+    btn_pla = lv_imgbtn_create(scr, "F:/bmp_temp_mini.bin", 20, 130, event_handler, ID_P_PLA);
+    btn_abs = lv_imgbtn_create(scr, "F:/bmp_temp_mini.bin", 20, 180,  event_handler, ID_P_ABS);
+
+    label_pla = lv_label_create(btn_pla, 50, 10, PREHEAT_1_LABEL);
+    label_abs = lv_label_create(btn_abs, 50, 10, PREHEAT_2_LABEL);
+
+
+}
+
 
 #endif // HAS_TFT_LVGL_UI
