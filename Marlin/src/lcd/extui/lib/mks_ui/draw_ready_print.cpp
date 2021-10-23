@@ -46,6 +46,15 @@ extern lv_group_t*  g;
 static lv_obj_t *scr;
 static lv_obj_t *labelExt1;
 
+
+static lv_obj_t *btn_pla;
+static lv_obj_t *btn_abs;
+
+static lv_style_t btn_style_pre;
+static lv_style_t btn_style_rel;
+static lv_obj_t *label_abs;
+static lv_obj_t *label_pla;
+
 #if HAS_MULTI_EXTRUDER && DISABLED(SINGLENOZZLE)
   static lv_obj_t *labelExt2;
 #endif
@@ -63,11 +72,16 @@ enum {
   ID_SET,
   ID_PRINT,
   ID_INFO_EXT,
-  ID_INFO_BED
+  ID_INFO_BED,
+  ID_P_ABS,
+  ID_P_PLA,
 };
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
-  lv_clear_ready_print();
+
+  if(obj->mks_obj_id != ID_P_ABS && obj->mks_obj_id != ID_P_PLA ){
+    lv_clear_ready_print();
+  }
 
   switch (obj->mks_obj_id) {
     case ID_TOOL:   lv_draw_tool(); break;
@@ -75,6 +89,15 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_INFO_EXT:  uiCfg.curTempType = 0; lv_draw_preHeat(); break;
     case ID_INFO_BED:  uiCfg.curTempType = 1; lv_draw_preHeat(); break;
     case ID_PRINT: TERN(MULTI_VOLUME, lv_draw_media_select(), lv_draw_print_file()); break;
+    case ID_P_ABS:
+      thermalManager.setTargetHotend(PREHEAT_2_TEMP_HOTEND, 0);
+        thermalManager.setTargetBed(PREHEAT_2_TEMP_BED);
+      break;
+    case ID_P_PLA:
+
+      thermalManager.setTargetHotend(PREHEAT_1_TEMP_HOTEND, 0);
+        thermalManager.setTargetBed(PREHEAT_1_TEMP_BED);
+      break;
   }
 }
 
@@ -131,6 +154,21 @@ void mks_disp_test() {
   #endif
 }
 
+void disp_ext_heart_ready_print() {
+
+// buttonBedstate = lv_imgbtn_create(scr, "F:/bmp_bed_state.bin", 206, 186, event_handler, ID_TEMP_BED);
+    btn_abs = lv_btn_create(scr, 160, 20, 80, 40, event_handler, ID_P_ABS);
+    btn_pla = lv_btn_create(scr, 260, 20, 80, 40, event_handler, ID_P_PLA);
+
+    lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
+    lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
+    lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
+
+    label_abs = lv_label_create(btn_abs, PREHEAT_2_LABEL);
+    label_pla = lv_label_create(btn_pla, PREHEAT_1_LABEL);
+}
+
 void lv_draw_ready_print(void) {
   #if HAS_HOTEND
     char buf[30] = {0};
@@ -138,7 +176,7 @@ void lv_draw_ready_print(void) {
   lv_obj_t *buttonTool;
 
   disp_state_stack._disp_index = 0;
-  
+
   ZERO(disp_state_stack._disp_state);
 
   if (mks_test_flag == 0x1E) {
@@ -226,6 +264,7 @@ void lv_draw_ready_print(void) {
       lv_draw_touch_calibration_screen();
     }
   #endif
+  disp_ext_heart_ready_print();
 }
 
 void lv_temp_info() {
