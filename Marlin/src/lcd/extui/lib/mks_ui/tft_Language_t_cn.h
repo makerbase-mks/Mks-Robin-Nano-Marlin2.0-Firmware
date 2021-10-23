@@ -327,6 +327,7 @@
 
 #define HOME_X_TEXT_T_CN                "X"
 #define HOME_Y_TEXT_T_CN                "Y"
+#define HOME_XY_TEXT_T_CN               "X-Y"
 #define HOME_Z_TEXT_T_CN                "Z"
 #define HOME_ALL_TEXT_T_CN              "回零"
 #define HOME_STOPMOVE_T_CN              "急停"
