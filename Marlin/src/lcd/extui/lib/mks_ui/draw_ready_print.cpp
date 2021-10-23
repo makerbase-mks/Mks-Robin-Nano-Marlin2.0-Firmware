@@ -157,16 +157,20 @@ void mks_disp_test() {
 void disp_ext_heart_ready_print() {
 
 // buttonBedstate = lv_imgbtn_create(scr, "F:/bmp_bed_state.bin", 206, 186, event_handler, ID_TEMP_BED);
-    btn_abs = lv_btn_create(scr, 160, 20, 80, 40, event_handler, ID_P_ABS);
-    btn_pla = lv_btn_create(scr, 260, 20, 80, 40, event_handler, ID_P_PLA);
+    btn_abs = lv_big_button_create(scr, "F:/bmp_temp_mini.bin",PREHEAT_2_LABEL, 350, 270,  event_handler, ID_P_ABS);
+    btn_pla = lv_big_button_create(scr, "F:/bmp_temp_mini.bin",PREHEAT_1_LABEL, 350, 230, event_handler, ID_P_PLA);
 
-    lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
-    lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
-    lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
+    // lv_btn_set_style(btn_abs, LV_BTN_STYLE_PR, &btn_style_pre);
+    // lv_btn_set_style(btn_abs, LV_BTN_STYLE_REL, &btn_style_rel);
+    // lv_btn_set_style(btn_pla, LV_BTN_STYLE_PR, &btn_style_pre);
+    // lv_btn_set_style(btn_pla, LV_BTN_STYLE_REL, &btn_style_rel);
 
-    label_abs = lv_label_create(btn_abs, PREHEAT_2_LABEL);
-    label_pla = lv_label_create(btn_pla, PREHEAT_1_LABEL);
+    // e1 = lv_label_create_empty(scr);
+    //   lv_obj_set_pos(e1, 20, 20);
+
+    // label_abs = lv_label_create(btn_abs, PREHEAT_2_LABEL);
+
+    // label_pla = lv_label_create(btn_pla, PREHEAT_1_LABEL);
 }
 
 void lv_draw_ready_print(void) {
