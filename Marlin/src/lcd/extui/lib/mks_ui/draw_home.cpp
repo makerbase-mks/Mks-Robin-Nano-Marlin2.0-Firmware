@@ -39,6 +39,7 @@ enum {
   ID_H_X,
   ID_H_Y,
   ID_H_Z,
+  ID_H_XY,
   ID_H_RETURN,
   ID_H_OFF_ALL,
   ID_H_OFF_XY
@@ -60,6 +61,9 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_H_Y:
       queue.inject_P(PSTR("G28Y"));
+      break;
+    case ID_H_XY:
+      queue.inject_P(PSTR("G28XY"));
       break;
     case ID_H_Z:
       queue.inject_P(PSTR("G28Z"));
@@ -83,8 +87,9 @@ void lv_draw_home(void) {
   lv_big_button_create(scr, "F:/bmp_zeroX.bin", home_menu.home_x, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_H_X);
   lv_big_button_create(scr, "F:/bmp_zeroY.bin", home_menu.home_y, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_H_Y);
   lv_big_button_create(scr, "F:/bmp_zeroZ.bin", home_menu.home_z, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_H_Z);
-  lv_big_button_create(scr, "F:/bmp_function1.bin", set_menu.motoroff, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_OFF_ALL);
-  lv_big_button_create(scr, "F:/bmp_function1.bin", set_menu.motoroffXY, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_OFF_XY);
+  lv_big_button_create(scr, "F:/bmp_leveling1.bin", home_menu.home_xy, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_XY);
+  lv_big_button_create(scr, "F:/bmp_function1.bin", set_menu.motoroff, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_OFF_ALL);
+  lv_big_button_create(scr, "F:/bmp_function1.bin", set_menu.motoroffXY, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_OFF_XY);
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_H_RETURN);
 }
 
