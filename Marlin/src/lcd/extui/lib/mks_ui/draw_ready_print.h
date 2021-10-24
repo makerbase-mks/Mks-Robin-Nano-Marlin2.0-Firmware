@@ -38,6 +38,8 @@ extern void disp_ext_temp();
 extern void disp_bed_temp();
 extern void lv_temp_info();
 extern void lv_temp_refr();
+extern void disp_ext_heart_ready_print();
+
 
 #ifdef __cplusplus
   } /* C-declarations for C++ */
