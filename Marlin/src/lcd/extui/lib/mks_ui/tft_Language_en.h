@@ -343,6 +343,7 @@
 
 #define HOME_X_TEXT_EN          "X"
 #define HOME_Y_TEXT_EN          "Y"
+#define HOME_XY_TEXT_EN          "X-Y"
 #define HOME_Z_TEXT_EN          "Z"
 #define HOME_ALL_TEXT_EN        "Home"
 #define HOME_STOPMOVE_EN        "Quickstop"

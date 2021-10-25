@@ -51,9 +51,9 @@ static lv_obj_t *labelExt1;
 static lv_obj_t *label_abs;
 static lv_obj_t *label_pla;
 
-static lv_style_t btn_style_pre;
-static lv_style_t btn_style_rel;
-static int additional;
+// static lv_style_t btn_style_pre;
+// static lv_style_t btn_style_rel;
+// static int additional;
 
 #if HAS_MULTI_EXTRUDER && DISABLED(SINGLENOZZLE)
   static lv_obj_t *labelExt2;

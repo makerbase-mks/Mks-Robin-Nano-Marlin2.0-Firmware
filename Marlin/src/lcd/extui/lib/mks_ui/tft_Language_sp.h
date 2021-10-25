@@ -71,6 +71,7 @@
 
 #define HOME_X_TEXT_SP          "EJE X"
 #define HOME_Y_TEXT_SP          "EJE Y"
+#define HOME_XY_TEXT_SP         "EJE X-Y"
 #define HOME_Z_TEXT_SP          "EJE Z"
 #define HOME_ALL_TEXT_SP        "TODOS"
 #define HOME_STOPMOVE_SP        "Quickstop"
