@@ -564,7 +564,7 @@ void Pic_Read(uint8_t *Pname, uint8_t *P_Rbuff) {
     do {
       W25QXX.SPI_FLASH_BufferRead(&PIC.name[j], PIC_NAME_ADDR + tmp_cnt, 1);
       tmp_cnt++;
-    } while (PIC.name[j++] != '\0');
+    } while (PIC.name[j++] != '\0' && j <= 50);  // fix-1025
     // pic size
     W25QXX.SPI_FLASH_BufferRead(PIC.size.bytes, PIC_SIZE_ADDR + i * 4, 4);
 
