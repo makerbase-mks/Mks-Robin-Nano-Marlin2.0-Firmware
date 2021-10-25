@@ -547,7 +547,9 @@ lv_obj_t* lv_screen_menu_item_onoff(lv_obj_t *par, const char *text, lv_coord_t 
 void lv_screen_menu_item_onoff_update(lv_obj_t *btn, const bool curValue);
 
 // set scr id and title
+#ifdef USE_NEW_LVGL_CONF
 lv_obj_t* lv_set_scr_id_title(lv_obj_t *scr ,DISP_STATE newScreenType, const char *title);
+#endif
 
 #define _DIA_1(T)       (uiCfg.dialogType == DIALOG_##T)
 #define DIALOG_IS(V...) DO(DIA,||,V)
