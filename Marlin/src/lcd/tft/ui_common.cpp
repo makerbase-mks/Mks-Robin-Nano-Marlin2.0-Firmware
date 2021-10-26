@@ -37,6 +37,27 @@ static xy_uint_t cursor;
   bool draw_menu_navigation = false;
 #endif
 
+#if HAS_TOUCH_SLEEP
+
+  bool lcd_sleep_task() {
+    static bool sleepCleared;
+    if (touch.isSleeping()) {
+      tft.queue.reset();
+      if (!sleepCleared) {
+        sleepCleared = true;
+        ui.clear_lcd();
+        tft.queue.async();
+      }
+      touch.idle();
+      return true;
+    }
+    else
+      sleepCleared = false;
+    return false;
+  }
+
+#endif
+
 void menu_line(const uint8_t row, uint16_t color) {
   cursor.set(0, row);
   tft.canvas(0, TFT_TOP_LINE_Y + cursor.y * MENU_LINE_HEIGHT, TFT_WIDTH, MENU_ITEM_HEIGHT);
@@ -131,7 +152,7 @@ void MenuItemBase::_draw(const bool sel, const uint8_t row, PGM_P const pstr, co
 }
 
 // Draw a menu item with a (potentially) editable value
-void MenuEditItemBase::draw(const bool sel, const uint8_t row, PGM_P const pstr, const char* const data, const bool pgm) {
+void MenuEditItemBase::draw(const bool sel, const uint8_t row, PGM_P const pstr, const char * const data, const bool pgm) {
   menu_item(row, sel);
 
   tft_string.set(pstr, itemIndex, itemString);
@@ -188,6 +209,15 @@ void MarlinUI::clear_lcd() {
   tft.fill(0, 0, TFT_WIDTH, TFT_HEIGHT, COLOR_BACKGROUND);
   cursor.set(0, 0);
 }
+
+#if HAS_LCD_BRIGHTNESS
+  void MarlinUI::_set_brightness() {
+    #if PIN_EXISTS(TFT_BACKLIGHT)
+      if (PWM_PIN(TFT_BACKLIGHT_PIN))
+        analogWrite(pin_t(TFT_BACKLIGHT_PIN), brightness);
+    #endif
+  }
+#endif
 
 #if ENABLED(TOUCH_SCREEN_CALIBRATION)
 

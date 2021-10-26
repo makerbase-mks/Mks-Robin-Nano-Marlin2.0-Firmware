@@ -83,8 +83,8 @@ void TWIBus::send() {
 // static
 void TWIBus::echoprefix(uint8_t bytes, const char pref[], uint8_t adr) {
   SERIAL_ECHO_START();
-  serialprintPGM(pref);
-  SERIAL_ECHOPAIR(": from:", adr, " bytes:", bytes, " data:");
+  SERIAL_ECHOPGM_P(pref);
+  SERIAL_ECHOPGM(": from:", adr, " bytes:", bytes, " data:");
 }
 
 // static
@@ -172,7 +172,7 @@ void TWIBus::flush() {
   // static
   void TWIBus::prefix(const char func[]) {
     SERIAL_ECHOPGM("TWIBus::");
-    serialprintPGM(func);
+    SERIAL_ECHOPGM_P(func);
     SERIAL_ECHOPGM(": ");
   }
   void TWIBus::debug(const char func[], uint32_t adr) {

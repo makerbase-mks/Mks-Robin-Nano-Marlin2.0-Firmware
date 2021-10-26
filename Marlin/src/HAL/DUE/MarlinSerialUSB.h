@@ -27,38 +27,39 @@
  */
 
 #include "../../inc/MarlinConfig.h"
-#if HAS_USB_SERIAL
-
-#include <WString.h>
 #include "../../core/serial_hook.h"
 
+#include <WString.h>
 
 struct MarlinSerialUSB {
-  static void begin(const long);
-  static void end();
-  static int peek();
-  static int read();
-  static void flush();
-  static void flushTX();
-  static bool available();
-  static size_t write(const uint8_t c);
+  void begin(const long);
+  void end();
+  int peek();
+  int read();
+  void flush();
+  int available();
+  size_t write(const uint8_t c);
 
   #if ENABLED(SERIAL_STATS_DROPPED_RX)
-    FORCE_INLINE static uint32_t dropped() { return 0; }
+    FORCE_INLINE uint32_t dropped() { return 0; }
   #endif
 
   #if ENABLED(SERIAL_STATS_MAX_RX_QUEUED)
-    FORCE_INLINE static int rxMaxEnqueued() { return 0; }
+    FORCE_INLINE int rxMaxEnqueued() { return 0; }
   #endif
 };
-typedef Serial0Type<MarlinSerialUSB> MSerialT;
 
 #if SERIAL_PORT == -1
-  extern MSerialT customizedSerial1;
+  typedef Serial1Class<MarlinSerialUSB> MSerialT1;
+  extern MSerialT1 customizedSerial1;
 #endif
 
 #if SERIAL_PORT_2 == -1
-  extern MSerialT customizedSerial2;
+  typedef Serial1Class<MarlinSerialUSB> MSerialT2;
+  extern MSerialT2 customizedSerial2;
 #endif
 
-#endif // HAS_USB_SERIAL
+#if SERIAL_PORT_3 == -1
+  typedef Serial1Class<MarlinSerialUSB> MSerialT3;
+  extern MSerialT3 customizedSerial3;
+#endif

@@ -50,9 +50,8 @@
  * Once installed select the Sanguino board and then select the CPU.
  */
 
-#if NOT_TARGET(__AVR_ATmega644P__, __AVR_ATmega1284P__)
-  #error "Oops! Select 'Sanguino' in 'Tools > Boards' and 'ATmega644P' or 'ATmega1284P' in 'Tools > Processor.'"
-#endif
+#define ALLOW_MEGA644P
+#include "env_validate.h"
 
 #ifndef BOARD_INFO_NAME
   #define BOARD_INFO_NAME "Sanguinololu <1.2"
@@ -166,16 +165,6 @@
       #define KILL_PIN                        10
       #define BEEPER_PIN                      27
 
-      #ifndef BOARD_ST7920_DELAY_1
-        #define BOARD_ST7920_DELAY_1 DELAY_NS(0)
-      #endif
-      #ifndef BOARD_ST7920_DELAY_2
-        #define BOARD_ST7920_DELAY_2 DELAY_NS(188)
-      #endif
-      #ifndef BOARD_ST7920_DELAY_3
-        #define BOARD_ST7920_DELAY_3 DELAY_NS(0)
-      #endif
-
     #elif ENABLED(U8GLIB_ST7920)                  // SPI GLCD 12864 ST7920 ( like [www.digole.com] ) For Melzi V2.0
 
       #if IS_MELZI
@@ -186,19 +175,6 @@
         // Marlin so this can be used for BEEPER_PIN. You can use this pin
         // with M42 instead of BEEPER_PIN.
         #define BEEPER_PIN                    27
-
-        #if IS_RRD_FG_SC
-          #ifndef BOARD_ST7920_DELAY_1
-            #define BOARD_ST7920_DELAY_1 DELAY_NS(0)
-          #endif
-          #ifndef BOARD_ST7920_DELAY_2
-            #define BOARD_ST7920_DELAY_2 DELAY_NS(188)
-          #endif
-          #ifndef BOARD_ST7920_DELAY_3
-            #define BOARD_ST7920_DELAY_3 DELAY_NS(0)
-          #endif
-        #endif
-
       #else                                       // Sanguinololu >=1.3
         #define LCD_PINS_RS                    4
         #define LCD_PINS_ENABLE               17

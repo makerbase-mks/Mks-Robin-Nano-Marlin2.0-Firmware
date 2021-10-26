@@ -37,9 +37,8 @@
  *  number (B5) agrees with the schematic but B5 is assigned to logical pin 11.
  */
 
-#if NOT_TARGET(__AVR_ATmega1280__, __AVR_ATmega2560__)
-  #error "Oops! Select 'Mega 1280' or 'Mega 2560' in 'Tools > Board.'"
-#endif
+#define ALLOW_MEGA1280
+#include "env_validate.h"
 
 #define BOARD_INFO_NAME      "Mightyboard"
 #define DEFAULT_MACHINE_NAME "MB Replicator"
@@ -126,7 +125,7 @@
 // K7 - 69 / ADC15 - 15
 #define TEMP_BED_PIN                          15
 
-// SPI for Max6675 or Max31855 Thermocouple
+// SPI for MAX Thermocouple
 // Uses a separate SPI bus
 //
 //  3 E5 DO (SO)
@@ -134,15 +133,15 @@
 //  2 E4 CS2
 // 78 E2 SCK
 //
-#define THERMO_SCK_PIN                        78  // E2
-#define THERMO_DO_PIN                          3  // E5
-#define THERMO_CS1_PIN                         5  // E3
-#define THERMO_CS2_PIN                         2  // E4
+#define TEMP_0_CS_PIN                          5  // E3
+#define TEMP_0_SCK_PIN                        78  // E2
+#define TEMP_0_MISO_PIN                        3  // E5
+//#define TEMP_0_MOSI_PIN                    ...  // For MAX31865
 
-#define MAX6675_SS_PIN            THERMO_CS1_PIN
-#define MAX6675_SS2_PIN           THERMO_CS2_PIN
-#define MAX6675_SCK_PIN           THERMO_SCK_PIN
-#define MAX6675_DO_PIN             THERMO_DO_PIN
+#define TEMP_1_CS_PIN                          2  // E4
+#define TEMP_1_SCK_PIN            TEMP_0_SCK_PIN
+#define TEMP_1_MISO_PIN          TEMP_0_MISO_PIN
+//#define TEMP_1_MOSI_PIN        TEMP_0_MOSI_PIN
 
 //
 // Augmentation for auto-assigning plugs

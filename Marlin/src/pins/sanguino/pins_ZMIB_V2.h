@@ -21,9 +21,8 @@
  */
 #pragma once
 
-#if NOT_TARGET(__AVR_ATmega644P__, __AVR_ATmega1284P__)
-  #error "Oops! Select 'Sanguino' in 'Tools > Boards' and 'ATmega644P' or 'ATmega1284P' in 'Tools > Processor.'"
-#endif
+#define ALLOW_MEGA644P
+#include "env_validate.h"
 
 #define BOARD_INFO_NAME   "Zonestar ZMIB_V2"
 #define BOARD_WEBSITE_URL "www.aliexpress.com/item/32957490744.html"
@@ -190,10 +189,9 @@
   #endif
   #define LCD_PINS_D4                         10  // ST7920_CLK_PIN LCD_PIN_ENABLE (PIN6 of LCD module)
 
-  // Alter timing for graphical display
-  #define ST7920_DELAY_1             DELAY_2_NOP
-  #define ST7920_DELAY_2             DELAY_2_NOP
-  #define ST7920_DELAY_3             DELAY_2_NOP
+  #define BOARD_ST7920_DELAY_1       DELAY_2_NOP
+  #define BOARD_ST7920_DELAY_2       DELAY_2_NOP
+  #define BOARD_ST7920_DELAY_3       DELAY_2_NOP
 
 #elif EITHER(ZONESTAR_12864OLED, ZONESTAR_12864OLED_SSD1306)
   //

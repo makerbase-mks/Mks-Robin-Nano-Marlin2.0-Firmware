@@ -39,8 +39,8 @@ typedef void (*selectFunc_t)();
 #define SS_INVERT  0x02
 #define SS_DEFAULT SS_CENTER
 
-#if HAS_MARLINUI_U8GLIB && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
-  void _lcd_zoffset_overlay_gfx(const float zvalue);
+#if EITHER(HAS_MARLINUI_U8GLIB, IS_DWIN_MARLINUI) && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
+  void _lcd_zoffset_overlay_gfx(const_float_t zvalue);
 #endif
 
 #if ENABLED(BABYSTEP_ZPROBE_OFFSET) && Z_PROBE_OFFSET_RANGE_MIN >= -9 && Z_PROBE_OFFSET_RANGE_MAX <= 9
@@ -114,7 +114,7 @@ class MenuItem_confirm : public MenuItemBase {
     static inline void select_screen(
       PGM_P const yes, PGM_P const no,
       selectFunc_t yesFunc, selectFunc_t noFunc,
-      PGM_P const pref, const progmem_str string, PGM_P const suff=nullptr
+      PGM_P const pref, FSTR_P const string, PGM_P const suff=nullptr
     ) {
       char str[strlen_P((PGM_P)string) + 1];
       strcpy_P(str, (PGM_P)string);
@@ -132,14 +132,15 @@ class MenuItem_confirm : public MenuItemBase {
 
 // The Menu Edit shadow value
 typedef union {
-  bool     state;
-  float    decimal;
-  int8_t   int8;
-  int16_t  int16;
-  int32_t  int32;
-  uint8_t  uint8;
-  uint16_t uint16;
-  uint32_t uint32;
+  bool      state;
+  float     decimal;
+  int8_t    int8;
+  int16_t   int16;
+  int32_t   int32;
+  uint8_t   uint8;
+  uint16_t  uint16;
+  uint32_t  uint32;
+  celsius_t celsius;
 } chimera_t;
 extern chimera_t editable;
 
@@ -172,14 +173,14 @@ class MenuEditItemBase : public MenuItemBase {
   public:
     // Implemented for HD44780 and DOGM
     // Draw the current item at specified row with edit data
-    static void draw(const bool sel, const uint8_t row, PGM_P const pstr, const char* const inStr, const bool pgm=false);
+    static void draw(const bool sel, const uint8_t row, PGM_P const pstr, const char * const inStr, const bool pgm=false);
 
     // Implemented for HD44780 and DOGM
     // This low-level method is good to draw from anywhere
-    static void draw_edit_screen(PGM_P const pstr, const char* const value);
+    static void draw_edit_screen(PGM_P const pstr, const char * const value);
 
     // This method is for the current menu item
-    static inline void draw_edit_screen(const char* const value) { draw_edit_screen(editLabel, value); }
+    static inline void draw_edit_screen(const char * const value) { draw_edit_screen(editLabel, value); }
 };
 
 #if ENABLED(SDSUPPORT)
@@ -212,11 +213,7 @@ void _lcd_draw_homing();
 #define HAS_LINE_TO_Z ANY(DELTA, PROBE_MANUALLY, MESH_BED_LEVELING, LEVEL_BED_CORNERS)
 
 #if HAS_LINE_TO_Z
-  void line_to_z(const float &z);
-#endif
-
-#if HAS_MARLINUI_U8GLIB && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
-  void _lcd_zoffset_overlay_gfx(const float zvalue);
+  void line_to_z(const_float_t z);
 #endif
 
 #if ENABLED(PROBE_OFFSET_WIZARD)

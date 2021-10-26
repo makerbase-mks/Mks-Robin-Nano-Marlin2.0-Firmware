@@ -23,13 +23,14 @@
 
 /**
  * FYSETC E4 pin assignments
- * FYSETC E4 is a 3D printer control board based on the ESP32 microcontroller.
+ *
+ * 3D printer control board based on the ESP32 microcontroller.
  * Supports 4 stepper drivers, heated bed, single hotend.
  */
 
-#ifndef ARDUINO_ARCH_ESP32
-  #error "Oops! Select an ESP32 board in 'Tools > Board.'"
-#elif EXTRUDERS > 1 || E_STEPPERS > 1
+#include "env_validate.h"
+
+#if EXTRUDERS > 1 || E_STEPPERS > 1
   #error "FYSETC E4 only supports one E Stepper. Comment out this line to continue."
 #elif HOTENDS > 1
   #error "FYSETC E4 only supports one hotend / E-stepper. Comment out this line to continue."
