@@ -548,11 +548,7 @@ void lv_screen_menu_item_onoff_update(lv_obj_t *btn, const bool curValue);
 
 // set scr id and title
 #ifdef USE_NEW_LVGL_CONF
-<<<<<<< HEAD
 lv_obj_t* lv_set_scr_id_title(lv_obj_t *scr ,DISP_STATE newScreenType, const char *title);
-=======
-  lv_obj_t* lv_set_scr_id_title(lv_obj_t *scr ,DISP_STATE newScreenType, const char *title);
->>>>>>> 8952cfdd2070bfcfa79f0b4ca988684a375166f5
 #endif
 
 #define _DIA_1(T)       (uiCfg.dialogType == DIALOG_##T)
