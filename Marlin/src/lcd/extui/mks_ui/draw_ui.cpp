@@ -1115,6 +1115,7 @@ void lv_btn_set_style_both(lv_obj_t *btn, lv_style_t *style) {
 }
 
 // set scr id and title
+#ifdef USE_NEW_LVGL_CONF
 lv_obj_t* lv_set_scr_id_title(lv_obj_t *scr ,DISP_STATE newScreenType, const char *title) {
 
   // breadcrumbs
@@ -1137,6 +1138,7 @@ lv_obj_t* lv_set_scr_id_title(lv_obj_t *scr ,DISP_STATE newScreenType, const cha
 
   return scr;
 }
+#endif
 
 // Create a screen
 lv_obj_t* lv_screen_create(DISP_STATE newScreenType, const char *title) {
