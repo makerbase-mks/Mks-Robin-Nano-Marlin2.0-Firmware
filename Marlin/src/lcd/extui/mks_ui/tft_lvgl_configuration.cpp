@@ -153,7 +153,9 @@ void tft_lvgl_init() {
     } while((!card.media_driver_usbFlash.isInserted()) && (usb_flash_loop--));
     card.mount();
   #elif HAS_LOGO_IN_FLASH
-    delay(2000);
+    delay(1000);
+    watchdog_refresh(); 
+    delay(1000);
   #endif
 
   watchdog_refresh();     // LVGL init takes time
@@ -162,11 +164,6 @@ void tft_lvgl_init() {
     UpdateAssets();
     watchdog_refresh();   // LVGL init takes time
     TERN_(MKS_TEST, mks_test_get());
-  #endif
-
-  #if ENABLED(MULTI_VOLUME)
-    // card.changeMedia(&card.media_driver_usbFlash);
-    // card.mount();
   #endif
 
   touch.Init();
