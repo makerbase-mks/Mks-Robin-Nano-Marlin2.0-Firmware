@@ -841,7 +841,6 @@ static void wifi_gcode_exec(uint8_t *cmd_line) {
   int8_t tempBuf[100] = { 0 };
   uint8_t *tmpStr = 0;
   int cmd_value;
-  volatile int print_rate;
   if (strchr((char *)cmd_line, '\n') && (strchr((char *)cmd_line, 'G') || strchr((char *)cmd_line, 'M') || strchr((char *)cmd_line, 'T'))) {
     tmpStr = (uint8_t *)strchr((char *)cmd_line, '\n');
     if (tmpStr) *tmpStr = '\0';
@@ -1068,9 +1067,8 @@ static void wifi_gcode_exec(uint8_t *cmd_line) {
         case 27:
           // Report print rate
           if ((uiCfg.print_state == WORKING) || (uiCfg.print_state == PAUSED)|| (uiCfg.print_state == REPRINTING)) {
-            print_rate = uiCfg.totalSend;
             ZERO(tempBuf);
-            sprintf_P((char *)tempBuf, PSTR("M27 %d\r\n"), print_rate);
+            sprintf_P((char *)tempBuf, PSTR("M27 %d\r\n"), uiCfg.print_progress);
             send_to_wifi((uint8_t *)tempBuf, strlen((char *)tempBuf));
           }
           break;
