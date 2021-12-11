@@ -79,6 +79,7 @@
   #define ESTATE(S) (READ(S##_PIN) != S##_ENDSTOP_INVERTING)
 
   void test_gpio_readlevel_L() {
+
     WRITE(WIFI_IO0_PIN, HIGH);
     delay(10);
     pw_det_sta = (READ(MKS_TEST_POWER_LOSS_PIN) == LOW);
@@ -211,6 +212,7 @@
   #if ENABLED(SDSUPPORT)
 
     void mks_gpio_test() {
+      watchdog_refresh();
       init_test_gpio();
 
       test_gpio_readlevel_L();
@@ -229,18 +231,25 @@
           && (READ(PE6) == LOW)
           && (READ(PE7) == LOW)
         #endif
-      )
+      ){
         disp_det_ok();
-      else
+      }
+      else{
         disp_det_error();
+      }
+      watchdog_refresh();
 
-      if (endstopx1_sta && endstopy1_sta && endstopz1_sta && endstopz2_sta)
+      if (endstopx1_sta && endstopy1_sta && endstopz1_sta && endstopz2_sta) {
         disp_Limit_ok();
-      else
+      }
+      else{
         disp_Limit_error();
+      }
+      watchdog_refresh();
     }
 
     void mks_hardware_test() {
+      watchdog_refresh();
       if (millis() % 2000 < 1000) {
         thermalManager.fan_speed[0] = 255;
         WRITE(X_DIR_PIN, LOW);
@@ -298,8 +307,10 @@
       else {
       }
 
-      if (disp_state == PRINT_READY_UI)
+      watchdog_refresh();
+      if (disp_state == PRINT_READY_UI) {
         mks_disp_test();
+      }
     }
 
   #endif

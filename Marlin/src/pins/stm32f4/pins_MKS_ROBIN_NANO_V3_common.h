@@ -26,6 +26,8 @@
 // MKS Robin Nano V3, MKS Eagle pinmap
 //
 
+// #define MKS_TEST
+
 // USB Flash Drive support
 #define HAS_OTG_USB_HOST_SUPPORT
 

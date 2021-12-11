@@ -149,6 +149,8 @@ bool DiskIODriver_USBFlash::usbStartup() {
 
 void DiskIODriver_USBFlash::idle() {
 
+  watchdog_refresh();  
+
   usb.Task();
 
   const uint8_t task_state = usb.getUsbTaskState();
@@ -255,6 +257,8 @@ void DiskIODriver_USBFlash::idle() {
       GOTO_STATE_AFTER_DELAY(MEDIA_ERROR, 0);
     }
   }
+
+  watchdog_refresh();  
 }
 
 // Marlin calls this function to check whether an USB drive is inserted.

@@ -142,9 +142,11 @@ void tft_lvgl_init() {
   #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
     uint16_t usb_flash_loop = 1000;
     #if ENABLED(MULTI_VOLUME)
-      SET_INPUT_PULLUP(SD_DETECT_PIN);
-      if (READ(SD_DETECT_PIN) == LOW) card.changeMedia(&card.media_driver_sdcard);
-      else card.changeMedia(&card.media_driver_usbFlash);
+      #ifndef HAS_SD_HOST_DRIVE
+        SET_INPUT_PULLUP(SD_DETECT_PIN);
+        if (READ(SD_DETECT_PIN) == LOW) card.changeMedia(&card.media_driver_sdcard);
+        else card.changeMedia(&card.media_driver_usbFlash);
+      #endif
     #endif
     do {
       card.media_driver_usbFlash.idle();
@@ -158,7 +160,7 @@ void tft_lvgl_init() {
     delay(1000);
   #endif
 
-  watchdog_refresh();     // LVGL init takes time
+  watchdog_refresh();   
 
   #if ENABLED(SDSUPPORT)
     UpdateAssets();
@@ -226,11 +228,16 @@ void tft_lvgl_init() {
     mks_esp_wifi_init();
     mks_wifi_firmware_update();
   #endif
+
   TERN_(HAS_SERVOS, servo_init());
+
   TERN_(HAS_Z_SERVO_PROBE, probe.servo_probe_init());
+
   bool ready = true;
+
   #if ENABLED(POWER_LOSS_RECOVERY)
     recovery.load();
+
     if (recovery.valid()) {
       ready = false;
       if (gCfgItems.from_flash_pic)
