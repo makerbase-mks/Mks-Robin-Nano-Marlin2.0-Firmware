@@ -237,7 +237,7 @@ void ui_cfg_init() {
 void update_spi_flash() {
   uint8_t command_buf[512];
 
-  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.init(SPI_FULL_SPEED);
   // read back the gcode command before erase spi flash
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
   W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
@@ -248,7 +248,7 @@ void update_spi_flash() {
 void update_gcode_command(int addr, uint8_t *s) {
   uint8_t command_buf[512];
 
-  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.init(SPI_FULL_SPEED);
   // read back the gcode command before erase spi flash
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
   W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
@@ -265,7 +265,7 @@ void update_gcode_command(int addr, uint8_t *s) {
 }
 
 void get_gcode_command(int addr, uint8_t *d) {
-  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.init(SPI_FULL_SPEED);
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)d, addr, 100);
 }
 
@@ -629,7 +629,7 @@ char *creat_title_text() {
       }
       SPI_TFT.tftio.WriteSequence((uint16_t*)bmp_public_buf, 200);
       #if HAS_BAK_VIEW_IN_FLASH
-        W25QXX.init(SPI_QUARTER_SPEED);
+        W25QXX.init(SPI_FULL_SPEED);
         if (row < 20) W25QXX.SPI_FLASH_SectorErase(BAK_VIEW_ADDR_TFT35 + row * 4096);
         W25QXX.SPI_FLASH_BufferWrite(bmp_public_buf, BAK_VIEW_ADDR_TFT35 + row * 400, 400);
       #endif
@@ -674,7 +674,7 @@ char *creat_title_text() {
   void draw_default_preview(int xpos_pixel, int ypos_pixel, uint8_t sel) {
     int index;
     int y_off = 0;
-    W25QXX.init(SPI_QUARTER_SPEED);
+    W25QXX.init(SPI_FULL_SPEED);
     for (index = 0; index < 10; index++) { // 200*200
       #if HAS_BAK_VIEW_IN_FLASH
         if (sel == 1) {
@@ -692,7 +692,7 @@ char *creat_title_text() {
 
       y_off++;
     }
-    W25QXX.init(SPI_QUARTER_SPEED);
+    W25QXX.init(SPI_FULL_SPEED);
   }
 
   void disp_pre_gcode(int xpos_pixel, int ypos_pixel) {

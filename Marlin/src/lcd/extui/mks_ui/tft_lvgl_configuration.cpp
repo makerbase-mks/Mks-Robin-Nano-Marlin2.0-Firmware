@@ -123,10 +123,12 @@ void SysTick_Callback() {
 
 void tft_lvgl_init() {
 
-  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.init(SPI_FULL_SPEED);
 
   gCfgItems_init();
+  
   ui_cfg_init();
+
   disp_language_init();
 
   watchdog_refresh();     // LVGL init takes time
@@ -271,6 +273,7 @@ void tft_lvgl_init() {
 }
 
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p) {
+
   uint16_t width = area->x2 - area->x1 + 1,
           height = area->y2 - area->y1 + 1;
 
@@ -280,7 +283,7 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 
   lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
 
-  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.init(SPI_FULL_SPEED);
 }
 
 void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv_color_t bk_color) {
@@ -289,7 +292,7 @@ void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv
   height = y2 - y1 + 1;
   SPI_TFT.setWindow((uint16_t)x1, (uint16_t)y1, width, height);
   SPI_TFT.tftio.WriteMultiple(bk_color.full, width * height);
-  W25QXX.init(SPI_QUARTER_SPEED);
+  W25QXX.init(SPI_FULL_SPEED);
 }
 
 #define TICK_CYCLE 1
@@ -366,7 +369,7 @@ lv_fs_res_t spi_flash_open_cb (lv_fs_drv_t * drv, void * file_p, const char * pa
     strcpy(last_path_name, path);
   }
   else {
-    W25QXX.init(SPI_QUARTER_SPEED);
+    W25QXX.init(SPI_FULL_SPEED);
     currentFlashPage = 0;
   }
   pic_read_addr_offset = pic_read_base_addr;
@@ -506,9 +509,7 @@ void lv_encoder_pin_init() {
           if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
 
         #else
-
           constexpr uint8_t newbutton = 0;
-
         #endif
 
         static uint8_t buttons = 0;

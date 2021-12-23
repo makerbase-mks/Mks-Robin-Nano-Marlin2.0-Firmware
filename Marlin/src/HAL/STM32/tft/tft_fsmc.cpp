@@ -118,7 +118,7 @@ void TFT_FSMC::Init() {
   DMAtx.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
   DMAtx.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
   DMAtx.Init.Mode = DMA_NORMAL;
-  DMAtx.Init.Priority = DMA_PRIORITY_HIGH;
+  DMAtx.Init.Priority = DMA_PRIORITY_VERY_HIGH;
 
   LCD = (LCD_CONTROLLER_TypeDef *)controllerAddress;
 }

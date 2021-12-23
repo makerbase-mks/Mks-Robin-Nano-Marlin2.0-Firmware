@@ -65,8 +65,11 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       if (uiCfg.curTempType == 0) {
         int16_t max_target;
         thermalManager.temp_hotend[uiCfg.extruderIndex].target += uiCfg.stepHeat;
-        if (uiCfg.extruderIndex == 0)
-          max_target = HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
+#ifdef WATCH_TEMP_INCREASE
+        if (uiCfg.extruderIndex == 0){
+            max_target = HEATER_0_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
+          
+        }
         else {
           #if HAS_MULTI_HOTEND
             max_target = HEATER_1_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
@@ -75,14 +78,17 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         if (thermalManager.degTargetHotend(uiCfg.extruderIndex) > max_target)
           thermalManager.setTargetHotend(max_target, uiCfg.extruderIndex);
         thermalManager.start_watching_hotend(uiCfg.extruderIndex);
+#endif
       }
       else {
         #if HAS_HEATED_BED
-          constexpr int16_t max_target = BED_MAXTEMP - (WATCH_BED_TEMP_INCREASE + TEMP_BED_HYSTERESIS + 1);
           thermalManager.temp_bed.target += uiCfg.stepHeat;
+          #ifdef WATCH_BED_TEMP_INCREASE
+          constexpr int16_t max_target = BED_MAXTEMP - (WATCH_BED_TEMP_INCREASE + TEMP_BED_HYSTERESIS + 1);
           if (thermalManager.degTargetBed() > max_target)
             thermalManager.setTargetBed(max_target);
           thermalManager.start_watching_bed();
+          #endif
         #endif
       }
       disp_desire_temp();

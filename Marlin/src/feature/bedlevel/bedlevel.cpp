@@ -87,7 +87,6 @@ void set_bed_leveling_enabled(const bool enable/*=true*/) {
       planner.unapply_leveling(current_position);
       if (DEBUGGING(LEVELING)) DEBUG_POS("...Now ON", current_position);
     }
-
     sync_plan_position();
   }
 }

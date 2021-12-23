@@ -71,8 +71,8 @@
   #define MCU_STEP_TIMER 16
   #define MCU_TEMP_TIMER 17
 #elif defined(STM32F1xx)
-  #define MCU_STEP_TIMER  4
-  #define MCU_TEMP_TIMER  2
+  #define MCU_STEP_TIMER  4 // 4
+  #define MCU_TEMP_TIMER  2 // 2
 #elif defined(STM32F401xC) || defined(STM32F401xE)
   #define MCU_STEP_TIMER  9
   #define MCU_TEMP_TIMER 10
