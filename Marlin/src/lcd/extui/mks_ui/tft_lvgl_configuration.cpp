@@ -277,8 +277,6 @@ void tft_lvgl_init() {
 static lv_disp_drv_t* disp_drv_p;
 
 bool lcd_dma_trans_lock = false;
-uint32_t test_w = 0;
-uint32_t test_h = 0;
 
 
 void dma_tc(struct __DMA_HandleTypeDef * hdma) {
@@ -297,9 +295,6 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 
   uint16_t width = area->x2 - area->x1 + 1,
           height = area->y2 - area->y1 + 1;
-  
-  test_w = width;
-  test_h = height;
 
   disp_drv_p = disp;
 
@@ -321,7 +316,6 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
   SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
   lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
 #endif
-  // lv_disp_flush_ready(disp_drv_p); // Indicate you are ready with the flushing
   W25QXX.init(SPI_FULL_SPEED);
 }
 
