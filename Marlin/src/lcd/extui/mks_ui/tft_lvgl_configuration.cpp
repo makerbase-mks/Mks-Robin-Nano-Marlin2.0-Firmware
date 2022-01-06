@@ -89,7 +89,7 @@ uint8_t public_buf[513];
 
 #ifdef USE_NEW_LVGL_CONF
   mks_ui_t mks_ui;
-#endif
+#endif  
 
 extern bool flash_preview_begin, default_preview_flg, gcode_preview_over;
 
@@ -120,6 +120,8 @@ void SysTick_Callback() {
     }
   }
 }
+
+// #define USE_DMA_FSMC_TC_INT
 
 void tft_lvgl_init() {
 
@@ -272,19 +274,61 @@ void tft_lvgl_init() {
   #endif
 }
 
+static lv_disp_drv_t* disp_drv_p;
+
+bool lcd_dma_trans_lock = false;
+uint32_t test_w = 0;
+uint32_t test_h = 0;
+
+
+void dma_tc(struct __DMA_HandleTypeDef * hdma) {
+  lv_disp_flush_ready(disp_drv_p); // Indicate you are ready with the flushing
+  lcd_dma_trans_lock = false;
+#if ENABLED(USE_DMA_FSMC_TC_INT)
+  
+#endif
+
+#if ENABLED(USE_SPI_DMA_TC)
+  TFT_SPI::Abort();
+#endif
+}
+
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p) {
 
   uint16_t width = area->x2 - area->x1 + 1,
           height = area->y2 - area->y1 + 1;
+  
+  test_w = width;
+  test_h = height;
+
+  disp_drv_p = disp;
 
   SPI_TFT.setWindow((uint16_t)area->x1, (uint16_t)area->y1, width, height);
 
+// #ifndef USE_DMA_FSMC_TC_INT
+#if EITHER(USE_DMA_FSMC_TC_INT, USE_SPI_DMA_TC)
+  lcd_dma_trans_lock = true;
+  SPI_TFT.tftio.WriteSequenceIT((uint16_t*)color_p, width * height);
+#if ENABLED(USE_DMA_FSMC_TC_INT)
+    TFT_FSMC::DMAtx.XferCpltCallback = dma_tc;
+#endif
+
+#if ENABLED(USE_SPI_DMA_TC)
+  TFT_SPI::DMAtx.XferCpltCallback = dma_tc;
+#endif
+
+#else
   SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
-
   lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
-
+#endif
+  // lv_disp_flush_ready(disp_drv_p); // Indicate you are ready with the flushing
   W25QXX.init(SPI_FULL_SPEED);
 }
+
+bool get_lcd_dma_lock(void) {
+  return lcd_dma_trans_lock;
+}
+
 
 void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv_color_t bk_color) {
   uint16_t width, height;
@@ -302,7 +346,7 @@ unsigned int getTickDiff(unsigned int curTick, unsigned int lastTick) {
 }
 
 static bool get_point(int16_t *x, int16_t *y) {
-  if (!touch.getRawPoint(x, y)) return false;
+  if (!touch.getRawPoint(x, y)) { return false; }
 
   #if ENABLED(TOUCH_SCREEN_CALIBRATION)
     const calibrationState state = touch_calibration.get_calibration_state();
@@ -324,6 +368,10 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
   static int16_t last_x = 0, last_y = 0;
   if (get_point(&last_x, &last_y)) {
     #if TFT_ROTATION == TFT_ROTATE_180
+
+      if(last_x > TFT_WIDTH) last_x = TFT_WIDTH;
+      if(last_y > TFT_HEIGHT) last_y = TFT_HEIGHT;
+
       data->point.x = TFT_WIDTH - last_x;
       data->point.y = TFT_HEIGHT - last_y;
     #else

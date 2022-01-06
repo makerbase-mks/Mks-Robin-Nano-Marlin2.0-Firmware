@@ -32,9 +32,11 @@
 #include "../../../inc/MarlinConfig.h"
 
 extern lv_group_t *g;
+
 #ifndef USE_NEW_LVGL_CONF
 static lv_obj_t *scr;
 #endif
+
 enum {
   ID_T_PRE_HEAT = 1,
   ID_T_EXTRUCT,

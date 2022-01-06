@@ -46,7 +46,7 @@ class TFT_FSMC {
     static uint32_t ReadID(uint16_t Reg);
     static void Transmit(uint16_t Data);
     static void TransmitDMA(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count);
-
+    static void TransmitDMA_TI(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count);
   public:
     static void Init();
     static uint32_t GetID();
@@ -60,6 +60,7 @@ class TFT_FSMC {
     static void WriteReg(uint16_t Reg);
 
     static void WriteSequence(uint16_t *Data, uint16_t Count) { TransmitDMA(DMA_PINC_MODE, Data, Count); }
+    static void WriteSequenceIT(uint16_t *Data, uint16_t Count) { }
     static void WriteMultiple(uint16_t Color, uint16_t Count) { static uint16_t Data; Data = Color; TransmitDMA(DMA_CIRC_MODE, &Data, Count); }
     static void WriteMultiple(uint16_t Color, uint32_t Count) {
       static uint16_t Data; Data = Color;

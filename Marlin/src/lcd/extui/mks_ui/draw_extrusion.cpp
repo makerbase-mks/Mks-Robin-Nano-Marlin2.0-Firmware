@@ -31,8 +31,13 @@
 #include "../../../gcode/queue.h"
 #include "../../../inc/MarlinConfig.h"
 
-static lv_obj_t *scr;
+
 extern lv_group_t *g;
+
+#ifndef USE_NEW_LVGL_CONF
+static lv_obj_t *scr;
+#endif
+
 static lv_obj_t *buttonType, *buttonStep, *buttonSpeed;
 static lv_obj_t *labelType;
 static lv_obj_t *labelStep;
@@ -108,22 +113,34 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_E_RETURN:
       clear_cur_ui();
+      // lv_draw_tool();
       draw_return_ui();
       break;
   }
 }
 
 void lv_draw_extrusion() {
+
+#ifdef USE_NEW_LVGL_CONF
+  mks_ui.src_main = lv_set_scr_id_title(mks_ui.src_main, TOOL_UI, "");
+  lv_obj_t *buttonAdd = lv_big_button_create(mks_ui.src_main, "F:/bmp_in.bin", extrude_menu.in, INTERVAL_V, titleHeight, event_handler, ID_E_ADD);
+  lv_obj_clear_protect(buttonAdd, LV_PROTECT_FOLLOW);
+  lv_big_button_create(mks_ui.src_main, "F:/bmp_out.bin", extrude_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_E_DEC);
+  buttonType = lv_imgbtn_create(mks_ui.src_main, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_TYPE);
+  buttonStep = lv_imgbtn_create(mks_ui.src_main, nullptr, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_STEP);
+  buttonSpeed = lv_imgbtn_create(mks_ui.src_main, nullptr, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_SPEED);
+#else 
   scr = lv_screen_create(EXTRUSION_UI);
-  // Create image buttons
   lv_obj_t *buttonAdd = lv_big_button_create(scr, "F:/bmp_in.bin", extrude_menu.in, INTERVAL_V, titleHeight, event_handler, ID_E_ADD);
   lv_obj_clear_protect(buttonAdd, LV_PROTECT_FOLLOW);
   lv_big_button_create(scr, "F:/bmp_out.bin", extrude_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_E_DEC);
-
   buttonType = lv_imgbtn_create(scr, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_TYPE);
   buttonStep = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_STEP);
   buttonSpeed = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_SPEED);
+#endif
 
+
+  // Create image buttons
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) {
       lv_group_add_obj(g, buttonType);
@@ -131,8 +148,11 @@ void lv_draw_extrusion() {
       lv_group_add_obj(g, buttonSpeed);
     }
   #endif
-
+#ifdef USE_NEW_LVGL_CONF
+  lv_big_button_create(mks_ui.src_main, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_RETURN);
+#else 
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_RETURN);
+#endif
 
   // Create labels on the image buttons
   labelType = lv_label_create_empty(buttonType);
@@ -143,12 +163,21 @@ void lv_draw_extrusion() {
   disp_ext_step();
   disp_ext_speed();
 
+#ifdef USE_NEW_LVGL_CONF
+  tempText = lv_label_create_empty(mks_ui.src_main);
+#else 
   tempText = lv_label_create_empty(scr);
+#endif  
   lv_obj_set_style(tempText, &tft_style_label_rel);
   disp_hotend_temp();
 
+#ifdef USE_NEW_LVGL_CONF
+  ExtruText = lv_label_create_empty(mks_ui.src_main);
+#else
   ExtruText = lv_label_create_empty(scr);
+#endif
   lv_obj_set_style(ExtruText, &tft_style_label_rel);
+
   disp_extru_amount();
 }
 
@@ -232,7 +261,12 @@ void disp_ext_step() {
 void lv_clear_extrusion() {
   if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable))
     lv_group_remove_all_objs(g);
+
+#ifdef USE_NEW_LVGL_CONF 
+  lv_obj_del(mks_ui.src_main); 
+#else 
   lv_obj_del(scr);
+#endif
 }
 
 #endif // HAS_TFT_LVGL_UI

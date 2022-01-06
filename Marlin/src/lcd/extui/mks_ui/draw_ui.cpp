@@ -623,11 +623,14 @@ char *creat_title_text() {
           bmp_public_buf[j] = ascii2dec_test((char*)&public_buf[i]) << 4 | ascii2dec_test((char*)&public_buf[i + 1]);
         if (j >= 400) break;
       }
+
       for (i = 0; i < 400; i += 2) {
         p_index = (uint16_t *)(&bmp_public_buf[i]);
         if (*p_index == 0x0000) *p_index = LV_COLOR_BACKGROUND.full;
       }
+
       SPI_TFT.tftio.WriteSequence((uint16_t*)bmp_public_buf, 200);
+      
       #if HAS_BAK_VIEW_IN_FLASH
         W25QXX.init(SPI_FULL_SPEED);
         if (row < 20) W25QXX.SPI_FLASH_SectorErase(BAK_VIEW_ADDR_TFT35 + row * 4096);
@@ -1382,11 +1385,15 @@ void print_time_count() {
     if (print_time.start == 1) print_time.seconds++;
 }
 
+// #define USE_DMA_FSMC_TC_INT
 void LV_TASK_HANDLER() {
 
-  GUI_RefreshPage();
-
-  lv_task_handler();
+  // #ifdef USE_DMA_FSMC_TC_INT
+  #if EITHER(USE_DMA_FSMC_TC_INT, USE_SPI_DMA_TC)
+    if(!get_lcd_dma_lock()) lv_task_handler();
+  #else
+    lv_task_handler();
+  #endif
 
   #if BOTH(MKS_TEST, SDSUPPORT)
     if (mks_test_flag == 0x1E) mks_hardware_test();
@@ -1395,6 +1402,8 @@ void LV_TASK_HANDLER() {
   TERN_(HAS_GCODE_PREVIEW, disp_pre_gcode(2, 36));
 
   TERN_(MKS_WIFI_MODULE, get_wifi_commands());
+
+  GUI_RefreshPage();
 
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_update_encoder();

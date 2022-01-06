@@ -53,15 +53,15 @@ typedef struct {
 class TFT_FSMC {
   private:
     static SRAM_HandleTypeDef SRAMx;
-    static DMA_HandleTypeDef DMAtx;
-
     static LCD_CONTROLLER_TypeDef *LCD;
 
     static uint32_t ReadID(tft_data_t Reg);
     static void Transmit(tft_data_t Data) { LCD->RAM = Data; __DSB(); }
     static void TransmitDMA(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count);
-
+    static void TransmitDMA_TI(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count);
   public:
+    static DMA_HandleTypeDef DMAtx;
+
     static void Init();
     static uint32_t GetID();
     static bool isBusy();
@@ -69,9 +69,11 @@ class TFT_FSMC {
 
     static void DataTransferBegin(uint16_t DataWidth = TFT_DATASIZE) {}
     static void DataTransferEnd() {};
-
+  
     static void WriteData(uint16_t Data) { Transmit(tft_data_t(Data)); }
     static void WriteReg(uint16_t Reg) { LCD->REG = tft_data_t(Reg); __DSB(); }
+
+    static void WriteSequenceIT(uint16_t *Data, uint16_t Count) { TransmitDMA_TI(DMA_PINC_ENABLE, Data, Count); }
 
     static void WriteSequence(uint16_t *Data, uint16_t Count) { TransmitDMA(DMA_PINC_ENABLE, Data, Count); }
     static void WriteMultiple(uint16_t Color, uint16_t Count) { static uint16_t Data; Data = Color; TransmitDMA(DMA_PINC_DISABLE, &Data, Count); }
@@ -82,6 +84,8 @@ class TFT_FSMC {
         Count = Count > 0xFFFF ? Count - 0xFFFF : 0;
       }
     }
+
+    // static void DMA2_Channel1_IRQHandler(void) {};
 };
 
 #ifdef STM32F1xx

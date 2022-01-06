@@ -49,6 +49,21 @@ enum {
 
 static lv_obj_t *label_PowerOff;
 static lv_obj_t *buttonPowerOff;
+uint8_t op_count = 0;
+
+lv_obj_t *buttonExtrusion = nullptr, *buttonSpeed = nullptr,
+          *buttonBack = nullptr,
+          *buttonMove = nullptr, 
+          *buttonBabyStep = nullptr,
+          *labelPreHeat = nullptr, *labelExtrusion = nullptr,
+          *label_Back = nullptr, *label_Speed = nullptr, *label_Fan = nullptr,
+          *label_Move = nullptr,
+          *label_BabyStep = nullptr,
+          *label_Filament = nullptr;
+
+lv_obj_t *buttonPreHeat;
+lv_obj_t *buttonFilament;
+lv_obj_t *buttonFan;
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
@@ -116,16 +131,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 }
 
 void lv_draw_operation() {
-  lv_obj_t *buttonExtrusion = nullptr, *buttonSpeed = nullptr,
-           *buttonBack = nullptr,
-           *labelPreHeat = nullptr, *labelExtrusion = nullptr,
-           *label_Back = nullptr, *label_Speed = nullptr, *label_Fan = nullptr,
-           *buttonMove = nullptr, *label_Move = nullptr,
-           *buttonBabyStep = nullptr, *label_BabyStep = nullptr,
-           *label_Filament = nullptr;
-
   scr = lv_screen_create(OPERATE_UI);
-
   // Create image buttons
   lv_obj_t *buttonPreHeat  = lv_imgbtn_create(scr, "F:/bmp_temp.bin", INTERVAL_V, titleHeight, event_handler, ID_O_PRE_HEAT);
   lv_obj_t *buttonFilament = lv_imgbtn_create(scr, "F:/bmp_filamentchange.bin", BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_O_FILAMENT);
@@ -219,6 +225,20 @@ void lv_draw_operation() {
     lv_obj_align(label_Back, buttonBack, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);
   }
 }
+
+// void draw_operation_btn(void) {
+//   buttonPreHeat  = lv_imgbtn_create(scr, "F:/bmp_temp.bin", INTERVAL_V, titleHeight, event_handler, ID_O_PRE_HEAT);
+//   buttonFilament = lv_imgbtn_create(scr, "F:/bmp_filamentchange.bin", BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_O_FILAMENT);
+//   buttonFan      = lv_imgbtn_create(scr, "F:/bmp_fan.bin", BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_O_FAN);
+//   buttonPowerOff = lv_imgbtn_create(scr, gCfgItems.finish_power_off ? "F:/bmp_auto_off.bin" : "F:/bmp_manual_off.bin", BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_O_POWER_OFF);
+// }
+
+// void draw_opration_label(void) {
+//   labelPreHeat   = lv_label_create_empty(buttonPreHeat);
+//   label_Filament = lv_label_create_empty(buttonFilament);
+//   label_Fan      = lv_label_create_empty(buttonFan);
+//   label_PowerOff = lv_label_create_empty(buttonPowerOff);
+// }
 
 void lv_clear_operation() {
   #if HAS_ROTARY_ENCODER

@@ -135,6 +135,7 @@ void set_main_screen(void) {
 }
 
 void lv_draw_ready_print() {
+  
   char buf[30] = {0};
   lv_obj_t *buttonTool;
 

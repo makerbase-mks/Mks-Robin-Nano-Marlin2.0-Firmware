@@ -234,4 +234,19 @@ void TFT_FSMC::TransmitDMA(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Cou
   #endif
 }
 
+void TFT_FSMC::TransmitDMA_TI(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count) {
+  #if defined(FSMC_DMA_DEV) && defined(FSMC_DMA_CHANNEL)
+    dma_attach_interrupt(FSMC_DMA_DEV, FSMC_DMA_CHANNEL, fsmc_dma_handler);
+    dma_setup_transfer(FSMC_DMA_DEV, FSMC_DMA_CHANNEL, Data, DMA_SIZE_16BITS, &LCD->RAM, DMA_SIZE_16BITS, DMA_MEM_2_MEM | MemoryIncrease);
+    dma_set_num_transfers(FSMC_DMA_DEV, FSMC_DMA_CHANNEL, Count);
+    dma_clear_isr_bits(FSMC_DMA_DEV, FSMC_DMA_CHANNEL);
+    dma_enable(FSMC_DMA_DEV, FSMC_DMA_CHANNEL);
+  #endif
+}
+
+void fsmc_dma_handler(void) {
+  dma_disable(FSMC_DMA_DEV, FSMC_DMA_CHANNEL);
+}
+
+
 #endif // HAS_FSMC_TFT

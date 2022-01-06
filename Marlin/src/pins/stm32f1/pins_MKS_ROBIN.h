@@ -186,6 +186,10 @@
   #define TOUCH_BUTTONS_HW_SPI_DEVICE          2
   #define TFT_BUFFER_SIZE                  14400
 #endif
+#define USE_DMA_HANDLER     1
+#define LCD_DMA_IRQn
+#define LCD_DMA_IRQHandlr                 
+#define USE_DMA_FSMC_TC_INT
 
 #if NEED_TOUCH_PINS
   #define TOUCH_CS_PIN                      PB1   // SPI2_NSS
@@ -200,7 +204,7 @@
 #define SPI_DEVICE                             2
 
 #define SDIO_SUPPORT
-#define SDIO_CLOCK                       4500000
+#define SDIO_CLOCK                          10000000 // 4500000    // 4.5MHz
 #define SDIO_READ_RETRIES                     16
 #if ENABLED(SDIO_SUPPORT)
   #define SD_SCK_PIN                        PB13  // SPI2
