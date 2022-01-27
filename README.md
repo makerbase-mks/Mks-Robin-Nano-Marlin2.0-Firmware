@@ -37,14 +37,14 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
   default_envs = mks_robin_nano35    
 
-- Configuation.h:  
+- Configuration.h:  
   #define SERIAL_PORT 3  
   #define MKS_ROBIN_TFT35  
   #define MOTHERBOARD BOARD_MKS_ROBIN_NANO  
   #define TFT_LVGL_UI  
   #define TOUCH_SCREEN  
 
-- Configuation_adv.h:  
+- Configuration_adv.h:  
   //#define USB_FLASH_DRIVE_SUPPORT  
   //#define MULTI_VOLUME
 
@@ -61,14 +61,14 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
   default_envs = mks_robin_nano35    
 
-- Configuation.h:   
+- Configuration.h:   
   #define SERIAL_PORT 3  
   #define MKS_TS35_V2_0  
   #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2     
   #define TFT_LVGL_UI  
   #define TOUCH_SCREEN  
 
-- Configuation_adv.h:  
+- Configuration_adv.h:  
   //#define USB_FLASH_DRIVE_SUPPORT  
   //#define MULTI_VOLUME
 
@@ -85,14 +85,14 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
   default_envs = mks_robin_nano_v3_usb_flash_drive
 
-- Configuation.h:   
+- Configuration.h:   
   #define SERIAL_PORT -1  
   #define MKS_TS35_V2_0  
   #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V3     
   #define TFT_LVGL_UI  
   #define TOUCH_SCREEN
 
-- Configuation_adv.h:    
+- Configuration_adv.h:    
   After 2021.6.7, you can use the multi-volume function.     
   Use the TF card and USB disk together:   
   #define USB_FLASH_DRIVE_SUPPORT  
@@ -124,7 +124,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
 
   default_envs = mks_eagle_usb_flash_drive
 
-- Configuation.h:   
+- Configuration.h:   
 
   #define SERIAL_PORT -1  
   #define MKS_TS35_V2_0  
@@ -132,7 +132,7 @@ The images should be added to gcode file when slicing, and MKS has developed the
   #define TFT_LVGL_UI  
   #define TOUCH_SCREEN
 
-- Configuation_adv.h:    
+- Configuration_adv.h:    
   After 2021.6.7, you can use the multi-volume function.     
   Use the TF card and USB disk together:   
   #define USB_FLASH_DRIVE_SUPPORT  
