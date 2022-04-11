@@ -145,7 +145,7 @@ void lv_draw_move_motor() {
   // lv_obj_t * title = lv_obj_get_child_back(mks_ui.src_main, nullptr);
 #else
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_RETURN);
-  lv_obj_t * title = lv_obj_get_child_back(scr, nullptr);
+  // lv_obj_t * title = lv_obj_get_child_back(scr, nullptr);
 #endif
   // We need to patch the title to leave some space on the right for displaying the status
   

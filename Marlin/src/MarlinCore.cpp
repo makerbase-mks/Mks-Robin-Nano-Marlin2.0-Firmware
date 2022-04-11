@@ -1571,11 +1571,12 @@ void setup() {
       #if ENABLED(MULTI_VOLUME)
         // card.changeMedia(&card.media_driver_sdcard);
       #endif
+
       if (!card.isMounted()) SETUP_RUN(card.mount()); // Mount SD to load graphics and fonts
+
     #endif
     SETUP_RUN(tft_lvgl_init());
   #endif
-
   #if BOTH(HAS_WIRED_LCD, SHOW_BOOTSCREEN)
     const millis_t elapsed = millis() - bootscreen_ms;
     #if ENABLED(MARLIN_DEV_MODE)

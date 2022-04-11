@@ -80,6 +80,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 }
 
 void lv_draw_step_settings() {
+  
   scr = lv_screen_create(STEPS_UI, machine_menu.StepsConfTitle);
 
   if (!uiCfg.para_ui_page) {

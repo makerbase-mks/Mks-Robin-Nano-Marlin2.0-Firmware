@@ -597,6 +597,10 @@
   #include "stm32f4/pins_BLACK_STM32F407VE.h"   // STM32F4                                env:STM32F407VE_black
 #elif MB(STEVAL_3DP001V1)
   #include "stm32f4/pins_STEVAL_3DP001V1.h"     // STM32F4                                env:STM32F401VE_STEVAL
+#elif MB(MKS_E3_V2)                            
+  #include "stm32f4/pins_MKS_E3_V2.h"           // STM32F4                                env:MKS_E3_V2
+#elif MB(MKS_E3D_V2)                            
+  #include "stm32f4/pins_MKS_E3D_V2.h"          // STM32F4                                env:MKS_E3D_V2
 #elif MB(BTT_SKR_PRO_V1_1)
   #include "stm32f4/pins_BTT_SKR_PRO_V1_1.h"    // STM32F4                                env:BIGTREE_SKR_PRO env:BIGTREE_SKR_PRO_usb_flash_drive
 #elif MB(BTT_SKR_PRO_V1_2)
@@ -653,6 +657,10 @@
   #include "stm32f4/pins_MKS_ROBIN_NANO_V1_3_F4.h" // STM32F4                             env:mks_robin_nano_v1_3_f4
 #elif MB(MKS_EAGLE)
   #include "stm32f4/pins_MKS_EAGLE.h"           // STM32F4                                env:mks_eagle
+#elif MB(MKS_NANO6)
+  #include "stm32f4/pins_MKS_ROBIN_NANO6.h"           // STM32F4                          env:mks_robin_nano6
+#elif MB(MKS_NANO4)
+  #include "stm32f4/pins_MKS_ROBIN_NANO4.h"           // STM32F4                          env:mks_robin_nano4
 
 //
 // ARM Cortex M7

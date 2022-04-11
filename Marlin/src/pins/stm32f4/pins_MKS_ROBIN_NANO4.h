@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2021 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -19,12 +19,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-
 #pragma once
 
+#define ALLOW_STM32DUINO
+#include "env_validate.h"
+
+#if HOTENDS > 2 || E_STEPPERS > 2
+  #error "MKS Robin Nano4 supports up to 2 hotends / E-steppers."
+#elif HAS_FSMC_TFT
+  #error "MKS Robin Nano4 doesn't support FSMC-based TFT displays."
+#endif
+
+#define BOARD_INFO_NAME "MKS Robin Nano4"
+
+#ifndef E1_CS_PIN
+  #define E1_CS_PIN                         PD8
+#endif
+
 //
-// MKS Robin Nano V3, MKS Eagle, MKS NANO6 pinmap, 
+// Software SPI pins for TMC2130 stepper drivers
+// This board only supports SW SPI for stepper drivers
 //
+#if HAS_TMC_SPI
+  #define TMC_USE_SW_SPI
+#endif
+#if ENABLED(TMC_USE_SW_SPI)
+  #if !defined(TMC_SW_MOSI) || TMC_SW_MOSI == -1
+    #define TMC_SW_MOSI                     PD14
+  #endif
+  #if !defined(TMC_SW_MISO) || TMC_SW_MISO == -1
+    #define TMC_SW_MISO                     PD1
+  #endif
+  #if !defined(TMC_SW_SCK) || TMC_SW_SCK == -1
+    #define TMC_SW_SCK                      PD0
+  #endif
+#endif
 
 // #define MKS_TEST
 
@@ -57,28 +86,17 @@
 //
 // Limit Switches
 //
-#define X_DIAG_PIN                          PA15
-#define Y_DIAG_PIN                          PD2
-#define Z_DIAG_PIN                          PC8
 
-#ifndef E0_DIAG_PIN
-  #define E0_DIAG_PIN                         PC4
-#endif
-
-#ifndef E1_DIAG_PIN
-#define E1_DIAG_PIN                         PE7
-#endif
-
-#define X_STOP_PIN                    X_DIAG_PIN
-#define Y_STOP_PIN                    Y_DIAG_PIN
-#define Z_MIN_PIN                     Z_DIAG_PIN
-#define Z_MAX_PIN                    E0_DIAG_PIN
+#define X_STOP_PIN                    PA15
+#define Y_STOP_PIN                    PD2
+#define Z_MIN_PIN                     PC8
+#define Z_MAX_PIN                     PC4
 
 //
 // Steppers
 //
 #ifndef X_ENABLE_PIN
-#define X_ENABLE_PIN                        PE4
+  #define X_ENABLE_PIN                        PE4
 #endif
 #define X_STEP_PIN                          PE3
 #define X_DIR_PIN                           PE2
@@ -106,18 +124,6 @@
   // Software serial
   // No Hardware serial for steppers
   //
-  #define X_SERIAL_TX_PIN                   PD5
-  #define X_SERIAL_RX_PIN        X_SERIAL_TX_PIN
-
-  #define Y_SERIAL_TX_PIN                   PD7
-  #define Y_SERIAL_RX_PIN        Y_SERIAL_TX_PIN
-
-  #define Z_SERIAL_TX_PIN                   PD4
-  #define Z_SERIAL_RX_PIN        Z_SERIAL_TX_PIN
-
-  #define E0_SERIAL_TX_PIN                  PD9
-  #define E0_SERIAL_RX_PIN      E0_SERIAL_TX_PIN
-
   #define E1_SERIAL_TX_PIN                  PD8
   #define E1_SERIAL_RX_PIN      E1_SERIAL_TX_PIN
 
@@ -129,64 +135,33 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN                          PC1   // TH1
-#define TEMP_1_PIN                          PA2   // TH2
 #define TEMP_BED_PIN                        PC0   // TB1
 
 //
 // Heaters / Fans
 //
 #define HEATER_0_PIN                        PE5   // HEATER1
-#define HEATER_1_PIN                        PB0   // HEATER2
 #define HEATER_BED_PIN                      PA0   // HOT BED
 
-#define FAN_PIN                             PC14  // FAN
-#define FAN1_PIN                            PB1   // FAN1
-
+#define FAN_PIN                             PC14  // FAN1
+#define FAN1_PIN                            PB1   // FAN2
+#define FAN2_PIN                            PB0   // FAN3
+#define FAN3_PIN                            PA2   // FAN4
 //
 // Thermocouples
 //
-//#define TEMP_0_CS_PIN             HEATER_0_PIN  // TC1 - CS1
-//#define TEMP_0_CS_PIN             HEATER_1_PIN  // TC2 - CS2
+//#define TEMP_0_CS_PIN             PD8  // TC1 - CS1
 
 //
 // Misc. Functions
 //
 #if HAS_TFT_LVGL_UI
   #define MT_DET_1_PIN                      PA4   // MT_DET
-  #define MT_DET_2_PIN                      PE6
   #define MT_DET_PIN_STATE                  LOW
 #endif
 
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN            MT_DET_1_PIN
-#endif
-#ifndef FIL_RUNOUT2_PIN
-  #define FIL_RUNOUT2_PIN           MT_DET_2_PIN
-#endif
-
-#ifndef POWER_LOSS_PIN
-  // #define POWER_LOSS_PIN                    PA13  // PW_DET
-#endif
-
-//#define SUICIDE_PIN                       PB2
-//#define LED_PIN                           PB2
-//#define KILL_PIN                          PA2
-//#define KILL_PIN_STATE                    LOW
-
-//
-// Power Supply Control
-//
-#if ENABLED(MKS_PWC)
-  #if ENABLED(TFT_LVGL_UI)
-    #undef PSU_CONTROL
-    #undef MKS_PWC
-    #define SUICIDE_PIN                     PB2
-    #define SUICIDE_PIN_STATE               LOW
-  #else
-    #define PS_ON_PIN                       PB2   // PW_OFF
-  #endif
-  #define KILL_PIN                          PA13  // PW_DET
-  #define KILL_PIN_STATE                    HIGH
 #endif
 
 // Random Info
@@ -204,12 +179,6 @@
   #define WIFI_IO0_PIN                      PC13
   #define WIFI_IO1_PIN                      PC7
   #define WIFI_RESET_PIN                    PE9
-#endif
-
-// MKS TEST
-#if ENABLED(MKS_TEST)
-  #define MKS_TEST_POWER_LOSS_PIN           PA13  // PW_DET
-  #define MKS_TEST_PS_ON_PIN                PB2   // PW_OFF
 #endif
 
 //
@@ -388,3 +357,4 @@
   #define BTN_EN2                    EXP2_06_PIN
   #define BTN_ENC                    EXP1_09_PIN
 #endif
+

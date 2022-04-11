@@ -235,6 +235,7 @@
 #define DIALOG_PRINT_TIME_RU                "Время печати: "
 #define DIALOG_REPRINT_RU                   "Print again"
 #define DIALOG_WIFI_ENABLE_TIPS_RU          "The wifi module is being configured,\nplease wait a moment....."
+#define DIALOG_AUTO_LEVELING_TIPS_RU        "Автоматическое выравнивание, подождите ..."
 
 #define MESSAGE_PAUSING_RU            "Стоянка..."
 #define MESSAGE_CHANGING_RU           "Подождите, пока начнется смена филамента"
@@ -285,6 +286,14 @@
 #define TRAMMING_POS_RU                 "настройки координат для уровня"
 #define LEVELING_AUTO_COMMAND_RU        "настройки комманд увтоуровня"
 #define LEVELING_AUTO_ZOFFSET_RU        "координаты смещения сопла"
+
+#define BLTOUCH_LEVELING_TITTLE_RU      "Settings>BL-Touch Probe"
+#define BLTOUCH_LEVELING_RU             "BL-Touch Probe"
+#define BLTOUCH_INIT_RU                 "Init"
+#define BLTOUCH_ZOFFSETPOS_RU           "Zoffset+"
+#define BLTOUCH_ZOFFSETNEG_RU           "Zoffset-"
+#define BLTOUCH_SAVE_RU                 "Save"
+#define BLTOUCH_TEST_RU                 "Test"
 
 #define MACHINE_CONFIG_TITLE_RU         "Hастройки принтера>настройки притера"
 #define MAXFEEDRATE_CONF_RU             "настройки максимальной скорости"

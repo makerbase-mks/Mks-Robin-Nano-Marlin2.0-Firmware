@@ -88,6 +88,14 @@
 #define LEVELING_AUTO_COMMAND_CN      "自动调平指令设置"
 #define LEVELING_AUTO_ZOFFSET_CN      "挤出头与调平开关偏移设置"
 
+#define BLTOUCH_LEVELING_TITTLE_CN    "机器参数>BL-Touch Probe"
+#define BLTOUCH_LEVELING_CN           "BL-Touch Probe"
+#define BLTOUCH_INIT_CN               "初始化"
+#define BLTOUCH_ZOFFSETPOS_CN         "Zoffset+"
+#define BLTOUCH_ZOFFSETNEG_CN         "Zoffset-"
+#define BLTOUCH_SAVE_CN               "保存"
+#define BLTOUCH_TEST_CN               "测试"
+
 #define LEVELING_PARA_CONF_TITLE_CN   "调平参数"
 #define AUTO_LEVELING_ENABLE_CN       "自动调平"
 #define BLTOUCH_LEVELING_ENABLE_CN    "启动BLTouch"
@@ -464,6 +472,7 @@
 #define DIALOG_PRINT_TIME_CN        "打印时间: "
 #define DIALOG_REPRINT_CN           "再打印一次"
 #define DIALOG_WIFI_ENABLE_TIPS_CN  "wifi模块正在配置中,请稍等......"
+#define DIALOG_AUTO_LEVELING_TIPS_CN    "正在自动调平,请稍等..."
 
 #define TEXT_VALUE_CN               "%d℃/%d℃"
 #define EXTRUDE_TEXT_VALUE_T_CN     ": %d℃"

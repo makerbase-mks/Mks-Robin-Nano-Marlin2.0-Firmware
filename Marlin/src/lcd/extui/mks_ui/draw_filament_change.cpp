@@ -40,7 +40,11 @@ static lv_obj_t *scr;
 #endif
 
 static lv_obj_t *buttonType;
+static lv_obj_t *buttonIn, *buttonOut;
+
+
 static lv_obj_t *labelType;
+
 static lv_obj_t *tempText1;
 
 enum {
@@ -131,9 +135,11 @@ void lv_draw_filament_change() {
   tempText1 = lv_label_create_empty(mks_ui.src_main);
   #else
   scr = lv_screen_create(FILAMENTCHANGE_UI);
-  lv_obj_t *buttonIn = lv_big_button_create(scr, "F:/bmp_in.bin", filament_menu.in, INTERVAL_V, titleHeight, event_handler, ID_FILAMNT_IN);
-  lv_obj_clear_protect(buttonIn, LV_PROTECT_FOLLOW);
-  lv_big_button_create(scr, "F:/bmp_out.bin", filament_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_FILAMNT_OUT);
+  // lv_obj_t *buttonIn = lv_big_button_create(scr, "F:/bmp_in.bin", filament_menu.in, INTERVAL_V, titleHeight, event_handler, ID_FILAMNT_IN);
+  // lv_obj_clear_protect(buttonIn, LV_PROTECT_FOLLOW);
+  buttonIn = lv_big_button_create(scr, "F:/bmp_in.bin", filament_menu.in, INTERVAL_V, titleHeight, event_handler, ID_FILAMNT_IN);
+  buttonOut = lv_big_button_create(scr, "F:/bmp_out.bin", filament_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_FILAMNT_OUT);
+
   buttonType = lv_imgbtn_create(scr, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_FILAMNT_TYPE);
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable)
@@ -148,6 +154,9 @@ void lv_draw_filament_change() {
 
   lv_obj_set_style(tempText1, &tft_style_label_rel);
   disp_filament_temp();
+
+  lv_imgbtn_set_src_both(buttonOut, "F:/bmp_out.bin");
+  lv_imgbtn_set_src_both(buttonIn, "F:/bmp_in.bin");
 }
 
 void disp_filament_type() {

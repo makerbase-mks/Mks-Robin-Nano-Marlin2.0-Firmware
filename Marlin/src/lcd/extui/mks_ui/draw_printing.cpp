@@ -294,7 +294,6 @@ void setProBarRate() {
 
   uiCfg.print_progress = rate;
 
-
   if (disp_state == PRINTING_UI) {
     lv_bar_set_value(bar1, rate, LV_ANIM_ON);
     sprintf_P(public_buf_l, "%d%%", rate);

@@ -128,15 +128,17 @@ void tft_lvgl_init() {
   W25QXX.init(SPI_FULL_SPEED);
 
   gCfgItems_init();
-  
   ui_cfg_init();
-
   disp_language_init();
 
   watchdog_refresh();     // LVGL init takes time
 
   #if MB(MKS_ROBIN_NANO)
     OUT_WRITE(PB0, LOW);  // HE1
+  #endif
+
+  #if PIN_EXISTS(USB_POWER_CONTROL)
+    OUT_WRITE(USB_POWER_CONTROL_PIN, HIGH);
   #endif
 
   // Init TFT first!
@@ -159,9 +161,7 @@ void tft_lvgl_init() {
     } while((!card.media_driver_usbFlash.isInserted()) && (usb_flash_loop--));
     card.mount();
   #elif HAS_LOGO_IN_FLASH
-    delay(1000);
     watchdog_refresh(); 
-    delay(1000);
   #endif
 
   watchdog_refresh();   
@@ -234,21 +234,16 @@ void tft_lvgl_init() {
   #endif
 
   TERN_(HAS_SERVOS, servo_init());
-
   TERN_(HAS_Z_SERVO_PROBE, probe.servo_probe_init());
-
   bool ready = true;
-
   #if ENABLED(POWER_LOSS_RECOVERY)
     recovery.load();
-
     if (recovery.valid()) {
       ready = false;
       if (gCfgItems.from_flash_pic)
         flash_preview_begin = true;
       else
         default_preview_flg = true;
-
       uiCfg.print_state = REPRINTING;
 
       #if ENABLED(LONG_FILENAME_HOST_SUPPORT)
@@ -276,8 +271,7 @@ void tft_lvgl_init() {
 
 static lv_disp_drv_t* disp_drv_p;
 
-bool lcd_dma_trans_lock = false;
-
+__IO bool lcd_dma_trans_lock = false;
 
 void dma_tc(struct __DMA_HandleTypeDef * hdma) {
   lv_disp_flush_ready(disp_drv_p); // Indicate you are ready with the flushing
@@ -300,7 +294,6 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 
   SPI_TFT.setWindow((uint16_t)area->x1, (uint16_t)area->y1, width, height);
 
-// #ifndef USE_DMA_FSMC_TC_INT
 #if EITHER(USE_DMA_FSMC_TC_INT, USE_SPI_DMA_TC)
   lcd_dma_trans_lock = true;
   SPI_TFT.tftio.WriteSequenceIT((uint16_t*)color_p, width * height);
@@ -359,31 +352,66 @@ static bool get_point(int16_t *x, int16_t *y) {
 }
 
 bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
+  // static int16_t last_x = 0, last_y = 0;
+  // if (get_point(&last_x, &last_y)) {
+  //   #if TFT_ROTATION == TFT_ROTATE_180
+
+  //     if(last_x > TFT_WIDTH) last_x = TFT_WIDTH;
+  //     if(last_y > TFT_HEIGHT) last_y = TFT_HEIGHT;
+
+  //     data->point.x = TFT_WIDTH - last_x;
+  //     data->point.y = TFT_HEIGHT - last_y;
+  //   #else
+  //     data->point.x = last_x;
+  //     data->point.y = last_y;
+  //   #endif
+  //   data->state = LV_INDEV_STATE_PR;
+  // }
+  // else {
+  //   #if TFT_ROTATION == TFT_ROTATE_180
+  //     data->point.x = TFT_WIDTH - last_x;
+  //     data->point.y = TFT_HEIGHT - last_y;
+  //   #else
+  //     data->point.x = last_x;
+  //     data->point.y = last_y;
+  //   #endif
+  //   data->state = LV_INDEV_STATE_REL;
+  // }
+
   static int16_t last_x = 0, last_y = 0;
-  if (get_point(&last_x, &last_y)) {
-    #if TFT_ROTATION == TFT_ROTATE_180
+  static uint8_t last_touch_state = LV_INDEV_STATE_REL;
+  static int32_t touch_time1 = 0;
+  uint32_t tmpTime, diffTime = 0;
 
-      if(last_x > TFT_WIDTH) last_x = TFT_WIDTH;
-      if(last_y > TFT_HEIGHT) last_y = TFT_HEIGHT;
+  tmpTime = millis();
+  diffTime = getTickDiff(tmpTime, touch_time1);
+  if (diffTime > 20) {
+    if (get_point(&last_x, &last_y)) {
 
-      data->point.x = TFT_WIDTH - last_x;
-      data->point.y = TFT_HEIGHT - last_y;
-    #else
-      data->point.x = last_x;
-      data->point.y = last_y;
-    #endif
-    data->state = LV_INDEV_STATE_PR;
+      if (last_touch_state == LV_INDEV_STATE_PR) return false;
+      data->state = LV_INDEV_STATE_PR;
+
+      // Set the coordinates (if released use the last-pressed coordinates)
+      #if TFT_ROTATION == TFT_ROTATE_180
+        data->point.x = TFT_WIDTH - last_x;
+        data->point.y = TFT_HEIGHT -last_y;
+      #else
+        data->point.x = last_x;
+        data->point.y = last_y;
+      #endif
+
+      last_x = last_y = 0;
+      last_touch_state = LV_INDEV_STATE_PR;
+    }
+    else {
+      if (last_touch_state == LV_INDEV_STATE_PR)
+        data->state = LV_INDEV_STATE_REL;
+      last_touch_state = LV_INDEV_STATE_REL;
+    }
+
+    touch_time1 = tmpTime;
   }
-  else {
-    #if TFT_ROTATION == TFT_ROTATE_180
-      data->point.x = TFT_WIDTH - last_x;
-      data->point.y = TFT_HEIGHT - last_y;
-    #else
-      data->point.x = last_x;
-      data->point.y = last_y;
-    #endif
-    data->state = LV_INDEV_STATE_REL;
-  }
+
   return false; // Return `false` since no data is buffering or left to read
 }
 
@@ -545,10 +573,23 @@ void lv_encoder_pin_init() {
         #if ANY_BUTTON(EN1, EN2, ENC, BACK)
 
           uint8_t newbutton = 0;
-          if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
-          if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
-          if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
-          if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+          // if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
+          // if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
+          // if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
+          // if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+
+          #if BUTTON_EXISTS(EN1)
+            if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
+          #endif
+          #if BUTTON_EXISTS(EN2)
+            if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
+          #endif
+          #if BUTTON_EXISTS(ENC)
+            if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
+          #endif
+          #if BUTTON_EXISTS(BACK)
+            if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
+          #endif
 
         #else
           constexpr uint8_t newbutton = 0;

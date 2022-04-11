@@ -52,7 +52,7 @@ void TFT_SPI::Init() {
   SPIx.Init.NSS                = SPI_NSS_SOFT;
   SPIx.Init.Mode               = SPI_MODE_MASTER;
   SPIx.Init.Direction          = (TFT_MISO_PIN == TFT_MOSI_PIN) ? SPI_DIRECTION_1LINE : SPI_DIRECTION_2LINES;
-  SPIx.Init.BaudRatePrescaler  = SPI_BAUDRATEPRESCALER_2;
+  SPIx.Init.BaudRatePrescaler  = SPI_BAUDRATEPRESCALER_8;
   SPIx.Init.CLKPhase           = SPI_PHASE_1EDGE;
   SPIx.Init.CLKPolarity        = SPI_POLARITY_LOW;
   SPIx.Init.DataSize           = SPI_DATASIZE_8BIT;
@@ -151,7 +151,7 @@ uint32_t TFT_SPI::ReadID(uint16_t Reg) {
     uint32_t BaudRatePrescaler = SPIx.Init.BaudRatePrescaler;
     uint32_t i;
 
-    SPIx.Init.BaudRatePrescaler = SPIx.Instance == SPI1 ? SPI_BAUDRATEPRESCALER_8 : SPI_BAUDRATEPRESCALER_4;
+    SPIx.Init.BaudRatePrescaler = SPIx.Instance == SPI1 ? SPI_BAUDRATEPRESCALER_4 : SPI_BAUDRATEPRESCALER_2;
     DataTransferBegin(DATASIZE_8BIT);
     WriteReg(Reg);
 
@@ -239,25 +239,25 @@ void TFT_SPI::TransmitDMA(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Coun
   SET_BIT(SPIx.Instance->CR2, SPI_CR2_TXDMAEN);   // Enable Tx DMA Request
 
   HAL_DMA_PollForTransfer(&DMAtx, HAL_DMA_FULL_TRANSFER, HAL_MAX_DELAY);
+  
   Abort();
 }
 
 void TFT_SPI::TransmitDMA_IT(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count) {
   
-  DMAtx.Init.MemInc = MemoryIncrease;
-  HAL_DMA_Init(&DMAtx);
+  // DMAtx.Init.MemInc = MemoryIncrease;
+  // HAL_DMA_Init(&DMAtx);
 
-  if (TFT_MISO_PIN == TFT_MOSI_PIN)
-    SPI_1LINE_TX(&SPIx);
+  // if (TFT_MISO_PIN == TFT_MOSI_PIN)
+  //   SPI_1LINE_TX(&SPIx);
 
-  DataTransferBegin();
+  // DataTransferBegin();
 
-  HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
-  HAL_DMA_Start_IT(&DMAtx, (uint32_t)Data, (uint32_t)&(SPIx.Instance->DR), Count);
-  __HAL_SPI_ENABLE(&SPIx);
-
-  SET_BIT(SPIx.Instance->CR2, SPI_CR2_TXDMAEN);   // Enable Tx DMA Request
+  // HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 5, 0);
+  // HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+  // HAL_DMA_Start_IT(&DMAtx, (uint32_t)Data, (uint32_t)&(SPIx.Instance->DR), Count);
+  // __HAL_SPI_ENABLE(&SPIx);
+  // SET_BIT(SPIx.Instance->CR2, SPI_CR2_TXDMAEN);   // Enable Tx DMA Request
 } 
 
 extern "C" void DMA2_Stream3_IRQHandler(void) {

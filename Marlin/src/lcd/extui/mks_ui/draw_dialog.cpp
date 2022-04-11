@@ -55,6 +55,19 @@
   #include "draw_touch_calibration.h"
 #endif
 
+#if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+  // #include "../../../../feature/bedlevel/bedlevel.h"
+  #include "../../../../src/feature/bedlevel/bedlevel.h"
+
+#endif
+
+#if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+  extern bed_mesh_t z_values;
+#endif
+
+
+
+
 extern lv_group_t *g;
 static lv_obj_t *scr, *tempText1, *filament_bar;
 
@@ -125,10 +138,35 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
       uiCfg.print_state = IDLE;
       card.abortFilePrintSoon();
     #endif
+
+    #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+      if (uiCfg.adjustZoffset) {
+        #if DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
+          for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
+            for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
+              z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
+        #endif
+        TERN_(EEPROM_SETTINGS, (void)settings.save());
+        uiCfg.babyStepZoffsetDiff = 0;
+        uiCfg.adjustZoffset       = 0;
+      }
+    #endif
   }
   else if (DIALOG_IS(TYPE_FINISH_PRINT)) {
     clear_cur_ui();
     lv_draw_ready_print();
+    #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+      if (uiCfg.adjustZoffset) {
+        #if DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
+          for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
+            for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
+              z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
+        #endif
+        TERN_(EEPROM_SETTINGS, (void)settings.save());
+        uiCfg.babyStepZoffsetDiff = 0;
+        uiCfg.adjustZoffset       = 0;
+      }
+    #endif
   }
   #if ENABLED(ADVANCED_PAUSE_FEATURE)
     else if (DIALOG_IS(PAUSE_MESSAGE_WAITING, PAUSE_MESSAGE_INSERT, PAUSE_MESSAGE_HEAT))
@@ -291,6 +329,11 @@ void lv_draw_dialog(uint8_t type) {
     lv_bar_set_anim_time(filament_bar, 1000);
     lv_bar_set_value(filament_bar, 0, LV_ANIM_ON);
   }
+  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+    else if (DIALOG_IS(TYPE_AUTO_LEVELING_TIPS)) {
+      //nothing to do
+    }
+  #endif
   else {
     btnOk = lv_button_btn_create(scr, BTN_OK_X, BTN_OK_Y, 100, 50, btn_ok_event_cb);
     lv_obj_t *labelOk = lv_label_create_empty(btnOk);             // Add a label to the button
@@ -470,6 +513,14 @@ void lv_draw_dialog(uint8_t type) {
       lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -70);
     }
   #endif
+
+  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+    else if (DIALOG_IS(TYPE_AUTO_LEVELING_TIPS)) {
+      lv_label_set_text(labelDialog, print_file_dialog_menu.autolevelingTips);
+      lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, 0);
+    }
+  #endif
+  
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) {
       if (btnOk) lv_group_add_obj(g, btnOk);

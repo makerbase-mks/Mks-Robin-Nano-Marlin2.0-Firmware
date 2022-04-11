@@ -1068,7 +1068,7 @@ static void wifi_gcode_exec(uint8_t *cmd_line) {
           // Report print rate
           if ((uiCfg.print_state == WORKING) || (uiCfg.print_state == PAUSED)|| (uiCfg.print_state == REPRINTING)) {
             ZERO(tempBuf);
-            sprintf_P((char *)tempBuf, PSTR("M27 %d\r\n"), uiCfg.print_progress);
+            sprintf_P((char *)tempBuf, PSTR("M27 %ld\r\n"), uiCfg.print_progress);
             send_to_wifi((uint8_t *)tempBuf, strlen((char *)tempBuf));
           }
           break;

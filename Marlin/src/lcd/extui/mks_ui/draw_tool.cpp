@@ -54,8 +54,8 @@ enum {
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
-  if (TERN1(AUTO_BED_LEVELING_BILINEAR, obj->mks_obj_id != ID_T_LEVELING))
-    lv_clear_tool();
+  // if (TERN1(AUTO_BED_LEVELING_BILINEAR, obj->mks_obj_id != ID_T_LEVELING))
+  lv_clear_tool();
   switch (obj->mks_obj_id) {
     case ID_T_PRE_HEAT: lv_draw_preHeat(); break;
     case ID_T_EXTRUCT:  lv_draw_extrusion(); break;
@@ -63,9 +63,14 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_T_HOME:     lv_draw_home(); break;
     case ID_T_LEVELING:
       #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-        get_gcode_command(AUTO_LEVELING_COMMAND_ADDR, (uint8_t *)public_buf_m);
-        public_buf_m[sizeof(public_buf_m) - 1] = 0;
-        queue.inject_P(PSTR(public_buf_m));
+        queue.inject_P(PSTR("G91"));
+        queue.inject_P(PSTR("G1 Z5 F1000"));
+        queue.inject_P(PSTR("G90"));
+        lv_draw_dialog(DIALOG_TYPE_AUTO_LEVELING_TIPS);
+        uiCfg.autoLeveling = 1;
+        // get_gcode_command(AUTO_LEVELING_COMMAND_ADDR, (uint8_t *)public_buf_m);
+        // public_buf_m[sizeof(public_buf_m) - 1] = 0;
+        // queue.inject_P(PSTR(public_buf_m));
       #else
         uiCfg.leveling_first_time = true;
         lv_draw_manualLevel();

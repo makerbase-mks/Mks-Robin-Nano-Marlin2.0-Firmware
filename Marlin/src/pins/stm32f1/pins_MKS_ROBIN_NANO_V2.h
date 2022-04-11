@@ -37,6 +37,8 @@
 
 #define BOARD_NO_NATIVE_USB
 
+#define MKS_TEST
+
 // Avoid conflict with TIMER_SERVO when using the STM32 HAL
 #define TEMP_TIMER                             5
 
@@ -387,6 +389,8 @@
 #ifndef BEEPER_PIN
   #define BEEPER_PIN                        PC5
 #endif
+
+
 
 #if ENABLED(SPEAKER) && BEEPER_PIN == PC5
   #error "MKS Robin nano default BEEPER_PIN is not a SPEAKER."

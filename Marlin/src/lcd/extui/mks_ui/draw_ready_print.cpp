@@ -159,6 +159,7 @@ void lv_draw_ready_print() {
     lv_obj_set_pos(buttonTool, 360, 180);
 
     lv_obj_t *label_tool = lv_label_create_empty(buttonTool);
+    
     if (gCfgItems.multiple_language) {
       lv_label_set_text(label_tool, main_menu.tool);
       lv_obj_align(label_tool, buttonTool, LV_ALIGN_IN_BOTTOM_MID, 0, BUTTON_TEXT_Y_OFFSET);

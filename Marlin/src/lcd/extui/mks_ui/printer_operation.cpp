@@ -93,6 +93,11 @@ void printer_state_polling() {
         sprintf_P(public_buf_m, PSTR("G1 Z%s"), dtostrf(uiCfg.current_z_position_bak, 1, 1, str_1));
         gcode.process_subcommands_now(public_buf_m);
       }
+      
+      ZERO(public_buf_m);
+      sprintf_P(public_buf_m, PSTR("G92 E%s"),  dtostrf(uiCfg.current_e_position_bak, 1, 1, str_1));
+      gcode.process_subcommands_now(public_buf_m);
+
       gcode.process_subcommands_now_P(M24_STR);
       uiCfg.print_state = WORKING;
       start_print_time();
@@ -144,6 +149,23 @@ void printer_state_polling() {
     filament_check();
 
   TERN_(MKS_WIFI_MODULE, wifi_looping());
+
+  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+    if (uiCfg.autoLeveling) {
+      get_gcode_command(AUTO_LEVELING_COMMAND_ADDR, (uint8_t *)public_buf_m);
+      public_buf_m[sizeof(public_buf_m) - 1] = 0;
+      gcode.process_subcommands_now_P(PSTR(public_buf_m));
+      clear_cur_ui();
+      #ifdef BLTOUCH
+      bltouch_do_init(false);
+      lv_draw_bltouch_settings();
+      #endif
+      #ifdef TOUCH_MI_PROBE
+      lv_draw_touchmi_settings();
+      #endif
+      uiCfg.autoLeveling = 0;
+    }
+  #endif
 }
 
 void filament_pin_setup() {

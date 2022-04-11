@@ -44,7 +44,6 @@ class TFT_SPI {
 private:
   static SPI_HandleTypeDef SPIx;
   
-
   static uint32_t ReadID(uint16_t Reg);
   static void Transmit(uint16_t Data);
   static void TransmitDMA(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count);

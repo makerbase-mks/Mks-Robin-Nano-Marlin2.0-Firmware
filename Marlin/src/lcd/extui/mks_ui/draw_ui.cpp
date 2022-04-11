@@ -433,7 +433,7 @@ void tft_style_init() {
 #define MAX_TITLE_LEN 28
 
 char public_buf_m[100] = {0};
-char public_buf_l[30];
+char public_buf_l[50];
 
 void titleText_cat(char *str, int strSize, char *addPart) {
   if (str == 0 || addPart == 0) return;
@@ -630,6 +630,7 @@ char *creat_title_text() {
       }
 
       SPI_TFT.tftio.WriteSequence((uint16_t*)bmp_public_buf, 200);
+      // SPI_TFT.tftio.WriteSequenceIT((uint16_t*)bmp_public_buf, 200);
       
       #if HAS_BAK_VIEW_IN_FLASH
         W25QXX.init(SPI_FULL_SPEED);
@@ -692,7 +693,7 @@ char *creat_title_text() {
 
       SPI_TFT.setWindow(xpos_pixel, y_off * 20 + ypos_pixel, 200, 20); // 200*200
       SPI_TFT.tftio.WriteSequence((uint16_t*)(bmp_public_buf), DEFAULT_VIEW_MAX_SIZE / 20);
-
+      // SPI_TFT.tftio.WriteSequenceIT((uint16_t*)(bmp_public_buf), DEFAULT_VIEW_MAX_SIZE / 20);
       y_off++;
     }
     W25QXX.init(SPI_FULL_SPEED);
@@ -732,6 +733,58 @@ void print_time_run() {
   }
 }
 
+// uint16_t print_disp_mode = 0;
+
+typedef enum{
+  MODE_DISP_EXT_TEMP = 0,
+  MODE_DISP_BED_TEMP    = 1,
+  MODE_DISP_FAN_TEMP    = 2,
+  MODE_DISP_PRINT_TEMP  = 3,
+  MODE_DISP_FANZ_ZPOS   = 4,
+}disp_mode_t;
+
+disp_mode_t print_disp_mode = MODE_DISP_EXT_TEMP; // defalut MODE_DISP_EXT_TEMP
+
+
+void print_dis_status() {
+
+  if (temps_update_flag) {
+        temps_update_flag = false;
+        // disp_ext_temp();
+        // disp_bed_temp();
+        // disp_fan_speed();
+        // disp_print_time();
+        // disp_fan_Zpos();
+      switch(print_disp_mode) {
+
+        case MODE_DISP_EXT_TEMP: 
+          disp_ext_temp();
+          print_disp_mode = MODE_DISP_BED_TEMP;
+        break;
+
+        case MODE_DISP_BED_TEMP: 
+          disp_bed_temp();
+          print_disp_mode = MODE_DISP_FAN_TEMP;
+        break;  
+
+        case MODE_DISP_FAN_TEMP: 
+          disp_fan_speed();
+          print_disp_mode = MODE_DISP_PRINT_TEMP;
+        break;  
+
+        case MODE_DISP_PRINT_TEMP:
+          disp_print_time();
+          print_disp_mode = MODE_DISP_FANZ_ZPOS;
+        break;
+
+        case MODE_DISP_FANZ_ZPOS: 
+          disp_fan_Zpos();
+          print_disp_mode = MODE_DISP_EXT_TEMP;
+        break; 
+      }
+  } 
+}
+
 void GUI_RefreshPage() {
   if ((systick_uptime_millis % 1000) == 0) temps_update_flag = true;
   if ((systick_uptime_millis % 3000) == 0) printing_rate_update_flag = true;
@@ -758,17 +811,21 @@ void GUI_RefreshPage() {
       }
       break;
 
-    case PRINT_FILE_UI: break;
+    case PRINT_FILE_UI: 
+    
+    break;
 
     case PRINTING_UI:
-      if (temps_update_flag) {
-        temps_update_flag = false;
-        disp_ext_temp();
-        disp_bed_temp();
-        disp_fan_speed();
-        disp_print_time();
-        disp_fan_Zpos();
-      }
+      // if (temps_update_flag) {
+      //   temps_update_flag = false;
+      //   disp_ext_temp();
+      //   disp_bed_temp();
+      //   disp_fan_speed();
+      //   disp_print_time();
+      //   disp_fan_Zpos();
+      // }
+      print_dis_status();
+
       if (printing_rate_update_flag || marlin_state == MF_SD_COMPLETE) {
         printing_rate_update_flag = false;
         if (!gcode_preview_over) setProBarRate();
@@ -873,6 +930,15 @@ void GUI_RefreshPage() {
         disp_z_offset_value();
       }
       break;
+    
+    #if ENABLED(BLTOUCH)
+      case BLTOUCH_UI:
+        if (temps_update_flag) {
+          temps_update_flag = false;
+          disp_bltouch_z_offset_value();
+        }
+        break;
+    #endif
 
     default: break;
   }
@@ -1319,12 +1385,24 @@ lv_obj_t* lv_screen_menu_item(lv_obj_t *par, const char *text, lv_coord_t x, lv_
 }
 
 lv_obj_t* lv_screen_menu_item_1_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue) {
-  lv_obj_t *btn = lv_screen_menu_item(par, text, x, y, cb, -1, index, false);
-  lv_obj_t *btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
-  lv_obj_t *labelValue = lv_label_create_empty(btnValue);
+  // lv_obj_t *btn = lv_screen_menu_item(par, text, x, y, cb, -1, index, false);
+  // lv_obj_t *btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
+  // lv_obj_t *labelValue = lv_label_create_empty(btnValue);
+  // lv_label_set_text(labelValue, editValue);
+  // lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
+
+  lv_label_create(par, x + PARA_UI_ITEM_TEXT_H, y + PARA_UI_ITEM_TEXT_V, text);
+
+  lv_obj_t* btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
+  lv_obj_t* labelValue = lv_label_create_empty(btnValue);
   lv_label_set_text(labelValue, editValue);
   lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
-  return btn;
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, btnValue);
+
+  lv_obj_t *line1 = lv_line_create(par, nullptr);
+  lv_ex_line(line1, line_points[index]);
+
+  return btnValue;
 }
 
 lv_obj_t* lv_screen_menu_item_2_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue, const int idEdit2, const char *editValue2) {

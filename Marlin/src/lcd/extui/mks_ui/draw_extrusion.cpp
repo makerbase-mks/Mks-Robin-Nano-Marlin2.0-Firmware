@@ -39,6 +39,7 @@ static lv_obj_t *scr;
 #endif
 
 static lv_obj_t *buttonType, *buttonStep, *buttonSpeed;
+static lv_obj_t *buttonIn, *buttonOut;
 static lv_obj_t *labelType;
 static lv_obj_t *labelStep;
 static lv_obj_t *labelSpeed;
@@ -60,18 +61,30 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
     case ID_E_ADD:
-      if (thermalManager.degHotend(uiCfg.extruderIndex) >= EXTRUDE_MINTEMP) {
-        sprintf_P((char *)public_buf_l, PSTR("G91\nG1 E%d F%d\nG90"), uiCfg.extruStep, 60 * uiCfg.extruSpeed);
-        queue.inject(public_buf_l);
+      if ((thermalManager.degHotend(uiCfg.extruderIndex) >= EXTRUDE_MINTEMP) && (!queue.ring_buffer.full(3))) {
+        // sprintf_P((char *)public_buf_l, PSTR("G91\nG1 E%d F%d\nG90"), uiCfg.extruStep, 60 * uiCfg.extruSpeed);
+        // queue.inject(public_buf_l);
+        // extrudeAmount += uiCfg.extruStep;
+        // disp_extru_amount();
+        queue.enqueue_now_P(PSTR("G91"));
+        sprintf_P((char *)public_buf_l, PSTR("G1 E%d F%d"), uiCfg.extruStep, 60 * uiCfg.extruSpeed);
+        queue.enqueue_one_now(public_buf_l);
+        queue.enqueue_now_P(PSTR("G90"));
         extrudeAmount += uiCfg.extruStep;
         disp_extru_amount();
       }
       break;
     case ID_E_DEC:
-      if (thermalManager.degHotend(uiCfg.extruderIndex) >= EXTRUDE_MINTEMP) {
-        sprintf_P((char *)public_buf_l, PSTR("G91\nG1 E%d F%d\nG90"), 0 - uiCfg.extruStep, 60 * uiCfg.extruSpeed);
-        // queue.enqueue_one_now(public_buf_l);
-        queue.inject(public_buf_l);
+      if ((thermalManager.degHotend(uiCfg.extruderIndex) >= EXTRUDE_MINTEMP) && (!queue.ring_buffer.full(3))) {
+        // sprintf_P((char *)public_buf_l, PSTR("G91\nG1 E%d F%d\nG90"), 0 - uiCfg.extruStep, 60 * uiCfg.extruSpeed);
+        // // queue.enqueue_one_now(public_buf_l);
+        // queue.inject(public_buf_l);
+        // extrudeAmount -= uiCfg.extruStep;
+        // disp_extru_amount();
+        queue.enqueue_now_P(PSTR("G91"));
+        sprintf_P((char *)public_buf_l, PSTR("G1 E%d F%d"), 0 - uiCfg.extruStep, 60 * uiCfg.extruSpeed);
+        queue.enqueue_one_now(public_buf_l);
+        queue.enqueue_now_P(PSTR("G90"));
         extrudeAmount -= uiCfg.extruStep;
         disp_extru_amount();
       }
@@ -131,14 +144,14 @@ void lv_draw_extrusion() {
   buttonSpeed = lv_imgbtn_create(mks_ui.src_main, nullptr, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_SPEED);
 #else 
   scr = lv_screen_create(EXTRUSION_UI);
-  lv_obj_t *buttonAdd = lv_big_button_create(scr, "F:/bmp_in.bin", extrude_menu.in, INTERVAL_V, titleHeight, event_handler, ID_E_ADD);
-  lv_obj_clear_protect(buttonAdd, LV_PROTECT_FOLLOW);
-  lv_big_button_create(scr, "F:/bmp_out.bin", extrude_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_E_DEC);
+  // lv_obj_t *buttonAdd = lv_big_button_create(scr, "F:/bmp_in.bin", extrude_menu.in, INTERVAL_V, titleHeight, event_handler, ID_E_ADD);
+  // lv_obj_clear_protect(buttonAdd, LV_PROTECT_FOLLOW);
   buttonType = lv_imgbtn_create(scr, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_TYPE);
   buttonStep = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_STEP);
   buttonSpeed = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_E_SPEED);
+  buttonIn = lv_big_button_create(scr, "F:/bmp_in.bin", extrude_menu.in, INTERVAL_V, titleHeight, event_handler, ID_E_ADD);
+  buttonOut = lv_big_button_create(scr, "F:/bmp_out.bin", extrude_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_E_DEC);
 #endif
-
 
   // Create image buttons
   #if HAS_ROTARY_ENCODER

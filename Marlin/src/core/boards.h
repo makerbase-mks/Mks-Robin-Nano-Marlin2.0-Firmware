@@ -403,6 +403,11 @@
 #define BOARD_INDEX_REV03             4233  // Index PnP Controller REV03 (STM32F407VET6/VGT6)
 #define BOARD_MKS_ROBIN_NANO_V1_3_F4  4234  // MKS Robin Nano V1.3 and MKS Robin Nano-S V1.3 (STM32F407VET6)
 #define BOARD_MKS_EAGLE               4235  // MKS Eagle (STM32F407VET6)
+#define BOARD_MKS_NANO6               4236  // MKS NANO6 (STM32F407VET6)
+#define BOARD_MKS_NANO4               4237  // MKS NANO4 (STM32F407VET6)
+#define BOARD_MKS_E3_V2               4238  // MKS Robin E3 V2 (STM32F401RCT6)
+#define BOARD_MKS_E3D_V2              4239  // MKS Robin E3D V2 (STM32F401RCT6)
+
 
 //
 // ARM Cortex M7
