@@ -144,7 +144,7 @@ void tft_lvgl_init() {
   // Init TFT first!
   SPI_TFT.spi_init(SPI_FULL_SPEED);
   SPI_TFT.LCD_init();
-
+  
   #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
     uint16_t usb_flash_loop = 1000;
     #if ENABLED(MULTI_VOLUME)
@@ -161,7 +161,9 @@ void tft_lvgl_init() {
     } while((!card.media_driver_usbFlash.isInserted()) && (usb_flash_loop--));
     card.mount();
   #elif HAS_LOGO_IN_FLASH
+    // delay(1000);
     watchdog_refresh(); 
+    // delay(1000);
   #endif
 
   watchdog_refresh();   
