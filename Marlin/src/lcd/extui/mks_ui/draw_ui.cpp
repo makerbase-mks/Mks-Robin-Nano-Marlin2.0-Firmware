@@ -1232,7 +1232,7 @@ lv_obj_t* lv_screen_create(DISP_STATE newScreenType, const char *title) {
   if (titleLabel)
     lv_obj_set_style(titleLabel, &tft_style_label_rel);
 
-  lv_refr_now(lv_refr_get_disp_refreshing());
+  lv_refr_now(lv_refr_get_disp_refreshing());   // 立即刷新屏幕
 
   return scr;
 }
