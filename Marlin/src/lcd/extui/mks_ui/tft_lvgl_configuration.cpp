@@ -292,7 +292,7 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
   uint16_t width = area->x2 - area->x1 + 1,
           height = area->y2 - area->y1 + 1;
 
-  disp_drv_p = disp;
+  // disp_drv_p = disp;
 
   SPI_TFT.setWindow((uint16_t)area->x1, (uint16_t)area->y1, width, height);
 
@@ -308,7 +308,10 @@ void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * co
 #endif
 
 #else
-  SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
+  // SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
+  for (uint16_t i = 0; i < height; i++)
+    SPI_TFT.tftio.WriteSequence((uint16_t*)(color_p + width * i), width);
+
   lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
 #endif
   W25QXX.init(SPI_FULL_SPEED);
@@ -484,7 +487,25 @@ lv_fs_res_t spi_flash_tell_cb(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p
 // sd
 char *cur_namefff;
 uint32_t sd_read_base_addr = 0, sd_read_addr_offset = 0, small_image_size = 409;
+char last_path[(SHORT_NAME_LEN + 1) * MAX_DIR_LEVEL + strlen("S:/") + 1];
 lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_fs_mode_t mode) {
+  // char name_buf[100];
+  // *name_buf = '/';
+  // strcpy(name_buf + 1, path);
+  // char *temp = strstr(name_buf, ".bin");
+  // if (temp) strcpy(temp, ".GCO");
+  // sd_read_base_addr = lv_open_gcode_file((char *)name_buf);
+  // sd_read_addr_offset = sd_read_base_addr;
+  // if (sd_read_addr_offset == UINT32_MAX) return LV_FS_RES_NOT_EX;
+  // // find small image size
+  // card.read(public_buf, 512);
+  // public_buf[511] = '\0';
+  // const char* eol = strpbrk((const char*)public_buf, "\n\r");
+  // small_image_size = (uintptr_t)eol - (uintptr_t)((uint32_t *)(&public_buf[0])) + 1;
+  // return LV_FS_RES_OK;
+  if (path != nullptr && card.isFileOpen() && strcmp((const char*)path, (const char*)last_path) == 0) return LV_FS_RES_OK;
+  strcpy(last_path, path);
+  lv_close_gcode_file();
   char name_buf[100];
   *name_buf = '/';
   strcpy(name_buf + 1, path);
@@ -496,14 +517,14 @@ lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_
   // find small image size
   card.read(public_buf, 512);
   public_buf[511] = '\0';
-  const char* eol = strpbrk((const char*)public_buf, "\n\r");
+  char* eol = strpbrk((const char*)public_buf, "\n\r");
   small_image_size = (uintptr_t)eol - (uintptr_t)((uint32_t *)(&public_buf[0])) + 1;
   return LV_FS_RES_OK;
 }
 
 lv_fs_res_t sd_close_cb (lv_fs_drv_t * drv, void * file_p) {
   /* Add your code here */
-  lv_close_gcode_file();
+  // lv_close_gcode_file();
   return LV_FS_RES_OK;
 }
 
