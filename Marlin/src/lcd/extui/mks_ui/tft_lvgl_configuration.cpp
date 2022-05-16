@@ -160,6 +160,7 @@ void tft_lvgl_init() {
       delay(2);
     } while((!card.media_driver_usbFlash.isInserted()) && (usb_flash_loop--));
     card.mount();
+    
   #elif HAS_LOGO_IN_FLASH
     // delay(1000);
     watchdog_refresh(); 

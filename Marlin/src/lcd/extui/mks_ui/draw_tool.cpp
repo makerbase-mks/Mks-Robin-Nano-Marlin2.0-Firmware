@@ -28,6 +28,7 @@
 #include <lv_conf.h>
 
 #include "../../../gcode/queue.h"
+#include "../../../gcode/gcode.h"
 #include "../../../module/temperature.h"
 #include "../../../inc/MarlinConfig.h"
 
@@ -66,6 +67,9 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         queue.inject_P(PSTR("G91"));
         queue.inject_P(PSTR("G1 Z5 F1000"));
         queue.inject_P(PSTR("G90"));
+        // sprintf(public_buf_l, PSTR("G91\nG1 Z5 F1000\nG90"));
+        queue.inject(public_buf_l);
+        // gcode.process_subcommands_now(public_buf_l);
         lv_draw_dialog(DIALOG_TYPE_AUTO_LEVELING_TIPS);
         uiCfg.autoLeveling = 1;
         // get_gcode_command(AUTO_LEVELING_COMMAND_ADDR, (uint8_t *)public_buf_m);

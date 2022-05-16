@@ -65,6 +65,7 @@ void printer_state_polling() {
           gcode.process_subcommands_now(public_buf_l);
         }
         if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
+
           sprintf_P(public_buf_l, PSTR("G1 X%s Y%s"), dtostrf(gCfgItems.pausePosX, 1, 1, str_1), dtostrf(gCfgItems.pausePosY, 1, 1, str_1));
           gcode.process_subcommands_now(public_buf_l);
         }
@@ -156,10 +157,11 @@ void printer_state_polling() {
       public_buf_m[sizeof(public_buf_m) - 1] = 0;
       gcode.process_subcommands_now_P(PSTR(public_buf_m));
       clear_cur_ui();
-      #ifdef BLTOUCH
+      #if ANY(BLTOUCH, FIX_MOUNTED_PROBE)
       bltouch_do_init(false);
       lv_draw_bltouch_settings();
       #endif
+      
       #ifdef TOUCH_MI_PROBE
       lv_draw_touchmi_settings();
       #endif

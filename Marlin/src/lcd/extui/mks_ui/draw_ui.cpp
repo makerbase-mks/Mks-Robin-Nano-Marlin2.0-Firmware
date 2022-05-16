@@ -931,7 +931,7 @@ void GUI_RefreshPage() {
       }
       break;
     
-    #if ENABLED(BLTOUCH)
+    #if ANY(BLTOUCH, FIX_MOUNTED_PROBE)
       case BLTOUCH_UI:
         if (temps_update_flag) {
           temps_update_flag = false;
@@ -1365,6 +1365,29 @@ lv_obj_t* lv_screen_menu_item(lv_obj_t *par, const char *text, lv_coord_t x, lv_
   lv_obj_t *btn = lv_btn_create(par, nullptr);   /*Add a button the current screen*/
   lv_obj_set_pos(btn, x, y);                         /*Set its position*/
   lv_obj_set_size(btn, PARA_UI_SIZE_X, PARA_UI_SIZE_Y);                       /*Set its size*/
+  if (id > -1) lv_obj_set_event_cb_mks(btn, cb, id, "", 0);
+  lv_btn_use_label_style(btn);
+  lv_btn_set_layout(btn, LV_LAYOUT_OFF);
+  lv_obj_t *label = lv_label_create_empty(btn);        /*Add a label to the button*/
+  if (gCfgItems.multiple_language) {
+    lv_label_set_text(label, text);
+    lv_obj_align(label, btn, LV_ALIGN_IN_LEFT_MID, 0, 0);
+  }
+  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable))
+    lv_group_add_obj(g, btn);
+
+  if (drawArrow) (void)lv_imgbtn_create(par, "F:/bmp_arrow.bin", x + PARA_UI_SIZE_X, y + PARA_UI_ARROW_V, cb, id);
+
+  lv_obj_t *line1 = lv_line_create(par, nullptr);
+  lv_ex_line(line1, line_points[index]);
+
+  return btn;
+}
+
+lv_obj_t* lv_screen_menu_item_w(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, bool drawArrow) {
+  lv_obj_t *btn = lv_btn_create(par, nullptr);   /*Add a button the current screen*/
+  lv_obj_set_pos(btn, x, y);                         /*Set its position*/
+  lv_obj_set_size(btn, 350, PARA_UI_SIZE_Y);                       /*Set its size*/
   if (id > -1) lv_obj_set_event_cb_mks(btn, cb, id, "", 0);
   lv_btn_use_label_style(btn);
   lv_btn_set_layout(btn, LV_LAYOUT_OFF);

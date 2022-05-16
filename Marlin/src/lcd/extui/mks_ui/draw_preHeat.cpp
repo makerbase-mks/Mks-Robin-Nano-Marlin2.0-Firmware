@@ -64,9 +64,9 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_P_ADD: {
       if (uiCfg.curTempType == 0) {
 
-        #if ANY(WATCH_TEMP_INCREASE, WATCH_BED_TEMP_INCREASE)
+        // #if ANY(WATCH_TEMP_INCREASE, WATCH_BED_TEMP_INCREASE)
         int16_t max_target;
-        #endif
+        // #endif
         
         thermalManager.temp_hotend[uiCfg.extruderIndex].target += uiCfg.stepHeat;
 #ifdef WATCH_TEMP_INCREASE
@@ -79,10 +79,11 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
             max_target = HEATER_1_MAXTEMP - (WATCH_TEMP_INCREASE + TEMP_HYSTERESIS + 1);
           #endif
         }
+#endif
         if (thermalManager.degTargetHotend(uiCfg.extruderIndex) > max_target)
           thermalManager.setTargetHotend(max_target, uiCfg.extruderIndex);
         thermalManager.start_watching_hotend(uiCfg.extruderIndex);
-#endif
+
       }
       else {
         #if HAS_HEATED_BED
@@ -120,7 +121,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_P_TYPE:
       if (uiCfg.curTempType == 0) {
-        if (ENABLED(HAS_MULTI_EXTRUDER)) {
+        if (ENABLED(HAS_MULTI_EXTRUDER) && (DISABLED(SINGLENOZZLE))) {
           if (uiCfg.extruderIndex == 0) {
             uiCfg.extruderIndex = 1;
           }
@@ -270,7 +271,8 @@ void disp_ext_heart() {
 
 void disp_temp_type() {
   if (uiCfg.curTempType == 0) {
-    if (uiCfg.extruderIndex == 1) {
+
+    if (uiCfg.extruderIndex == 1 && (DISABLED(SINGLENOZZLE))) {
       lv_imgbtn_set_src_both(buttonType, "F:/bmp_extru2.bin");
       if (gCfgItems.multiple_language) {
         lv_label_set_text(labelType, preheat_menu.ext2);

@@ -1571,7 +1571,9 @@ void setup() {
       #if ENABLED(MULTI_VOLUME)
         card.changeMedia(&card.media_driver_sdcard);
       #endif
-      if (!card.isMounted()) SETUP_RUN(card.mount()); // Mount SD to load graphics and fonts
+
+      // if (!card.isMounted()) SETUP_RUN(card.mount()); // Mount SD to load graphics and fonts
+
     #endif
     SETUP_RUN(tft_lvgl_init());
   #endif
@@ -1592,7 +1594,6 @@ void setup() {
   #endif
 
   marlin_state = MF_RUNNING;
-
   SETUP_LOG("setup() completed.");
 }
 

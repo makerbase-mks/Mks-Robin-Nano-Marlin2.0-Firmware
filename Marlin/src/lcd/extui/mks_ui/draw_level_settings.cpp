@@ -60,7 +60,8 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
         lv_draw_auto_level_offset_settings();
         break;
     #endif
-    #if ENABLED(BLTOUCH)
+    // #if ENABLED(BLTOUCH)
+    #if ANY(BLTOUCH, FIX_MOUNTED_PROBE)
       case ID_LEVEL_BLTOUCH:
         last_disp_state = LEVELING_PARA_UI;
         lv_clear_level_settings();
@@ -79,7 +80,7 @@ void lv_draw_level_settings() {
     lv_screen_menu_item(scr, machine_menu.LevelingAutoZoffsetConf, PARA_UI_POS_X, PARA_UI_POS_Y * 3, event_handler, ID_LEVEL_ZOFFSET, 2);
   #endif
 
-  #if ENABLED(BLTOUCH)
+  #if ANY(BLTOUCH, FIX_MOUNTED_PROBE)
     lv_screen_menu_item(scr, machine_menu.BLTouchLevelingConf, PARA_UI_POS_X, PARA_UI_POS_Y * 4, event_handler, ID_LEVEL_BLTOUCH, 3);
   #endif
 
