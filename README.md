@@ -53,6 +53,31 @@ The images should be added to gcode file when slicing, and MKS has developed the
 - Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
 - Insert SD card to the motherboard, and you can see the update interface after power on.   
 
+
+## MKS Robin Nano V1.3 & Nano-S V1.3 build and update firmware
+
+1. Build config:
+
+- platformio.ini: 
+
+  default_envs = mks_robin_nano_v1_3_f4
+
+- Configuration.h:  
+  #define SERIAL_PORT 3  
+  #define MKS_ROBIN_TFT35  
+  #define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V1_3_F4 
+  #define TFT_LVGL_UI  
+  #define TOUCH_SCREEN  
+
+- Configuration_adv.h:  
+  //#define USB_FLASH_DRIVE_SUPPORT  
+  //#define MULTI_VOLUME
+
+2. Update firmware:
+
+- Enter the `.pio\build\mks_robin_nano35` directory, copy the `assets` folder and `Robin_nano35.bin` to the sd card
+- Insert SD card to the motherboard, and you can see the update interface after power on.
+
 ## MKS Robin Nano V2.x build and update firmware
 
 1. Build config:
