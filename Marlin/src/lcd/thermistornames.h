@@ -70,6 +70,10 @@
   #define THERMISTOR_NAME "Zonestar (P802M Hot Bed)"
 #elif THERMISTOR_ID == 503
   #define THERMISTOR_NAME "Zonestar (Z8XM2 Bed)"
+#elif THERMISTOR_ID == 504
+  #define THERMISTOR_NAME "Zonestar (P802QR2 Hot End)"
+#elif THERMISTOR_ID == 505
+  #define THERMISTOR_NAME "Zonestar (P802QR2 Bed)"
 #elif THERMISTOR_ID == 512
   #define THERMISTOR_NAME "RPW-Ultra"
 #elif THERMISTOR_ID == 6
@@ -120,6 +124,8 @@
   #define THERMISTOR_NAME "ATC104GT-2 1K"
 #elif THERMISTOR_ID == 1047
   #define THERMISTOR_NAME "PT1000 4K7"
+#elif THERMISTOR_ID == 1022
+  #define THERMISTOR_NAME "PT1000 2K2"
 #elif THERMISTOR_ID == 1010
   #define THERMISTOR_NAME "PT1000 1K"
 #elif THERMISTOR_ID == 147
@@ -135,7 +141,7 @@
 #elif THERMISTOR_ID == 61
   #define THERMISTOR_NAME "Formbot 350°C"
 #elif THERMISTOR_ID == 66
-  #define THERMISTOR_NAME "Dyze 4.7M"
+  #define THERMISTOR_NAME "Dyze / TL 4.7M"
 #elif THERMISTOR_ID == 67
   #define THERMISTOR_NAME "SliceEng 450°C"
 

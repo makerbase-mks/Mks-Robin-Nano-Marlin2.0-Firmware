@@ -57,8 +57,8 @@
  * TIM14 - TEMP_TIMER (Marlin)
  *
  */
-#define STEP_TIMER                             4
-#define TEMP_TIMER                            14
+#define STEP_TIMER  4
+#define TEMP_TIMER 14
 
 /**
  * These pin assignments are arbitrary and intending for testing purposes.
@@ -69,7 +69,7 @@
  *                                              (X_DIR) PB15 | · · | PB9 (X_CS)
  *                                             (LCD_D4) PB13 | · · | AVDD
  *                 _CN8_                                PB12 | · · | GND
- *             NC | · · | PC8                (HEATER_0) PA15 | · · | PA5  (SCLK)
+ *             -- | · · | PC8                (HEATER_0) PA15 | · · | PA5  (SCLK)
  *          IOREF | · · | PC9                   (BEEPER) PC7 | · · | PA6  (MISO)
  *          RESET | · · | PC10              (SERVO1_PIN) PB5 | · · | PA7  (MOSI)
  *          +3.3V | · · | PC11              (HEATER_BED) PB3 | · · | PD14 (SD_DETECT)
@@ -86,7 +86,7 @@
  *            PF3 | · · | PD4                            PF4 | · · | PF15
  *            PF5 | · · | PD3                   (E_STEP) PB6 | · · | PG14 (E_EN)
  *           PF10 | · · | GND                    (E_DIR) PB2 | · · | PG9  (E_CS)
- *             NC | · · | PE2                            GND | · · | PE8
+ *             -- | · · | PE2                            GND | · · | PE8
  *            PA7 | · · | PE4                           PD13 | · · | PE7
  *            PF2 | · · | PE5                           PD12 | · · | GND
  *   (Y_STEP) PF1 | · · | PE6 (Y_EN)           (Z_STEP) PD11 | · · | PE10 (Z_EN)
@@ -154,8 +154,8 @@
 #define HEATER_0_PIN                        PA15  // PWM Capable, TIM2_CH1
 #define HEATER_BED_PIN                      PB3   // PWM Capable, TIM2_CH2
 
-#ifndef FAN_PIN
-  #define FAN_PIN                           PB10  // PWM Capable, TIM2_CH3
+#ifndef FAN0_PIN
+  #define FAN0_PIN                          PB10  // PWM Capable, TIM2_CH3
 #endif
 #define FAN1_PIN                            PB11  // PWM Capable, TIM2_CH4
 
@@ -186,7 +186,7 @@
   #define BTN_ENC                           PE11  // BTN_ENC
   #define SD_DETECT_PIN                     PD14
   #define LCD_PINS_RS                       PF12  // LCD_RS
-  #define LCD_PINS_ENABLE                   PD15  // LCD_EN
+  #define LCD_PINS_EN                       PD15  // LCD_EN
   #define LCD_PINS_D4                       PB13  // LCD_D4
   #define BTN_EN1                           PF13  // BTN_EN1
   #define BTN_EN2                           PE9   // BTN_EN2

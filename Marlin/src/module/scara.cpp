@@ -37,9 +37,9 @@
   #include "../MarlinCore.h"
 #endif
 
-float segments_per_second = TERN(AXEL_TPARA, TPARA_SEGMENTS_PER_SECOND, SCARA_SEGMENTS_PER_SECOND);
+float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
 
-#if EITHER(MORGAN_SCARA, MP_SCARA)
+#if ANY(MORGAN_SCARA, MP_SCARA)
 
   static constexpr xy_pos_t scara_offset = { SCARA_OFFSET_X, SCARA_OFFSET_Y };
 
@@ -254,7 +254,7 @@ float segments_per_second = TERN(AXEL_TPARA, TPARA_SEGMENTS_PER_SECOND, SCARA_SE
     // Do this here all at once for Delta, because
     // XYZ isn't ABC. Applying this per-tower would
     // give the impression that they are the same.
-    LOOP_LINEAR_AXES(i) set_axis_is_at_home((AxisEnum)i);
+    LOOP_NUM_AXES(i) set_axis_is_at_home((AxisEnum)i);
 
     sync_plan_position();
   }

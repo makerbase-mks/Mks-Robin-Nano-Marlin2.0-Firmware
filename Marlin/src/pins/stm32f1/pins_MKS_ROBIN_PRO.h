@@ -28,7 +28,7 @@
 #include "env_validate.h"
 
 #if HOTENDS > 3 || E_STEPPERS > 3
-  #error "MKS Robin pro supports up to 3 hotends / E-steppers. Comment out this line to continue."
+  #error "MKS Robin pro supports up to 3 hotends / E steppers."
 #endif
 
 #define BOARD_INFO_NAME "MKS Robin pro"
@@ -41,9 +41,9 @@
 #define DISABLE_DEBUG
 
 //
-// Note: MKS Robin board is using SPI2 interface.
+// SPI
 //
-#define SPI_DEVICE                             2
+#define SPI_DEVICE                             2  // Maple
 
 //
 // Servos
@@ -105,18 +105,16 @@
   #define E2_CS_PIN                         PG9
 #endif
 //
-// Software SPI pins for TMC2130 stepper drivers
+// SPI pins for TMC2130 stepper drivers
 //
-#if ENABLED(TMC_USE_SW_SPI)
-  #ifndef TMC_SW_MOSI
-    #define TMC_SW_MOSI                     PB15
-  #endif
-  #ifndef TMC_SW_MISO
-    #define TMC_SW_MISO                     PB14
-  #endif
-  #ifndef TMC_SW_SCK
-    #define TMC_SW_SCK                      PB13
-  #endif
+#ifndef TMC_SPI_MOSI
+  #define TMC_SPI_MOSI                      PB15
+#endif
+#ifndef TMC_SPI_MISO
+  #define TMC_SPI_MISO                      PB14
+#endif
+#ifndef TMC_SPI_SCK
+  #define TMC_SPI_SCK                       PB13
 #endif
 
 #if HAS_TMC_UART
@@ -167,11 +165,11 @@
 #define HEATER_1_PIN                        PB0   // +HE1-
 #define HEATER_2_PIN                        PF9   // +HE2-
 #define HEATER_BED_PIN                      PA0   // +HOT-BED-
-#define FAN_PIN                             PB1   // +FAN-
+#define FAN0_PIN                            PB1   // +FAN-
 
-/**
- * Note: MKS Robin Pro board is using SPI2 interface. Make sure your stm32duino library is configured accordingly
- */
+//
+// Note: Using SPI2 interface. Make sure stm32duino is configured accordingly
+//
 //#define TEMP_0_CS_PIN                     PE5   // TC1 - CS1
 //#define TEMP_0_CS_PIN                     PF11  // TC2 - CS2
 
@@ -185,7 +183,9 @@
 //
 #if ENABLED(MKS_PWC)
   #if ENABLED(TFT_LVGL_UI)
-    #undef PSU_CONTROL
+    #if ENABLED(PSU_CONTROL)
+      #error "PSU_CONTROL is incompatible with MKS_PWC plus TFT_LVGL_UI."
+    #endif
     #undef MKS_PWC
     #define SUICIDE_PIN                     PG11
     #define SUICIDE_PIN_STATE               LOW
@@ -210,7 +210,7 @@
   #define SD_MOSI_PIN                       PB15
   #define SD_SS_PIN                         PG6
 #elif SD_CONNECTION_IS(ONBOARD)
-  #define SDIO_SUPPORT
+  #define ONBOARD_SDIO
   #define SD_DETECT_PIN                     PD12
   #define ONBOARD_SD_CS_PIN                 PC11
 #elif SD_CONNECTION_IS(CUSTOM_CABLE)
@@ -231,13 +231,11 @@
 
   #define FSMC_CS_PIN                       PD7   // NE4
   #define FSMC_RS_PIN                       PD11  // A0
-  #define FSMC_DMA_DEV                      DMA2
-  #define FSMC_DMA_CHANNEL               DMA_CH5
   #define LCD_USE_DMA_FSMC                        // Use DMA transfers to send data to the TFT
   #define TFT_CS_PIN                 FSMC_CS_PIN
   #define TFT_RS_PIN                 FSMC_RS_PIN
 
-  #define LCD_RESET_PIN                     PF6
+  #define LCD_RESET_PIN                     PC6
   #define LCD_BACKLIGHT_PIN                 PD13
 
   #define TFT_BUFFER_SIZE                  14400
@@ -266,7 +264,7 @@
 
   #define BEEPER_PIN                        PC5
   #define BTN_ENC                           PG2
-  #define LCD_PINS_ENABLE                   PG0
+  #define LCD_PINS_EN                       PG0
   #define LCD_PINS_RS                       PG1
   #define BTN_EN1                           PG5
   #define BTN_EN2                           PG4
@@ -300,17 +298,17 @@
 #endif
 
 // Alter timing for graphical display
-#if ENABLED(U8GLIB_ST7920)
+#if IS_U8GLIB_ST7920
   #define BOARD_ST7920_DELAY_1               125
   #define BOARD_ST7920_DELAY_2               125
   #define BOARD_ST7920_DELAY_3               125
 #endif
 
-#define HAS_SPI_FLASH                          1
-#if HAS_SPI_FLASH
+#define SPI_FLASH
+#if ENABLED(SPI_FLASH)
   #define SPI_FLASH_SIZE               0x1000000  // 16MB
   #define SPI_FLASH_CS_PIN                  PB12  // Flash chip-select
-  #define SPI_FLASH_MOSI_PIN                PB15
-  #define SPI_FLASH_MISO_PIN                PB14
   #define SPI_FLASH_SCK_PIN                 PB13
+  #define SPI_FLASH_MISO_PIN                PB14
+  #define SPI_FLASH_MOSI_PIN                PB15
 #endif

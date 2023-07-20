@@ -33,7 +33,6 @@
 
 extern lv_group_t *g;
 static lv_obj_t *scr, *labelModelValue = nullptr, *buttonModelValue = nullptr, *labelCloudValue = nullptr;
-static lv_obj_t *buttonCloudValue = nullptr;
 
 enum {
   ID_WIFI_RETURN = 1,
@@ -48,8 +47,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   switch (obj->mks_obj_id) {
     case ID_WIFI_RETURN:
-      lv_clear_wifi_settings();
-      draw_return_ui();
+      goto_previous_ui();
       break;
     case ID_WIFI_MODEL:
       if (gCfgItems.wifi_mode_sel == AP_MODEL) {
@@ -78,12 +76,12 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_WIFI_CLOUD:
       if (gCfgItems.cloud_enable) {
         gCfgItems.cloud_enable = false;
-        lv_imgbtn_set_src_both(buttonCloudValue, "F:/bmp_disable.bin"); 
+        lv_obj_set_event_cb_mks(obj, event_handler, ID_WIFI_CLOUD, "bmp_disable.bin", 0);
         lv_label_set_text(labelCloudValue, machine_menu.disable);
       }
       else {
         gCfgItems.cloud_enable = true;
-        lv_imgbtn_set_src_both(buttonCloudValue, "F:/bmp_enable.bin");
+        lv_obj_set_event_cb_mks(obj, event_handler, ID_WIFI_CLOUD, "bmp_enable.bin", 0);
         lv_label_set_text(labelCloudValue, machine_menu.enable);
       }
       update_spi_flash();
@@ -96,7 +94,6 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 }
 
 void lv_draw_wifi_settings() {
-
   scr = lv_screen_create(WIFI_SETTINGS_UI, machine_menu.WifiConfTitle);
 
   lv_label_create(scr, PARA_UI_POS_X, PARA_UI_POS_Y + 10, machine_menu.wifiMode);
@@ -123,7 +120,7 @@ void lv_draw_wifi_settings() {
   lv_ex_line(line3, line_points[2]);
 
   lv_label_create(scr, PARA_UI_POS_X, PARA_UI_POS_Y * 4 + 10, machine_menu.wifiCloud);
-  buttonCloudValue = lv_imgbtn_create(scr, gCfgItems.cloud_enable ? "F:/bmp_enable.bin" : "F:/bmp_disable.bin", PARA_UI_STATE_POS_X, PARA_UI_POS_Y * 4 + PARA_UI_STATE_V, event_handler, ID_WIFI_CLOUD);
+  lv_obj_t *buttonCloudValue = lv_imgbtn_create(scr, gCfgItems.cloud_enable ? "F:/bmp_enable.bin" : "F:/bmp_disable.bin", PARA_UI_STATE_POS_X, PARA_UI_POS_Y * 4 + PARA_UI_STATE_V, event_handler, ID_WIFI_CLOUD);
   labelCloudValue = lv_label_create_empty(buttonCloudValue);
 
   lv_obj_t *line4 = lv_line_create(scr, nullptr);
@@ -132,7 +129,7 @@ void lv_draw_wifi_settings() {
   lv_obj_t *buttonConfig = lv_imgbtn_create(scr, "F:/bmp_back70x40.bin", PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, event_handler, ID_WIFI_CONFIG);
   lv_obj_t *labelConfig = lv_label_create_empty(buttonConfig);
 
-  lv_obj_t *buttonBack = lv_imgbtn_create(scr, "F:/bmp_back70x40.bin", PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y, event_handler, ID_WIFI_RETURN);
+  lv_obj_t *buttonBack = lv_imgbtn_create(scr, "F:/bmp_back70x40.bin", PARA_UI_BACK_POS_X, PARA_UI_BACK_POS_Y, event_handler, ID_WIFI_RETURN);
   lv_obj_t *label_Back = lv_label_create_empty(buttonBack);
 
   if (gCfgItems.multiple_language) {

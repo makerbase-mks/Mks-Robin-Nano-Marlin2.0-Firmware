@@ -26,7 +26,7 @@
 #include <lvgl.h>
 
 // Functions for MKS_TEST
-#if BOTH(MKS_TEST, SDSUPPORT)
+#if ALL(MKS_TEST, HAS_MEDIA)
   void mks_hardware_test();
   void mks_test_get();
   void mks_gpio_test();
@@ -36,6 +36,7 @@
 #endif
 
 // String display and assets
-void disp_string(uint16_t x, uint16_t y, const char * string, uint16_t charColor, uint16_t bkColor);
+void disp_string(uint16_t x, uint16_t y, const char * cstr, uint16_t charColor, uint16_t bkColor);
+void disp_string(uint16_t x, uint16_t y, FSTR_P const fstr, uint16_t charColor, uint16_t bkColor);
 void disp_assets_update();
-void disp_assets_update_progress(const char *msg);
+void disp_assets_update_progress(FSTR_P const msg);

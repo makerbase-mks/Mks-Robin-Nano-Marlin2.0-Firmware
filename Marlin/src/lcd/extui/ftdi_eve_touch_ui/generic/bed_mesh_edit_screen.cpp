@@ -95,7 +95,7 @@ void BedMeshEditScreen::setHighlightedValue(float value) {
 }
 
 void BedMeshEditScreen::moveToHighlightedValue() {
-  if (ExtUI::getMeshValid()) {
+  if (ExtUI::getLevelingIsValid()) {
     ExtUI::setLevelingActive(true);
     ExtUI::setSoftEndstopState(false);
     ExtUI::moveToMeshPoint(mydata.highlight, gaugeThickness + mydata.zAdjustment);
@@ -174,11 +174,11 @@ bool BedMeshEditScreen::onTouchEnd(uint8_t tag) {
     case 1:
       // On Cancel, reload saved mesh, discarding changes
       GOTO_PREVIOUS();
-      injectCommands_P(PSTR("G29 L1"));
+      injectCommands(F("G29 L1"));
       return true;
     case 2:
       saveAdjustedHighlightedValue();
-      injectCommands_P(PSTR("G29 S1"));
+      injectCommands(F("G29 S1"));
       mydata.needSave = false;
       return true;
     case 3:

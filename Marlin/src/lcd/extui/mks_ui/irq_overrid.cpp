@@ -23,7 +23,7 @@
 
 #include "../../../inc/MarlinConfigPre.h"
 
-#if BOTH(HAS_TFT_LVGL_UI, MKS_WIFI_MODULE)
+#if ALL(HAS_TFT_LVGL_UI, MKS_WIFI_MODULE)
 
 #include "tft_lvgl_configuration.h"
 
@@ -39,7 +39,7 @@
 #include "../../../inc/MarlinConfig.h"
 
 #ifdef __cplusplus
-  extern "C" { /* C-declarations for C++ */
+  extern "C" {
 #endif
 
 #define WIFI_IO1_SET()    WRITE(WIFI_IO1_PIN, HIGH);

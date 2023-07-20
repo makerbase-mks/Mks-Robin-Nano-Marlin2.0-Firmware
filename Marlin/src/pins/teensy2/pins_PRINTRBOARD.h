@@ -25,6 +25,15 @@
  *  Rev B  2 JUN 2017
  *
  *  Converted to Arduino pin numbering
+ *
+ *  Schematic (RevA): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.A/schematic.png
+ *  Origin (RevA): https://raw.githubusercontent.com/lwalkera/printrboard/revA/Printrboard.sch
+ *  Schematic (RevB): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.B/schematic.png
+ *  Origin (RevB): https://raw.githubusercontent.com/lwalkera/printrboard/revB/Printrboard.sch
+ *  Schematic (RevC): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.C/schematic.png
+ *  Origin (RevC): https://raw.githubusercontent.com/lwalkera/printrboard/revC/Printrboard.sch
+ *  Schematic (RevD): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.D/schematic.png
+ *  Origin (RevD): https://raw.githubusercontent.com/lwalkera/printrboard/RevD/Printrboard.sch
  */
 
 /**
@@ -109,8 +118,8 @@
 #define HEATER_2_PIN                          45  // F7
 #define HEATER_BED_PIN                        14  // C4 PWM3C
 
-#ifndef FAN_PIN
-  #define FAN_PIN                             16  // C6 PWM3A
+#ifndef FAN0_PIN
+  #define FAN0_PIN                            16  // C6 PWM3A
 #endif
 
 //
@@ -121,10 +130,10 @@
 //
 // LCD / Controller
 //
-#if IS_ULTRA_LCD && IS_NEWPANEL
+#if HAS_WIRED_LCD && IS_NEWPANEL
 
   #define LCD_PINS_RS                          9  // E1       JP11-11
-  #define LCD_PINS_ENABLE                      8  // E0       JP11-10
+  #define LCD_PINS_EN                          8  // E0       JP11-10
   #define LCD_PINS_D4                          7  // D7       JP11-8
   #define LCD_PINS_D5                          6  // D6       JP11-7
   #define LCD_PINS_D6                          5  // D5       JP11-6
@@ -135,7 +144,6 @@
 
     #define DOGLCD_A0                         40  // F2       JP2-2
     #define DOGLCD_CS                         41  // F3       JP2-4
-    #define LCD_SCREEN_ROT_180
 
     #define BTN_EN1                            2  // D2 TX1   JP2-5
     #define BTN_EN2                            3  // D3 RX1   JP2-7
@@ -145,6 +153,8 @@
 
     #define STAT_LED_RED_PIN                  12  // C2    JP11-14
     #define STAT_LED_BLUE_PIN                 10  // C0    JP11-12
+
+    #define LCD_SCREEN_ROTATE                180  // 0, 90, 180, 270
 
   #elif ENABLED(LCD_I2C_PANELOLU2)
 
@@ -162,7 +172,7 @@
 
   #endif
 
-#endif // IS_ULTRA_LCD && IS_NEWPANEL
+#endif // HAS_WIRED_LCD && IS_NEWPANEL
 
 #ifndef SDSS
   #define SDSS                                26  // B6 SDCS

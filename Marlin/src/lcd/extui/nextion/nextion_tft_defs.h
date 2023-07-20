@@ -54,10 +54,10 @@
  // TFT panel commands
 #define  msg_welcome                MACHINE_NAME " Ready."
 
-#define SEND_TEMP(x,y,t,z)  (nextion.SendtoTFT(PSTR(x)), nextion.SendtoTFT(PSTR(".txt=\"")), LCD_SERIAL.print(y), nextion.SendtoTFT(PSTR(t)), LCD_SERIAL.print(z), nextion.SendtoTFT(PSTR("\"\xFF\xFF\xFF")))
-#define SEND_VAL(x,y)       (nextion.SendtoTFT(PSTR(x)), nextion.SendtoTFT(PSTR(".val=")),   LCD_SERIAL.print(y), nextion.SendtoTFT(PSTR("\xFF\xFF\xFF")))
-#define SEND_TXT(x,y)       (nextion.SendtoTFT(PSTR(x)), nextion.SendtoTFT(PSTR(".txt=\"")), nextion.SendtoTFT(PSTR(y)),  nextion.SendtoTFT(PSTR("\"\xFF\xFF\xFF")))
-#define SEND_TXT_P(x,y)     (nextion.SendtoTFT(PSTR(x)), nextion.SendtoTFT(PSTR(".txt=\"")), nextion.SendtoTFT(y), nextion.SendtoTFT(PSTR("\"\xFF\xFF\xFF")))
-#define SEND_VALasTXT(x,y)  (nextion.SendtoTFT(PSTR(x)), nextion.SendtoTFT(PSTR(".txt=\"")), LCD_SERIAL.print(y), nextion.SendtoTFT(PSTR("\"\xFF\xFF\xFF")))
-#define SEND_TXT_END(x)     (nextion.SendtoTFT(PSTR(x)), nextion.SendtoTFT(PSTR("\xFF\xFF\xFF")))
-#define SEND_PCO2(x,y,z)    (nextion.SendtoTFT(PSTR(x)), LCD_SERIAL.print(y), nextion.SendtoTFT(PSTR(".pco=")), nextion.SendtoTFT(PSTR(z)), nextion.SendtoTFT(PSTR("\xFF\xFF\xFF")))
+#define SEND_TEMP(x,y,t,z)  (nextion.tftSend(F(x)), nextion.tftSend(F(".txt=\"")), LCD_SERIAL.print(y), nextion.tftSend(F(t)), LCD_SERIAL.print(z), nextion.tftSend(F("\"\xFF\xFF\xFF")))
+#define SEND_VAL(x,y)       (nextion.tftSend(F(x)), nextion.tftSend(F(".val=")),   LCD_SERIAL.print(y), nextion.tftSend(F("\xFF\xFF\xFF")))
+#define SEND_TXT(x,y)       (nextion.tftSend(F(x)), nextion.tftSend(F(".txt=\"")), nextion.tftSend(F(y)), nextion.tftSend(F("\"\xFF\xFF\xFF")))
+#define SEND_TXT_F(x,y)     (nextion.tftSend(F(x)), nextion.tftSend(F(".txt=\"")), nextion.tftSend(y), nextion.tftSend(F("\"\xFF\xFF\xFF")))
+#define SEND_VALasTXT(x,y)  (nextion.tftSend(F(x)), nextion.tftSend(F(".txt=\"")), LCD_SERIAL.print(y), nextion.tftSend(F("\"\xFF\xFF\xFF")))
+#define SEND_TXT_END(x)     (nextion.tftSend(F(x)), nextion.tftSend(F("\xFF\xFF\xFF")))
+#define SEND_PCO2(x,y,z)    (nextion.tftSend(F(x)), LCD_SERIAL.print(y), nextion.tftSend(F(".pco=")), nextion.tftSend(F(z)), nextion.tftSend(F("\xFF\xFF\xFF")))

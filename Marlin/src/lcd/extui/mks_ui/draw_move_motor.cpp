@@ -32,10 +32,7 @@
 #include "../../../inc/MarlinConfig.h"
 
 extern lv_group_t *g;
-
-#ifndef USE_NEW_LVGL_CONF
 static lv_obj_t *scr;
-#endif
 
 static lv_obj_t *labelV, *buttonV, *labelP;
 static lv_task_t *updatePosTask;
@@ -62,7 +59,7 @@ void disp_cur_pos() {
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   char str_1[16];
   if (event != LV_EVENT_RELEASED) return;
-  if (!queue.ring_buffer.full(1)) {
+  if (!queue.ring_buffer.full(3)) {
     bool do_inject = true;
     float dist = uiCfg.move_dist;
     switch (obj->mks_obj_id) {
@@ -86,10 +83,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       disp_move_dist();
       break;
     case ID_M_RETURN:
-      // lv_clear_move_motor();
-      // lv_draw_tool();
-      clear_cur_ui();
-      draw_return_ui();
+      goto_previous_ui();
       return;
   }
   disp_cur_pos();
@@ -106,18 +100,6 @@ void refresh_pos(lv_task_t *) {
 }
 
 void lv_draw_move_motor() {
-
-#ifdef USE_NEW_LVGL_CONF
-  mks_ui.src_main = lv_set_scr_id_title(mks_ui.src_main, MOVE_MOTOR_UI, "");
-
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_xAdd.bin", move_menu.x_add, INTERVAL_V, titleHeight, event_handler, ID_M_X_P);
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_xDec.bin", move_menu.x_dec, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_X_N);
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_yAdd.bin", move_menu.y_add, BTN_X_PIXEL + INTERVAL_V * 2, titleHeight, event_handler, ID_M_Y_P);
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_yDec.bin", move_menu.y_dec, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_Y_N);
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_zAdd.bin", move_menu.z_add, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_M_Z_P);
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_zDec.bin", move_menu.z_dec, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_Z_N);
-
-#else 
   scr = lv_screen_create(MOVE_MOTOR_UI);
   lv_obj_t *buttonXI = lv_big_button_create(scr, "F:/bmp_xAdd.bin", move_menu.x_add, INTERVAL_V, titleHeight, event_handler, ID_M_X_P);
   lv_obj_clear_protect(buttonXI, LV_PROTECT_FOLLOW);
@@ -126,35 +108,20 @@ void lv_draw_move_motor() {
   lv_big_button_create(scr, "F:/bmp_yDec.bin", move_menu.y_dec, BTN_X_PIXEL + INTERVAL_V * 2, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_Y_N);
   lv_big_button_create(scr, "F:/bmp_zAdd.bin", move_menu.z_add, BTN_X_PIXEL * 2 + INTERVAL_V * 3, titleHeight, event_handler, ID_M_Z_P);
   lv_big_button_create(scr, "F:/bmp_zDec.bin", move_menu.z_dec, BTN_X_PIXEL * 2 + INTERVAL_V * 3, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_Z_N);
-#endif
 
   // button with image and label changed dynamically by disp_move_dist
-#ifdef USE_NEW_LVGL_CONF
-  buttonV = lv_imgbtn_create(mks_ui.src_main, nullptr, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_M_STEP);
-#else
   buttonV = lv_imgbtn_create(scr, nullptr, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_M_STEP);
-#endif
   labelV = lv_label_create_empty(buttonV);
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_group_add_obj(g, buttonV);
   #endif
 
-
-#ifdef USE_NEW_LVGL_CONF
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_RETURN);
-  // lv_obj_t * title = lv_obj_get_child_back(mks_ui.src_main, nullptr);
-#else
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_M_RETURN);
-  // lv_obj_t * title = lv_obj_get_child_back(scr, nullptr);
-#endif
+
   // We need to patch the title to leave some space on the right for displaying the status
-  
-  // if (title != nullptr) lv_obj_set_width(title, TFT_WIDTH - 101);
-#ifdef USE_NEW_LVGL_CONF
-  labelP = lv_label_create(mks_ui.src_main, TFT_WIDTH - 100, TITLE_YPOS, "Z:0.0mm");
-#else
+  lv_obj_t * title = lv_obj_get_child_back(scr, nullptr);
+  if (title != nullptr) lv_obj_set_width(title, TFT_WIDTH - 101);
   labelP = lv_label_create(scr, TFT_WIDTH - 100, TITLE_YPOS, "Z:0.0mm");
-#endif
   if (labelP != nullptr)
     updatePosTask = lv_task_create(refresh_pos, 300, LV_TASK_PRIO_LOWEST, 0);
 
@@ -191,11 +158,7 @@ void lv_clear_move_motor() {
     if (gCfgItems.encoder_enable) lv_group_remove_all_objs(g);
   #endif
   lv_task_del(updatePosTask);
-#ifdef USE_NEW_LVGL_CONF
-  lv_obj_clean(mks_ui.src_main);
-#else
   lv_obj_del(scr);
-#endif
 }
 
 #endif // HAS_TFT_LVGL_UI

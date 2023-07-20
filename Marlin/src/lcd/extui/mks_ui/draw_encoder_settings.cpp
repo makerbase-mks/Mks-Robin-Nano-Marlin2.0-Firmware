@@ -34,17 +34,11 @@
 extern lv_group_t *g;
 static lv_obj_t *scr;
 static lv_obj_t *buttonEncoderState = nullptr;
-static lv_obj_t *labelEncoderState = nullptr;
-
-static void encoder_disp_update(void);
 
 enum {
   ID_ENCODER_RETURN = 1,
-  ID_ENCODER_STATE,
-  ID_ENCODER_NONE
+  ID_ENCODER_STATE
 };
-
-
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
@@ -55,45 +49,16 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
       break;
     case ID_ENCODER_STATE:
       gCfgItems.encoder_enable ^= true;
-      // lv_screen_menu_item_onoff_update(buttonEncoderState, gCfgItems.encoder_enable);
-      encoder_disp_update();
+      lv_screen_menu_item_onoff_update(buttonEncoderState, gCfgItems.encoder_enable);
       update_spi_flash();
       break;
   }
 }
 
-static lv_obj_t* set_on_off_label(lv_obj_t *labelValue, lv_obj_t *btn, bool curValue) {
-  labelValue = lv_label_create_empty(btn);
-  lv_label_set_text(labelValue, curValue ? machine_menu.enable : machine_menu.disable);
-  lv_obj_align(labelValue, btn, LV_ALIGN_CENTER, 0, 0);
-  return labelValue;
-}
-
 void lv_draw_encoder_settings() {
   scr = lv_screen_create(ENCODER_SETTINGS_UI, machine_menu.EncoderConfTitle);
-  // buttonEncoderState = lv_screen_menu_item_onoff(scr, machine_menu.EncoderConfText, PARA_UI_POS_X, PARA_UI_POS_Y, event_handler, ID_ENCODER_STATE, 0, gCfgItems.encoder_enable);
-  
-  lv_screen_menu_item_w(scr, machine_menu.EncoderConfText, PARA_UI_POS_X, PARA_UI_POS_Y, event_handler, ID_ENCODER_NONE, 0, false);
-
-  buttonEncoderState = lv_imgbtn_create(scr, 
-                                        gCfgItems.encoder_enable ? "F:/bmp_enable.bin" : "F:/bmp_disable.bin",
-                                        PARA_UI_STATE_POS_X, PARA_UI_POS_Y + PARA_UI_STATE_V, 
-                                        event_handler, 
-                                        ID_ENCODER_STATE);
-  
-  labelEncoderState = set_on_off_label(labelEncoderState, buttonEncoderState, gCfgItems.encoder_enable);
-
-  lv_big_button_create(scr, 
-                      "F:/bmp_back70x40.bin", 
-                      common_menu.text_back, 
-                      PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y, 
-                      event_handler, ID_ENCODER_RETURN, true);
-}
-
-static void encoder_disp_update(void) {
-
-    lv_imgbtn_set_src_both(buttonEncoderState, gCfgItems.encoder_enable ? "F:/bmp_enable.bin" : "F:/bmp_disable.bin");
-    lv_label_set_text(labelEncoderState, gCfgItems.encoder_enable ? machine_menu.enable : machine_menu.disable);
+  buttonEncoderState = lv_screen_menu_item_onoff(scr, machine_menu.EncoderConfText, PARA_UI_POS_X, PARA_UI_POS_Y, event_handler, ID_ENCODER_STATE, 0, gCfgItems.encoder_enable);
+  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACK_POS_X, PARA_UI_BACK_POS_Y, event_handler, ID_ENCODER_RETURN, true);
 }
 
 void lv_clear_encoder_settings() {

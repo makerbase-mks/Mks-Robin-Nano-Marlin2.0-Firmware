@@ -118,7 +118,7 @@ extern "C" {
 #endif
 
 #ifndef LSE_STARTUP_TIMEOUT
-  #define LSE_STARTUP_TIMEOUT  50U       // No 32.7KHz LSE on this board, reduced to avoid delays
+  #define LSE_STARTUP_TIMEOUT  50U       // No 32.7kHz LSE on this board, reduced to avoid delays
 #endif
 
 /* Tip: To avoid modifying this file each time you need to use different HSE,
@@ -171,7 +171,7 @@ extern "C" {
 * Activated: CRC code is present inside driver
 * Deactivated: CRC code cleaned from driver
 */
-#if !defined(USE_SPI_CRC)
+#ifndef USE_SPI_CRC
 #define USE_SPI_CRC 0
 #endif
 

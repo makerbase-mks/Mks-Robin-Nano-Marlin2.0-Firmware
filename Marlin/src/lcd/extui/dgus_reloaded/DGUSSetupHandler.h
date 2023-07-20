@@ -16,27 +16,27 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 #pragma once
 
 namespace DGUSSetupHandler {
 
-  #if ENABLED(SDSUPPORT)
-    bool Print();
+  #if HAS_MEDIA
+    bool print();
   #endif
-  bool PrintStatus();
-  bool PrintAdjust();
-  bool LevelingMenu();
-  bool LevelingOffset();
-  bool LevelingManual();
-  bool LevelingAutomatic();
-  bool LevelingProbing();
-  bool Filament();
-  bool Move();
-  bool Gcode();
-  bool PID();
-  bool Infos();
+  bool printStatus();
+  bool printAdjust();
+  bool levelingMenu();
+  bool levelingOffset();
+  bool levelingManual();
+  bool levelingAutomatic();
+  bool levelingProbing();
+  bool filament();
+  bool move();
+  bool gcode();
+  bool pid();
+  bool infos();
 
 }

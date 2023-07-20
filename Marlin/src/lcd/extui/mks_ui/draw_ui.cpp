@@ -159,7 +159,7 @@ void gCfgItems_init() {
     gCfgItems.spi_flash_flag = FLASH_INF_VALID_FLAG;
     W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
     W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
-    // init gcode command
+    // Init G-code command
     W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[0], AUTO_LEVELING_COMMAND_ADDR, 100);
     W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[1], OTHERS_COMMAND_ADDR_1, 100);
     W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&custom_gcode_command[2], OTHERS_COMMAND_ADDR_2, 100);
@@ -237,8 +237,8 @@ void ui_cfg_init() {
 void update_spi_flash() {
   uint8_t command_buf[512];
 
-  W25QXX.init(SPI_FULL_SPEED);
-  // read back the gcode command before erase spi flash
+  W25QXX.init(SPI_QUARTER_SPEED);
+  // read back the G-code command before erase spi flash
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
   W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
   W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
@@ -248,8 +248,8 @@ void update_spi_flash() {
 void update_gcode_command(int addr, uint8_t *s) {
   uint8_t command_buf[512];
 
-  W25QXX.init(SPI_FULL_SPEED);
-  // read back the gcode command before erase spi flash
+  W25QXX.init(SPI_QUARTER_SPEED);
+  // read back the G-code command before erase spi flash
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)&command_buf, GCODE_COMMAND_ADDR, sizeof(command_buf));
   W25QXX.SPI_FLASH_SectorErase(VAR_INF_ADDR);
   W25QXX.SPI_FLASH_BufferWrite((uint8_t *)&gCfgItems, VAR_INF_ADDR, sizeof(gCfgItems));
@@ -265,7 +265,7 @@ void update_gcode_command(int addr, uint8_t *s) {
 }
 
 void get_gcode_command(int addr, uint8_t *d) {
-  W25QXX.init(SPI_FULL_SPEED);
+  W25QXX.init(SPI_QUARTER_SPEED);
   W25QXX.SPI_FLASH_BufferRead((uint8_t *)d, addr, 100);
 }
 
@@ -433,7 +433,7 @@ void tft_style_init() {
 #define MAX_TITLE_LEN 28
 
 char public_buf_m[100] = {0};
-char public_buf_l[50];
+char public_buf_l[30];
 
 void titleText_cat(char *str, int strSize, char *addPart) {
   if (str == 0 || addPart == 0) return;
@@ -456,6 +456,10 @@ char *getDispText(int index) {
       }
       break;
     case MOVE_MOTOR_UI:       strcpy(public_buf_l, move_menu.title); break;
+
+    #if ENABLED(PROBE_OFFSET_WIZARD)
+      case Z_OFFSET_WIZARD_UI: break;
+    #endif
     case OPERATE_UI:
       switch (disp_state_stack._disp_state[disp_state_stack._disp_index]) {
         IF_DISABLED(TFT35, case OPERATE_UI: case PAUSE_UI:)
@@ -475,7 +479,7 @@ char *getDispText(int index) {
     case EXTRUSION_UI:        strcpy(public_buf_l, extrude_menu.title); break;
     case CHANGE_SPEED_UI:     strcpy(public_buf_l, speed_menu.title); break;
     case FAN_UI:              strcpy(public_buf_l, fan_menu.title); break;
-    case PRE_HEAT_UI:
+    case PREHEAT_UI:
       switch (disp_state_stack._disp_state[disp_state_stack._disp_index]) {
         case OPERATE_UI:      strcpy(public_buf_l, preheat_menu.adjust_title);
         default:              strcpy(public_buf_l, preheat_menu.title); break;
@@ -500,7 +504,7 @@ char *getDispText(int index) {
     case TOOL_UI:             strcpy(public_buf_l, tool_menu.title); break;
     case WIFI_LIST_UI:        TERN_(MKS_WIFI_MODULE, strcpy(public_buf_l, list_menu.title)); break;
     case MACHINE_PARA_UI:     strcpy(public_buf_l, MachinePara_menu.title); break;
-    case BABY_STEP_UI:        strcpy(public_buf_l, operation_menu.babystep); break;
+    case BABYSTEP_UI:         strcpy(public_buf_l, operation_menu.babystep); break;
     case EEPROM_SETTINGS_UI:  strcpy(public_buf_l, eeprom_menu.title); break;
     case MEDIA_SELECT_UI:     strcpy(public_buf_l, media_select_menu.title); break;
     default: break;
@@ -559,7 +563,7 @@ char *creat_title_text() {
   uintptr_t gPicturePreviewStart = 0;
 
   void preview_gcode_prehandle(char *path) {
-    #if ENABLED(SDSUPPORT)
+    #if HAS_MEDIA
       uintptr_t pre_read_cnt = 0;
       uint32_t *p1;
       char *cur_name;
@@ -589,7 +593,7 @@ char *creat_title_text() {
   }
 
   void gcode_preview(char *path, int xpos_pixel, int ypos_pixel) {
-    #if ENABLED(SDSUPPORT)
+    #if HAS_MEDIA
       volatile uint32_t i, j;
       volatile uint16_t *p_index;
       char *cur_name;
@@ -623,17 +627,13 @@ char *creat_title_text() {
           bmp_public_buf[j] = ascii2dec_test((char*)&public_buf[i]) << 4 | ascii2dec_test((char*)&public_buf[i + 1]);
         if (j >= 400) break;
       }
-
       for (i = 0; i < 400; i += 2) {
         p_index = (uint16_t *)(&bmp_public_buf[i]);
         if (*p_index == 0x0000) *p_index = LV_COLOR_BACKGROUND.full;
       }
-
-      SPI_TFT.tftio.WriteSequence((uint16_t*)bmp_public_buf, 200);
-      // SPI_TFT.tftio.WriteSequenceIT((uint16_t*)bmp_public_buf, 200);
-      
+      SPI_TFT.tftio.writeSequence((uint16_t*)bmp_public_buf, 200);
       #if HAS_BAK_VIEW_IN_FLASH
-        W25QXX.init(SPI_FULL_SPEED);
+        W25QXX.init(SPI_QUARTER_SPEED);
         if (row < 20) W25QXX.SPI_FLASH_SectorErase(BAK_VIEW_ADDR_TFT35 + row * 4096);
         W25QXX.SPI_FLASH_BufferWrite(bmp_public_buf, BAK_VIEW_ADDR_TFT35 + row * 400, 400);
       #endif
@@ -647,8 +647,8 @@ char *creat_title_text() {
 
         char *cur_name = strrchr(list_file.file_name[sel_id], '/');
 
-        SdFile file;
-        SdFile *curDir;
+        MediaFile file;
+        MediaFile *curDir;
         const char * const fname = card.diveToFile(false, curDir, cur_name);
         if (!fname) return;
         if (file.open(curDir, fname, O_READ)) {
@@ -672,13 +672,13 @@ char *creat_title_text() {
         }
         return;
       }
-    #endif // SDSUPPORT
+    #endif // HAS_MEDIA
   }
 
   void draw_default_preview(int xpos_pixel, int ypos_pixel, uint8_t sel) {
     int index;
     int y_off = 0;
-    W25QXX.init(SPI_FULL_SPEED);
+    W25QXX.init(SPI_QUARTER_SPEED);
     for (index = 0; index < 10; index++) { // 200*200
       #if HAS_BAK_VIEW_IN_FLASH
         if (sel == 1) {
@@ -692,11 +692,11 @@ char *creat_title_text() {
       #endif
 
       SPI_TFT.setWindow(xpos_pixel, y_off * 20 + ypos_pixel, 200, 20); // 200*200
-      SPI_TFT.tftio.WriteSequence((uint16_t*)(bmp_public_buf), DEFAULT_VIEW_MAX_SIZE / 20);
-      // SPI_TFT.tftio.WriteSequenceIT((uint16_t*)(bmp_public_buf), DEFAULT_VIEW_MAX_SIZE / 20);
+      SPI_TFT.tftio.writeSequence((uint16_t*)(bmp_public_buf), DEFAULT_VIEW_MAX_SIZE / 20);
+
       y_off++;
     }
-    W25QXX.init(SPI_FULL_SPEED);
+    W25QXX.init(SPI_QUARTER_SPEED);
   }
 
   void disp_pre_gcode(int xpos_pixel, int ypos_pixel) {
@@ -733,58 +733,6 @@ void print_time_run() {
   }
 }
 
-// uint16_t print_disp_mode = 0;
-
-typedef enum{
-  MODE_DISP_EXT_TEMP = 0,
-  MODE_DISP_BED_TEMP    = 1,
-  MODE_DISP_FAN_TEMP    = 2,
-  MODE_DISP_PRINT_TEMP  = 3,
-  MODE_DISP_FANZ_ZPOS   = 4,
-}disp_mode_t;
-
-disp_mode_t print_disp_mode = MODE_DISP_EXT_TEMP; // defalut MODE_DISP_EXT_TEMP
-
-
-void print_dis_status() {
-
-  if (temps_update_flag) {
-        temps_update_flag = false;
-        // disp_ext_temp();
-        // disp_bed_temp();
-        // disp_fan_speed();
-        // disp_print_time();
-        // disp_fan_Zpos();
-      switch(print_disp_mode) {
-
-        case MODE_DISP_EXT_TEMP: 
-          disp_ext_temp();
-          print_disp_mode = MODE_DISP_BED_TEMP;
-        break;
-
-        case MODE_DISP_BED_TEMP: 
-          disp_bed_temp();
-          print_disp_mode = MODE_DISP_FAN_TEMP;
-        break;  
-
-        case MODE_DISP_FAN_TEMP: 
-          disp_fan_speed();
-          print_disp_mode = MODE_DISP_PRINT_TEMP;
-        break;  
-
-        case MODE_DISP_PRINT_TEMP:
-          disp_print_time();
-          print_disp_mode = MODE_DISP_FANZ_ZPOS;
-        break;
-
-        case MODE_DISP_FANZ_ZPOS: 
-          disp_fan_Zpos();
-          print_disp_mode = MODE_DISP_EXT_TEMP;
-        break; 
-      }
-  } 
-}
-
 void GUI_RefreshPage() {
   if ((systick_uptime_millis % 1000) == 0) temps_update_flag = true;
   if ((systick_uptime_millis % 3000) == 0) printing_rate_update_flag = true;
@@ -798,7 +746,7 @@ void GUI_RefreshPage() {
         disp_hotend_temp();
       }
       break;
-    case PRE_HEAT_UI:
+    case PREHEAT_UI:
       if (temps_update_flag) {
         temps_update_flag = false;
         disp_desire_temp();
@@ -811,21 +759,17 @@ void GUI_RefreshPage() {
       }
       break;
 
-    case PRINT_FILE_UI: 
-    
-    break;
+    case PRINT_FILE_UI: break;
 
     case PRINTING_UI:
-      // if (temps_update_flag) {
-      //   temps_update_flag = false;
-      //   disp_ext_temp();
-      //   disp_bed_temp();
-      //   disp_fan_speed();
-      //   disp_print_time();
-      //   disp_fan_Zpos();
-      // }
-      print_dis_status();
-
+      if (temps_update_flag) {
+        temps_update_flag = false;
+        disp_ext_temp();
+        disp_bed_temp();
+        disp_fan_speed();
+        disp_print_time();
+        disp_fan_Zpos();
+      }
       if (printing_rate_update_flag || marlin_state == MF_SD_COMPLETE) {
         printing_rate_update_flag = false;
         if (!gcode_preview_over) setProBarRate();
@@ -844,6 +788,10 @@ void GUI_RefreshPage() {
       break;
 
     case MOVE_MOTOR_UI: break;
+
+    #if ENABLED(PROBE_OFFSET_WIZARD)
+      case Z_OFFSET_WIZARD_UI: break;
+    #endif
 
     #if ENABLED(MKS_WIFI_MODULE)
       case WIFI_UI:
@@ -882,7 +830,7 @@ void GUI_RefreshPage() {
       case WIFI_TIPS_UI:
         switch (wifi_tips_type) {
           case TIPS_TYPE_JOINING:
-            if (wifi_link_state == WIFI_CONNECTED && strcmp((const char *)wifi_list.wifiConnectedName,(const char *)wifi_list.wifiName[wifi_list.nameIndex]) == 0) {
+            if (wifi_link_state == WIFI_CONNECTED && strcmp((const char *)wifi_list.wifiConnectedName, (const char *)wifi_list.wifiName[wifi_list.nameIndex]) == 0) {
               tips_disp.timer = TIPS_TIMER_STOP;
               tips_disp.timer_count = 0;
 
@@ -924,21 +872,12 @@ void GUI_RefreshPage() {
         break;
     #endif
 
-    case BABY_STEP_UI:
+    case BABYSTEP_UI:
       if (temps_update_flag) {
         temps_update_flag = false;
         disp_z_offset_value();
       }
       break;
-    
-    #if ANY(BLTOUCH, FIX_MOUNTED_PROBE)
-      case BLTOUCH_UI:
-        if (temps_update_flag) {
-          temps_update_flag = false;
-          disp_bltouch_z_offset_value();
-        }
-        break;
-    #endif
 
     default: break;
   }
@@ -954,10 +893,13 @@ void clear_cur_ui() {
     case PRINT_FILE_UI:               lv_clear_print_file(); break;
     case PRINTING_UI:                 lv_clear_printing(); break;
     case MOVE_MOTOR_UI:               lv_clear_move_motor(); break;
+    #if ENABLED(PROBE_OFFSET_WIZARD)
+      case Z_OFFSET_WIZARD_UI:        lv_clear_z_offset_wizard(); break;
+    #endif
     case OPERATE_UI:                  lv_clear_operation(); break;
     case PAUSE_UI:                    break;
     case EXTRUSION_UI:                lv_clear_extrusion(); break;
-    case PRE_HEAT_UI:                 lv_clear_preHeat(); break;
+    case PREHEAT_UI:                  lv_clear_preHeat(); break;
     case CHANGE_SPEED_UI:             lv_clear_change_speed(); break;
     case FAN_UI:                      lv_clear_fan(); break;
     case SET_UI:                      lv_clear_set(); break;
@@ -998,15 +940,14 @@ void clear_cur_ui() {
     case MACHINE_SETTINGS_UI:         lv_clear_machine_settings(); break;
     case TEMPERATURE_SETTINGS_UI:     break;
     case MOTOR_SETTINGS_UI:           lv_clear_motor_settings(); break;
-    case MACHINETYPE_UI:              break;
+    case MACHINE_TYPE_UI:             break;
     case STROKE_UI:                   break;
     case HOME_DIR_UI:                 break;
     case ENDSTOP_TYPE_UI:             break;
     case FILAMENT_SETTINGS_UI:        break;
-    case LEVELING_SETTIGNS_UI:        break;
     case LEVELING_PARA_UI:            lv_clear_level_settings(); break;
     case DELTA_LEVELING_PARA_UI:      break;
-    case MANUAL_LEVELING_POSIGION_UI: lv_clear_tramming_pos_settings(); break;
+    case MANUAL_LEVELING_POSITION_UI: lv_clear_tramming_pos_settings(); break;
     case MAXFEEDRATE_UI:              lv_clear_max_feedrate_settings(); break;
     case STEPS_UI:                    lv_clear_step_settings(); break;
     case ACCELERATION_UI:             lv_clear_acceleration_settings(); break;
@@ -1019,7 +960,7 @@ void clear_cur_ui() {
     case DOUBLE_Z_UI:                 break;
     case ENABLE_INVERT_UI:            break;
     case NUMBER_KEY_UI:               lv_clear_number_key(); break;
-    case BABY_STEP_UI:                lv_clear_baby_stepping(); break;
+    case BABYSTEP_UI:                 lv_clear_baby_stepping(); break;
     case PAUSE_POS_UI:                lv_clear_pause_position(); break;
     #if HAS_TRINAMIC_CONFIG
       case TMC_CURRENT_UI:            lv_clear_tmc_current_settings(); break;
@@ -1063,10 +1004,13 @@ void draw_return_ui() {
                                         break;
 
       case MOVE_MOTOR_UI:               lv_draw_move_motor(); break;
+      #if ENABLED(PROBE_OFFSET_WIZARD)
+        case Z_OFFSET_WIZARD_UI:        lv_draw_z_offset_wizard(); break;
+      #endif
       case OPERATE_UI:                  lv_draw_operation(); break;
       case PAUSE_UI:                    break;
       case EXTRUSION_UI:                lv_draw_extrusion(); break;
-      case PRE_HEAT_UI:                 lv_draw_preHeat(); break;
+      case PREHEAT_UI:                  lv_draw_preHeat(); break;
       case CHANGE_SPEED_UI:             lv_draw_change_speed(); break;
       case FAN_UI:                      lv_draw_fan(); break;
       case SET_UI:                      lv_draw_set(); break;
@@ -1106,15 +1050,14 @@ void draw_return_ui() {
       case MACHINE_SETTINGS_UI:         lv_draw_machine_settings(); break;
       case TEMPERATURE_SETTINGS_UI:     break;
       case MOTOR_SETTINGS_UI:           lv_draw_motor_settings(); break;
-      case MACHINETYPE_UI:              break;
+      case MACHINE_TYPE_UI:             break;
       case STROKE_UI:                   break;
       case HOME_DIR_UI:                 break;
       case ENDSTOP_TYPE_UI:             break;
       case FILAMENT_SETTINGS_UI:        lv_draw_filament_settings(); break;
-      case LEVELING_SETTIGNS_UI:        break;
       case LEVELING_PARA_UI:            lv_draw_level_settings(); break;
       case DELTA_LEVELING_PARA_UI:      break;
-      case MANUAL_LEVELING_POSIGION_UI: lv_draw_tramming_pos_settings(); break;
+      case MANUAL_LEVELING_POSITION_UI: lv_draw_tramming_pos_settings(); break;
       case MAXFEEDRATE_UI:              lv_draw_max_feedrate_settings(); break;
       case STEPS_UI:                    lv_draw_step_settings(); break;
       case ACCELERATION_UI:             lv_draw_acceleration_settings(); break;
@@ -1130,7 +1073,7 @@ void draw_return_ui() {
       case ENABLE_INVERT_UI:            break;
       case NUMBER_KEY_UI:               lv_draw_number_key(); break;
       case DIALOG_UI:                   break;
-      case BABY_STEP_UI:                lv_draw_baby_stepping(); break;
+      case BABYSTEP_UI:                 lv_draw_baby_stepping(); break;
       case PAUSE_POS_UI:                lv_draw_pause_position(); break;
       #if HAS_TRINAMIC_CONFIG
         case TMC_CURRENT_UI:            lv_draw_tmc_current_settings(); break;
@@ -1151,6 +1094,11 @@ void draw_return_ui() {
       default: break;
     }
   }
+}
+
+void goto_previous_ui() {
+  clear_cur_ui();
+  draw_return_ui();
 }
 
 // Set the same image for both Released and Pressed
@@ -1183,32 +1131,6 @@ void lv_btn_set_style_both(lv_obj_t *btn, lv_style_t *style) {
   lv_btn_set_style(btn, LV_BTN_STYLE_PR,  style);
 }
 
-// set scr id and title
-#ifdef USE_NEW_LVGL_CONF
-lv_obj_t* lv_set_scr_id_title(lv_obj_t *scr ,DISP_STATE newScreenType, const char *title) {
-
-  // breadcrumbs
-  if (disp_state_stack._disp_state[disp_state_stack._disp_index] != newScreenType) {
-    disp_state_stack._disp_index++;
-    disp_state_stack._disp_state[disp_state_stack._disp_index] = newScreenType;
-  }
-  disp_state = newScreenType;
-
-  // title
-  lv_obj_t *titleLabel = nullptr;
-  if (!title)
-    titleLabel = lv_label_create(scr, TITLE_XPOS, TITLE_YPOS, creat_title_text());
-  else if (title[0] != '\0')
-    titleLabel = lv_label_create(scr, TITLE_XPOS, TITLE_YPOS, title);
-  if (titleLabel)
-    lv_obj_set_style(titleLabel, &tft_style_label_rel);
-
-  lv_refr_now(lv_refr_get_disp_refreshing());
-
-  return scr;
-}
-#endif
-
 // Create a screen
 lv_obj_t* lv_screen_create(DISP_STATE newScreenType, const char *title) {
   lv_obj_t *scr = lv_obj_create(nullptr, nullptr);
@@ -1232,7 +1154,7 @@ lv_obj_t* lv_screen_create(DISP_STATE newScreenType, const char *title) {
   if (titleLabel)
     lv_obj_set_style(titleLabel, &tft_style_label_rel);
 
-  lv_refr_now(lv_refr_get_disp_refreshing());   // 立即刷新屏幕
+  lv_refr_now(lv_refr_get_disp_refreshing());
 
   return scr;
 }
@@ -1384,48 +1306,13 @@ lv_obj_t* lv_screen_menu_item(lv_obj_t *par, const char *text, lv_coord_t x, lv_
   return btn;
 }
 
-lv_obj_t* lv_screen_menu_item_w(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, bool drawArrow) {
-  lv_obj_t *btn = lv_btn_create(par, nullptr);   /*Add a button the current screen*/
-  lv_obj_set_pos(btn, x, y);                         /*Set its position*/
-  lv_obj_set_size(btn, 350, PARA_UI_SIZE_Y);                       /*Set its size*/
-  if (id > -1) lv_obj_set_event_cb_mks(btn, cb, id, "", 0);
-  lv_btn_use_label_style(btn);
-  lv_btn_set_layout(btn, LV_LAYOUT_OFF);
-  lv_obj_t *label = lv_label_create_empty(btn);        /*Add a label to the button*/
-  if (gCfgItems.multiple_language) {
-    lv_label_set_text(label, text);
-    lv_obj_align(label, btn, LV_ALIGN_IN_LEFT_MID, 0, 0);
-  }
-  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable))
-    lv_group_add_obj(g, btn);
-
-  if (drawArrow) (void)lv_imgbtn_create(par, "F:/bmp_arrow.bin", x + PARA_UI_SIZE_X, y + PARA_UI_ARROW_V, cb, id);
-
-  lv_obj_t *line1 = lv_line_create(par, nullptr);
-  lv_ex_line(line1, line_points[index]);
-
-  return btn;
-}
-
 lv_obj_t* lv_screen_menu_item_1_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue) {
-  // lv_obj_t *btn = lv_screen_menu_item(par, text, x, y, cb, -1, index, false);
-  // lv_obj_t *btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
-  // lv_obj_t *labelValue = lv_label_create_empty(btnValue);
-  // lv_label_set_text(labelValue, editValue);
-  // lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
-
-  lv_label_create(par, x + PARA_UI_ITEM_TEXT_H, y + PARA_UI_ITEM_TEXT_V, text);
-
-  lv_obj_t* btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
-  lv_obj_t* labelValue = lv_label_create_empty(btnValue);
+  lv_obj_t *btn = lv_screen_menu_item(par, text, x, y, cb, -1, index, false);
+  lv_obj_t *btnValue = lv_btn_create(par, PARA_UI_VALUE_POS_X, y + PARA_UI_VALUE_V, PARA_UI_VALUE_BTN_X_SIZE, PARA_UI_VALUE_BTN_Y_SIZE, cb, id);
+  lv_obj_t *labelValue = lv_label_create_empty(btnValue);
   lv_label_set_text(labelValue, editValue);
   lv_obj_align(labelValue, btnValue, LV_ALIGN_CENTER, 0, 0);
-  if (TERN0(HAS_ROTARY_ENCODER, gCfgItems.encoder_enable)) lv_group_add_obj(g, btnValue);
-
-  lv_obj_t *line1 = lv_line_create(par, nullptr);
-  lv_ex_line(line1, line_points[index]);
-
-  return btnValue;
+  return btn;
 }
 
 lv_obj_t* lv_screen_menu_item_2_edit(lv_obj_t *par, const char *text, lv_coord_t x, lv_coord_t y, lv_event_cb_t cb, const int id, const int index, const char *editValue, const int idEdit2, const char *editValue2) {
@@ -1458,8 +1345,7 @@ void lv_screen_menu_item_onoff_update(lv_obj_t *btn, const bool curValue) {
   lv_label_set_text((lv_obj_t*)btn->child_ll.head, curValue ? machine_menu.enable : machine_menu.disable);
 }
 
-
-#if ENABLED(SDSUPPORT)
+#if HAS_MEDIA
 
   void sd_detection() {
     static bool last_sd_status;
@@ -1486,25 +1372,20 @@ void print_time_count() {
     if (print_time.start == 1) print_time.seconds++;
 }
 
-// #define USE_DMA_FSMC_TC_INT
 void LV_TASK_HANDLER() {
 
-  // #ifdef USE_DMA_FSMC_TC_INT
-  #if EITHER(USE_DMA_FSMC_TC_INT, USE_SPI_DMA_TC)
-    if(!get_lcd_dma_lock()) lv_task_handler();
-  #else
+  if (TERN1(USE_SPI_DMA_TC, !get_lcd_dma_lock()))
     lv_task_handler();
-  #endif
 
-  #if BOTH(MKS_TEST, SDSUPPORT)
+  #if ALL(MKS_TEST, HAS_MEDIA)
     if (mks_test_flag == 0x1E) mks_hardware_test();
   #endif
 
   TERN_(HAS_GCODE_PREVIEW, disp_pre_gcode(2, 36));
 
-  TERN_(MKS_WIFI_MODULE, get_wifi_commands());
-
   GUI_RefreshPage();
+
+  TERN_(MKS_WIFI_MODULE, get_wifi_commands());
 
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_update_encoder();

@@ -24,23 +24,22 @@
 #define ALLOW_STM32DUINO
 #include "env_validate.h"
 
-#if HOTENDS > 1 || E_STEPPERS > 1
-  #error "LERDGE X only supports one hotend / E-stepper. Comment out this line to continue."
+#if HAS_MULTI_HOTEND || E_STEPPERS > 1
+  #error "LERDGE X only supports 1 hotend / E stepper."
 #endif
 
 #define BOARD_INFO_NAME      "Lerdge X"
 #define DEFAULT_MACHINE_NAME "LERDGE"
 
-#define STEP_TIMER                             4
-#define TEMP_TIMER                             2
+#define STEP_TIMER  4
+#define TEMP_TIMER  2
 
 #define I2C_EEPROM
 #define I2C_SCL_PIN                         PB8
 #define I2C_SDA_PIN                         PB9
 #define MARLIN_EEPROM_SIZE               0x10000  // FM24CL64 F-RAM 64K (8Kx8)
 
-// USB Flash Drive support
-#define HAS_OTG_USB_HOST_SUPPORT
+#define HAS_OTG_USB_HOST_SUPPORT                  // USB Flash Drive support
 
 //
 // Servos
@@ -99,8 +98,8 @@
 #define HEATER_1_PIN                        -1
 #define HEATER_BED_PIN                      PA2
 
-//#ifndef FAN_PIN
-//  #define FAN_PIN                         PC15
+//#ifndef FAN0_PIN
+//  #define FAN0_PIN                        PC15
 //#endif
 #define FAN1_PIN                            PC15
 #define FAN2_PIN                            PA0
@@ -119,10 +118,10 @@
 //
 // SD support (On board)
 //
-#define SDIO_SUPPORT
+#define ONBOARD_SDIO
 #define SD_DETECT_PIN                       PA8
 #define SDIO_CLOCK                       4800000
-#if DISABLED(SDIO_SUPPORT)
+#if DISABLED(ONBOARD_SDIO)
   #define SOFTWARE_SPI
   #define SD_SCK_PIN                        PC12
   #define SD_MISO_PIN                       PC8

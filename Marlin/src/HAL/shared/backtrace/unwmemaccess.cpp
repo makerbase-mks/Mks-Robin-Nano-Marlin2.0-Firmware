@@ -41,7 +41,7 @@
   #define START_FLASH_ADDR  0x00000000
   #define END_FLASH_ADDR    0x00080000
 
-#elif defined(__STM32F1__) || defined(STM32F1xx) || defined(STM32F0xx)
+#elif defined(__STM32F1__) || defined(STM32F1xx) || defined(STM32F0xx) || defined(STM32G0xx)
 
   // For STM32F103ZET6/STM32F103VET6/STM32F0xx
   //  SRAM  (0x20000000 - 0x20010000) (64kb)
@@ -135,7 +135,7 @@
   // Generic ARM code, that's testing if an access to the given address would cause a fault or not
   // It can't guarantee an address is in RAM or Flash only, but we usually don't care
 
-  #define NVIC_FAULT_STAT         0xE000ED28  // Configurable Fault Status Reg.
+  #define NVIC_FAULT_STAT         0xE000ED28  // Configurable Fault Status reg.
   #define NVIC_CFG_CTRL           0xE000ED14  // Configuration Control Register
   #define NVIC_FAULT_STAT_BFARV   0x00008000  // BFAR is valid
   #define NVIC_CFG_CTRL_BFHFNMIGN 0x00000100  // Ignore bus fault in NMI/fault

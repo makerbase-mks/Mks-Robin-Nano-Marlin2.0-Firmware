@@ -22,7 +22,7 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" { /* C-declarations for C++ */
+  extern "C" {
 #endif
 
 enum {
@@ -71,8 +71,7 @@ enum {
   DIALOG_REVERT_EEPROM_TIPS,
 
   DIALOG_WIFI_CONFIG_TIPS,
-  DIALOG_TRANSFER_NO_DEVICE,
-  DIALOG_TYPE_AUTO_LEVELING_TIPS
+  DIALOG_TRANSFER_NO_DEVICE
 };
 
 void lv_draw_dialog(uint8_t type);

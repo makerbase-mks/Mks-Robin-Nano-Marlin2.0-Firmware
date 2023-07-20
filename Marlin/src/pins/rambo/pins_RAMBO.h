@@ -39,6 +39,8 @@
 
 /**
  * Rambo pin assignments
+ * Schematic (1.1b): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/RAMBo/Rambo1-1-schematic.png
+ * Origin (1.1b): https://www.reprap.org/wiki/File:Rambo1-1-schematic.png
  */
 
 #include "env_validate.h"
@@ -138,8 +140,8 @@
 #define HEATER_2_PIN                           6
 #define HEATER_BED_PIN                         3
 
-#ifndef FAN_PIN
-  #define FAN_PIN                              8
+#ifndef FAN0_PIN
+  #define FAN0_PIN                             8
 #endif
 #ifndef FAN1_PIN
   #define FAN1_PIN                             6
@@ -166,9 +168,11 @@
 //
 // M3/M4/M5 - Spindle/Laser Control
 //
-#define SPINDLE_LASER_PWM_PIN                 45  // Hardware PWM
-#define SPINDLE_LASER_ENA_PIN                 31  // Pullup!
-#define SPINDLE_DIR_PIN                       32
+#if HAS_CUTTER
+  #define SPINDLE_LASER_PWM_PIN               45  // Hardware PWM
+  #define SPINDLE_LASER_ENA_PIN               31  // Pullup!
+  #define SPINDLE_DIR_PIN                     32
+#endif
 
 //
 // SPI for MAX Thermocouple
@@ -186,9 +190,11 @@
 //
 // Průša i3 MK2 Multiplexer Support
 //
-#define E_MUX0_PIN                            17
-#define E_MUX1_PIN                            16
-#define E_MUX2_PIN                            84  // 84 in MK2 Firmware
+#if HAS_PRUSA_MMU1
+  #define E_MUX0_PIN                          17
+  #define E_MUX1_PIN                          16
+  #define E_MUX2_PIN                          84  // 84 in MK2 Firmware
+#endif
 
 //
 // LCD / Controller
@@ -200,7 +206,7 @@
   #if IS_ULTIPANEL || TOUCH_UI_ULTIPANEL
 
     #define LCD_PINS_RS                       70
-    #define LCD_PINS_ENABLE                   71
+    #define LCD_PINS_EN                       71
     #define LCD_PINS_D4                       72
     #define LCD_PINS_D5                       73
     #define LCD_PINS_D6                       74
@@ -214,7 +220,6 @@
 
       #define DOGLCD_A0                       70
       #define DOGLCD_CS                       71
-      #define LCD_SCREEN_ROT_180
 
       #define BTN_EN1                         85
       #define BTN_EN2                         84
@@ -224,6 +229,8 @@
 
       #define STAT_LED_RED_PIN                22
       #define STAT_LED_BLUE_PIN               32
+
+      #define LCD_SCREEN_ROTATE              180  // 0, 90, 180, 270
 
     #else                                         // !VIKI2 && !miniVIKI
 
@@ -259,7 +266,7 @@
     //#define SHIFT_EN_PIN                    17
 
     #define LCD_PINS_RS                       75
-    #define LCD_PINS_ENABLE                   17
+    #define LCD_PINS_EN                       17
     #define LCD_PINS_D4                       23
     #define LCD_PINS_D5                       25
     #define LCD_PINS_D6                       27
@@ -270,7 +277,7 @@
 #endif // HAS_WIRED_LCD
 
 // Alter timing for graphical display
-#if ENABLED(U8GLIB_ST7920)
+#if IS_U8GLIB_ST7920
   #define BOARD_ST7920_DELAY_1                 0
   #define BOARD_ST7920_DELAY_2                 0
   #define BOARD_ST7920_DELAY_3                 0

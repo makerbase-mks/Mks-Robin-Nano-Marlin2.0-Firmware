@@ -23,6 +23,8 @@
 
 /**
  * AZSMZ MINI pin assignments
+ * Schematic: http://green-candy.osdn.jp/external/MarlinFW/board_schematics/AZSMZ%20MINI/AZSMZ.svg
+ * Source: https://raw.githubusercontent.com/Rose-Fish/AZSMZ-mini/master/AZSMZ.sch
  */
 
 #include "env_validate.h"
@@ -80,8 +82,8 @@
 // EFB
 #define HEATER_0_PIN                       P2_04
 #define HEATER_BED_PIN                     P2_05
-#ifndef FAN_PIN
-  #define FAN_PIN                          P2_07
+#ifndef FAN0_PIN
+  #define FAN0_PIN                         P2_07
 #endif
 #define FAN1_PIN                           P0_26
 
@@ -145,9 +147,9 @@
  *  PWM1.4   DIO53   SDSS(SSEL0)      J3-5  AUX-3
  *  PWM1.4   DIO46   Z_STEP_PIN
  *  PWM1.5   DIO3    X_MIN_PIN        10K PULLUP TO 3.3v, 1K SERIES
- *  PWM1.5   DIO9    RAMPS_D9_PIN
+ *  PWM1.5   DIO9    MOSFET_B_PIN
  *  PWM1.6   DIO14   Y_MIN_PIN        10K PULLUP TO 3.3v, 1K SERIES
- *  PWM1.6   DIO10   RAMPS_D10_PIN
+ *  PWM1.6   DIO10   MOSFET_A_PIN
  */
 
  /**

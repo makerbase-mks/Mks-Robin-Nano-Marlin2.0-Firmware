@@ -6,11 +6,11 @@
 
 #include "../../../inc/MarlinConfig.h"
 
-#if ENABLED(SDSUPPORT)
+#if HAS_MEDIA
 
 #include "../../../sd/cardreader.h"
 extern "C" {
-#include "sd_mmc_spi_mem.h"
+  #include "sd_mmc_spi_mem.h"
 }
 
 #define SD_MMC_BLOCK_SIZE 512
@@ -138,5 +138,5 @@ Ctrl_status sd_mmc_spi_usb_write_10(uint32_t addr, uint16_t nb_sector) {
 
 #endif // ACCESS_USB == true
 
-#endif // SDSUPPORT
+#endif // HAS_MEDIA
 #endif // ARDUINO_ARCH_SAM

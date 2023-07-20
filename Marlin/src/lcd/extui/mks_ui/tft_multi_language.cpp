@@ -167,7 +167,7 @@ void machine_setting_disp() {
     machine_menu.Extrude_Min_Temper   = EXTRUD_MIN_TEMPER_CN;
 
     machine_menu.HotbedConfTitle      = HOTBED_CONF_TITLE_CN;
-    machine_menu.HotbedAjustType      = HOTBED_ADJUST_CN;
+    machine_menu.HotbedAdjustType     = HOTBED_ADJUST_CN;
     machine_menu.HotbedMinTemperature = HOTBED_MIN_TEMPERATURE_CN;
     machine_menu.HotbedMaxTemperature = HOTBED_MAX_TEMPERATURE_CN;
 
@@ -282,14 +282,6 @@ void machine_setting_disp() {
     machine_menu.Yoffset         = OFFSET_Y_CN;
     machine_menu.Zoffset         = OFFSET_Z_CN;
 
-    machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_CN;
-    machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_CN;
-    machine_menu.BLTouchInit              = BLTOUCH_INIT_CN;
-    machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_CN;
-    machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_CN;
-    machine_menu.BLTouchSave              = BLTOUCH_SAVE_CN;
-    machine_menu.BLTouchTest              = BLTOUCH_TEST_CN;
-
     machine_menu.HomingSensitivityConfTitle = HOMING_SENSITIVITY_CONF_TITLE_CN;
     machine_menu.X_Sensitivity              = X_SENSITIVITY_CN;
     machine_menu.Y_Sensitivity              = Y_SENSITIVITY_CN;
@@ -403,7 +395,7 @@ void machine_setting_disp() {
     machine_menu.Extrude_Min_Temper   = EXTRUD_MIN_TEMPER_T_CN;
 
     machine_menu.HotbedConfTitle      = HOTBED_CONF_TITLE_T_CN;
-    machine_menu.HotbedAjustType      = HOTBED_ADJUST_T_CN;
+    machine_menu.HotbedAdjustType     = HOTBED_ADJUST_T_CN;
     machine_menu.HotbedMinTemperature = HOTBED_MIN_TEMPERATURE_T_CN;
     machine_menu.HotbedMaxTemperature = HOTBED_MAX_TEMPERATURE_T_CN;
 
@@ -519,14 +511,6 @@ void machine_setting_disp() {
     machine_menu.Yoffset         = OFFSET_Y_T_CN;
     machine_menu.Zoffset         = OFFSET_Z_T_CN;
 
-    machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_T_CN;
-    machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_T_CN;
-    machine_menu.BLTouchInit              = BLTOUCH_INIT_T_CN;
-    machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_T_CN;
-    machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_T_CN;
-    machine_menu.BLTouchSave              = BLTOUCH_SAVE_T_CN;
-    machine_menu.BLTouchTest              = BLTOUCH_TEST_T_CN;
-
     machine_menu.HomingSensitivityConfTitle = HOMING_SENSITIVITY_CONF_TITLE_T_CN;
     machine_menu.X_Sensitivity              = X_SENSITIVITY_T_CN;
     machine_menu.Y_Sensitivity              = Y_SENSITIVITY_T_CN;
@@ -594,6 +578,8 @@ void machine_setting_disp() {
     machine_menu.OutLength           = FILAMENT_OUT_LENGTH_EN;
     machine_menu.OutSpeed            = FILAMENT_OUT_SPEED_EN;
 
+    machine_menu.LevelingZoffsetTitle = LEVELING_ZOFFSET_TITLE_EN;
+
     machine_menu.LevelingParaConfTitle   = LEVELING_CONF_TITLE_EN;
     machine_menu.LevelingParaConf        = LEVELING_PARA_CONF_EN;
     machine_menu.TrammingPosConf         = TRAMMING_POS_EN;
@@ -641,7 +627,7 @@ void machine_setting_disp() {
 
     machine_menu.HotbedEnable         = HOTBED_ENABLE_EN;
     machine_menu.HotbedConfTitle      = HOTBED_CONF_TITLE_EN;
-    machine_menu.HotbedAjustType      = HOTBED_ADJUST_EN;
+    machine_menu.HotbedAdjustType     = HOTBED_ADJUST_EN;
     machine_menu.HotbedMinTemperature = HOTBED_MIN_TEMPERATURE_EN;
     machine_menu.HotbedMaxTemperature = HOTBED_MAX_TEMPERATURE_EN;
 
@@ -759,14 +745,6 @@ void machine_setting_disp() {
     machine_menu.Yoffset         = OFFSET_Y_EN;
     machine_menu.Zoffset         = OFFSET_Z_EN;
 
-    machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_EN;
-    machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_EN;
-    machine_menu.BLTouchInit              = BLTOUCH_INIT_EN;
-    machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_EN;
-    machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_EN;
-    machine_menu.BLTouchSave              = BLTOUCH_SAVE_EN;
-    machine_menu.BLTouchTest              = BLTOUCH_TEST_EN;
-
     machine_menu.HomingSensitivityConfTitle = HOMING_SENSITIVITY_CONF_TITLE_EN;
     machine_menu.X_Sensitivity              = X_SENSITIVITY_EN;
     machine_menu.Y_Sensitivity              = Y_SENSITIVITY_EN;
@@ -791,11 +769,12 @@ void disp_language_init() {
   move_menu.z_add = AXIS_Z_ADD_TEXT;
   move_menu.z_dec = AXIS_Z_DEC_TEXT;
 
-  move_menu.step_001mm = TEXT_001MM;
-  move_menu.step_005mm = TEXT_005MM;
-  move_menu.step_01mm  = TEXT_01MM;
-  move_menu.step_1mm   = TEXT_1MM;
-  move_menu.step_10mm  = TEXT_10MM;
+  move_menu.step_001mm  = TEXT_001MM;
+  move_menu.step_0025mm = TEXT_0025MM;
+  move_menu.step_005mm  = TEXT_005MM;
+  move_menu.step_01mm   = TEXT_01MM;
+  move_menu.step_1mm    = TEXT_1MM;
+  move_menu.step_10mm   = TEXT_10MM;
 
   home_menu.home_x   = HOME_X_TEXT;
   home_menu.home_y   = HOME_Y_TEXT;
@@ -1101,7 +1080,6 @@ void disp_language_init() {
       print_file_dialog_menu.print_time       = DIALOG_PRINT_TIME_CN;
       print_file_dialog_menu.reprint          = DIALOG_REPRINT_CN;
       print_file_dialog_menu.wifi_enable_tips = DIALOG_WIFI_ENABLE_TIPS_CN;
-      print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_CN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_CN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_CN;
@@ -1346,7 +1324,6 @@ void disp_language_init() {
             print_file_dialog_menu.print_time          = DIALOG_PRINT_TIME_T_CN;
             print_file_dialog_menu.reprint             = DIALOG_REPRINT_T_CN;
             print_file_dialog_menu.wifi_enable_tips    = DIALOG_WIFI_ENABLE_TIPS_T_CN;
-            print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_T_CN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_T_CN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_T_CN;
@@ -1372,6 +1349,7 @@ void disp_language_init() {
           case LANG_ENGLISH:
             common_menu.dialog_confirm_title  = TITLE_DIALOG_CONFIRM_EN;
             common_menu.text_back             = BACK_TEXT_EN;
+            common_menu.text_save             = SAVE_TEXT_EN;
             common_menu.close_machine_tips    = DIALOG_CLOSE_MACHINE_EN;
             common_menu.unbind_printer_tips   = DIALOG_UNBIND_PRINTER_EN;
             common_menu.print_special_title   = PRINTING_OTHER_LANGUGE;
@@ -1581,7 +1559,6 @@ void disp_language_init() {
             print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_EN;
             print_file_dialog_menu.reprint               = DIALOG_REPRINT_EN;
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
-            print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_EN;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
             pause_msg_menu.changing      = MESSAGE_CHANGING_EN;
@@ -1801,14 +1778,6 @@ void disp_language_init() {
             machine_menu.Yoffset         = OFFSET_Y_RU;
             machine_menu.Zoffset         = OFFSET_Z_RU;
 
-            machine_menu.BLTouchLevelingConfTitle = BLTOUCH_LEVELING_TITTLE_RU;
-            machine_menu.BLTouchLevelingConf      = BLTOUCH_LEVELING_RU;
-            machine_menu.BLTouchInit              = BLTOUCH_INIT_RU;
-            machine_menu.BLTouchOffsetpos         = BLTOUCH_ZOFFSETPOS_RU;
-            machine_menu.BLTouchOffsetneg         = BLTOUCH_ZOFFSETNEG_RU;
-            machine_menu.BLTouchSave              = BLTOUCH_SAVE_RU;
-            machine_menu.BLTouchTest              = BLTOUCH_TEST_RU;
-
             machine_menu.FilamentConfTitle   = FILAMENT_CONF_TITLE_RU;
             machine_menu.InLength            = FILAMENT_IN_LENGTH_RU;
             machine_menu.InSpeed             = FILAMENT_IN_SPEED_RU;
@@ -1915,7 +1884,6 @@ void disp_language_init() {
             print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_RU;
             print_file_dialog_menu.reprint               = DIALOG_REPRINT_RU;
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_RU;
-            print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_RU;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_RU;
             pause_msg_menu.changing      = MESSAGE_CHANGING_RU;
@@ -2153,7 +2121,6 @@ void disp_language_init() {
             print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_SP;
             print_file_dialog_menu.reprint               = DIALOG_REPRINT_SP;
             print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_SP;
-            print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_SP;
 
             pause_msg_menu.pausing       = MESSAGE_PAUSING_SP;
             pause_msg_menu.changing      = MESSAGE_CHANGING_SP;
@@ -2388,7 +2355,6 @@ void disp_language_init() {
           print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_FR;
           print_file_dialog_menu.reprint               = DIALOG_REPRINT_FR;
           print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_FR;
-          print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_FR;
 
           pause_msg_menu.pausing       = MESSAGE_PAUSING_FR;
           pause_msg_menu.changing      = MESSAGE_CHANGING_FR;
@@ -2622,7 +2588,6 @@ void disp_language_init() {
           print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_IT;
           print_file_dialog_menu.reprint               = DIALOG_REPRINT_IT;
           print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_IT;
-          print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_IT;
 
           pause_msg_menu.pausing       = MESSAGE_PAUSING_IT;
           pause_msg_menu.changing      = MESSAGE_CHANGING_IT;
@@ -2859,7 +2824,6 @@ void disp_language_init() {
       print_file_dialog_menu.print_time            = DIALOG_PRINT_TIME_EN;
       print_file_dialog_menu.reprint               = DIALOG_REPRINT_EN;
       print_file_dialog_menu.wifi_enable_tips      = DIALOG_WIFI_ENABLE_TIPS_EN;
-      print_file_dialog_menu.autolevelingTips   = DIALOG_AUTO_LEVELING_TIPS_EN;
 
       pause_msg_menu.pausing       = MESSAGE_PAUSING_EN;
       pause_msg_menu.changing      = MESSAGE_CHANGING_EN;

@@ -95,7 +95,7 @@
   static_assert(IS_FLASH_SECTOR(FLASH_SECTOR), "FLASH_SECTOR is invalid");
   static_assert(IS_POWER_OF_2(FLASH_UNIT_SIZE), "FLASH_UNIT_SIZE should be a power of 2, please check your chip's spec sheet");
 
-#endif
+#endif // FLASH_EEPROM_LEVELING
 
 static bool eeprom_data_written = false;
 
@@ -174,9 +174,9 @@ bool PersistentStore::access_finish() {
         UNLOCK_FLASH();
 
         TERN_(HAS_PAUSE_SERVO_OUTPUT, PAUSE_SERVO_OUTPUT());
-        DISABLE_ISRS();
+        hal.isr_off();
         status = HAL_FLASHEx_Erase(&EraseInitStruct, &SectorError);
-        ENABLE_ISRS();
+        hal.isr_on();
         TERN_(HAS_PAUSE_SERVO_OUTPUT, RESUME_SERVO_OUTPUT());
         if (status != HAL_OK) {
           DEBUG_ECHOLNPGM("HAL_FLASHEx_Erase=", status);
@@ -189,15 +189,15 @@ bool PersistentStore::access_finish() {
 
       UNLOCK_FLASH();
 
-      uint32_t offset = 0;
-      uint32_t address = SLOT_ADDRESS(current_slot);
-      uint32_t address_end = address + MARLIN_EEPROM_SIZE;
-      uint32_t data = 0;
+      uint32_t offset = 0,
+               address = SLOT_ADDRESS(current_slot),
+               address_end = address + MARLIN_EEPROM_SIZE,
+               data = 0;
 
       bool success = true;
 
       while (address < address_end) {
-        memcpy(&data, ram_eeprom + offset, sizeof(uint32_t));
+        memcpy(&data, ram_eeprom + offset, sizeof(data));
         status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address, data);
         if (status == HAL_OK) {
           address += sizeof(uint32_t);
@@ -221,7 +221,8 @@ bool PersistentStore::access_finish() {
 
       return success;
 
-    #else
+    #else // !FLASH_EEPROM_LEVELING
+
       // The following was written for the STM32F4 but may work with other MCUs as well.
       // Most STM32F4 flash does not allow reading from flash during erase operations.
       // This takes about a second on a STM32F407 with a 128kB sector used as EEPROM.
@@ -229,13 +230,14 @@ bool PersistentStore::access_finish() {
       // output. Servo output still glitches with interrupts disabled, but recovers after the
       // erase.
       TERN_(HAS_PAUSE_SERVO_OUTPUT, PAUSE_SERVO_OUTPUT());
-      DISABLE_ISRS();
+      hal.isr_off();
       eeprom_buffer_flush();
-      ENABLE_ISRS();
+      hal.isr_on();
       TERN_(HAS_PAUSE_SERVO_OUTPUT, RESUME_SERVO_OUTPUT());
 
       eeprom_data_written = false;
-    #endif
+
+    #endif // !FLASH_EEPROM_LEVELING
   }
 
   return true;

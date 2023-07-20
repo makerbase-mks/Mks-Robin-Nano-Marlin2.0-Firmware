@@ -45,6 +45,7 @@
 #include "../../inc/MarlinConfig.h"
 #include "../marlinui.h"
 #include "../../gcode/gcode.h"
+
 #if M600_PURGE_MORE_RESUMABLE
   #include "../../feature/pause.h"
 #endif
@@ -57,11 +58,11 @@ namespace ExtUI {
 
   static constexpr size_t eeprom_data_size = 48;
 
-  enum axis_t     : uint8_t { X, Y, Z, I, J, K, X2, Y2, Z2, Z3, Z4 };
+  enum axis_t     : uint8_t { X, Y, Z, I, J, K, U, V, W, X2, Y2, Z2, Z3, Z4 };
   enum extruder_t : uint8_t { E0, E1, E2, E3, E4, E5, E6, E7 };
   enum heater_t   : uint8_t { H0, H1, H2, H3, H4, H5, BED, CHAMBER, COOLER };
   enum fan_t      : uint8_t { FAN0, FAN1, FAN2, FAN3, FAN4, FAN5, FAN6, FAN7 };
-  enum result_t   : uint8_t { PID_STARTED, PID_BAD_EXTRUDER_NUM, PID_TEMP_TOO_HIGH, PID_TUNING_TIMEOUT, PID_DONE };
+  enum result_t   : uint8_t { PID_STARTED, PID_BAD_HEATER_ID, PID_TEMP_TOO_HIGH, PID_TUNING_TIMEOUT, PID_DONE };
 
   constexpr uint8_t extruderCount = EXTRUDERS;
   constexpr uint8_t hotendCount   = HOTENDS;
@@ -79,11 +80,14 @@ namespace ExtUI {
   bool canMove(const axis_t);
   bool canMove(const extruder_t);
   void injectCommands_P(PGM_P const);
+  inline void injectCommands(FSTR_P const fstr) { injectCommands_P(FTOP(fstr)); }
   void injectCommands(char * const);
   bool commandsInQueue();
 
-  GcodeSuite::MarlinBusyState getHostKeepaliveState();
-  bool getHostKeepaliveIsPaused();
+  #if ENABLED(HOST_KEEPALIVE_FEATURE)
+    GcodeSuite::MarlinBusyState getHostKeepaliveState();
+    bool getHostKeepaliveIsPaused();
+  #endif
 
   bool isHeaterIdle(const heater_t);
   bool isHeaterIdle(const extruder_t);
@@ -147,7 +151,7 @@ namespace ExtUI {
 
   uint32_t getProgress_seconds_elapsed();
 
-  #if PREHEAT_COUNT
+  #if HAS_PREHEAT
     uint16_t getMaterial_preset_E(const uint16_t);
     #if HAS_HEATED_BED
       uint16_t getMaterial_preset_B(const uint16_t);
@@ -161,17 +165,21 @@ namespace ExtUI {
   #if ENABLED(SHOW_REMAINING_TIME)
     inline uint32_t getProgress_seconds_remaining() { return ui.get_remaining_time(); }
   #endif
+  #if ENABLED(SHOW_INTERACTION_TIME)
+    inline uint32_t getInteraction_seconds_remaining() { return ui.interaction_time; }
+  #endif
 
   #if HAS_LEVELING
     bool getLevelingActive();
     void setLevelingActive(const bool);
-    bool getMeshValid();
+    bool getLevelingIsValid();
+    void onLevelingStart();
+    void onLevelingDone();
     #if HAS_MESH
       bed_mesh_t& getMeshArray();
       float getMeshPoint(const xy_uint8_t &pos);
       void setMeshPoint(const xy_uint8_t &pos, const_float_t zval);
       void moveToMeshPoint(const xy_uint8_t &pos, const_float_t z);
-      void onMeshLevelingStart();
       void onMeshUpdate(const int8_t xpos, const int8_t ypos, const_float_t zval);
       inline void onMeshUpdate(const xy_int8_t &pos, const_float_t zval) { onMeshUpdate(pos.x, pos.y, zval); }
 
@@ -195,7 +203,7 @@ namespace ExtUI {
   #endif
 
   inline void simulateUserClick() {
-    #if ANY(HAS_LCD_MENU, EXTENSIBLE_UI, DWIN_CREALITY_LCD_JYERSUI)
+    #if ANY(HAS_MARLINUI_MENU, EXTENSIBLE_UI, DWIN_CREALITY_LCD_JYERSUI)
       ui.lcd_clicked = true;
     #endif
   }
@@ -314,19 +322,24 @@ namespace ExtUI {
     #endif
   #endif
 
+  #if ENABLED(POWER_LOSS_RECOVERY)
+    bool getPowerLossRecoveryEnabled();
+    void setPowerLossRecoveryEnabled(const bool);
+  #endif
+
   #if ENABLED(PIDTEMP)
-    float getPIDValues_Kp(const extruder_t);
-    float getPIDValues_Ki(const extruder_t);
-    float getPIDValues_Kd(const extruder_t);
-    void setPIDValues(const_float_t, const_float_t , const_float_t , extruder_t);
+    float getPID_Kp(const extruder_t);
+    float getPID_Ki(const extruder_t);
+    float getPID_Kd(const extruder_t);
+    void setPID(const_float_t, const_float_t , const_float_t , extruder_t);
     void startPIDTune(const celsius_t, extruder_t);
   #endif
 
   #if ENABLED(PIDTEMPBED)
-    float getBedPIDValues_Kp();
-    float getBedPIDValues_Ki();
-    float getBedPIDValues_Kd();
-    void setBedPIDValues(const_float_t, const_float_t , const_float_t);
+    float getBedPID_Kp();
+    float getBedPID_Ki();
+    float getBedPID_Kd();
+    void setBedPID(const_float_t, const_float_t , const_float_t);
     void startBedPIDTune(const celsius_t);
   #endif
 
@@ -363,9 +376,6 @@ namespace ExtUI {
   void resumePrint();
 
   class FileList {
-    private:
-      uint16_t num_files;
-
     public:
       FileList();
       void refresh();
@@ -393,27 +403,30 @@ namespace ExtUI {
   void onMediaError();
   void onMediaRemoved();
   void onPlayTone(const uint16_t frequency, const uint16_t duration);
-  void onPrinterKilled(PGM_P const error, PGM_P const component);
+  void onPrinterKilled(FSTR_P const error, FSTR_P const component);
+  void onSurviveInKilled();
   void onPrintTimerStarted();
   void onPrintTimerPaused();
   void onPrintTimerStopped();
-  void onPrintFinished();
+  void onPrintDone();
   void onFilamentRunout(const extruder_t extruder);
   void onUserConfirmRequired(const char * const msg);
-  void onUserConfirmRequired_P(PGM_P const pstr);
+  void onUserConfirmRequired(FSTR_P const fstr);
   void onStatusChanged(const char * const msg);
-  void onStatusChanged_P(PGM_P const pstr);
+  void onStatusChanged(FSTR_P const fstr);
   void onHomingStart();
-  void onHomingComplete();
+  void onHomingDone();
   void onSteppersDisabled();
   void onSteppersEnabled();
   void onFactoryReset();
   void onStoreSettings(char *);
   void onLoadSettings(const char *);
   void onPostprocessSettings();
-  void onConfigurationStoreWritten(bool success);
-  void onConfigurationStoreRead(bool success);
+  void onSettingsStored(const bool success);
+  void onSettingsLoaded(const bool success);
   #if ENABLED(POWER_LOSS_RECOVERY)
+    void onSetPowerLoss(const bool onoff);
+    void onPowerLoss();
     void onPowerLossResume();
   #endif
   #if HAS_PID_HEATING

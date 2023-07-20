@@ -30,7 +30,7 @@
 void stop();
 
 // Pass true to keep steppers from timing out
-void idle(bool no_stepper_sleep=false);
+void idle(const bool no_stepper_sleep=false);
 inline void idle_no_sleep() { idle(true); }
 
 #if ENABLED(G38_PROBE_TARGET)
@@ -38,7 +38,7 @@ inline void idle_no_sleep() { idle(true); }
   extern bool G38_did_trigger;      // Flag from the ISR to indicate the endstop changed
 #endif
 
-void kill(PGM_P const lcd_error=nullptr, PGM_P const lcd_component=nullptr, const bool steppers_off=false);
+void kill(FSTR_P const lcd_error=nullptr, FSTR_P const lcd_component=nullptr, const bool steppers_off=false);
 void minkill(const bool steppers_off=false);
 
 // Global State of the firmware
@@ -60,6 +60,8 @@ bool printingIsActive();
 bool printJobOngoing();
 bool printingIsPaused();
 void startOrResumeJob();
+
+bool printer_busy();
 
 extern bool wait_for_heatup;
 

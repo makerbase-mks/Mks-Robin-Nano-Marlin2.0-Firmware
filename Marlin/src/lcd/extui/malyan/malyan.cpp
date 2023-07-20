@@ -24,7 +24,7 @@
  * lcd/extui/malyan/malyan.cpp
  *
  * LCD implementation for Malyan's LCD, a separate ESP8266 MCU running
- * on Serial1 for the M200 board. This module outputs a pseudo-gcode
+ * on Serial1 for the M200 board. This module outputs a pseudo-G-code
  * wrapped in curly braces which the LCD implementation translates into
  * actual G-code commands.
  *
@@ -74,35 +74,36 @@ uint16_t inbound_count;
 bool last_printing_status = false;
 
 // Everything written needs the high bit set.
-void write_to_lcd_P(PGM_P const message) {
+void write_to_lcd(FSTR_P const fmsg) {
+  PGM_P pmsg = FTOP(fmsg);
   char encoded_message[MAX_CURLY_COMMAND];
-  uint8_t message_length = _MIN(strlen_P(message), sizeof(encoded_message));
+  uint8_t message_length = _MIN(strlen_P(pmsg), sizeof(encoded_message));
 
-  LOOP_L_N(i, message_length)
-    encoded_message[i] = pgm_read_byte(&message[i]) | 0x80;
+  for (uint8_t i = 0; i < message_length; ++i)
+    encoded_message[i] = pgm_read_byte(&pmsg[i]) | 0x80;
 
   LCD_SERIAL.Print::write(encoded_message, message_length);
 }
 
-void write_to_lcd(const char * const message) {
+void write_to_lcd(const char * const cmsg) {
   char encoded_message[MAX_CURLY_COMMAND];
-  const uint8_t message_length = _MIN(strlen(message), sizeof(encoded_message));
+  const uint8_t message_length = _MIN(strlen(cmsg), sizeof(encoded_message));
 
-  LOOP_L_N(i, message_length)
-    encoded_message[i] = message[i] | 0x80;
+  for (uint8_t i = 0; i < message_length; ++i)
+    encoded_message[i] = cmsg[i] | 0x80;
 
   LCD_SERIAL.Print::write(encoded_message, message_length);
 }
 
 // {E:<msg>} is for error states.
-void set_lcd_error_P(PGM_P const error, PGM_P const component/*=nullptr*/) {
-  write_to_lcd_P(PSTR("{E:"));
-  write_to_lcd_P(error);
+void set_lcd_error(FSTR_P const error, FSTR_P const component/*=nullptr*/) {
+  write_to_lcd(F("{E:"));
+  write_to_lcd(error);
   if (component) {
-    write_to_lcd_P(PSTR(" "));
-    write_to_lcd_P(component);
+    write_to_lcd(F(" "));
+    write_to_lcd(component);
   }
-  write_to_lcd_P(PSTR("}"));
+  write_to_lcd(F("}"));
 }
 
 
@@ -166,7 +167,7 @@ void process_lcd_eb_command(const char *command) {
       char message_buffer[MAX_CURLY_COMMAND];
       uint8_t done_pct = print_job_timer.isRunning() ? (iteration * 10) : 100;
       iteration = (iteration + 1) % 10; // Provide progress animation
-      #if ENABLED(SDSUPPORT)
+      #if HAS_MEDIA
         if (ExtUI::isPrintingFromMedia() || ExtUI::isPrintingFromMediaPaused())
           done_pct = card.percentDone();
       #endif
@@ -179,7 +180,7 @@ void process_lcd_eb_command(const char *command) {
         #else
           0, 0,
         #endif
-        TERN(SDSUPPORT, done_pct, 0),
+        TERN(HAS_MEDIA, done_pct, 0),
         elapsed_buffer
       );
       write_to_lcd(message_buffer);
@@ -243,20 +244,20 @@ void process_lcd_p_command(const char *command) {
   switch (command[0]) {
     case 'P':
         ExtUI::pausePrint();
-        write_to_lcd_P(PSTR("{SYS:PAUSED}"));
+        write_to_lcd(F("{SYS:PAUSED}"));
         break;
     case 'R':
         ExtUI::resumePrint();
-        write_to_lcd_P(PSTR("{SYS:RESUMED}"));
+        write_to_lcd(F("{SYS:RESUMED}"));
         break;
     case 'X':
-        write_to_lcd_P(PSTR("{SYS:CANCELING}"));
+        write_to_lcd(F("{SYS:CANCELING}"));
         ExtUI::stopPrint();
-        write_to_lcd_P(PSTR("{SYS:STARTED}"));
+        write_to_lcd(F("{SYS:STARTED}"));
         break;
     case 'H': queue.enqueue_now_P(G28_STR); break; // Home all axes
     default: {
-      #if ENABLED(SDSUPPORT)
+      #if HAS_MEDIA
         // Print file 000 - a three digit number indicating which
         // file to print in the SD card. If it's a directory,
         // then switch to the directory.
@@ -271,13 +272,13 @@ void process_lcd_p_command(const char *command) {
         // but the V2 LCD switches to "print" mode on {SYS:DIR} response.
         if (card.flag.filenameIsDir) {
           card.cd(card.filename);
-          write_to_lcd_P(PSTR("{SYS:DIR}"));
+          write_to_lcd(F("{SYS:DIR}"));
         }
         else {
           char message_buffer[MAX_CURLY_COMMAND];
           sprintf_P(message_buffer, PSTR("{PRINTFILE:%s}"), card.longest_filename());
           write_to_lcd(message_buffer);
-          write_to_lcd_P(PSTR("{SYS:BUILD}"));
+          write_to_lcd(F("{SYS:BUILD}"));
           card.openAndPrintFile(card.filename);
         }
       #endif
@@ -315,7 +316,7 @@ void process_lcd_s_command(const char *command) {
     } break;
 
     case 'L': {
-      #if ENABLED(SDSUPPORT)
+      #if HAS_MEDIA
         if (!card.isMounted()) card.mount();
 
         // A more efficient way to do this would be to
@@ -325,14 +326,14 @@ void process_lcd_s_command(const char *command) {
         // select a file for printing during a print, there's
         // little reason not to do it this way.
         char message_buffer[MAX_CURLY_COMMAND];
-        uint16_t file_count = card.get_num_Files();
-        for (uint16_t i = 0; i < file_count; i++) {
+        int16_t file_count = card.get_num_items();
+        for (int16_t i = 0; i < file_count; i++) {
           card.selectFileByIndex(i);
           sprintf_P(message_buffer, card.flag.filenameIsDir ? PSTR("{DIR:%s}") : PSTR("{FILE:%s}"), card.longest_filename());
           write_to_lcd(message_buffer);
         }
 
-        write_to_lcd_P(PSTR("{SYS:OK}"));
+        write_to_lcd(F("{SYS:OK}"));
       #endif
     } break;
 
@@ -413,7 +414,7 @@ void update_usb_status(const bool forceUpdate) {
   // This is more logical.
   if (last_usb_connected_status != MYSERIAL1.connected() || forceUpdate) {
     last_usb_connected_status = MYSERIAL1.connected();
-    write_to_lcd_P(last_usb_connected_status ? PSTR("{R:UC}\r\n") : PSTR("{R:UD}\r\n"));
+    write_to_lcd(last_usb_connected_status ? F("{R:UC}\r\n") : F("{R:UD}\r\n"));
   }
 }
 

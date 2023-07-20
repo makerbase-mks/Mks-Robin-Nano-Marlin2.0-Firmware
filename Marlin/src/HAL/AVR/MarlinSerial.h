@@ -34,6 +34,7 @@
 #include <WString.h>
 
 #include "../../inc/MarlinConfigPre.h"
+#include "../../core/types.h"
 #include "../../core/serial_hook.h"
 
 #ifndef SERIAL_PORT
@@ -138,10 +139,6 @@
 
   #define BYTE 0
 
-  // Templated type selector
-  template<bool b, typename T, typename F> struct TypeSelector { typedef T type;} ;
-  template<typename T, typename F> struct TypeSelector<false, T, F> { typedef F type; };
-
   template<typename Cfg>
   class MarlinSerial {
   protected:
@@ -164,7 +161,7 @@
     static constexpr B_U2Xx<Cfg::PORT>   B_U2X   = 0;
 
     // Base size of type on buffer size
-    typedef typename TypeSelector<(Cfg::RX_SIZE>256), uint16_t, uint8_t>::type ring_buffer_pos_t;
+    typedef uvalue_t(Cfg::RX_SIZE - 1) ring_buffer_pos_t;
 
     struct ring_buffer_r {
       volatile ring_buffer_pos_t head, tail;
@@ -191,13 +188,13 @@
                    rx_framing_errors;
     static ring_buffer_pos_t rx_max_enqueued;
 
-    static FORCE_INLINE ring_buffer_pos_t atomic_read_rx_head();
+    FORCE_INLINE static ring_buffer_pos_t atomic_read_rx_head();
 
     static volatile bool rx_tail_value_not_stable;
     static volatile uint16_t rx_tail_value_backup;
 
-    static FORCE_INLINE void atomic_set_rx_tail(ring_buffer_pos_t value);
-    static FORCE_INLINE ring_buffer_pos_t atomic_read_rx_tail();
+    FORCE_INLINE static void atomic_set_rx_tail(ring_buffer_pos_t value);
+    FORCE_INLINE static ring_buffer_pos_t atomic_read_rx_tail();
 
   public:
     FORCE_INLINE static void store_rxd_char();
@@ -217,7 +214,7 @@
     #endif
 
     enum { HasEmergencyParser = Cfg::EMERGENCYPARSER };
-    static inline bool emergency_parser_enabled() { return Cfg::EMERGENCYPARSER; }
+    static bool emergency_parser_enabled() { return Cfg::EMERGENCYPARSER; }
 
     FORCE_INLINE static uint8_t dropped() { return Cfg::DROPPED_RX ? rx_dropped_bytes : 0; }
     FORCE_INLINE static uint8_t buffer_overruns() { return Cfg::RX_OVERRUNS ? rx_buffer_overruns : 0; }
@@ -283,7 +280,7 @@
     static constexpr bool DROPPED_RX        = false;
     static constexpr bool RX_FRAMING_ERRORS = false;
     static constexpr bool MAX_RX_QUEUED     = false;
-    static constexpr bool RX_OVERRUNS       = BOTH(HAS_DGUS_LCD, SERIAL_STATS_RX_BUFFER_OVERRUNS);
+    static constexpr bool RX_OVERRUNS       = ALL(HAS_DGUS_LCD, SERIAL_STATS_RX_BUFFER_OVERRUNS);
   };
 
   typedef Serial1Class< MarlinSerial< LCDSerialCfg<LCD_SERIAL_PORT> > > MSerialLCD;

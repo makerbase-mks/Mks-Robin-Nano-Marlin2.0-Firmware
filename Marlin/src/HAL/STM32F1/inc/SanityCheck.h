@@ -25,7 +25,7 @@
  * Test STM32F1-specific configuration values for errors at compile-time.
  */
 
-#if ENABLED(SDCARD_EEPROM_EMULATION) && DISABLED(SDSUPPORT)
+#if ENABLED(SDCARD_EEPROM_EMULATION) && !HAS_MEDIA
   #undef SDCARD_EEPROM_EMULATION // Avoid additional error noise
   #if USE_FALLBACK_EEPROM
     #warning "EEPROM type not specified. Fallback is SDCARD_EEPROM_EMULATION."
@@ -39,7 +39,7 @@
   #error "SERIAL_STATS_DROPPED_RX is not supported on the STM32F1 platform."
 #endif
 
-#if ENABLED(NEOPIXEL_LED) && DISABLED(MKS_MINI_12864_V3)
+#if ENABLED(NEOPIXEL_LED) && DISABLED(FYSETC_MINI_12864_2_1)
   #error "NEOPIXEL_LED (Adafruit NeoPixel) is not supported for HAL/STM32F1. Comment out this line to proceed at your own risk!"
 #endif
 

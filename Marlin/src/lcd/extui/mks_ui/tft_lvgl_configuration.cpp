@@ -36,10 +36,11 @@
 #include <lvgl.h>
 
 #include "../../../MarlinCore.h"
+#include "../../marlinui.h"
+
 #include "../../../inc/MarlinConfig.h"
 
-#include HAL_PATH(../../../HAL, tft/xpt2046.h)
-#include "../../marlinui.h"
+#include HAL_PATH(../../.., tft/xpt2046.h)
 XPT2046 touch;
 
 #if ENABLED(POWER_LOSS_RECOVERY)
@@ -50,7 +51,7 @@ XPT2046 touch;
   #include "../../../module/servo.h"
 #endif
 
-#if EITHER(PROBE_TARE, HAS_Z_SERVO_PROBE)
+#if ANY(PROBE_TARE, HAS_Z_SERVO_PROBE)
   #include "../../../module/probe.h"
 #endif
 
@@ -78,7 +79,7 @@ XPT2046 touch;
 
 static lv_disp_buf_t disp_buf;
 lv_group_t*  g;
-#if ENABLED(SDSUPPORT)
+#if HAS_MEDIA
   void UpdateAssets();
 #endif
 uint16_t DeviceCode = 0x9488;
@@ -86,10 +87,6 @@ extern uint8_t sel_id;
 
 uint8_t bmp_public_buf[14 * 1024];
 uint8_t public_buf[513];
-
-#ifdef USE_NEW_LVGL_CONF
-  mks_ui_t mks_ui;
-#endif  
 
 extern bool flash_preview_begin, default_preview_flg, gcode_preview_over;
 
@@ -121,61 +118,51 @@ void SysTick_Callback() {
   }
 }
 
-// #define USE_DMA_FSMC_TC_INT
-
 void tft_lvgl_init() {
 
-  W25QXX.init(SPI_FULL_SPEED);
+  W25QXX.init(SPI_QUARTER_SPEED);
 
   gCfgItems_init();
   ui_cfg_init();
   disp_language_init();
 
-  watchdog_refresh();     // LVGL init takes time
-
-  #if MB(MKS_ROBIN_NANO)
-    OUT_WRITE(PB0, LOW);  // HE1
-  #endif
-
-  #if PIN_EXISTS(USB_POWER_CONTROL)
-    OUT_WRITE(USB_POWER_CONTROL_PIN, HIGH);
-  #endif
+  hal.watchdog_refresh();     // LVGL init takes time
 
   // Init TFT first!
-  SPI_TFT.spi_init(SPI_FULL_SPEED);
-  SPI_TFT.LCD_init();
-  
+  SPI_TFT.spiInit(SPI_FULL_SPEED);
+  SPI_TFT.lcdInit();
+
+  hal.watchdog_refresh();     // LVGL init takes time
+
   #if ENABLED(USB_FLASH_DRIVE_SUPPORT)
     uint16_t usb_flash_loop = 1000;
-    #if ENABLED(MULTI_VOLUME)
-      #ifndef HAS_SD_HOST_DRIVE
-        SET_INPUT_PULLUP(SD_DETECT_PIN);
-        if (READ(SD_DETECT_PIN) == LOW) card.changeMedia(&card.media_driver_sdcard);
-        else card.changeMedia(&card.media_driver_usbFlash);
-      #endif
+    #if ENABLED(MULTI_VOLUME) && !HAS_SD_HOST_DRIVE
+      if (IS_SD_INSERTED())
+        card.changeMedia(&card.media_driver_sdcard);
+      else
+        card.changeMedia(&card.media_driver_usbFlash);
     #endif
     do {
       card.media_driver_usbFlash.idle();
-      watchdog_refresh();
+      hal.watchdog_refresh();
       delay(2);
-    } while((!card.media_driver_usbFlash.isInserted()) && (usb_flash_loop--));
+    } while (!card.media_driver_usbFlash.isInserted() && usb_flash_loop--);
     card.mount();
-    
   #elif HAS_LOGO_IN_FLASH
-    // delay(1000);
-    watchdog_refresh(); 
-    // delay(1000);
+    delay(1000);
+    hal.watchdog_refresh();
+    delay(1000);
   #endif
 
-  watchdog_refresh();   
+  hal.watchdog_refresh();     // LVGL init takes time
 
-  #if ENABLED(SDSUPPORT)
+  #if HAS_MEDIA
     UpdateAssets();
-    watchdog_refresh();   // LVGL init takes time
+    hal.watchdog_refresh();   // LVGL init takes time
     TERN_(MKS_TEST, mks_test_get());
   #endif
 
-  touch.Init();
+  touch.init();
 
   lv_init();
 
@@ -235,7 +222,6 @@ void tft_lvgl_init() {
     mks_esp_wifi_init();
     mks_wifi_firmware_update();
   #endif
-
   TERN_(HAS_SERVOS, servo_init());
   TERN_(HAS_Z_SERVO_PROBE, probe.servo_probe_init());
   bool ready = true;
@@ -247,6 +233,7 @@ void tft_lvgl_init() {
         flash_preview_begin = true;
       else
         default_preview_flg = true;
+
       uiCfg.print_state = REPRINTING;
 
       #if ENABLED(LONG_FILENAME_HOST_SUPPORT)
@@ -260,86 +247,66 @@ void tft_lvgl_init() {
     }
   #endif
 
-  if (ready) {
-#ifdef USE_NEW_LVGL_CONF
-    set_main_screen();
-#endif
-    lv_draw_ready_print();
-  }
+  if (ready) lv_draw_ready_print();
 
-  #if BOTH(MKS_TEST, SDSUPPORT)
+  #if ALL(MKS_TEST, HAS_MEDIA)
     if (mks_test_flag == 0x1E) mks_gpio_test();
   #endif
 }
 
 static lv_disp_drv_t* disp_drv_p;
 
-__IO bool lcd_dma_trans_lock = false;
-
-void dma_tc(struct __DMA_HandleTypeDef * hdma) {
-  lv_disp_flush_ready(disp_drv_p); // Indicate you are ready with the flushing
-  lcd_dma_trans_lock = false;
-#if ENABLED(USE_DMA_FSMC_TC_INT)
-  
-#endif
-
 #if ENABLED(USE_SPI_DMA_TC)
-  TFT_SPI::Abort();
+  bool lcd_dma_trans_lock = false;
 #endif
+
+void dmc_tc_handler(struct __DMA_HandleTypeDef * hdma) {
+  #if ENABLED(USE_SPI_DMA_TC)
+    lv_disp_flush_ready(disp_drv_p);
+    lcd_dma_trans_lock = false;
+    TFT_SPI::abort();
+  #endif
 }
 
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p) {
-
   uint16_t width = area->x2 - area->x1 + 1,
           height = area->y2 - area->y1 + 1;
 
-  // disp_drv_p = disp;
+  disp_drv_p = disp;
 
   SPI_TFT.setWindow((uint16_t)area->x1, (uint16_t)area->y1, width, height);
 
-#if EITHER(USE_DMA_FSMC_TC_INT, USE_SPI_DMA_TC)
-  lcd_dma_trans_lock = true;
-  SPI_TFT.tftio.WriteSequenceIT((uint16_t*)color_p, width * height);
-#if ENABLED(USE_DMA_FSMC_TC_INT)
-    TFT_FSMC::DMAtx.XferCpltCallback = dma_tc;
-#endif
+  #if ENABLED(USE_SPI_DMA_TC)
+    lcd_dma_trans_lock = true;
+    SPI_TFT.tftio.writeSequenceIT((uint16_t*)color_p, width * height);
+    TFT_SPI::DMAtx.XferCpltCallback = dmc_tc_handler;
+  #else
+    SPI_TFT.tftio.writeSequence((uint16_t*)color_p, width * height);
+    lv_disp_flush_ready(disp_drv_p); // Indicate you are ready with the flushing
+  #endif
+
+  W25QXX.init(SPI_QUARTER_SPEED);
+}
 
 #if ENABLED(USE_SPI_DMA_TC)
-  TFT_SPI::DMAtx.XferCpltCallback = dma_tc;
+  bool get_lcd_dma_lock() { return lcd_dma_trans_lock; }
 #endif
-
-#else
-  // SPI_TFT.tftio.WriteSequence((uint16_t*)color_p, width * height);
-  for (uint16_t i = 0; i < height; i++)
-    SPI_TFT.tftio.WriteSequence((uint16_t*)(color_p + width * i), width);
-
-  lv_disp_flush_ready(disp); // Indicate you are ready with the flushing
-#endif
-  W25QXX.init(SPI_FULL_SPEED);
-}
-
-bool get_lcd_dma_lock(void) {
-  return lcd_dma_trans_lock;
-}
-
 
 void lv_fill_rect(lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2, lv_color_t bk_color) {
   uint16_t width, height;
   width = x2 - x1 + 1;
   height = y2 - y1 + 1;
   SPI_TFT.setWindow((uint16_t)x1, (uint16_t)y1, width, height);
-  SPI_TFT.tftio.WriteMultiple(bk_color.full, width * height);
-  W25QXX.init(SPI_FULL_SPEED);
+  SPI_TFT.tftio.writeMultiple(bk_color.full, width * height);
+  W25QXX.init(SPI_QUARTER_SPEED);
 }
 
-#define TICK_CYCLE 1
-
-unsigned int getTickDiff(unsigned int curTick, unsigned int lastTick) {
-  return TICK_CYCLE * (lastTick <= curTick ? (curTick - lastTick) : (0xFFFFFFFF - lastTick + curTick));
+uint16_t getTickDiff(const uint16_t curTick, const uint16_t lastTick) {
+  return (TICK_CYCLE) * (lastTick <= curTick ? (curTick - lastTick) : (0xFFFFFFFF - lastTick + curTick));
 }
 
 static bool get_point(int16_t *x, int16_t *y) {
-  if (!touch.getRawPoint(x, y)) { return false; }
+  if (!touch.getRawPoint(x, y)) return false;
 
   #if ENABLED(TOUCH_SCREEN_CALIBRATION)
     const calibrationState state = touch_calibration.get_calibration_state();
@@ -358,66 +325,27 @@ static bool get_point(int16_t *x, int16_t *y) {
 }
 
 bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data) {
-  // static int16_t last_x = 0, last_y = 0;
-  // if (get_point(&last_x, &last_y)) {
-  //   #if TFT_ROTATION == TFT_ROTATE_180
-
-  //     if(last_x > TFT_WIDTH) last_x = TFT_WIDTH;
-  //     if(last_y > TFT_HEIGHT) last_y = TFT_HEIGHT;
-
-  //     data->point.x = TFT_WIDTH - last_x;
-  //     data->point.y = TFT_HEIGHT - last_y;
-  //   #else
-  //     data->point.x = last_x;
-  //     data->point.y = last_y;
-  //   #endif
-  //   data->state = LV_INDEV_STATE_PR;
-  // }
-  // else {
-  //   #if TFT_ROTATION == TFT_ROTATE_180
-  //     data->point.x = TFT_WIDTH - last_x;
-  //     data->point.y = TFT_HEIGHT - last_y;
-  //   #else
-  //     data->point.x = last_x;
-  //     data->point.y = last_y;
-  //   #endif
-  //   data->state = LV_INDEV_STATE_REL;
-  // }
-
   static int16_t last_x = 0, last_y = 0;
-  static uint8_t last_touch_state = LV_INDEV_STATE_REL;
-  static int32_t touch_time1 = 0;
-  uint32_t tmpTime, diffTime = 0;
-
-  tmpTime = millis();
-  diffTime = getTickDiff(tmpTime, touch_time1);
-  if (diffTime > 20) {
-    if (get_point(&last_x, &last_y)) {
-
-      if (last_touch_state == LV_INDEV_STATE_PR) return false;
-      data->state = LV_INDEV_STATE_PR;
-
-      // Set the coordinates (if released use the last-pressed coordinates)
-      #if TFT_ROTATION == TFT_ROTATE_180
-        data->point.x = TFT_WIDTH - last_x;
-        data->point.y = TFT_HEIGHT -last_y;
-      #else
-        data->point.x = last_x;
-        data->point.y = last_y;
-      #endif
-
-      last_x = last_y = 0;
-      last_touch_state = LV_INDEV_STATE_PR;
-    }
-    else {
-      if (last_touch_state == LV_INDEV_STATE_PR)
-        data->state = LV_INDEV_STATE_REL;
-      last_touch_state = LV_INDEV_STATE_REL;
-    }
-
-    touch_time1 = tmpTime;
+  if (get_point(&last_x, &last_y)) {
+    #if TFT_ROTATION == TFT_ROTATE_180
+      data->point.x = TFT_WIDTH - last_x;
+      data->point.y = TFT_HEIGHT - last_y;
+    #else
+      data->point.x = last_x;
+      data->point.y = last_y;
+    #endif
+    data->state = LV_INDEV_STATE_PR;
   }
-
+  else {
+    #if TFT_ROTATION == TFT_ROTATE_180
+      data->point.x = TFT_WIDTH - last_x;
+      data->point.y = TFT_HEIGHT - last_y;
+    #else
+      data->point.x = last_x;
+      data->point.y = last_y;
+    #endif
+    data->state = LV_INDEV_STATE_REL;
+  }
   return false; // Return `false` since no data is buffering or left to read
 }
 
@@ -445,7 +373,7 @@ lv_fs_res_t spi_flash_open_cb (lv_fs_drv_t * drv, void * file_p, const char * pa
     strcpy(last_path_name, path);
   }
   else {
-    W25QXX.init(SPI_FULL_SPEED);
+    W25QXX.init(SPI_QUARTER_SPEED);
     currentFlashPage = 0;
   }
   pic_read_addr_offset = pic_read_base_addr;
@@ -488,25 +416,7 @@ lv_fs_res_t spi_flash_tell_cb(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p
 // sd
 char *cur_namefff;
 uint32_t sd_read_base_addr = 0, sd_read_addr_offset = 0, small_image_size = 409;
-char last_path[(SHORT_NAME_LEN + 1) * MAX_DIR_LEVEL + strlen("S:/") + 1];
 lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_fs_mode_t mode) {
-  // char name_buf[100];
-  // *name_buf = '/';
-  // strcpy(name_buf + 1, path);
-  // char *temp = strstr(name_buf, ".bin");
-  // if (temp) strcpy(temp, ".GCO");
-  // sd_read_base_addr = lv_open_gcode_file((char *)name_buf);
-  // sd_read_addr_offset = sd_read_base_addr;
-  // if (sd_read_addr_offset == UINT32_MAX) return LV_FS_RES_NOT_EX;
-  // // find small image size
-  // card.read(public_buf, 512);
-  // public_buf[511] = '\0';
-  // const char* eol = strpbrk((const char*)public_buf, "\n\r");
-  // small_image_size = (uintptr_t)eol - (uintptr_t)((uint32_t *)(&public_buf[0])) + 1;
-  // return LV_FS_RES_OK;
-  if (path != nullptr && card.isFileOpen() && strcmp((const char*)path, (const char*)last_path) == 0) return LV_FS_RES_OK;
-  strcpy(last_path, path);
-  lv_close_gcode_file();
   char name_buf[100];
   *name_buf = '/';
   strcpy(name_buf + 1, path);
@@ -518,14 +428,14 @@ lv_fs_res_t sd_open_cb (lv_fs_drv_t * drv, void * file_p, const char * path, lv_
   // find small image size
   card.read(public_buf, 512);
   public_buf[511] = '\0';
-  char* eol = strpbrk((const char*)public_buf, "\n\r");
+  const char* eol = strpbrk((const char*)public_buf, "\n\r");
   small_image_size = (uintptr_t)eol - (uintptr_t)((uint32_t *)(&public_buf[0])) + 1;
   return LV_FS_RES_OK;
 }
 
 lv_fs_res_t sd_close_cb (lv_fs_drv_t * drv, void * file_p) {
   /* Add your code here */
-  // lv_close_gcode_file();
+  lv_close_gcode_file();
   return LV_FS_RES_OK;
 }
 
@@ -573,18 +483,19 @@ void lv_encoder_pin_init() {
   #if BUTTON_EXISTS(UP)
     SET_INPUT(BTN_UP);
   #endif
-  #if BUTTON_EXISTS(DWN)
-    SET_INPUT(BTN_DWN);
+  #if BUTTON_EXISTS(DOWN)
+    SET_INPUT(BTN_DOWN);
   #endif
-  #if BUTTON_EXISTS(LFT)
-    SET_INPUT(BTN_LFT);
+  #if BUTTON_EXISTS(LEFT)
+    SET_INPUT(BTN_LEFT);
   #endif
-  #if BUTTON_EXISTS(RT)
-    SET_INPUT(BTN_RT);
+  #if BUTTON_EXISTS(RIGHT)
+    SET_INPUT(BTN_RIGHT);
   #endif
 }
 
 #if 1 // HAS_ENCODER_ACTION
+
   void lv_update_encoder() {
     static uint32_t encoder_time1;
     uint32_t tmpTime, diffTime = 0;
@@ -597,26 +508,15 @@ void lv_encoder_pin_init() {
         #if ANY_BUTTON(EN1, EN2, ENC, BACK)
 
           uint8_t newbutton = 0;
-          // if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
-          // if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
-          // if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
-          // if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
-
-          #if BUTTON_EXISTS(EN1)
-            if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
-          #endif
-          #if BUTTON_EXISTS(EN2)
-            if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
-          #endif
-          #if BUTTON_EXISTS(ENC)
-            if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
-          #endif
-          #if BUTTON_EXISTS(BACK)
-            if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
-          #endif
+          if (BUTTON_PRESSED(EN1)) newbutton |= EN_A;
+          if (BUTTON_PRESSED(EN2)) newbutton |= EN_B;
+          if (BUTTON_PRESSED(ENC)) newbutton |= EN_C;
+          if (BUTTON_PRESSED(BACK)) newbutton |= EN_D;
 
         #else
+
           constexpr uint8_t newbutton = 0;
+
         #endif
 
         static uint8_t buttons = 0;
@@ -656,7 +556,7 @@ void lv_encoder_pin_init() {
 
       #endif // HAS_ENCODER_WHEEL
 
-    } // next_button_update_ms
+    } // encoder_time1
   }
 
 #endif // HAS_ENCODER_ACTION

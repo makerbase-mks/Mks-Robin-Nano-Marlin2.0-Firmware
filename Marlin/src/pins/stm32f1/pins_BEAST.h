@@ -89,11 +89,11 @@
 
 #define HEATER_BED_PIN                      PB9   // BED
 
-#ifndef FAN_PIN
-  #define FAN_PIN                           PB10
+#ifndef FAN0_PIN
+  #define FAN0_PIN                          PB10
 #endif
 
-#define FAN_SOFT_PWM
+#define FAN_SOFT_PWM_REQUIRED
 
 //
 // Temperature Sensors
@@ -112,7 +112,7 @@
     #error "REPRAPWORLD_GRAPHICAL_LCD is not supported."
   #else
     #define LCD_PINS_RS                     PB8
-    #define LCD_PINS_ENABLE                 PD2
+    #define LCD_PINS_EN                     PD2
     #define LCD_PINS_D4                     PB12
     #define LCD_PINS_D5                     PB13
     #define LCD_PINS_D6                     PB14

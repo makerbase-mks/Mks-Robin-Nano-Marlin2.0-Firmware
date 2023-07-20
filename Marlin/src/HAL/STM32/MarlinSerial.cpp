@@ -34,7 +34,6 @@
 #ifndef USART4
   #define USART4 UART4
 #endif
-
 #ifndef USART5
   #define USART5 UART5
 #endif

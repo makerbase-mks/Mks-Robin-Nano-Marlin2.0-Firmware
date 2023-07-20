@@ -23,10 +23,6 @@
 
 #include "../inc/MarlinConfigPre.h"
 
-#if DISABLED(BLTOUCH_HS_MODE)
-  #define BLTOUCH_SLOW_MODE 1
-#endif
-
 // BLTouch commands are sent as servo angles
 typedef unsigned char BLTCommand;
 
@@ -70,8 +66,17 @@ typedef unsigned char BLTCommand;
 
 class BLTouch {
 public:
+
   static void init(const bool set_voltage=false);
-  static bool last_written_mode; // Initialized by settings.load, 0 = Open Drain; 1 = 5V Drain
+  static bool od_5v_mode;         // Initialized by settings.load, 0 = Open Drain; 1 = 5V Drain
+
+  #if HAS_BLTOUCH_HS_MODE
+    static bool high_speed_mode;  // Initialized by settings.load, 0 = Low Speed; 1 = High Speed
+  #else
+    static constexpr bool high_speed_mode = false;
+  #endif
+
+  static float z_extra_clearance() { return TERN0(HAS_BLTOUCH_HS_MODE, high_speed_mode ? BLTOUCH_HS_EXTRA_CLEARANCE : 0); }
 
   // DEPLOY and STOW are wrapped for error handling - these are used by homing and by probing
   static bool deploy()              { return deploy_proc(); }

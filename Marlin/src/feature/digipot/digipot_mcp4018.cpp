@@ -31,9 +31,13 @@
 
 // Settings for the I2C based DIGIPOT (MCP4018) based on WT150
 
-#define DIGIPOT_A4988_Rsx               0.250
-#define DIGIPOT_A4988_Vrefmax           1.666
-#define DIGIPOT_MCP4018_MAX_VALUE     127
+#ifndef DIGIPOT_A4988_Rsx
+  #define DIGIPOT_A4988_Rsx             0.250
+#endif
+#ifndef DIGIPOT_A4988_Vrefmax
+  #define DIGIPOT_A4988_Vrefmax         1.666
+#endif
+#define DIGIPOT_MCP4018_MAX_VALUE       127
 
 #define DIGIPOT_A4988_Itripmax(Vref)    ((Vref) / (8.0 * DIGIPOT_A4988_Rsx))
 
@@ -85,7 +89,7 @@ void DigipotI2C::set_current(const uint8_t channel, const float current) {
 }
 
 void DigipotI2C::init() {
-  LOOP_L_N(i, DIGIPOT_I2C_NUM_CHANNELS) pots[i].i2c_init();
+  for (uint8_t i = 0; i < DIGIPOT_I2C_NUM_CHANNELS; ++i) pots[i].i2c_init();
 
   // Init currents according to Configuration_adv.h
   static const float digipot_motor_current[] PROGMEM =
@@ -95,7 +99,7 @@ void DigipotI2C::init() {
       DIGIPOT_I2C_MOTOR_CURRENTS
     #endif
   ;
-  LOOP_L_N(i, COUNT(digipot_motor_current))
+  for (uint8_t i = 0; i < COUNT(digipot_motor_current); ++i)
     set_current(i, pgm_read_float(&digipot_motor_current[i]));
 }
 

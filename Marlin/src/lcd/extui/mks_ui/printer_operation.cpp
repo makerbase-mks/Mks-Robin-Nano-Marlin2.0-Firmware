@@ -45,7 +45,7 @@ extern bool flash_preview_begin, default_preview_flg, gcode_preview_over;
 void printer_state_polling() {
   char str_1[16];
   if (uiCfg.print_state == PAUSING) {
-    #if ENABLED(SDSUPPORT)
+    #if HAS_MEDIA
       if (!planner.has_blocks_queued() && card.getIndex() > MIN_FILE_PRINTED)
         uiCfg.waitEndMoves++;
 
@@ -53,7 +53,7 @@ void printer_state_polling() {
         uiCfg.waitEndMoves = 0;
         planner.synchronize();
 
-        gcode.process_subcommands_now_P(PSTR("M25"));
+        gcode.process_subcommands_now(F("M25"));
 
         // save the position
         uiCfg.current_x_position_bak = current_position.x;
@@ -65,7 +65,6 @@ void printer_state_polling() {
           gcode.process_subcommands_now(public_buf_l);
         }
         if (gCfgItems.pausePosX != (float)-1 && gCfgItems.pausePosY != (float)-1) {
-
           sprintf_P(public_buf_l, PSTR("G1 X%s Y%s"), dtostrf(gCfgItems.pausePosX, 1, 1, str_1), dtostrf(gCfgItems.pausePosY, 1, 1, str_1));
           gcode.process_subcommands_now(public_buf_l);
         }
@@ -94,12 +93,7 @@ void printer_state_polling() {
         sprintf_P(public_buf_m, PSTR("G1 Z%s"), dtostrf(uiCfg.current_z_position_bak, 1, 1, str_1));
         gcode.process_subcommands_now(public_buf_m);
       }
-      
-      ZERO(public_buf_m);
-      sprintf_P(public_buf_m, PSTR("G92 E%s"),  dtostrf(uiCfg.current_e_position_bak, 1, 1, str_1));
-      gcode.process_subcommands_now(public_buf_m);
-
-      gcode.process_subcommands_now_P(M24_STR);
+      gcode.process_subcommands_now(FPSTR(M24_STR));
       uiCfg.print_state = WORKING;
       start_print_time();
 
@@ -150,24 +144,6 @@ void printer_state_polling() {
     filament_check();
 
   TERN_(MKS_WIFI_MODULE, wifi_looping());
-
-  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-    if (uiCfg.autoLeveling) {
-      get_gcode_command(AUTO_LEVELING_COMMAND_ADDR, (uint8_t *)public_buf_m);
-      public_buf_m[sizeof(public_buf_m) - 1] = 0;
-      gcode.process_subcommands_now_P(PSTR(public_buf_m));
-      clear_cur_ui();
-      #if ANY(BLTOUCH, FIX_MOUNTED_PROBE)
-      bltouch_do_init(false);
-      lv_draw_bltouch_settings();
-      #endif
-      
-      #ifdef TOUCH_MI_PROBE
-      lv_draw_touchmi_settings();
-      #endif
-      uiCfg.autoLeveling = 0;
-    }
-  #endif
 }
 
 void filament_pin_setup() {

@@ -255,9 +255,9 @@ extern "C" {
 
 // Timer Definitions
 // Do not use timer used by PWM pins when possible. See PinMap_PWM in PeripheralPins.c
-#define TIMER_TONE              TIM10
-#define TIMER_SERVO             TIM5
-#define TIMER_SERIAL            TIM7
+#define TIMER_TONE              TIM10 // TIMER_TONE must be defined in this file
+#define TIMER_SERVO             TIM5  // TIMER_SERVO must be defined in this file
+#define TIMER_SERIAL            TIM7  // TIMER_SERIAL must be defined in this file
 
 // UART Definitions
 //#define ENABLE_HWSERIAL1        done automatically by the #define SERIAL_UART_INSTANCE below
@@ -280,7 +280,7 @@ extern "C" {
 #define PIN_SERIAL_TX           PA9
 
 // Optional PIN_SERIALn_RX and PIN_SERIALn_TX where 'n' is the U(S)ART number
-// Used when user instantiate a hardware Serial using its peripheral name.
+// Used when the user instantiates a hardware Serial using its peripheral name.
 // Example: HardwareSerial mySerial(USART3);
 // will use PIN_SERIAL3_RX and PIN_SERIAL3_TX if defined.
 #define PIN_SERIAL1_RX          PA10
@@ -295,6 +295,7 @@ extern "C" {
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
 /*----------------------------------------------------------------------------
  *        Arduino objects - C++ only
  *----------------------------------------------------------------------------*/

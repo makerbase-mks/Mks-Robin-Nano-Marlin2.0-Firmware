@@ -25,7 +25,6 @@
 #if ENABLED(DIRECT_PIN_CONTROL)
 
 #include "../gcode.h"
-#include "../../MarlinCore.h" // for pin_is_protected
 
 #if HAS_FAN
   #include "../../module/temperature.h"
@@ -37,6 +36,8 @@
   #define INPUT_ANALOG INPUT_ANALOG
   #define OUTPUT_OPEN_DRAIN OUTPUT_OPEN_DRAIN
 #endif
+
+bool pin_is_protected(const pin_t pin);
 
 void protected_pin_err() {
   SERIAL_ERROR_MSG(STR_ERR_PROTECTED_PIN);
@@ -52,7 +53,8 @@ void protected_pin_err() {
  *  S<byte> Pin status from 0 - 255
  *  I       Flag to ignore Marlin's pin protection
  *
- *  M<mode> Pin mode: 0=INPUT  1=OUTPUT  2=INPUT_PULLUP  3=INPUT_PULLDOWN
+ *  T<mode> Pin mode: 0=INPUT  1=OUTPUT  2=INPUT_PULLUP  3=INPUT_PULLDOWN
+ *                    4=INPUT_ANALOG  5=OUTPUT_OPEN_DRAIN
  */
 void GcodeSuite::M42() {
   const int pin_index = PARSED_PIN_INDEX('P', GET_PIN_MAP_INDEX(LED_PIN));
@@ -63,7 +65,7 @@ void GcodeSuite::M42() {
   if (!parser.boolval('I') && pin_is_protected(pin)) return protected_pin_err();
 
   bool avoidWrite = false;
-  if (parser.seenval('M')) {
+  if (parser.seenval('T')) {
     switch (parser.value_byte()) {
       case 0: pinMode(pin, INPUT); avoidWrite = true; break;
       case 1: pinMode(pin, OUTPUT); break;
@@ -86,30 +88,8 @@ void GcodeSuite::M42() {
 
   #if HAS_FAN
     switch (pin) {
-      #if HAS_FAN0
-        case FAN0_PIN: thermalManager.fan_speed[0] = pin_status; return;
-      #endif
-      #if HAS_FAN1
-        case FAN1_PIN: thermalManager.fan_speed[1] = pin_status; return;
-      #endif
-      #if HAS_FAN2
-        case FAN2_PIN: thermalManager.fan_speed[2] = pin_status; return;
-      #endif
-      #if HAS_FAN3
-        case FAN3_PIN: thermalManager.fan_speed[3] = pin_status; return;
-      #endif
-      #if HAS_FAN4
-        case FAN4_PIN: thermalManager.fan_speed[4] = pin_status; return;
-      #endif
-      #if HAS_FAN5
-        case FAN5_PIN: thermalManager.fan_speed[5] = pin_status; return;
-      #endif
-      #if HAS_FAN6
-        case FAN6_PIN: thermalManager.fan_speed[6] = pin_status; return;
-      #endif
-      #if HAS_FAN7
-        case FAN7_PIN: thermalManager.fan_speed[7] = pin_status; return;
-      #endif
+      #define _CASE(N) case FAN##N##_PIN: thermalManager.fan_speed[N] = pin_status; return;
+      REPEAT(FAN_COUNT, _CASE)
     }
   #endif
 
@@ -119,17 +99,17 @@ void GcodeSuite::M42() {
   }
 
   // An OUTPUT_OPEN_DRAIN should not be changed to normal OUTPUT (STM32)
-  // Use M42 Px M1/5 S0/1 to set the output type and then set value
+  // Use M42 Px T1/5 S0/1 to set the output type and then set value
   #ifndef OUTPUT_OPEN_DRAIN
     pinMode(pin, OUTPUT);
   #endif
   extDigitalWrite(pin, pin_status);
 
   #ifdef ARDUINO_ARCH_STM32
-    // A simple I/O will be set to 0 by analogWrite()
+    // A simple I/O will be set to 0 by hal.set_pwm_duty()
     if (pin_status <= 1 && !PWM_PIN(pin)) return;
   #endif
-  analogWrite(pin, pin_status);
+  hal.set_pwm_duty(pin, pin_status);
 }
 
 #endif // DIRECT_PIN_CONTROL

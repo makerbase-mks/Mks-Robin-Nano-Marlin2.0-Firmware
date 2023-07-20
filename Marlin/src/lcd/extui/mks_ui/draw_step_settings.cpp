@@ -80,7 +80,6 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
 }
 
 void lv_draw_step_settings() {
-  
   scr = lv_screen_create(STEPS_UI, machine_menu.StepsConfTitle);
 
   if (!uiCfg.para_ui_page) {
@@ -105,7 +104,7 @@ void lv_draw_step_settings() {
     lv_big_button_create(scr, "F:/bmp_back70x40.bin", machine_menu.previous, PARA_UI_TURN_PAGE_POS_X, PARA_UI_TURN_PAGE_POS_Y, event_handler, ID_STEP_UP, true);
   }
 
-  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACL_POS_X, PARA_UI_BACL_POS_Y, event_handler, ID_STEP_RETURN, true);
+  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACK_POS_X, PARA_UI_BACK_POS_Y, event_handler, ID_STEP_RETURN, true);
 }
 
 void lv_clear_step_settings() {

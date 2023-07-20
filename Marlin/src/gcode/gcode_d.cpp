@@ -38,7 +38,7 @@
 #include "../sd/cardreader.h"
 #include "../MarlinCore.h" // for kill
 
-extern void dump_delay_accuracy_check();
+void dump_delay_accuracy_check();
 
 /**
  * Dn: G-code for development and testing
@@ -54,11 +54,11 @@ void GcodeSuite::D(const int16_t dcode) {
       for (;;) { /* loop forever (watchdog reset) */ }
 
     case 0:
-      HAL_reboot();
+      hal.reboot();
       break;
 
     case 10:
-      kill(PSTR("D10"), PSTR("KILL TEST"), parser.seen_test('P'));
+      kill(F("D10"), F("KILL TEST"), parser.seen_test('P'));
       break;
 
     case 1: {
@@ -74,7 +74,7 @@ void GcodeSuite::D(const int16_t dcode) {
         settings.reset();
         settings.save();
       #endif
-      HAL_reboot();
+      hal.reboot();
     } break;
 
     case 2: { // D2 Read / Write SRAM
@@ -156,20 +156,21 @@ void GcodeSuite::D(const int16_t dcode) {
     } break;
 
     case 5: { // D5 Read / Write onboard Flash
-      #define FLASH_SIZE 1024
+              // This will overwrite program and data, so don't use it.
+      #define ONBOARD_FLASH_SIZE 1024 // 0x400
       uint8_t *pointer = parser.hex_adr_val('A');
       uint16_t len = parser.ushortval('C', 1);
       uintptr_t addr = (uintptr_t)pointer;
-      NOMORE(addr, size_t(FLASH_SIZE - 1));
-      NOMORE(len, FLASH_SIZE - addr);
+      NOMORE(addr, size_t(ONBOARD_FLASH_SIZE - 1));
+      NOMORE(len, ONBOARD_FLASH_SIZE - addr);
       if (parser.seenval('X')) {
         // TODO: Write the hex bytes after the X
         //while (len--) {}
       }
       else {
         //while (len--) {
-        //// TODO: Read bytes from EEPROM
-        //  print_hex_byte(eeprom_read_byte(adr++));
+        //// TODO: Read bytes from FLASH
+        //  print_hex_byte(flash_read_byte(adr++));
         //}
         SERIAL_EOL();
       }
@@ -189,16 +190,16 @@ void GcodeSuite::D(const int16_t dcode) {
       SERIAL_ECHOLNPGM("(USE_WATCHDOG " TERN(USE_WATCHDOG, "ENABLED", "DISABLED") ")");
       thermalManager.disable_all_heaters();
       delay(1000); // Allow time to print
-      DISABLE_ISRS();
+      hal.isr_off();
       // Use a low-level delay that does not rely on interrupts to function
       // Do not spin forever, to avoid thermal risks if heaters are enabled and
       // watchdog does not work.
       for (int i = 10000; i--;) DELAY_US(1000UL);
-      ENABLE_ISRS();
+      hal.isr_on();
       SERIAL_ECHOLNPGM("FAILURE: Watchdog did not trigger board reset.");
     } break;
 
-    #if ENABLED(SDSUPPORT)
+    #if HAS_MEDIA
 
       case 101: { // D101 Test SD Write
         card.openFileWrite("test.gco");
@@ -214,7 +215,7 @@ void GcodeSuite::D(const int16_t dcode) {
 
         c = 1024 * 4;
         while (c--) {
-          TERN_(USE_WATCHDOG, watchdog_refresh());
+          hal.watchdog_refresh();
           card.write(buf, COUNT(buf));
         }
         SERIAL_ECHOLNPGM(" done");
@@ -231,7 +232,7 @@ void GcodeSuite::D(const int16_t dcode) {
         __attribute__((aligned(sizeof(size_t)))) uint8_t buf[512];
         uint16_t c = 1024 * 4;
         while (c--) {
-          TERN_(USE_WATCHDOG, watchdog_refresh());
+          hal.watchdog_refresh();
           card.read(buf, COUNT(buf));
           bool error = false;
           for (uint16_t i = 0; i < COUNT(buf); i++) {
@@ -249,7 +250,7 @@ void GcodeSuite::D(const int16_t dcode) {
         card.closefile();
       } break;
 
-    #endif // SDSUPPORT
+    #endif // HAS_MEDIA
 
     #if ENABLED(POSTMORTEM_DEBUGGING)
 

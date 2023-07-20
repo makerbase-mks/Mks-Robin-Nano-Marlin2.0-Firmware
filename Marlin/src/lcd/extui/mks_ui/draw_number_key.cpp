@@ -119,22 +119,22 @@ static void disp_key_value() {
 
     case XJerk:
       #if HAS_CLASSIC_JERK
-        dtostrf(planner.max_jerk[X_AXIS], 1, 1, public_buf_m);
+        dtostrf(planner.max_jerk.x, 1, 1, public_buf_m);
       #endif
       break;
     case YJerk:
       #if HAS_CLASSIC_JERK
-        dtostrf(planner.max_jerk[Y_AXIS], 1, 1, public_buf_m);
+        dtostrf(planner.max_jerk.y, 1, 1, public_buf_m);
       #endif
       break;
     case ZJerk:
       #if HAS_CLASSIC_JERK
-        dtostrf(planner.max_jerk[Z_AXIS], 1, 1, public_buf_m);
+        dtostrf(planner.max_jerk.z, 1, 1, public_buf_m);
       #endif
       break;
     case EJerk:
       #if HAS_CLASSIC_JERK
-        dtostrf(planner.max_jerk[E_AXIS], 1, 1, public_buf_m);
+        dtostrf(planner.max_jerk.e, 1, 1, public_buf_m);
       #endif
       break;
 
@@ -307,10 +307,10 @@ static void set_value_confirm() {
     case ZMaxFeedRate:   planner.settings.max_feedrate_mm_s[Z_AXIS] = atof(key_value); break;
     case E0MaxFeedRate:  planner.settings.max_feedrate_mm_s[E_AXIS] = atof(key_value); break;
     case E1MaxFeedRate:  planner.settings.max_feedrate_mm_s[E_AXIS_N(1)] = atof(key_value); break;
-    case XJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk[X_AXIS] = atof(key_value)); break;
-    case YJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk[Y_AXIS] = atof(key_value)); break;
-    case ZJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk[Z_AXIS] = atof(key_value)); break;
-    case EJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk[E_AXIS] = atof(key_value)); break;
+    case XJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk.x = atof(key_value)); break;
+    case YJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk.y = atof(key_value)); break;
+    case ZJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk.z = atof(key_value)); break;
+    case EJerk: TERN_(HAS_CLASSIC_JERK, planner.max_jerk.e = atof(key_value)); break;
     case Xstep:  planner.settings.axis_steps_per_mm[X_AXIS] = atof(key_value); planner.refresh_positioning(); break;
     case Ystep:  planner.settings.axis_steps_per_mm[Y_AXIS] = atof(key_value); planner.refresh_positioning(); break;
     case Zstep:  planner.settings.axis_steps_per_mm[Z_AXIS] = atof(key_value); planner.refresh_positioning(); break;
@@ -404,7 +404,7 @@ static void set_value_confirm() {
     case z_sensitivity: TERN_(Z_SENSORLESS, stepperZ.homing_threshold(atoi(key_value))); break;
     case z2_sensitivity: TERN_(Z2_SENSORLESS, stepperZ2.homing_threshold(atoi(key_value))); break;
   }
-  gcode.process_subcommands_now_P(PSTR("M500"));
+  gcode.process_subcommands_now(F("M500"));
 }
 
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
@@ -453,8 +453,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_NUM_CONFIRM:
       last_disp_state = NUMBER_KEY_UI;
       if (strlen(key_value) != 0) set_value_confirm();
-      lv_clear_number_key();
-      draw_return_ui();
+      goto_previous_ui();
       break;
   }
 }

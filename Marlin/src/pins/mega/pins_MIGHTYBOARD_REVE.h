@@ -23,6 +23,8 @@
 
 /**
  * Mightyboard Rev.E pin assignments
+ * Schematic: https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Mightyboard%20Rev.E/MakerBot%20MightyBoard%20REVE%20Schematic.pdf
+ * Origin: https://github.com/sciguy14/HelioWatcher/blob/master/HelioWatcher%20Circuit/MakerBot%20MightyBoard%20REVE%20Schematic.pdf
  * also works for Rev D boards. It's all rev E despite what the silk screen says
  */
 
@@ -69,7 +71,7 @@
 #endif
 
 //
-// Filament Runout Pins
+// Filament Runout Sensor
 //
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN                      49
@@ -144,61 +146,34 @@
 //#define TEMP_1_MOSI_PIN        TEMP_0_MOSI_PIN
 
 //
-// Augmentation for auto-assigning plugs
-//
-// Two thermocouple connectors allows for either
-// 2 extruders or 1 extruder and a heated bed.
-// With no heated bed, an additional 24V fan is possible.
+// FET Pin Mapping - FET A is closest to the input power connector
 //
 
-// Labels from the schematic:
-#define EX1_HEAT_PIN                           6  // H3
-#define EX1_FAN_PIN                            7  // H4
-#define EX2_HEAT_PIN                          11  // B5
-#define EX2_FAN_PIN                           12  // B6
-#define HBP_PIN                               45  // L4
-#define EXTRA_FET_PIN                         44  // L5
-
-#if HAS_MULTI_HOTEND
-  #if TEMP_SENSOR_BED
-    #define IS_EEB
-  #else
-    #define IS_EEF
-  #endif
-#elif TEMP_SENSOR_BED
-  #define IS_EFB
-#else
-  #define IS_EFF
-#endif
+#define MOSFET_A_PIN                           6  // Plug EX1 Pin 1-2 -> PH3 #15 -> Logical 06
+#define MOSFET_B_PIN                          11  // Plug EX2 1-2 -> PB5 #24 -> Logical 11
+#define MOSFET_C_PIN                          45  // Plug HBD 1-2 -> PL4 #39 -> Logical 45
+#define MOSFET_D_PIN                           7  // Plug EX1 Pin 3-4 -> PH4 #16 -> Logical 07
+#define MOSFET_E_PIN                          12  // Plug EX2 3-4 -> PB6 #25 -> Logical 12
+#define MOSFET_F_PIN                          44  // Plug Extra 1-2 -> PL5 #40 -> Logical 44 (FET not soldered in all boards)
 
 //
 // Heaters / Fans (24V)
 //
-#define HEATER_0_PIN                EX1_HEAT_PIN
 
-#if ENABLED(IS_EFB)                               // Hotend, Fan, Bed
-  #define HEATER_BED_PIN                 HBP_PIN
-#elif ENABLED(IS_EEF)                             // Hotend, Hotend, Fan
-  #define HEATER_1_PIN              EX2_HEAT_PIN
-#elif ENABLED(IS_EEB)                             // Hotend, Hotend, Bed
-  #define HEATER_1_PIN              EX2_HEAT_PIN
-  #define HEATER_BED_PIN                 HBP_PIN
-#elif ENABLED(IS_EFF)                             // Hotend, Fan, Fan
-  #define FAN1_PIN                       HBP_PIN
+#define HEATER_0_PIN                MOSFET_A_PIN  // EX1
+#define HEATER_1_PIN                MOSFET_B_PIN  // EX2
+#define HEATER_BED_PIN              MOSFET_C_PIN  // HBP
+
+#ifndef E0_AUTO_FAN_PIN
+  #define E0_AUTO_FAN_PIN           MOSFET_D_PIN
+#elif !defined(FAN0_PIN)
+  #define FAN0_PIN                  MOSFET_D_PIN
 #endif
 
-#ifndef FAN_PIN
-  #if EITHER(IS_EFB, IS_EFF)                      // Hotend, Fan, Bed or Hotend, Fan, Fan
-    #define FAN_PIN                 EX2_HEAT_PIN
-  #elif EITHER(IS_EEF, IS_SF)                     // Hotend, Hotend, Fan or Spindle, Fan
-    #define FAN_PIN                      HBP_PIN
-  #else
-    #define FAN_PIN                EXTRA_FET_PIN
-  #endif
-#endif
-
-#ifndef CONTROLLER_FAN_PIN
-  #define CONTROLLER_FAN_PIN         EX2_FAN_PIN
+#ifndef E1_AUTO_FAN_PIN
+  #define E1_AUTO_FAN_PIN           MOSFET_E_PIN
+#elif !defined(FAN1_PIN)
+  #define FAN1_PIN                  MOSFET_E_PIN
 #endif
 
 //
@@ -217,7 +192,7 @@
   #if IS_RRD_FG_SC
 
     #define LCD_PINS_RS                       33  // C4: LCD-STROBE
-    #define LCD_PINS_ENABLE                   72  // J2: LEFT
+    #define LCD_PINS_EN                       72  // J2: LEFT
     #define LCD_PINS_D4                       35  // C2: LCD-CLK
     #define LCD_PINS_D5                       32  // C5: RLED
     #define LCD_PINS_D6                       34  // C3: LCD-DATA
@@ -225,14 +200,13 @@
 
     #define BTN_EN2                           75  // J4, UP
     #define BTN_EN1                           73  // J3, DOWN
-    //STOP button connected as KILL_PIN
-    #define KILL_PIN                          14  // J1, RIGHT
-    //KILL - not connected
+    // STOP button connected as KILL_PIN
+    #define KILL_PIN                          14  // J1, RIGHT (not connected)
 
     #define BEEPER_PIN                         8  // H5, SD_WP
 
-    //on board leds
-    #define STAT_LED_RED_LED          SERVO0_PIN  // C1 (1280-EX1, DEBUG2)
+    // Onboard leds
+    #define STAT_LED_RED_PIN          SERVO0_PIN  // C1 (1280-EX1, DEBUG2)
     #define STAT_LED_BLUE_PIN         SERVO1_PIN  // C0 (1280-EX2, DEBUG3)
 
   #else
@@ -242,9 +216,9 @@
     #define SR_STROBE_PIN                     33  // C4
 
     #define BTN_UP                            75  // J4
-    #define BTN_DWN                           73  // J3
-    #define BTN_LFT                           72  // J2
-    #define BTN_RT                            14  // J1
+    #define BTN_DOWN                          73  // J3
+    #define BTN_LEFT                          72  // J2
+    #define BTN_RIGHT                         14  // J1
 
     // Disable encoder
     #undef BTN_EN1
@@ -268,9 +242,6 @@
 #define SDSS                                  53  // B0
 #define SD_DETECT_PIN                          9  // H6
 
-//
-// TMC 220x
-//
 #if HAS_TMC_UART
   /**
    * TMC220x stepper drivers

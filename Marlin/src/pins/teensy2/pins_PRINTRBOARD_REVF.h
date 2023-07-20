@@ -25,6 +25,19 @@
  *  Rev B  2 JUN 2017
  *
  *  Converted to Arduino pin numbering
+ *
+ *  Schematic (RevF): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.F/schematic.png
+ *  Origin (RevF): https://github.com/lwalkera/printrboard/raw/revF/Printrboard.sch
+ *  Schematic (RevF2): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.F2/schematic.png
+ *  Origin (RevF2): https://raw.githubusercontent.com/lwalkera/printrboard/revF2/Printrboard.sch
+ *  Schematic (RevF3): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.F3/schematic.png
+ *  Origin (RevF3): https://raw.githubusercontent.com/lwalkera/printrboard/revF3/Printrboard.sch
+ *  Schematic (RevF4): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.F4/schematic.png
+ *  Origin (RevF4): https://raw.githubusercontent.com/lwalkera/printrboard/revF4/Printrboard.sch
+ *  Schematic (RevF5): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.F5/schematic.png
+ *  Origin (RevF5): https://raw.githubusercontent.com/lwalkera/printrboard/revF5/Printrboard.sch
+ *  Schematic (RevF6): https://green-candy.osdn.jp/external/MarlinFW/board_schematics/Printrboard%20Rev.F6/schematic.png
+ *  Origin (RevF6): https://raw.githubusercontent.com/lwalkera/printrboard/revF6/Printrboard.sch
  */
 
 /**
@@ -190,8 +203,8 @@
 #endif
 #endif
 
-#ifndef FAN_PIN
-  #define FAN_PIN                             16  // C6 PWM3A
+#ifndef FAN0_PIN
+  #define FAN0_PIN                            16  // C6 PWM3A
 #endif
 
 //
@@ -201,7 +214,7 @@
 
 #if HAS_WIRED_LCD
   #define LCD_PINS_RS                          9  // E1       JP11-11
-  #define LCD_PINS_ENABLE                      8  // E0       JP11-10
+  #define LCD_PINS_EN                          8  // E0       JP11-10
   #define LCD_PINS_D4                          7  // D7       JP11-8
   #define LCD_PINS_D5                          6  // D6       JP11-7
   #define LCD_PINS_D6                          5  // D5       JP11-6
@@ -212,7 +225,6 @@
     #define BEEPER_PIN                         8  // E0       JP11-10
     #define DOGLCD_A0                         40  // F2       JP2-2
     #define DOGLCD_CS                         41  // F3       JP2-4
-    #define LCD_SCREEN_ROT_180
 
     #define BTN_EN1                            2  // D2 TX1   JP2-5
     #define BTN_EN2                            3  // D3 RX1   JP2-7
@@ -222,6 +234,8 @@
 
     #define STAT_LED_RED_PIN                  12  // C2       JP11-14
     #define STAT_LED_BLUE_PIN                 10  // C0       JP11-12
+
+    #define LCD_SCREEN_ROTATE                180  // 0, 90, 180, 270
 
   #elif ENABLED(MINIPANEL)
 

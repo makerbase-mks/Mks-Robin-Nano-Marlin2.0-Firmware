@@ -73,9 +73,7 @@ void lv_draw_motor_settings() {
   int index = 0;
 
   scr = lv_screen_create(MOTOR_SETTINGS_UI, machine_menu.MotorConfTitle);
-
   lv_screen_menu_item(scr, machine_menu.StepsConf, PARA_UI_POS_X, PARA_UI_POS_Y, event_handler, ID_MOTOR_STEPS, index++);
-  
   #if USE_SENSORLESS
     lv_screen_menu_item(scr, machine_menu.HomingSensitivityConf, PARA_UI_POS_X, PARA_UI_POS_Y * (index + 1), event_handler, ID_HOME_SENSE, index);
     index++;
@@ -88,7 +86,7 @@ void lv_draw_motor_settings() {
       index++;
     #endif
   #endif
-  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACL_POS_X + 10, PARA_UI_BACL_POS_Y, event_handler, ID_MOTOR_RETURN, true);
+  lv_big_button_create(scr, "F:/bmp_back70x40.bin", common_menu.text_back, PARA_UI_BACK_POS_X + 10, PARA_UI_BACK_POS_Y, event_handler, ID_MOTOR_RETURN, true);
 }
 
 void lv_clear_motor_settings() {

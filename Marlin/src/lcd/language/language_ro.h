@@ -29,7 +29,7 @@
   *
   * Translation by cristyanul
   */
-namespace Language_ro {
+namespace LanguageNarrow_ro {
   using namespace Language_en; // Inherit undefined strings from English
 
   constexpr uint8_t CHARSIZE              = 2;
@@ -49,7 +49,7 @@ namespace Language_ro {
   LSTR MSG_KILL_SUBCALL_OVERFLOW          = _UxGT("Eroare:Subcall Overflow");
   LSTR MSG_LCD_ENDSTOPS                   = _UxGT("Endstops"); // Max length 8 characters
   LSTR MSG_LCD_SOFT_ENDSTOPS              = _UxGT("Soft Endstops");
-  LSTR MSG_MAIN                           = _UxGT("Principal");
+  LSTR MSG_MAIN_MENU                      = _UxGT("Principal");
   LSTR MSG_ADVANCED_SETTINGS              = _UxGT("Setari Avansate");
   LSTR MSG_CONFIGURATION                  = _UxGT("Configurare");
   LSTR MSG_RUN_AUTO_FILES                 = _UxGT("Autostart");
@@ -68,24 +68,23 @@ namespace Language_ro {
   LSTR MSG_Z_FADE_HEIGHT                  = _UxGT("Fade Inaltime");
   LSTR MSG_SET_HOME_OFFSETS               = _UxGT("Seteaza Offseturile Acasa");
   LSTR MSG_HOME_OFFSETS_APPLIED           = _UxGT("Offseturi Aplicate");
-  LSTR MSG_SET_ORIGIN                     = _UxGT("Seteaza Originea");
-  #if PREHEAT_COUNT
-    LSTR MSG_PREHEAT_1                    = _UxGT("Preincalzeste ") PREHEAT_1_LABEL;
-    LSTR MSG_PREHEAT_1_H                  = _UxGT("Preincalzeste ") PREHEAT_1_LABEL " ~";
-    LSTR MSG_PREHEAT_1_END                = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Capatul");
-    LSTR MSG_PREHEAT_1_END_E              = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Capatul ~");
-    LSTR MSG_PREHEAT_1_ALL                = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Tot");
-    LSTR MSG_PREHEAT_1_BEDONLY            = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Patul");
-    LSTR MSG_PREHEAT_1_SETTINGS           = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Conf");
 
-    LSTR MSG_PREHEAT_M                    = _UxGT("Preincalzeste $");
-    LSTR MSG_PREHEAT_M_H                  = _UxGT("Preincalzeste $ ~");
-    LSTR MSG_PREHEAT_M_END                = _UxGT("Preincalzeste $ Capatul");
-    LSTR MSG_PREHEAT_M_END_E              = _UxGT("Preincalzeste $ Capatul ~");
-    LSTR MSG_PREHEAT_M_ALL                = _UxGT("Preincalzeste $ Tot");
-    LSTR MSG_PREHEAT_M_BEDONLY            = _UxGT("Preincalzeste $ Patul");
-    LSTR MSG_PREHEAT_M_SETTINGS           = _UxGT("Preincalzeste $ Conf");
-  #endif
+  LSTR MSG_PREHEAT_1                      = _UxGT("Preincalzeste ") PREHEAT_1_LABEL;
+  LSTR MSG_PREHEAT_1_H                    = _UxGT("Preincalzeste ") PREHEAT_1_LABEL " ~";
+  LSTR MSG_PREHEAT_1_END                  = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Capatul");
+  LSTR MSG_PREHEAT_1_END_E                = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Capatul ~");
+  LSTR MSG_PREHEAT_1_ALL                  = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Tot");
+  LSTR MSG_PREHEAT_1_BEDONLY              = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Patul");
+  LSTR MSG_PREHEAT_1_SETTINGS             = _UxGT("Preincalzeste ") PREHEAT_1_LABEL _UxGT(" Conf");
+
+  LSTR MSG_PREHEAT_M                      = _UxGT("Preincalzeste $");
+  LSTR MSG_PREHEAT_M_H                    = _UxGT("Preincalzeste $ ~");
+  LSTR MSG_PREHEAT_M_END                  = _UxGT("Preincalzeste $ Capatul");
+  LSTR MSG_PREHEAT_M_END_E                = _UxGT("Preincalzeste $ Capatul ~");
+  LSTR MSG_PREHEAT_M_ALL                  = _UxGT("Preincalzeste $ Tot");
+  LSTR MSG_PREHEAT_M_BEDONLY              = _UxGT("Preincalzeste $ Patul");
+  LSTR MSG_PREHEAT_M_SETTINGS             = _UxGT("Preincalzeste $ Conf");
+
   LSTR MSG_PREHEAT_CUSTOM                 = _UxGT("Preincalzeste Personalizat");
   LSTR MSG_COOLDOWN                       = _UxGT("Racire");
   LSTR MSG_CUTTER_FREQUENCY               = _UxGT("Frecventa");
@@ -120,9 +119,8 @@ namespace Language_ro {
   LSTR MSG_IDEX_MODE_DUPLICATE            = _UxGT("Duplication");
   LSTR MSG_IDEX_MODE_MIRRORED_COPY        = _UxGT("Mirrored Copy");
   LSTR MSG_IDEX_MODE_FULL_CTRL            = _UxGT("Full Control");
-  LSTR MSG_HOTEND_OFFSET_X                = _UxGT("2nd Nozzle X");
-  LSTR MSG_HOTEND_OFFSET_Y                = _UxGT("2nd Nozzle Y");
   LSTR MSG_HOTEND_OFFSET_Z                = _UxGT("2nd Nozzle Z");
+  LSTR MSG_HOTEND_OFFSET_A                = _UxGT("2nd Nozzle @");
   LSTR MSG_UBL_DOING_G29                  = _UxGT("Doing G29");
   LSTR MSG_UBL_TOOLS                      = _UxGT("UBL Tools");
   LSTR MSG_UBL_LEVEL_BED                  = _UxGT("Unified Bed Leveling");
@@ -144,10 +142,8 @@ namespace Language_ro {
   LSTR MSG_UBL_DONE_EDITING_MESH          = _UxGT("Done Editing Mesh");
   LSTR MSG_UBL_BUILD_CUSTOM_MESH          = _UxGT("Build Custom Mesh");
   LSTR MSG_UBL_BUILD_MESH_MENU            = _UxGT("Build Mesh");
-  #if PREHEAT_COUNT
-    LSTR MSG_UBL_BUILD_MESH_M             = _UxGT("Build Mesh ($)");
-    LSTR MSG_UBL_VALIDATE_MESH_M          = _UxGT("Validate Mesh ($)");
-  #endif
+  LSTR MSG_UBL_BUILD_MESH_M               = _UxGT("Build Mesh ($)");
+  LSTR MSG_UBL_VALIDATE_MESH_M            = _UxGT("Validate Mesh ($)");
   LSTR MSG_UBL_BUILD_COLD_MESH            = _UxGT("Build Cold Mesh");
   LSTR MSG_UBL_MESH_HEIGHT_ADJUST         = _UxGT("Adjust Mesh Height");
   LSTR MSG_UBL_MESH_HEIGHT_AMOUNT         = _UxGT("Height Amount");
@@ -224,16 +220,17 @@ namespace Language_ro {
   LSTR MSG_MOVE_X                         = _UxGT("Move X");
   LSTR MSG_MOVE_Y                         = _UxGT("Move Y");
   LSTR MSG_MOVE_Z                         = _UxGT("Move Z");
+  LSTR MSG_MOVE_N                         = _UxGT("Move @");
   LSTR MSG_MOVE_E                         = _UxGT("Extruder");
   LSTR MSG_MOVE_EN                        = _UxGT("Extruder *");
   LSTR MSG_HOTEND_TOO_COLD                = _UxGT("Capat Prea Rece");
-  LSTR MSG_MOVE_N_MM                      = _UxGT("Move %smm");
+  LSTR MSG_MOVE_N_MM                      = _UxGT("Move $mm");
   LSTR MSG_MOVE_01MM                      = _UxGT("Move 0.1mm");
   LSTR MSG_MOVE_1MM                       = _UxGT("Move 1mm");
   LSTR MSG_MOVE_10MM                      = _UxGT("Move 10mm");
   LSTR MSG_MOVE_100MM                     = _UxGT("Move 100mm");
   LSTR MSG_SPEED                          = _UxGT("Speed");
-  LSTR MSG_BED_Z                          = _UxGT("Bed Z");
+  LSTR MSG_MESH_Z_OFFSET                  = _UxGT("Bed Z");
   LSTR MSG_NOZZLE                         = _UxGT("Nozzle");
   LSTR MSG_NOZZLE_N                       = _UxGT("Nozzle ~");
   LSTR MSG_NOZZLE_PARKED                  = _UxGT("Nozzle Parked");
@@ -262,54 +259,45 @@ namespace Language_ro {
   LSTR MSG_PID_AUTOTUNE                   = _UxGT("PID Autotune");
   LSTR MSG_PID_AUTOTUNE_E                 = _UxGT("PID Autotune *");
   LSTR MSG_PID_AUTOTUNE_DONE              = _UxGT("PID tuning done");
-  LSTR MSG_PID_BAD_EXTRUDER_NUM           = _UxGT("Autotune failed. Bad extruder.");
-  LSTR MSG_PID_TEMP_TOO_HIGH              = _UxGT("Autotune failed. Temperature too high.");
+  LSTR MSG_PID_BAD_HEATER_ID              = _UxGT("Autotune failed! Bad extruder.");
+  LSTR MSG_PID_TEMP_TOO_HIGH              = _UxGT("Autotune failed! Temperature too high.");
   LSTR MSG_PID_TIMEOUT                    = _UxGT("Autotune failed! Timeout.");
-  LSTR MSG_SELECT                         = _UxGT("Select");
   LSTR MSG_SELECT_E                       = _UxGT("Select *");
   LSTR MSG_ACC                            = _UxGT("Accel");
   LSTR MSG_JERK                           = _UxGT("Jerk");
-  LSTR MSG_VA_JERK                        = _UxGT("V") LCD_STR_A _UxGT("-Jerk");
-  LSTR MSG_VB_JERK                        = _UxGT("V") LCD_STR_B _UxGT("-Jerk");
-  LSTR MSG_VC_JERK                        = _UxGT("V") LCD_STR_C _UxGT("-Jerk");
-  LSTR MSG_VI_JERK                        = _UxGT("V") LCD_STR_I _UxGT("-Jerk");
-  LSTR MSG_VJ_JERK                        = _UxGT("V") LCD_STR_J _UxGT("-Jerk");
-  LSTR MSG_VK_JERK                        = _UxGT("V") LCD_STR_K _UxGT("-Jerk");
+  LSTR MSG_VA_JERK                        = _UxGT("V") STR_A _UxGT("-Jerk");
+  LSTR MSG_VB_JERK                        = _UxGT("V") STR_B _UxGT("-Jerk");
+  LSTR MSG_VC_JERK                        = _UxGT("V") STR_C _UxGT("-Jerk");
+  LSTR MSG_VN_JERK                        = _UxGT("V@-Jerk");
   LSTR MSG_VE_JERK                        = _UxGT("Ve-Jerk");
   LSTR MSG_JUNCTION_DEVIATION             = _UxGT("Junction Dev");
-  LSTR MSG_VELOCITY                       = _UxGT("Velocity");
-  LSTR MSG_VMAX_A                         = _UxGT("Vmax ") LCD_STR_A;
-  LSTR MSG_VMAX_B                         = _UxGT("Vmax ") LCD_STR_B;
-  LSTR MSG_VMAX_C                         = _UxGT("Vmax ") LCD_STR_C;
-  LSTR MSG_VMAX_I                         = _UxGT("Vmax ") LCD_STR_I;
-  LSTR MSG_VMAX_J                         = _UxGT("Vmax ") LCD_STR_J;
-  LSTR MSG_VMAX_K                         = _UxGT("Vmax ") LCD_STR_K;
-  LSTR MSG_VMAX_E                         = _UxGT("Vmax ") LCD_STR_E;
-  LSTR MSG_VMAX_EN                        = _UxGT("Vmax *");
+  LSTR MSG_MAX_SPEED                      = _UxGT("Max Speed");
+  LSTR MSG_VMAX_A                         = _UxGT("Max Speed ") STR_A;
+  LSTR MSG_VMAX_B                         = _UxGT("Max Speed ") STR_B;
+  LSTR MSG_VMAX_C                         = _UxGT("Max Speed ") STR_C;
+  LSTR MSG_VMAX_N                         = _UxGT("Max Speed @");
+  LSTR MSG_VMAX_E                         = _UxGT("Max Speed E");
+  LSTR MSG_VMAX_EN                        = _UxGT("Max Speed *");
   LSTR MSG_VMIN                           = _UxGT("Vmin");
   LSTR MSG_VTRAV_MIN                      = _UxGT("VTrav Min");
   LSTR MSG_ACCELERATION                   = _UxGT("Acceleration");
-  LSTR MSG_AMAX_A                         = _UxGT("Amax ") LCD_STR_A;
-  LSTR MSG_AMAX_B                         = _UxGT("Amax ") LCD_STR_B;
-  LSTR MSG_AMAX_C                         = _UxGT("Amax ") LCD_STR_C;
-  LSTR MSG_AMAX_I                         = _UxGT("Amax ") LCD_STR_I;
-  LSTR MSG_AMAX_J                         = _UxGT("Amax ") LCD_STR_J;
-  LSTR MSG_AMAX_K                         = _UxGT("Amax ") LCD_STR_K;
-  LSTR MSG_AMAX_E                         = _UxGT("Amax ") LCD_STR_E;
+  LSTR MSG_AMAX_A                         = _UxGT("Amax ") STR_A;
+  LSTR MSG_AMAX_B                         = _UxGT("Amax ") STR_B;
+  LSTR MSG_AMAX_C                         = _UxGT("Amax ") STR_C;
+  LSTR MSG_AMAX_N                         = _UxGT("Amax @");
+  LSTR MSG_AMAX_E                         = _UxGT("Amax E");
   LSTR MSG_AMAX_EN                        = _UxGT("Amax *");
   LSTR MSG_A_RETRACT                      = _UxGT("A-Retract");
   LSTR MSG_A_TRAVEL                       = _UxGT("A-Travel");
   LSTR MSG_XY_FREQUENCY_LIMIT             = _UxGT("Frequency max");
   LSTR MSG_XY_FREQUENCY_FEEDRATE          = _UxGT("Feed min");
   LSTR MSG_STEPS_PER_MM                   = _UxGT("Steps/mm");
-  LSTR MSG_A_STEPS                        = LCD_STR_A _UxGT(" steps/mm");
-  LSTR MSG_B_STEPS                        = LCD_STR_B _UxGT(" steps/mm");
-  LSTR MSG_C_STEPS                        = LCD_STR_C _UxGT(" steps/mm");
-  LSTR MSG_I_STEPS                        = LCD_STR_I _UxGT(" steps/mm");
-  LSTR MSG_J_STEPS                        = LCD_STR_J _UxGT(" steps/mm");
-  LSTR MSG_K_STEPS                        = LCD_STR_K _UxGT(" steps/mm");
-  LSTR MSG_E_STEPS                        = _UxGT("Esteps/mm");
-  LSTR MSG_EN_STEPS                       = _UxGT("*steps/mm");
+  LSTR MSG_A_STEPS                        = STR_A _UxGT(" steps/mm");
+  LSTR MSG_B_STEPS                        = STR_B _UxGT(" steps/mm");
+  LSTR MSG_C_STEPS                        = STR_C _UxGT(" steps/mm");
+  LSTR MSG_N_STEPS                        = _UxGT("@ steps/mm");
+  LSTR MSG_E_STEPS                        = _UxGT("E steps/mm");
+  LSTR MSG_EN_STEPS                       = _UxGT("* steps/mm");
   LSTR MSG_TEMPERATURE                    = _UxGT("Temperature");
   LSTR MSG_MOTION                         = _UxGT("Motion");
   LSTR MSG_FILAMENT                       = _UxGT("Filament");
@@ -327,13 +315,13 @@ namespace Language_ro {
   LSTR MSG_LOAD_EEPROM                    = _UxGT("Load Settings");
   LSTR MSG_RESTORE_DEFAULTS               = _UxGT("Restore Defaults");
   LSTR MSG_INIT_EEPROM                    = _UxGT("Initialize EEPROM");
-  LSTR MSG_ERR_EEPROM_CRC                 = _UxGT("EEPROM CRC Error");
-  LSTR MSG_ERR_EEPROM_INDEX               = _UxGT("EEPROM Index Error");
-  LSTR MSG_ERR_EEPROM_VERSION             = _UxGT("EEPROM Version Error");
+  LSTR MSG_ERR_EEPROM_CRC                 = _UxGT("Err: EEPROM CRC");
+  LSTR MSG_ERR_EEPROM_SIZE                = _UxGT("Err: Mărimea EEPROM");
+  LSTR MSG_ERR_EEPROM_VERSION             = _UxGT("Err: Versiunea EEPROM");
   LSTR MSG_SETTINGS_STORED                = _UxGT("Settings Stored");
   LSTR MSG_MEDIA_UPDATE                   = _UxGT("Media Update");
   LSTR MSG_RESET_PRINTER                  = _UxGT("Reset Imprimanta");
-  LSTR MSG_REFRESH                        = LCD_STR_REFRESH  _UxGT("Refresh");
+  LSTR MSG_REFRESH                        = LCD_STR_REFRESH _UxGT("Refresh");
   LSTR MSG_INFO_SCREEN                    = _UxGT("Info Screen");
   LSTR MSG_PREPARE                        = _UxGT("Prepare");
   LSTR MSG_TUNE                           = _UxGT("Tune");
@@ -358,7 +346,7 @@ namespace Language_ro {
   LSTR MSG_STOP_PRINT                     = _UxGT("Stop Print");
   LSTR MSG_PRINTING_OBJECT                = _UxGT("Printing Object");
   LSTR MSG_CANCEL_OBJECT                  = _UxGT("Cancel Object");
-  LSTR MSG_CANCEL_OBJECT_N                = _UxGT("Cancel Object =");
+  LSTR MSG_CANCEL_OBJECT_N                = _UxGT("Cancel Object {");
   LSTR MSG_OUTAGE_RECOVERY                = _UxGT("Outage Recovery");
   LSTR MSG_MEDIA_MENU                     = _UxGT("Print from Media");
   LSTR MSG_NO_MEDIA                       = _UxGT("No Media");
@@ -429,7 +417,7 @@ namespace Language_ro {
   LSTR MSG_MANUAL_DEPLOY_TOUCHMI          = _UxGT("Deploy TouchMI");
   LSTR MSG_MANUAL_DEPLOY                  = _UxGT("Deploy Z-Probe");
   LSTR MSG_MANUAL_STOW                    = _UxGT("Stow Z-Probe");
-  LSTR MSG_HOME_FIRST                     = _UxGT("Home %s%s%s First");
+  LSTR MSG_HOME_FIRST                     = _UxGT("Home %s First");
   LSTR MSG_ZPROBE_OFFSETS                 = _UxGT("Probe Offsets");
   LSTR MSG_ZPROBE_XOFFSET                 = _UxGT("Probe X Offset");
   LSTR MSG_ZPROBE_YOFFSET                 = _UxGT("Probe Y Offset");
@@ -437,6 +425,7 @@ namespace Language_ro {
   LSTR MSG_BABYSTEP_X                     = _UxGT("Babystep X");
   LSTR MSG_BABYSTEP_Y                     = _UxGT("Babystep Y");
   LSTR MSG_BABYSTEP_Z                     = _UxGT("Babystep Z");
+  LSTR MSG_BABYSTEP_N                     = _UxGT("Babystep @");
   LSTR MSG_BABYSTEP_TOTAL                 = _UxGT("Total");
   LSTR MSG_ENDSTOP_ABORT                  = _UxGT("Endstop Abort");
   LSTR MSG_HEATING_FAILED_LCD             = _UxGT("Heating Failed");
@@ -461,8 +450,6 @@ namespace Language_ro {
   LSTR MSG_DELTA_CALIBRATE_CENTER         = _UxGT("Calibrate Center");
   LSTR MSG_DELTA_SETTINGS                 = _UxGT("Delta Settings");
   LSTR MSG_DELTA_AUTO_CALIBRATE           = _UxGT("Auto Calibration");
-  LSTR MSG_DELTA_HEIGHT_CALIBRATE         = _UxGT("Set Delta Height");
-  LSTR MSG_DELTA_Z_OFFSET_CALIBRATE       = _UxGT("Probe Z-offset");
   LSTR MSG_DELTA_DIAG_ROD                 = _UxGT("Diag Rod");
   LSTR MSG_DELTA_HEIGHT                   = _UxGT("Inaltime");
   LSTR MSG_DELTA_RADIUS                   = _UxGT("Radius");
@@ -487,31 +474,17 @@ namespace Language_ro {
   LSTR MSG_CASE_LIGHT_BRIGHTNESS          = _UxGT("Light Brightness");
   LSTR MSG_KILL_EXPECTED_PRINTER          = _UxGT("INCORRECT PRINTER");
 
-#if LCD_WIDTH >= 20
-  LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Total Printuri");
-  LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Completat");
-  LSTR MSG_INFO_PRINT_TIME                = _UxGT("Timp Imprimare Total");
-  LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Longest Job Time");
-  LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Total Extrudat");
-#else
   LSTR MSG_INFO_PRINT_COUNT               = _UxGT("Prints");
   LSTR MSG_INFO_COMPLETED_PRINTS          = _UxGT("Completed");
   LSTR MSG_INFO_PRINT_TIME                = _UxGT("Total");
   LSTR MSG_INFO_PRINT_LONGEST             = _UxGT("Longest");
   LSTR MSG_INFO_PRINT_FILAMENT            = _UxGT("Extruded");
-#endif
 
   LSTR MSG_INFO_MIN_TEMP                  = _UxGT("Temperatura Minima");
   LSTR MSG_INFO_MAX_TEMP                  = _UxGT("Temperatura Maxima");
   LSTR MSG_INFO_PSU                       = _UxGT("PSU");
   LSTR MSG_DRIVE_STRENGTH                 = _UxGT("Drive Strength");
-  LSTR MSG_DAC_PERCENT_A                  = LCD_STR_A _UxGT(" Driver %");
-  LSTR MSG_DAC_PERCENT_B                  = LCD_STR_B _UxGT(" Driver %");
-  LSTR MSG_DAC_PERCENT_C                  = LCD_STR_C _UxGT(" Driver %");
-  LSTR MSG_DAC_PERCENT_I                  = LCD_STR_I _UxGT(" Driver %");
-  LSTR MSG_DAC_PERCENT_J                  = LCD_STR_J _UxGT(" Driver %");
-  LSTR MSG_DAC_PERCENT_K                  = LCD_STR_K _UxGT(" Driver %");
-  LSTR MSG_DAC_PERCENT_E                  = _UxGT("E Driver %");
+  LSTR MSG_DAC_PERCENT_N                  = _UxGT("@ Driver %");
   LSTR MSG_ERROR_TMC                      = _UxGT("TMC CONNECTION ERROR");
   LSTR MSG_DAC_EEPROM_WRITE               = _UxGT("DAC EEPROM Write");
   LSTR MSG_FILAMENT_CHANGE_HEADER         = _UxGT("FILAMENT CHANGE");
@@ -549,7 +522,7 @@ namespace Language_ro {
   LSTR MSG_MMU2_EJECT_RECOVER             = _UxGT("Remove, click");
 
   LSTR MSG_MIX                            = _UxGT("Mix");
-  LSTR MSG_MIX_COMPONENT_N                = _UxGT("Component =");
+  LSTR MSG_MIX_COMPONENT_N                = _UxGT("Component {");
   LSTR MSG_MIXER                          = _UxGT("Mixer");
   LSTR MSG_GRADIENT                       = _UxGT("Gradient");
   LSTR MSG_FULL_GRADIENT                  = _UxGT("Full Gradient");
@@ -577,22 +550,8 @@ namespace Language_ro {
   LSTR MSG_BAD_PAGE_SPEED                 = _UxGT("Bad page speed");
 
   //
-  // Filament Inlocuire screens show up to 3 lines on a 4-line display
-  //                        ...or up to 2 lines on a 3-line display
+  // Filament Inlocuire screens show up to 2 lines on a 3-line display
   //
-#if LCD_HEIGHT >= 4
-  LSTR MSG_ADVANCED_PAUSE_WAITING         = _UxGT(MSG_2_LINE("Apasa Butonul", "pentru a reveni la print"));
-  LSTR MSG_PAUSE_PRINT_PARKING            = _UxGT(MSG_1_LINE("Parcare..."));
-  LSTR MSG_FILAMENT_CHANGE_INIT           = _UxGT(MSG_3_LINE("Astept ca", "inlocuirea filamentului", "sa inceapa"));
-  LSTR MSG_FILAMENT_CHANGE_INSERT         = _UxGT(MSG_3_LINE("Insert filament", "and press button", "to continue"));
-  LSTR MSG_FILAMENT_CHANGE_HEAT           = _UxGT(MSG_2_LINE("Press button", "to heat nozzle"));
-  LSTR MSG_FILAMENT_CHANGE_HEATING        = _UxGT(MSG_2_LINE("Nozzle heating", "Please wait..."));
-  LSTR MSG_FILAMENT_CHANGE_UNLOAD         = _UxGT(MSG_2_LINE("Wait for", "filament unload"));
-  LSTR MSG_FILAMENT_CHANGE_LOAD           = _UxGT(MSG_2_LINE("Wait for", "filament load"));
-  LSTR MSG_FILAMENT_CHANGE_PURGE          = _UxGT(MSG_2_LINE("Wait for", "filament purge"));
-  LSTR MSG_FILAMENT_CHANGE_CONT_PURGE     = _UxGT(MSG_2_LINE("Click to finish", "filament purge"));
-  LSTR MSG_FILAMENT_CHANGE_RESUME         = _UxGT(MSG_2_LINE("Wait for print", "to resume..."));
-#else
   LSTR MSG_ADVANCED_PAUSE_WAITING         = _UxGT(MSG_1_LINE("Click to continue"));
   LSTR MSG_PAUSE_PRINT_PARKING            = _UxGT(MSG_1_LINE("Parcare..."));
   LSTR MSG_FILAMENT_CHANGE_INIT           = _UxGT(MSG_1_LINE("Va rog asteptati..."));
@@ -604,7 +563,7 @@ namespace Language_ro {
   LSTR MSG_FILAMENT_CHANGE_PURGE          = _UxGT(MSG_1_LINE("Curatare..."));
   LSTR MSG_FILAMENT_CHANGE_CONT_PURGE     = _UxGT(MSG_1_LINE("Click pentru a termina"));
   LSTR MSG_FILAMENT_CHANGE_RESUME         = _UxGT(MSG_1_LINE("Se Reia..."));
-#endif
+
   LSTR MSG_TMC_DRIVERS                    = _UxGT("TMC Drivers");
   LSTR MSG_TMC_CURRENT                    = _UxGT("Driver Current");
   LSTR MSG_TMC_HYBRID_THRS                = _UxGT("Hybrid Threshold");
@@ -624,10 +583,34 @@ namespace Language_ro {
   LSTR MSG_REHEATING                      = _UxGT("Reincalzire...");
 }
 
-#if FAN_COUNT == 1
-  #define MSG_FIRST_FAN_SPEED       MSG_FAN_SPEED
-  #define MSG_EXTRA_FIRST_FAN_SPEED MSG_EXTRA_FAN_SPEED
-#else
-  #define MSG_FIRST_FAN_SPEED       MSG_FAN_SPEED_N
-  #define MSG_EXTRA_FIRST_FAN_SPEED MSG_EXTRA_FAN_SPEED_N
-#endif
+namespace LanguageWide_ro {
+  using namespace LanguageNarrow_ro;
+  #if LCD_WIDTH >= 20 || HAS_DWIN_E3V2
+    LSTR MSG_INFO_PRINT_COUNT             = _UxGT("Total Printuri");
+    LSTR MSG_INFO_COMPLETED_PRINTS        = _UxGT("Completat");
+    LSTR MSG_INFO_PRINT_TIME              = _UxGT("Timp Imprimare Total");
+    LSTR MSG_INFO_PRINT_LONGEST           = _UxGT("Longest Job Time");
+    LSTR MSG_INFO_PRINT_FILAMENT          = _UxGT("Total Extrudat");
+  #endif
+}
+
+namespace LanguageTall_ro {
+  using namespace LanguageWide_ro;
+  #if LCD_HEIGHT >= 4
+    // Filament Change screens show up to 3 lines on a 4-line display
+    LSTR MSG_ADVANCED_PAUSE_WAITING       = _UxGT(MSG_2_LINE("Apasa Butonul", "pentru a reveni la print"));
+    LSTR MSG_FILAMENT_CHANGE_INIT         = _UxGT(MSG_3_LINE("Astept ca", "inlocuirea filamentului", "sa inceapa"));
+    LSTR MSG_FILAMENT_CHANGE_INSERT       = _UxGT(MSG_3_LINE("Insert filament", "and press button", "to continue"));
+    LSTR MSG_FILAMENT_CHANGE_HEAT         = _UxGT(MSG_2_LINE("Press button", "to heat nozzle"));
+    LSTR MSG_FILAMENT_CHANGE_HEATING      = _UxGT(MSG_2_LINE("Nozzle heating", "Please wait..."));
+    LSTR MSG_FILAMENT_CHANGE_UNLOAD       = _UxGT(MSG_2_LINE("Wait for", "filament unload"));
+    LSTR MSG_FILAMENT_CHANGE_LOAD         = _UxGT(MSG_2_LINE("Wait for", "filament load"));
+    LSTR MSG_FILAMENT_CHANGE_PURGE        = _UxGT(MSG_2_LINE("Wait for", "filament purge"));
+    LSTR MSG_FILAMENT_CHANGE_CONT_PURGE   = _UxGT(MSG_2_LINE("Click to finish", "filament purge"));
+    LSTR MSG_FILAMENT_CHANGE_RESUME       = _UxGT(MSG_2_LINE("Wait for print", "to resume..."));
+  #endif
+}
+
+namespace Language_ro {
+  using namespace LanguageTall_ro;
+}

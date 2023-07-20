@@ -22,7 +22,7 @@
 #pragma once
 
 /**
- * CREALITY v4.2.7 (STM32F103) board pin assignments
+ * CREALITY v4.2.7 (STM32F103RE / STM32F103RC) board pin assignments
  */
 
 #define BOARD_INFO_NAME      "Creality v4.2.7"
@@ -33,9 +33,10 @@
 //
 #define X_STEP_PIN                          PB9
 #define X_DIR_PIN                           PC2
-#define Y_STEP_PIN                          PB7
 
+#define Y_STEP_PIN                          PB7
 #define Y_DIR_PIN                           PB8
+
 #define Z_STEP_PIN                          PB5
 #define Z_DIR_PIN                           PB6
 

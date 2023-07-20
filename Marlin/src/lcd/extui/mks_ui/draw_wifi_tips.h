@@ -22,7 +22,7 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" { /* C-declarations for C++ */
+  extern "C" {
 #endif
 
 
@@ -38,7 +38,7 @@ extern TIPS_TYPE wifi_tips_type;
 
 typedef struct {
   unsigned char timer;
-  unsigned int timer_count;
+  uint16_t timer_count;
 } TIPS_DISP;
 extern TIPS_DISP tips_disp;
 

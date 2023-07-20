@@ -123,7 +123,7 @@
 #else
   #define HEATER_1_PIN                         8
 #endif
-#define FAN_PIN                                9
+#define FAN0_PIN                               9
 #define FAN1_PIN                               7
 #define FAN2_PIN                              12
 
@@ -155,8 +155,8 @@
 //
 #if HAS_CUTTER && !defined(SPINDLE_LASER_ENA_PIN)
   #if !NUM_SERVOS                                 // Use servo connector if possible
-    #define SPINDLE_LASER_ENA_PIN              4  // Pullup or pulldown!
     #define SPINDLE_LASER_PWM_PIN              6  // Hardware PWM
+    #define SPINDLE_LASER_ENA_PIN              4  // Pullup or pulldown!
     #define SPINDLE_DIR_PIN                    5
   #else
     #error "No auto-assignable Spindle/Laser pins available."
@@ -164,18 +164,16 @@
 #endif
 
 //
-// TMC software SPI
+// TMC SPI
 //
-#if ENABLED(TMC_USE_SW_SPI)
-  #ifndef TMC_SW_MOSI
-    #define TMC_SW_MOSI                       58  // Mega/Due:66 - AGCM4:58
-  #endif
-  #ifndef TMC_SW_MISO
-    #define TMC_SW_MISO                       44
-  #endif
-  #ifndef TMC_SW_SCK
-    #define TMC_SW_SCK                        56  // Mega/Due:64 - AGCM4:56
-  #endif
+#ifndef TMC_SPI_MOSI
+  #define TMC_SPI_MOSI                        58  // Mega/Due:66 - AGCM4:58
+#endif
+#ifndef TMC_SPI_MISO
+  #define TMC_SPI_MISO                        44
+#endif
+#ifndef TMC_SPI_SCK
+  #define TMC_SPI_SCK                         56  // Mega/Due:64 - AGCM4:56
 #endif
 
 #if HAS_TMC_UART
@@ -275,14 +273,14 @@
 
     // TO TEST
     //#define LCD_PINS_RS                     49  // CS chip select /SS chip slave select
-    //#define LCD_PINS_ENABLE                 51  // SID (MOSI)
+    //#define LCD_PINS_EN                     51  // SID (MOSI)
     //#define LCD_PINS_D4                     52  // SCK (CLK) clock
 
-  #elif BOTH(IS_NEWPANEL, PANEL_ONE)
+  #elif ALL(IS_NEWPANEL, PANEL_ONE)
 
     // TO TEST
     //#define LCD_PINS_RS                     40
-    //#define LCD_PINS_ENABLE                 42
+    //#define LCD_PINS_EN                     42
     //#define LCD_PINS_D4                     57  // Mega/Due:65 - AGCM4:57
     //#define LCD_PINS_D5                     58  // Mega/Due:66 - AGCM4:58
     //#define LCD_PINS_D6                     44
@@ -294,7 +292,7 @@
 
       // TO TEST
       //#define LCD_PINS_RS                   27
-      //#define LCD_PINS_ENABLE               29
+      //#define LCD_PINS_EN                   29
       //#define LCD_PINS_D4                   25
 
       #if !IS_NEWPANEL
@@ -306,7 +304,7 @@
 
       // TO TEST
       //#define LCD_PINS_RS                   56  // Mega/Due:64 - AGCM4:56
-      //#define LCD_PINS_ENABLE               44
+      //#define LCD_PINS_EN                   44
       //#define LCD_PINS_D4                   55  // Mega/Due:63 - AGCM4:55
       //#define LCD_PINS_D5                   40
       //#define LCD_PINS_D6                   42
@@ -314,7 +312,7 @@
 
     #else
 
-      #if EITHER(MKS_12864OLED, MKS_12864OLED_SSD1306)
+      #if ANY(MKS_12864OLED, MKS_12864OLED_SSD1306)
         // TO TEST
         //#define LCD_PINS_DC                 25  // Set as output on init
         //#define LCD_PINS_RS                 27  // Pull low for 1s to init
@@ -325,7 +323,7 @@
         //#define DOGLCD_A0          LCD_PINS_DC
       #else
         #define LCD_PINS_RS                   16
-        #define LCD_PINS_ENABLE               17
+        #define LCD_PINS_EN                   17
         #define LCD_PINS_D4                   23
         #define LCD_PINS_D5                   25
         #define LCD_PINS_D6                   27
@@ -413,7 +411,6 @@
       // TO TEST
       //#define DOGLCD_CS                     45
       //#define DOGLCD_A0                     44
-      //#define LCD_SCREEN_ROT_180
 
       //#define BEEPER_PIN                    33
       //#define STAT_LED_RED_PIN              32
@@ -425,6 +422,8 @@
 
       //#define SD_DETECT_PIN                 -1  // Pin 49 for display SD interface, 72 for easy adapter board
       //#define KILL_PIN                      31
+
+      //#define LCD_SCREEN_ROTATE            180  // 0, 90, 180, 270
 
     #elif ENABLED(ELB_FULL_GRAPHIC_CONTROLLER)
 
@@ -443,7 +442,7 @@
       //#define SD_DETECT_PIN                 49
       //#define KILL_PIN                      41
 
-    #elif EITHER(MKS_MINI_12864, FYSETC_MINI_12864)
+    #elif ANY(MKS_MINI_12864, FYSETC_MINI_12864)
 
       // TO TEST
       //#define BEEPER_PIN                    37
@@ -451,7 +450,7 @@
       //#define SD_DETECT_PIN                 49
 
       //#ifndef KILL_PIN
-      //  #define KILL_PIN         41
+      //  #define KILL_PIN                    41
       //#endif
 
       #if ENABLED(MKS_MINI_12864)
@@ -460,17 +459,13 @@
         //#define DOGLCD_A0                   27
         //#define DOGLCD_CS                   25
 
-        // GLCD features
-        // Uncomment screen orientation
-        //#define LCD_SCREEN_ROT_90
-        //#define LCD_SCREEN_ROT_180
-        //#define LCD_SCREEN_ROT_270
-
         // not connected to a pin
         //#define LCD_BACKLIGHT_PIN           57  // backlight LED on A11/D? (Mega/Due:65 - AGCM4:57)
 
         //#define BTN_EN1                     31
         //#define BTN_EN2                     33
+
+        //#define LCD_SCREEN_ROTATE          180  // 0, 90, 180, 270
 
       #elif ENABLED(FYSETC_MINI_12864)
 
@@ -488,7 +483,7 @@
 
         //#define LCD_RESET_PIN               23  // Must be high or open for LCD to operate normally.
 
-        #if EITHER(FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0)
+        #if ANY(FYSETC_MINI_12864_1_2, FYSETC_MINI_12864_2_0)
           #ifndef RGB_LED_R_PIN
             // TO TEST
             //#define RGB_LED_R_PIN           25
@@ -518,18 +513,14 @@
       //#define DOGLCD_A0                     44
       //#define DOGLCD_CS                     58  // Mega/Due:66 - AGCM4:58
 
-      // GLCD features
-      // Uncomment screen orientation
-      //#define LCD_SCREEN_ROT_90
-      //#define LCD_SCREEN_ROT_180
-      //#define LCD_SCREEN_ROT_270
-
       //#define BTN_EN1                       40
       //#define BTN_EN2                       55  // Mega/Due:63 - AGCM4:55
       //#define BTN_ENC                       72  // Mega/Due:59 - AGCM4:72
 
       //#define SD_DETECT_PIN                 49
       //#define KILL_PIN                      56  // Mega/Due:64 - AGCM4:56
+
+      //#define LCD_SCREEN_ROTATE            180  // 0, 90, 180, 270
 
     #elif ENABLED(ZONESTAR_LCD)
 

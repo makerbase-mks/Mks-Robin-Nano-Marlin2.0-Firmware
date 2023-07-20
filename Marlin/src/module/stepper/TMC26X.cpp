@@ -34,7 +34,7 @@
 
 #include "TMC26X.h"
 
-#define _TMC26X_DEFINE(ST) TMC26XStepper stepper##ST(200, ST##_CS_PIN, ST##_STEP_PIN, ST##_DIR_PIN, ST##_MAX_CURRENT, ST##_SENSE_RESISTOR)
+#define _TMC26X_DEFINE(ST) TMC26XStepper stepper##ST(200, ST##_CS_PIN, ST##_STEP_PIN, ST##_DIR_PIN, ST##_CURRENT, int(ST##_RSENSE * 1000))
 
 #if AXIS_DRIVER_TYPE_X(TMC26X)
   _TMC26X_DEFINE(X);
@@ -68,6 +68,15 @@
 #endif
 #if AXIS_DRIVER_TYPE_K(TMC26X)
   _TMC26X_DEFINE(K);
+#endif
+#if AXIS_DRIVER_TYPE_U(TMC26X)
+  _TMC26X_DEFINE(U);
+#endif
+#if AXIS_DRIVER_TYPE_V(TMC26X)
+  _TMC26X_DEFINE(V);
+#endif
+#if AXIS_DRIVER_TYPE_W(TMC26X)
+  _TMC26X_DEFINE(W);
 #endif
 #if AXIS_DRIVER_TYPE_E0(TMC26X)
   _TMC26X_DEFINE(E0);
@@ -132,6 +141,15 @@ void tmc26x_init_to_defaults() {
   #endif
   #if AXIS_DRIVER_TYPE_K(TMC26X)
     _TMC26X_INIT(K);
+  #endif
+  #if AXIS_DRIVER_TYPE_U(TMC26X)
+    _TMC26X_INIT(U);
+  #endif
+  #if AXIS_DRIVER_TYPE_V(TMC26X)
+    _TMC26X_INIT(V);
+  #endif
+  #if AXIS_DRIVER_TYPE_W(TMC26X)
+    _TMC26X_INIT(W);
   #endif
   #if AXIS_DRIVER_TYPE_E0(TMC26X)
     _TMC26X_INIT(E0);

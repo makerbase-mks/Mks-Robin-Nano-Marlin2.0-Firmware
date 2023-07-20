@@ -55,19 +55,6 @@
   #include "draw_touch_calibration.h"
 #endif
 
-#if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-  // #include "../../../../feature/bedlevel/bedlevel.h"
-  #include "../../../../src/feature/bedlevel/bedlevel.h"
-
-#endif
-
-#if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-  extern bed_mesh_t z_values;
-#endif
-
-
-
-
 extern lv_group_t *g;
 static lv_obj_t *scr, *tempText1, *filament_bar;
 
@@ -98,12 +85,12 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
     lv_clear_dialog();
     lv_draw_printing();
 
-    #if ENABLED(SDSUPPORT)
+    #if HAS_MEDIA
       if (!gcode_preview_over) {
         char *cur_name;
         cur_name = strrchr(list_file.file_name[sel_id], '/');
 
-        SdFile file, *curDir;
+        MediaFile file, *curDir;
         card.abortFilePrintNow();
         const char * const fname = card.diveToFile(false, curDir, cur_name);
         if (!fname) return;
@@ -134,39 +121,14 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
     lv_clear_dialog();
     lv_draw_ready_print();
 
-    #if ENABLED(SDSUPPORT)
+    #if HAS_MEDIA
       uiCfg.print_state = IDLE;
       card.abortFilePrintSoon();
-    #endif
-
-    #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-      if (uiCfg.adjustZoffset) {
-        #if DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
-          for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
-            for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
-              z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
-        #endif
-        TERN_(EEPROM_SETTINGS, (void)settings.save());
-        uiCfg.babyStepZoffsetDiff = 0;
-        uiCfg.adjustZoffset       = 0;
-      }
     #endif
   }
   else if (DIALOG_IS(TYPE_FINISH_PRINT)) {
     clear_cur_ui();
     lv_draw_ready_print();
-    #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-      if (uiCfg.adjustZoffset) {
-        #if DISABLED(Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
-          for (uint8_t x = 0; x < GRID_MAX_POINTS_X; x++)
-            for (uint8_t y = 0; y < GRID_MAX_POINTS_Y; y++)
-              z_values[x][y] = z_values[x][y] + uiCfg.babyStepZoffsetDiff;
-        #endif
-        TERN_(EEPROM_SETTINGS, (void)settings.save());
-        uiCfg.babyStepZoffsetDiff = 0;
-        uiCfg.adjustZoffset       = 0;
-      }
-    #endif
   }
   #if ENABLED(ADVANCED_PAUSE_FEATURE)
     else if (DIALOG_IS(PAUSE_MESSAGE_WAITING, PAUSE_MESSAGE_INSERT, PAUSE_MESSAGE_HEAT))
@@ -174,19 +136,16 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
     else if (DIALOG_IS(PAUSE_MESSAGE_OPTION))
       pause_menu_response = PAUSE_RESPONSE_EXTRUDE_MORE;
     else if (DIALOG_IS(PAUSE_MESSAGE_RESUME)) {
-      clear_cur_ui();
-      draw_return_ui();
+      goto_previous_ui();
     }
   #endif
   else if (DIALOG_IS(STORE_EEPROM_TIPS)) {
     TERN_(EEPROM_SETTINGS, (void)settings.save());
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
   else if (DIALOG_IS(READ_EEPROM_TIPS)) {
     TERN_(EEPROM_SETTINGS, (void)settings.load());
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
   else if (DIALOG_IS(REVERT_EEPROM_TIPS)) {
     TERN_(EEPROM_SETTINGS, (void)settings.reset());
@@ -204,27 +163,23 @@ static void btn_ok_event_cb(lv_obj_t *btn, lv_event_t event) {
   }
   else if (DIALOG_IS(WIFI_CONFIG_TIPS)) {
     uiCfg.configWifi = true;
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
   else if (DIALOG_IS(TYPE_FILAMENT_HEAT_LOAD_COMPLETED))
     uiCfg.filament_heat_completed_load = true;
   else if (DIALOG_IS(TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED))
     uiCfg.filament_heat_completed_unload = true;
   else if (DIALOG_IS(TYPE_FILAMENT_LOAD_COMPLETED, TYPE_FILAMENT_UNLOAD_COMPLETED)) {
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
   #if ENABLED(MKS_WIFI_MODULE)
     else if (DIALOG_IS(TYPE_UNBIND)) {
       cloud_unbind();
-      clear_cur_ui();
-      draw_return_ui();
+      goto_previous_ui();
     }
   #endif
   else {
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
 }
 
@@ -235,11 +190,10 @@ static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
   }
   else if (DIALOG_IS(TYPE_FILAMENT_LOAD_HEAT, TYPE_FILAMENT_UNLOAD_HEAT, TYPE_FILAMENT_HEAT_LOAD_COMPLETED, TYPE_FILAMENT_HEAT_UNLOAD_COMPLETED)) {
     thermalManager.setTargetHotend(uiCfg.hotendTargetTempBak, uiCfg.extruderIndex);
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
   else if (DIALOG_IS(TYPE_FILAMENT_LOADING, TYPE_FILAMENT_UNLOADING)) {
-    queue.enqueue_one_P(PSTR("M410"));
+    queue.enqueue_one(F("M410"));
     uiCfg.filament_rate                = 0;
     uiCfg.filament_loading_completed   = false;
     uiCfg.filament_unloading_completed = false;
@@ -248,12 +202,10 @@ static void btn_cancel_event_cb(lv_obj_t *btn, lv_event_t event) {
     uiCfg.filament_unloading_time_flg  = false;
     uiCfg.filament_unloading_time_cnt  = 0;
     thermalManager.setTargetHotend(uiCfg.hotendTargetTempBak, uiCfg.extruderIndex);
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
   else {
-    clear_cur_ui();
-    draw_return_ui();
+    goto_previous_ui();
   }
 }
 
@@ -329,11 +281,6 @@ void lv_draw_dialog(uint8_t type) {
     lv_bar_set_anim_time(filament_bar, 1000);
     lv_bar_set_value(filament_bar, 0, LV_ANIM_ON);
   }
-  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-    else if (DIALOG_IS(TYPE_AUTO_LEVELING_TIPS)) {
-      //nothing to do
-    }
-  #endif
   else {
     btnOk = lv_button_btn_create(scr, BTN_OK_X, BTN_OK_Y, 100, 50, btn_ok_event_cb);
     lv_obj_t *labelOk = lv_label_create_empty(btnOk);             // Add a label to the button
@@ -364,10 +311,6 @@ void lv_draw_dialog(uint8_t type) {
   else if (DIALOG_IS(TYPE_FINISH_PRINT)) {
     lv_label_set_text(labelDialog, print_file_dialog_menu.print_finish);
     lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -20);
-
-    sprintf_P(public_buf_l, PSTR("%s: %d%d:%d%d:%d%d"), print_file_dialog_menu.print_time, print_time.hours / 10, print_time.hours % 10, print_time.minutes / 10, print_time.minutes % 10, print_time.seconds / 10, print_time.seconds % 10);
-    lv_obj_t *labelPrintTime = lv_label_create(scr, public_buf_l);
-    lv_obj_align(labelPrintTime, nullptr, LV_ALIGN_CENTER, 0, -60);
   }
   else if (DIALOG_IS(PAUSE_MESSAGE_PARKING)) {
     lv_label_set_text(labelDialog, pause_msg_menu.pausing);
@@ -517,14 +460,6 @@ void lv_draw_dialog(uint8_t type) {
       lv_obj_align(labelDialog, nullptr, LV_ALIGN_CENTER, 0, -70);
     }
   #endif
-
-  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-    else if (DIALOG_IS(TYPE_AUTO_LEVELING_TIPS)) {
-      lv_label_set_text(labelDialog, print_file_dialog_menu.autolevelingTips);
-      lv_obj_align(labelDialog, NULL, LV_ALIGN_CENTER, 0, 0);
-    }
-  #endif
-  
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) {
       if (btnOk) lv_group_add_obj(g, btnOk);

@@ -34,17 +34,9 @@
 #include "../../../inc/MarlinConfig.h"
 
 extern lv_group_t *g;
-
-#ifndef USE_NEW_LVGL_CONF
 static lv_obj_t *scr;
-#endif
-
 static lv_obj_t *buttonType;
-static lv_obj_t *buttonIn, *buttonOut;
-
-
 static lv_obj_t *labelType;
-
 static lv_obj_t *tempText1;
 
 enum {
@@ -102,61 +94,41 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_FILAMNT_RETURN:
       #if HAS_MULTI_EXTRUDER
         if (uiCfg.print_state != IDLE && uiCfg.print_state != REPRINTED)
-          gcode.process_subcommands_now_P(uiCfg.extruderIndexBak == 1 ? PSTR("T1") : PSTR("T0"));
+          gcode.process_subcommands_now(uiCfg.extruderIndexBak == 1 ? F("T1") : F("T0"));
       #endif
       feedrate_mm_s = (float)uiCfg.moveSpeed_bak;
       if (uiCfg.print_state == PAUSED)
         planner.set_e_position_mm((destination.e = current_position.e = uiCfg.current_e_position_bak));
       thermalManager.setTargetHotend(uiCfg.hotendTargetTempBak, uiCfg.extruderIndex);
 
-      // lv_clear_filament_change();
-      // lv_draw_tool();
-      clear_cur_ui();
-      draw_return_ui();
+      goto_previous_ui();
       break;
   }
 }
 
 void lv_draw_filament_change() {
-  
-#ifdef USE_NEW_LVGL_CONF
-  mks_ui.src_main = lv_screen_create(FILAMENTCHANGE_UI);
-  lv_obj_t *buttonIn = lv_big_button_create(mks_ui.src_main, "F:/bmp_in.bin", filament_menu.in, INTERVAL_V, titleHeight, event_handler, ID_FILAMNT_IN);
-  lv_obj_clear_protect(buttonIn, LV_PROTECT_FOLLOW);
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_out.bin", filament_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_FILAMNT_OUT);
-  buttonType = lv_imgbtn_create(mks_ui.src_main, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_FILAMNT_TYPE);
-  #if HAS_ROTARY_ENCODER
-    if (gCfgItems.encoder_enable)
-      lv_group_add_obj(g, buttonType);
-  #endif
-  lv_big_button_create(mks_ui.src_main, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_FILAMNT_RETURN);
-  // Create labels on the image buttons
-  labelType = lv_label_create_empty(buttonType);
-  tempText1 = lv_label_create_empty(mks_ui.src_main);
-  #else
   scr = lv_screen_create(FILAMENTCHANGE_UI);
-  // lv_obj_t *buttonIn = lv_big_button_create(scr, "F:/bmp_in.bin", filament_menu.in, INTERVAL_V, titleHeight, event_handler, ID_FILAMNT_IN);
-  // lv_obj_clear_protect(buttonIn, LV_PROTECT_FOLLOW);
-  buttonIn = lv_big_button_create(scr, "F:/bmp_in.bin", filament_menu.in, INTERVAL_V, titleHeight, event_handler, ID_FILAMNT_IN);
-  buttonOut = lv_big_button_create(scr, "F:/bmp_out.bin", filament_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_FILAMNT_OUT);
+  // Create an Image button
+  lv_obj_t *buttonIn = lv_big_button_create(scr, "F:/bmp_in.bin", filament_menu.in, INTERVAL_V, titleHeight, event_handler, ID_FILAMNT_IN);
+  lv_obj_clear_protect(buttonIn, LV_PROTECT_FOLLOW);
+  lv_big_button_create(scr, "F:/bmp_out.bin", filament_menu.out, BTN_X_PIXEL * 3 + INTERVAL_V * 4, titleHeight, event_handler, ID_FILAMNT_OUT);
 
   buttonType = lv_imgbtn_create(scr, nullptr, INTERVAL_V, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_FILAMNT_TYPE);
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable)
       lv_group_add_obj(g, buttonType);
   #endif
+
   lv_big_button_create(scr, "F:/bmp_return.bin", common_menu.text_back, BTN_X_PIXEL * 3 + INTERVAL_V * 4, BTN_Y_PIXEL + INTERVAL_H + titleHeight, event_handler, ID_FILAMNT_RETURN);
+
   // Create labels on the image buttons
   labelType = lv_label_create_empty(buttonType);
-  tempText1 = lv_label_create_empty(scr);
-#endif
+
   disp_filament_type();
 
+  tempText1 = lv_label_create_empty(scr);
   lv_obj_set_style(tempText1, &tft_style_label_rel);
   disp_filament_temp();
-
-  lv_imgbtn_set_src_both(buttonOut, "F:/bmp_out.bin");
-  lv_imgbtn_set_src_both(buttonIn, "F:/bmp_in.bin");
 }
 
 void disp_filament_type() {
@@ -194,12 +166,7 @@ void lv_clear_filament_change() {
   #if HAS_ROTARY_ENCODER
     if (gCfgItems.encoder_enable) lv_group_remove_all_objs(g);
   #endif
-
-#ifdef USE_NEW_LVGL_CONF
-  lv_obj_clean(mks_ui.src_main);
-#else
   lv_obj_del(scr);
-#endif
 }
 
 #endif // HAS_TFT_LVGL_UI

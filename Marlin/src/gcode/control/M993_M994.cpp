@@ -22,7 +22,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if ALL(HAS_SPI_FLASH, SDSUPPORT, MARLIN_DEV_MODE)
+#if SPI_FLASH_BACKUP
 
 #include "../gcode.h"
 #include "../../sd/cardreader.h"
@@ -43,7 +43,7 @@ void GcodeSuite::M993() {
 
   uint8_t buf[1024];
   uint32_t addr = 0;
-  W25QXX.init(SPI_FULL_SPEED);
+  W25QXX.init(SPI_QUARTER_SPEED);
   SERIAL_ECHOPGM("Save SPI Flash");
   while (addr < SPI_FLASH_SIZE) {
     W25QXX.SPI_FLASH_BufferRead(buf, addr, COUNT(buf));
@@ -71,7 +71,7 @@ void GcodeSuite::M994() {
 
   uint8_t buf[1024];
   uint32_t addr = 0;
-  W25QXX.init(SPI_FULL_SPEED);
+  W25QXX.init(SPI_QUARTER_SPEED);
   W25QXX.SPI_FLASH_BulkErase();
   SERIAL_ECHOPGM("Load SPI Flash");
   while (addr < SPI_FLASH_SIZE) {
@@ -85,4 +85,4 @@ void GcodeSuite::M994() {
   card.closefile();
 }
 
-#endif // HAS_SPI_FLASH && SDSUPPORT && MARLIN_DEV_MODE
+#endif // SPI_FLASH_BACKUP

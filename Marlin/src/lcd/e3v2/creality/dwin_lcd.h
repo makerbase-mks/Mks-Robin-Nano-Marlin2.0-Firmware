@@ -29,9 +29,6 @@
  * @brief    迪文屏控制操作函数
  ********************************************************************************/
 
-#define DWIN_WIDTH  272
-#define DWIN_HEIGHT 480
-
 #include "../common/dwin_api.h"
 #include "../common/dwin_set.h"
 #include "../common/dwin_font.h"
@@ -47,4 +44,4 @@
 //  xStart/yStart: Upper-left of virtual area
 //  xEnd/yEnd: Lower-right of virtual area
 //  x/y: Screen paste point
-void DWIN_Frame_AreaCopy(uint8_t cacheID, uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint16_t x, uint16_t y);
+void dwinFrameAreaCopy(uint8_t cacheID, uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint16_t x, uint16_t y);

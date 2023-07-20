@@ -101,19 +101,13 @@ typedef struct machine_common_disp {
   const char *OutLength;
   const char *OutSpeed;
 
+  const char *LevelingZoffsetTitle;
+
   const char *LevelingParaConfTitle;
   const char *LevelingParaConf;
   const char *TrammingPosConf;
   const char *LevelingAutoCommandConf;
   const char *LevelingAutoZoffsetConf;
-
-  const char *BLTouchLevelingConfTitle;
-  const char *BLTouchLevelingConf;
-  const char *BLTouchInit;
-  const char *BLTouchOffsetpos;
-  const char *BLTouchOffsetneg;
-  const char *BLTouchSave;
-  const char *BLTouchTest;
 
   const char *LevelingSubConfTitle;
   const char *AutoLevelEnable;
@@ -156,7 +150,7 @@ typedef struct machine_common_disp {
 
   const char *HotbedEnable;
   const char *HotbedConfTitle;
-  const char *HotbedAjustType;
+  const char *HotbedAdjustType;
   const char *HotbedMinTemperature;
   const char *HotbedMaxTemperature;
 
@@ -302,6 +296,7 @@ extern machine_common_def machine_menu;
 
 typedef struct common_menu_disp {
   const char *text_back;
+  const char *text_save;
   const char *dialog_confirm_title;
   const char *close_machine_tips;
   const char *unbind_printer_tips;
@@ -363,11 +358,11 @@ typedef struct move_menu_disp {
   const char *z_add;
   const char *z_dec;
   const char *step_001mm;
+  const char *step_0025mm;
   const char *step_005mm;
   const char *step_01mm;
   const char *step_1mm;
   const char *step_10mm;
-  const char *zoffset;
   const char *back;
 } move_menu_def;
 
@@ -696,7 +691,6 @@ typedef struct print_file_dialog_disp {
   const char *print_time;
   const char *reprint;
   const char *wifi_enable_tips;
-  const char *autolevelingTips;
 } print_file_dialog_menu_def;
 
 extern print_file_dialog_menu_def print_file_dialog_menu;
@@ -787,6 +781,7 @@ extern eeprom_def eeprom_menu;
 #define AXIS_Z_ADD_TEXT     "Z+"
 #define AXIS_Z_DEC_TEXT     "Z-"
 #define TEXT_001MM          "0.01 mm"
+#define TEXT_0025MM         "0.025 mm"
 #define TEXT_005MM          "0.05 mm"
 #define TEXT_01MM           "0.1 mm"
 #define TEXT_1MM            "1 mm"
